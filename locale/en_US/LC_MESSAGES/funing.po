@@ -1,0 +1,42 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2020-12-06 20:47+0800\n"
+"PO-Revision-Date: 2020-12-06 20:47+0800\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+"X-Generator: Poedit 2.4.1\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"Language: zh_CN\n"
+
+#: ui/main_ui.py:7
+msgid "Funing"
+msgstr ""
+
+#: ui/main_ui.py:12
+msgid "Shoot"
+msgstr ""
+
+#: ui/main_ui.py:20
+msgid "Name"
+msgstr ""
+
+#: ui/main_ui.py:23
+msgid "DOB"
+msgstr ""
+
+#: ui/main_ui.py:26
+msgid "Address"
+msgstr ""
+
+#: ui/main_ui.py:29
+msgid "Note"
+msgstr ""
