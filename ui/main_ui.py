@@ -1,15 +1,15 @@
 
 import tkinter as tk
 from tkinter import ttk
-from _ui.settings import _, default_lang_code
+from _ui import _, default_lang_code
 from _ui import _main_ui
-from _ui._ui import locale_lang_display_names
+from _ui import locale_lang_display_names
 from langcodes import Language
 
 class MainUI():
     def __init__(self):
         self.root = tk.Tk()
-
+        self.root.title( _('Funing') )
         # show_frame
         self.show_frame = ttk.Frame( self.root )
         self.shoot_button = ttk.Button( self.show_frame, text = _('Shoot') )
@@ -39,7 +39,7 @@ class MainUI():
 
         # language_combobox
         self.lang_combobox_var = tk.StringVar( self.root )
-        self.lang_code = default_lang_code.replace('_','-')
+        self.lang_code = default_lang_code
         self.lang_combobox_var.set(
             Language.make( self.lang_code ).display_name( self.lang_code)
           )
