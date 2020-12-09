@@ -3,7 +3,7 @@
 import os
 import sys
 
-from _ui._main_ui import InitUI
+from _ui._main_ui import MainUIdef
 
 
 class Funing():
@@ -12,7 +12,7 @@ class Funing():
             os.path.dirname(__file__))
     
     def start(self):
-        InitUI()
+        MainUIdef()
         
 
 if __name__ == '__main__':

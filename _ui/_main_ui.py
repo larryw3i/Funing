@@ -5,7 +5,7 @@ from langcodes import Language
 from _ui import change_language
 import gettext
 
-class InitUI():
+class MainUIdef():
     def __init__(self):
         self.mainui = MainUI()
         self.mainui.place()

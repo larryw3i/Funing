@@ -1,11 +1,13 @@
 
 from pony.orm import *
 import os
-from  funing.Funing import base_dir
+from  ..funing import Funing
 # from uuid import UUID
 # from datetime import date
 
-data_file_path = base_dir + '/data/funing.sqlite'
+f = Funing()
+
+data_file_path = f.base_dir + '/data/funing.sqlite'
 if not os.path.exists( data_file_path ):
     with open( data_file_path ,"w") as f: pass
 
