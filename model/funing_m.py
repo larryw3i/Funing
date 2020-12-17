@@ -1,24 +1,15 @@
 
 from pony.orm import *
 import os
-from  ..funing import Funing
-# from uuid import UUID
-# from datetime import date
+import sys
 
-f = Funing()
+from uuid import UUID
+from datetime import date
 
-data_file_path = f.base_dir + '/data/funing.sqlite'
-if not os.path.exists( data_file_path ):
-    with open( data_file_path ,"w") as f: pass
+from _ui import _
+from _ui.setting import base_dir
 
 db = Database()
-db.bind(provider='sqlite', filename = data_file_path )
-
-class FuningM( db.Entity ):
-    id = PrimaryKey( UUID, auto = True )
-    lang_code = Optional( str )
-
-    person = Set('Person')
 
 class Person( db.Entity ):
     id = PrimaryKey( UUID, auto = True )
@@ -26,5 +17,22 @@ class Person( db.Entity ):
     dob = Optional( date )
     note = Optional( str )
     face = Required( Json )
+    
+class FuningData( db.Entity ):
+    id = PrimaryKey( UUID, auto = True )
+    lang_code = Optional( str )
 
-db.generate_mapping(create_tables=True)
+
+
+class FuningM():
+    def generate_mapping(self):
+
+        data_file_path = base_dir + '/data/funing.sqlite'
+
+        if not os.path.exists( data_file_path ):
+            with open( data_file_path ,"w") : pass
+
+        db.bind(provider='sqlite', filename = data_file_path )
+        db.generate_mapping(create_tables=True)
+
+        print( _('generate mapping successfully!') )
