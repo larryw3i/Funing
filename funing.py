@@ -24,5 +24,6 @@ if __name__ == '__main__':
     sys.path.append( f.base_dir )
     if sys_argv[1] == 'gm':
         fm.generate_mapping()
+        
     if sys_argv[1] == 'start':
         f.start()

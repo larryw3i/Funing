@@ -2,3 +2,5 @@ dlib
 face-recognition
 langcodes
 pony
+pylint
+langcodes
