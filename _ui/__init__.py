@@ -19,16 +19,3 @@ default_lang.install()
 
 _ = default_lang.gettext
 
-
-def locale_lang_display_names():
-    lang_codes = os.listdir('locale/')
-    display_names = []
-    for i in lang_codes:
-        display_names.append( Language.make(i).display_name(i) )
-        
-    return display_names
-
-
-if __name__ == '__main__':
-
-    pass
