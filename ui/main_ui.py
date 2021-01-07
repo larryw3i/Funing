@@ -1,4 +1,5 @@
 
+
 import tkinter as tk
 from tkinter import ttk
 from _ui import _, default_lang_code
@@ -11,8 +12,8 @@ class MainUI():
         self.root = tk.Tk()
         self.root.title( _('Funing') )
         # show_frame
-        self.show_frame = ttk.Frame( self.root )
-        self.shoot_button = ttk.Button( self.show_frame, text = _('Shoot') )
+        self.show_frame = tk.Frame( self.root )
+        self.shoot_button = tk.Button( self.show_frame, text = _('Shoot') )
         self.show_from_optionmenus =  {
             'file':_('File'),
             'camara': _('Camara') }
@@ -24,18 +25,18 @@ class MainUI():
             *self.show_from_optionmenus.values() )
 
         # entry_frame
-        self.entry_frame = ttk.Frame( self.root )
-        self.name_label = ttk.Label( self.entry_frame, text = _('Name') )
-        self.name_entry = ttk.Entry( self.entry_frame )
+        self.entry_frame = tk.Frame( self.root )
+        self.name_label = tk.Label( self.entry_frame, text = _('Name') )
+        self.name_entry = tk.Entry( self.entry_frame )
 
-        self.DOB_label = ttk.Label( self.entry_frame, text = _('DOB') )
-        self.DOB_entry = ttk.Entry( self.entry_frame )
+        self.DOB_label = tk.Label( self.entry_frame, text = _('DOB') )
+        self.DOB_entry = tk.Entry( self.entry_frame )
 
-        self.address_label = ttk.Label( self.entry_frame, text = _('Address') )
-        self.address_entry = ttk.Entry( self.entry_frame )
+        self.address_label = tk.Label( self.entry_frame, text = _('Address') )
+        self.address_entry = tk.Entry( self.entry_frame )
 
-        self.note_label = ttk.Label( self.entry_frame, text = _('Note') )
-        self.note_entry = ttk.Entry( self.entry_frame )
+        self.note_label = tk.Label( self.entry_frame, text = _('Note') )
+        self.note_entry = tk.Entry( self.entry_frame )
 
         # language_combobox
         self.lang_combobox_var = tk.StringVar( self.root )

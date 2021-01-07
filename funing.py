@@ -20,8 +20,8 @@ if __name__ == '__main__':
     sys_argv = sys.argv
     f = Funing()
     fm = FuningM()
-
     sys.path.append( f.base_dir )
+
     if sys_argv[1] == 'gm':
         fm.generate_mapping()
         
