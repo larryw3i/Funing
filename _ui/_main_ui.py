@@ -1,18 +1,20 @@
 
-
+from pony.orm import *
 from tkinter import messagebox
 import tkinter as tk
 from ui.main_ui import MainUI
 from langcodes import Language
 import gettext
 import sys,os
+from model import funing_m as fm
 
 class MainUIdef():
     def __init__(self):
         self.mainui = MainUI()
         self.mainui.place()
 
-        self.mainui.lang_combobox.bind('<<ComboboxSelected>>',
+        self.mainui.lang_combobox.bind(
+            '<<ComboboxSelected>>',
             self.change_language )
         self.mainui.mainloop()
 
@@ -22,6 +24,11 @@ class MainUIdef():
             title = _('Restart Funing Now?')
         )
         if restartapp:
+
+            lang_code_exists = count( d for d in fm.FuningData ) > 0
+            if not lang_code_exists:
+                FuningData( lang_code =  )
+
             sys_executable = sys.executable
             os.execl(sys_executable, sys_executable, * sys.argv)
 

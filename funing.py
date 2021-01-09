@@ -4,7 +4,7 @@ import os
 import sys
 
 from _ui._main_ui import MainUIdef
-from model.funing_m import FuningM
+from model.funing_m import FuningM, data_file_path
 
 
 class Funing():
@@ -20,10 +20,6 @@ if __name__ == '__main__':
     sys_argv = sys.argv
     f = Funing()
     fm = FuningM()
-    sys.path.append( f.base_dir )
-
-    if sys_argv[1] == 'gm':
-        fm.generate_mapping()
-        
-    if sys_argv[1] == 'start':
+       
+    if sys_argv[1] in ['start', 'st']:
         f.start()

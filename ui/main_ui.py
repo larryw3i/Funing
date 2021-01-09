@@ -10,6 +10,7 @@ class MainUI():
     def __init__(self):
         self.root = tk.Tk()
         self.root.title( _('Funing') )
+        
         # show_frame
         self.show_frame = tk.Frame( self.root )
         self.shoot_button = tk.Button( self.show_frame, text = _('Shoot') )

@@ -7,9 +7,19 @@ from uuid import UUID
 from datetime import date
 
 from _ui import _
-from _ui.setting import base_dir
+from setting import base_dir
 
 db = Database()
+
+data_file_p_path = base_dir + '/data'
+data_file_path = data_file_p_path + '/funing.sqlite'
+
+if not os.path.exists( data_file_p_path ):
+    os.mkdir( data_file_p_path )
+if not os.path.exists( data_file_path ):
+    with open( data_file_path ,"w") : pass
+
+db.bind(provider='sqlite', filename = data_file_path )
 
 class Person( db.Entity ):
     id = PrimaryKey( UUID, auto = True )
@@ -22,17 +32,4 @@ class FuningData( db.Entity ):
     id = PrimaryKey( UUID, auto = True )
     lang_code = Optional( str )
 
-
-
-class FuningM():
-    def generate_mapping(self):
-
-        data_file_path = base_dir + '/data/funing.sqlite'
-
-        if not os.path.exists( data_file_path ):
-            with open( data_file_path ,"w") : pass
-
-        db.bind(provider='sqlite', filename = data_file_path )
-        db.generate_mapping(create_tables=True)
-
-        print( _('generate mapping successfully!') )
+db.generate_mapping(create_tables=True)
