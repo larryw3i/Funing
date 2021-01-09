@@ -2,7 +2,7 @@
 
 import tkinter as tk
 from tkinter import ttk
-from _ui import _, default_lang_code
+from _ui import _, lang_code
 from langcodes import Language
 import os
 
@@ -40,7 +40,7 @@ class MainUI():
 
         # language_combobox
         self.lang_combobox_var = tk.StringVar( self.root )
-        self.lang_code = default_lang_code
+        self.lang_code = lang_code
         self.lang_combobox_var.set(
             Language.make( self.lang_code ).display_name( self.lang_code)
           )

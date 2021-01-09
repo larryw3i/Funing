@@ -6,7 +6,6 @@ import sys
 from uuid import UUID
 from datetime import date
 
-from _ui import _
 from setting import base_dir
 
 db = Database()

@@ -18,6 +18,7 @@ class MainUIdef():
             '<<ComboboxSelected>>',
             self.change_language )
         self.mainui.mainloop()
+        
     @db_session    
     def change_language(self, lang ):
 
