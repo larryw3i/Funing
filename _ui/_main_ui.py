@@ -17,8 +17,14 @@ class MainUIdef():
         self.mainui.lang_combobox.bind(
             '<<ComboboxSelected>>',
             self.change_language )
-        self.mainui.mainloop()
         
+        self.mainui.show_from_optionmenu.bind(
+            '<Button-1>',)
+
+        self.mainui.mainloop()
+
+    def 
+
     @db_session    
     def change_language(self, lang ):
 
