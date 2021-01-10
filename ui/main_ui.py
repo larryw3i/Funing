@@ -17,11 +17,11 @@ class MainUI():
         self.show_from_optionmenus =  {
             'file':_('File'),
             'camara': _('Camara') }
-        self.optionmenu_var = tk.StringVar( self.root )
-        self.optionmenu_var.set( _('Open') )
+        self.show_f_optionmenu_var = tk.StringVar( self.root )
+        self.show_f_optionmenu_var.set( _('Open') )
         self.show_from_optionmenu = tk.OptionMenu( 
             self.show_frame,
-            self.optionmenu_var, 
+            self.show_f_optionmenu_var , 
             *self.show_from_optionmenus.values() )
 
         # entry_frame

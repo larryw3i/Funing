@@ -8,6 +8,7 @@ import gettext
 import sys,os
 from model import funing_m as fm
 from model.funing_m import FuningData as fd
+import  tkinter.filedialog as tkf
 
 class MainUIdef():
     def __init__(self):
@@ -19,13 +20,24 @@ class MainUIdef():
             self.change_language )
         
         self.mainui.show_from_optionmenu.bind(
-            '<Button-1>',)
+            '<Button-1>', self.show_from )
 
         self.mainui.mainloop()
 
-    def 
+    def show_from( self ):
+        keys =  self.main_ui.show_from_optionmenus.keys()
+        values = self.main_ui.show_from_optionmenus.values()
+        value = self.main_ui.show_f_optionmenu_var.get()        
+        show_f = list(keys)[ list( values ).index( value )]
+        
+        if show_f == 'file':
+            file_path = tkf.askopenfile()
+            print( file_path )
 
-    @db_session    
+        if show_f == 'camara':
+            pass
+
+    @db_session
     def change_language(self, lang ):
 
         restartapp = messagebox.askyesno(
