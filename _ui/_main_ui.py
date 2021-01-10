@@ -9,33 +9,69 @@ import sys,os
 from model import funing_m as fm
 from model.funing_m import FuningData as fd
 import  tkinter.filedialog as tkf
+import cv2
+
+class IRU():
+    def __init__(self, video_source = 0 ):
+        self.vid = cv2.VideoCapture( self.video_source )
+        if not self.vid.isOpened():
+            messagebox.showerror( 
+                _('Unable to open video source'), 
+                self.video_source )
+        self.width = self.vid.get(cv2.CAP_PROP_FRAME_WIDTH)
+        self.height = self.vid.get(cv2.CAP_PROP_FRAME_HEIGHT)
+    
+    def get_frame(self):
+        if self.vid.isOpened():
+            ret, frame = self.vid.read()
+            if ret:
+                return (ret, cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+            else:                
+               return (ret, None ) 
+        else:
+            return (ret, None)
+
 
 class MainUIdef():
     def __init__(self):
         self.mainui = MainUI()
+        self.iru = None
         self.mainui.place()
+
+        self.video_source = None
+        self.vid = None
 
         self.mainui.lang_combobox.bind(
             '<<ComboboxSelected>>',
             self.change_language )
         
-        self.mainui.show_from_optionmenu.bind(
-            '<Button-1>', self.show_from )
+        self.mainui.show_f_optionmenu_var.trace(
+            'w', self.show_from )
 
         self.mainui.mainloop()
 
-    def show_from( self ):
-        keys =  self.main_ui.show_from_optionmenus.keys()
-        values = self.main_ui.show_from_optionmenus.values()
-        value = self.main_ui.show_f_optionmenu_var.get()        
+    def show_from( self, *args  ):
+        keys =  self.mainui.show_from_optionmenus.keys()
+        values = self.mainui.show_from_optionmenus.values()
+        value = self.mainui.show_f_optionmenu_var.get()        
         show_f = list(keys)[ list( values ).index( value )]
         
         if show_f == 'file':
-            file_path = tkf.askopenfile()
-            print( file_path )
+            self.video_source = tkf.askopenfile(
+                title = _('Select a file'),
+                initialdir = '~/Videos'
+            )
 
         if show_f == 'camara':
-            pass
+            self.video_source = 0
+        
+        self.play_video( self.video_source )
+
+    def play_video( self , video_source ):
+        self.iru = IRU( video_source )
+
+        
+
 
     @db_session
     def change_language(self, lang ):

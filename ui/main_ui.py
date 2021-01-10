@@ -13,7 +13,6 @@ class MainUI():
         
         # show_frame
         self.show_frame = tk.Frame( self.root )
-        self.shoot_button = tk.Button( self.show_frame, text = _('Shoot') )
         self.show_from_optionmenus =  {
             'file':_('File'),
             'camara': _('Camara') }
@@ -23,6 +22,11 @@ class MainUI():
             self.show_frame,
             self.show_f_optionmenu_var , 
             *self.show_from_optionmenus.values() )
+
+        # shoot
+        self.shoot_button = tk.Button( self.show_frame, text = _('Shoot') )
+
+        self.vid_canvas = tk.Canvas( self.show_frame )
 
         # entry_frame
         self.entry_frame = tk.Frame( self.root )
@@ -52,9 +56,14 @@ class MainUI():
 
 
     def place(self):
+
+        # video canvas
+        self.vid_canvas.grid( column = 0, row = 0, rowspan = 3,
+            columnspan = 3 )
+
         # place show_frame
-        self.show_from_optionmenu.grid( column = 0, row = 1 )
-        self.shoot_button.grid( column = 1, row = 1 )
+        self.show_from_optionmenu.grid( column = 0, row = 4 )
+        self.shoot_button.grid( column = 1, row = 4)
         self.show_frame.grid( column = 0, row = 0 )
 
         # place entry_frame
