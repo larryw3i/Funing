@@ -2,6 +2,7 @@
 
 import os
 import sys
+import getopt
 from setting import base_dir
 
 
@@ -24,11 +25,14 @@ class Funing():
         
 
 if __name__ == '__main__':
-    sys_argv = sys.argv
+    sys_argv = sys.argv[1:]
     f = Funing()
-       
-    if sys_argv[1] in ['start', 'st']:
-        f.start()
 
-    if sys_argv[1] in ['msgfmt' ]:
-        f.msgfmt()
+    optlist , args  = getopt.getopt( sys_argv, '' )
+
+    for a in args:
+        if a in [ 's' ,'st', 'start' ]:
+            f.start()
+        elif a in [ 'm' , 'msg' , 'msgfmt' ]:
+            f.msgfmt()
+      

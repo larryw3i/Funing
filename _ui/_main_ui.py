@@ -10,6 +10,7 @@ from model import funing_m as fm
 from model.funing_m import FuningData as fd
 import  tkinter.filedialog as tkf
 import cv2
+from PIL import Image , ImageTK
 
 class IRU():
     def __init__(self, video_source = 0 ):
@@ -25,7 +26,7 @@ class IRU():
         if self.vid.isOpened():
             ret, frame = self.vid.read()
             if ret:
-                return (ret, cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+                return (ret, cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA))
             else:                
                return (ret, None ) 
         else:
