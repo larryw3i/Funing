@@ -10,10 +10,11 @@ from model import funing_m as fm
 from model.funing_m import FuningData as fd
 import  tkinter.filedialog as tkf
 import cv2
-from PIL import Image , ImageTK
+from PIL import Image , ImageTk
 
 class IRU():
     def __init__(self, video_source = 0 ):
+        self.video_source = video_source
         self.vid = cv2.VideoCapture( self.video_source )
         if not self.vid.isOpened():
             messagebox.showerror( 
@@ -33,7 +34,7 @@ class IRU():
             return (ret, None)
 
 
-class MainUIdef():
+class _MainUI():
     def __init__(self):
         self.mainui = MainUI()
         self.iru = None
@@ -41,6 +42,8 @@ class MainUIdef():
 
         self.video_source = None
         self.vid = None
+        self.vid_frame = None
+        self.vid_refesh = 10
 
         self.mainui.lang_combobox.bind(
             '<<ComboboxSelected>>',
@@ -66,11 +69,16 @@ class MainUIdef():
         if show_f == 'camara':
             self.video_source = 0
         
-        self.play_video( self.video_source )
+        self.iru = IRU( self.video_source )
+        self.play_video()
 
-    def play_video( self , video_source ):
-        self.iru = IRU( video_source )
-
+    def play_video( self ):
+        self.vid_frame = self.iru.get_frame()
+        vid_img = Image.fromarray( self.vid_frame[1] )
+        imgtk = ImageTk.PhotoImage( image=vid_img )
+        self.mainui.vid_label.imgtk = imgtk
+        self.mainui.vid_label.configure(image=imgtk)
+        self.mainui.vid_label.after( self.vid_refesh,  self.play_video ) 
         
 
 

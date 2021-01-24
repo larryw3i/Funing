@@ -14,8 +14,8 @@ class Funing():
         pass    
 
     def start(self):
-        from _ui._main_ui import MainUIdef
-        MainUIdef()
+        from _ui._main_ui import _MainUI
+        _MainUI()
     
     def msgfmt( self ):
         locale_path =  base_dir + '/locale'
