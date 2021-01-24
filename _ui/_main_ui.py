@@ -18,6 +18,8 @@ class IRU():
     def __init__(self, video_source = 0 ):
         self.video_source = video_source
         self.vid = cv2.VideoCapture( self.video_source )
+        self.resize_rate = 0.25
+
         if not self.vid.isOpened():
             messagebox.showerror( 
                 _('Unable to open video source'), 
@@ -32,14 +34,18 @@ class IRU():
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
                 small_frame = cv2.resize( frame, (0, 0), \
-                    fx=0.25, fy=0.25)  
+                    fx=self.resize_rate, fy=self.resize_rate)  
                 
                 self.face_locations = \
                     face_recognition.face_locations( small_frame )
 
                 for top, right, bottom, left in self.face_locations:
+                    top = int(top/self.resize_rate)
+                    right = int(right/self.resize_rate)
+                    bottom = int(bottom/self.resize_rate)
+                    left = int(left/self.resize_rate)
                     cv2.rectangle( frame, \
-                        (left*4, top*4), (right*4, bottom*4), (0, 0, 255), 2)
+                        (left, top), (right, bottom), (0, 0, 255), 2)
 
                 return (ret, frame)
 
@@ -100,8 +106,9 @@ class _MainUI():
                 self.iru.release()
                 self.iru = None
 
-        self.iru = IRU( self.video_source )
-        self.play_video()
+        if self.video_source is not None:
+            self.iru = IRU( self.video_source )
+            self.play_video()
 
     def play_video( self ):
         if self.iru is not None:
