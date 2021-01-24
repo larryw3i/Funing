@@ -11,6 +11,8 @@ from model.funing_m import FuningData as fd
 import  tkinter.filedialog as tkf
 import cv2
 from PIL import Image , ImageTk
+import dlib
+import face_recognition
 
 class IRU():
     def __init__(self, video_source = 0 ):
@@ -27,23 +29,43 @@ class IRU():
         if self.vid.isOpened():
             ret, frame = self.vid.read()
             if ret:
-                return (ret, cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA))
+                frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+
+                small_frame = cv2.resize( frame, (0, 0), \
+                    fx=0.25, fy=0.25)  
+                
+                self.face_locations = \
+                    face_recognition.face_locations( small_frame )
+
+                for top, right, bottom, left in self.face_locations:
+                    cv2.rectangle( frame, \
+                        (left*4, top*4), (right*4, bottom*4), (0, 0, 255), 2)
+
+                return (ret, frame)
+
             else:                
                return (ret, None ) 
         else:
-            return (ret, None)
+            return (None, None)
+        
+    def release( self ):
+        self.vid.release()
 
 
 class _MainUI():
     def __init__(self):
         self.mainui = MainUI()
-        self.iru = None
         self.mainui.place()
 
+        self.mainui.root.protocol("WM_DELETE_WINDOW", self.destroy )
+
+        self.iru = None
         self.video_source = None
         self.vid = None
         self.vid_frame = None
         self.vid_refesh = 10
+
+        self.face_locations = None
 
         self.mainui.lang_combobox.bind(
             '<<ComboboxSelected>>',
@@ -53,6 +75,11 @@ class _MainUI():
             'w', self.show_from )
 
         self.mainui.mainloop()
+    
+    def destroy( self ):
+        if self.iru is not None:
+            self.iru.release()
+        self.mainui.root.destroy()
 
     def show_from( self, *args  ):
         keys =  self.mainui.show_from_optionmenus.keys()
@@ -68,18 +95,23 @@ class _MainUI():
 
         if show_f == 'camara':
             self.video_source = 0
-        
+            
+            if self.iru  is not None:
+                self.iru.release()
+                self.iru = None
+
         self.iru = IRU( self.video_source )
         self.play_video()
 
     def play_video( self ):
-        self.vid_frame = self.iru.get_frame()
-        vid_img = Image.fromarray( self.vid_frame[1] )
-        imgtk = ImageTk.PhotoImage( image=vid_img )
-        self.mainui.vid_label.imgtk = imgtk
-        self.mainui.vid_label.configure(image=imgtk)
-        self.mainui.vid_label.after( self.vid_refesh,  self.play_video ) 
-        
+        if self.iru is not None:
+            self.vid_frame = self.iru.get_frame()
+            if self.vid_frame[0] is not None:
+                vid_img = Image.fromarray( self.vid_frame[1] )
+                imgtk = ImageTk.PhotoImage( image=vid_img )
+                self.mainui.vid_label.imgtk = imgtk
+                self.mainui.vid_label.configure(image=imgtk)
+            self.mainui.vid_label.after( self.vid_refesh,  self.play_video ) 
 
 
     @db_session
@@ -102,6 +134,9 @@ class _MainUI():
                     .lang_code = lang_code
             
             commit()
+
+            if self.iru is not None:
+                self.iru.release()
 
             sys_executable = sys.executable
             os.execl(sys_executable, sys_executable, * sys.argv)

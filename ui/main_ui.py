@@ -90,6 +90,7 @@ class MainUI():
     def mainloop(self):
         self.root.mainloop()
 
+
     def locale_lang_display_names( self ):
         lang_codes = os.listdir('locale/')
         display_names = []
