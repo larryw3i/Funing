@@ -29,10 +29,11 @@ class MainUI():
         self.vid_label = tk.Label( self.show_frame )
 
         # shoot
-        self.shoot_button = tk.Button( self.show_frame, text = _('Shoot') )
+        self.pause_button = tk.Button( self.show_frame, text = _('Pause') )
 
         # entry_frame
         self.entry_frame = tk.Frame( self.root )
+        self.face_label = tk.Label( self.entry_frame )
         self.name_label = tk.Label( self.entry_frame, text = _('Name') )
         self.name_entry = tk.Entry( self.entry_frame )
 
@@ -43,7 +44,7 @@ class MainUI():
         self.address_entry = tk.Entry( self.entry_frame )
 
         self.note_label = tk.Label( self.entry_frame, text = _('Note') )
-        self.note_entry = tk.Entry( self.entry_frame )
+        self.note_text = tk.Text( self.entry_frame, height = 6, width = 20 )
 
         # language_combobox
         self.lang_combobox_var = tk.StringVar( self.root )
@@ -66,21 +67,24 @@ class MainUI():
 
         # place show_frame
         self.show_from_optionmenu.grid( column = 0, row = 4 )
-        self.shoot_button.grid( column = 1, row = 4)
+        self.pause_button.grid( column = 1, row = 4)
         self.show_frame.grid( column = 0, row = 0 )
 
         # place entry_frame
-        self.name_label.grid(column = 0, row = 0 )
-        self.name_entry.grid(column = 1 ,row = 0)
 
-        self.DOB_label.grid(column = 0, row = 1 )
-        self.DOB_entry.grid(column = 1 ,row = 1 )
+        self.face_label.grid( column = 0 , row = 0 )
+        
+        self.name_label.grid(column = 0, row = 1 )
+        self.name_entry.grid(column = 1 ,row = 1)
 
-        self.address_label.grid(column = 0, row = 2 )
-        self.address_entry.grid(column = 1 ,row = 2 )
+        self.DOB_label.grid(column = 0, row = 2 )
+        self.DOB_entry.grid(column = 1 ,row = 2 )
 
-        self.note_label.grid(column = 0, row = 3 )
-        self.note_entry.grid(column = 1 ,row = 3 )
+        self.address_label.grid(column = 0, row = 3 )
+        self.address_entry.grid(column = 1 ,row = 3 )
+
+        self.note_label.grid(column = 0, row = 4 )
+        self.note_text.grid(column = 1 ,row = 4 )
 
         self.entry_frame.grid( column = 1, row = 0 )
 

@@ -22,7 +22,7 @@ class Funing():
         for d in os.listdir( locale_path ):
             po_p_p =  f'{locale_path}/{d}/LC_MESSAGES'
             os.system(f'msgfmt -o {po_p_p}/funing.mo {po_p_p}/funing.po')
-        
+
 
 if __name__ == '__main__':
     sys_argv = sys.argv[1:]

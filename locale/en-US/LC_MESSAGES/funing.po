@@ -40,3 +40,11 @@ msgstr ""
 #: ui/main_ui.py:29
 msgid "Note"
 msgstr ""
+
+#: ../../../_ui/_main_ui.py:119
+msgid "Pause"
+msgstr ""
+
+#: ../../../_ui/_main_ui.py:122
+msgid "Play"
+msgstr ""

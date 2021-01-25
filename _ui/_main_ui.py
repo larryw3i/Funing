@@ -26,6 +26,11 @@ class IRU():
                 self.video_source )
         self.width = self.vid.get(cv2.CAP_PROP_FRAME_WIDTH)
         self.height = self.vid.get(cv2.CAP_PROP_FRAME_HEIGHT)
+        self.f_top = 0
+        self.f_right = 0
+        self.f_bottom  = 0
+        self.f_left = 0
+        self.face_locations = []
     
     def get_frame(self):
         if self.vid.isOpened():
@@ -40,12 +45,13 @@ class IRU():
                     face_recognition.face_locations( small_frame )
 
                 for top, right, bottom, left in self.face_locations:
-                    top = int(top/self.resize_rate)
-                    right = int(right/self.resize_rate)
-                    bottom = int(bottom/self.resize_rate)
-                    left = int(left/self.resize_rate)
+                    self.f_top = int(top/self.resize_rate)
+                    self.f_right = int(right/self.resize_rate)
+                    self.f_bottom = int(bottom/self.resize_rate)
+                    self.f_left = int(left/self.resize_rate)
                     cv2.rectangle( frame, \
-                        (left, top), (right, bottom), (0, 0, 255), 2)
+                        (self.f_left, self.f_top), \
+                        (self.f_right, self.f_bottom), (0, 0, 255), 2)
 
                 return (ret, frame)
 
@@ -71,11 +77,14 @@ class _MainUI():
         self.vid_frame = None
         self.vid_refesh = 10
 
+        self.is_pause = False
+
         self.face_locations = None
 
         self.mainui.lang_combobox.bind(
             '<<ComboboxSelected>>',
             self.change_language )
+        self.mainui.pause_button['command'] = self.pause_vid
         
         self.mainui.show_f_optionmenu_var.trace(
             'w', self.show_from )
@@ -102,16 +111,34 @@ class _MainUI():
         if show_f == 'camara':
             self.video_source = 0
             
-            if self.iru  is not None:
-                self.iru.release()
-                self.iru = None
 
-        if self.video_source is not None:
+        if self.video_source is not None\
+            and self.iru is None:
             self.iru = IRU( self.video_source )
+        
+        self.play_video()
+
+    def pause_vid( self ):
+        if self.is_pause:
+            self.is_pause = False
             self.play_video()
+            self.mainui.pause_button['text'] = _('Pause')
+        else:
+            self.is_pause = True
+            self.mainui.pause_button['text'] = _('Play')
+
+    def pick_face( self ):
+        frame =  self.vid_frame[1][self.iru.f_left:self.iru.f_right,\
+            self.iru.f_top:self.iru.f_bottom]
+        face_img = Image.fromarray( frame )
+        faceimgtk = ImageTk.PhotoImage( image=face_img )
+        self.mainui.face_label.imgtk = faceimgtk
+        self.mainui.face_label.configure(image=faceimgtk)
 
     def play_video( self ):
-        if self.iru is not None:
+        if self.iru is not None and not self.is_pause:
+            if len(self.iru.face_locations) > 0:
+                self.pick_face()
             self.vid_frame = self.iru.get_frame()
             if self.vid_frame[0] is not None:
                 vid_img = Image.fromarray( self.vid_frame[1] )
