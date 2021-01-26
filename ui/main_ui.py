@@ -58,6 +58,8 @@ class MainUI():
             values = tuple( self.locale_lang_display_names() )
         )
 
+        # save_button
+        self.save_button = tk.Button( self.entry_frame, text = _('Save') )
 
     def place(self):
 
@@ -72,7 +74,7 @@ class MainUI():
 
         # place entry_frame
 
-        self.face_label.grid( column = 0 , row = 0 )
+        self.face_label.grid( column = 0 , row = 0, columnspan = 2 )
         
         self.name_label.grid(column = 0, row = 1 )
         self.name_entry.grid(column = 1 ,row = 1)
@@ -85,6 +87,8 @@ class MainUI():
 
         self.note_label.grid(column = 0, row = 4 )
         self.note_text.grid(column = 1 ,row = 4 )
+        # save_button
+        self.save_button.grid( column = 1, row= 5)
 
         self.entry_frame.grid( column = 1, row = 0 )
 

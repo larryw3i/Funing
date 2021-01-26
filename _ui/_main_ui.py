@@ -56,7 +56,7 @@ class _MainUI():
         self.video_source = None
         self.vid = None
         self.vid_ret_frame = None
-        self.vid_refesh = 10
+        self.vid_refesh = 30
 
         # face
         self.f_top = 0
@@ -126,6 +126,8 @@ class _MainUI():
             self.vid_ret_frame = self.iru.get_ret_frame()
             if self.vid_ret_frame[0] is not None:
                 
+                self.get_face_locations()
+
                 self.make_rect()
 
                 vid_img = Image.fromarray( self.vid_ret_frame[1] )
@@ -134,7 +136,7 @@ class _MainUI():
                 self.mainui.vid_label.configure(image=imgtk)
             self.mainui.vid_label.after( self.vid_refesh,  self.play_video ) 
     
-    def make_rect( self ):
+    def get_face_locations(self):
 
         small_frame = cv2.resize( self.vid_ret_frame[1], (0, 0), \
             fx=self.iru.resize_rate, fy=self.iru.resize_rate)  
@@ -149,13 +151,21 @@ class _MainUI():
                 int(bottom/self.iru.resize_rate)
             self.f_x_start = self.f_left = int(left/self.iru.resize_rate)
 
-            cv2.rectangle( self.vid_ret_frame[1], \
-                (self.f_left, self.f_top), \
-                (self.f_right, self.f_bottom), (0, 0, 255), 2)
+    
+    def make_rect( self ):
+
+        cv2.rectangle( self.vid_ret_frame[1], \
+            (self.f_left, self.f_top), \
+            (self.f_right, self.f_bottom), (0, 0, 255), 2)
+
 
     def pick_face( self ):
-        frame =  self.vid_ret_frame[1][self.f_left:self.f_right,\
-            self.f_top:self.f_bottom]
+        b_t_sub = self.f_bottom - self.f_top
+        r_l_sub = self.f_right - self.f_left
+        size_add = b_t_sub if  b_t_sub > r_l_sub else r_l_sub
+        frame =  self.vid_ret_frame[1][self.f_top:( self.f_top + size_add ), \
+            self.f_left:(self.f_left + size_add)]
+        frame = cv2.resize( frame, (200, 200) )
         face_img = Image.fromarray( frame )
         faceimgtk = ImageTk.PhotoImage( image=face_img )
         self.mainui.face_label.imgtk = faceimgtk
