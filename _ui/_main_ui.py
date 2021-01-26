@@ -52,26 +52,16 @@ class _MainUI():
         self.mainui.root.protocol("WM_DELETE_WINDOW", self.destroy )
          
         # vid
-        self.iru = None
-        self.video_source = None
-        self.vid = None
-        self.vid_ret_frame = None
-        self.vid_refesh = 30
+        self.iru =  self.video_source = self.vid =  self.vid_ret_frame = None
+
+        self.is_pause = False;          self.vid_refesh = 30
 
         # face
-        self.f_top = 0
-        self.f_right = 0
-        self.f_bottom  = 0
-        self.f_left = 0
-        self.f_x_start = 0
-        self.f_x_end = 0
-        self.f_y_start  = 0
-        self.f_y_end = 0
+        self.f_top =    self.f_right =  self.f_bottom =     self.f_left =  0,   
+        self.f_x_start= self.f_x_end =  self.f_y_start =    self.f_y_end = 0,  
+        
         self.face_locations = []
     
-
-        self.is_pause = False
-
         self.mainui.lang_combobox.bind(
             '<<ComboboxSelected>>',
             self.change_language )

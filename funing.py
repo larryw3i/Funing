@@ -22,6 +22,8 @@ class Funing():
         for d in os.listdir( locale_path ):
             po_p_p =  f'{locale_path}/{d}/LC_MESSAGES'
             os.system(f'msgfmt -o {po_p_p}/funing.mo {po_p_p}/funing.po')
+    def pip_install_r( self ):
+        os.system('pip3 install -r requirements.txt ')
 
 
 if __name__ == '__main__':
@@ -35,4 +37,7 @@ if __name__ == '__main__':
             f.start()
         elif a in [ 'm' , 'msg' , 'msgfmt' ]:
             f.msgfmt()
+        
+        elif a in ['pip' , 'pip_install']:
+            f.pip_install_r()
       

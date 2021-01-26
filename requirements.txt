@@ -4,5 +4,4 @@ langcodes
 pony
 pylint
 langcodes
-pep8
 opencv-python
