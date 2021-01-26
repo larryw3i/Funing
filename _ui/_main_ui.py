@@ -26,32 +26,12 @@ class IRU():
                 self.video_source )
         self.width = self.vid.get(cv2.CAP_PROP_FRAME_WIDTH)
         self.height = self.vid.get(cv2.CAP_PROP_FRAME_HEIGHT)
-        self.f_top = 0
-        self.f_right = 0
-        self.f_bottom  = 0
-        self.f_left = 0
-        self.face_locations = []
-    
-    def get_frame(self):
+
+    def get_ret_frame(self):
         if self.vid.isOpened():
             ret, frame = self.vid.read()
             if ret:
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-
-                small_frame = cv2.resize( frame, (0, 0), \
-                    fx=self.resize_rate, fy=self.resize_rate)  
-                
-                self.face_locations = \
-                    face_recognition.face_locations( small_frame )
-
-                for top, right, bottom, left in self.face_locations:
-                    self.f_top = int(top/self.resize_rate)
-                    self.f_right = int(right/self.resize_rate)
-                    self.f_bottom = int(bottom/self.resize_rate)
-                    self.f_left = int(left/self.resize_rate)
-                    cv2.rectangle( frame, \
-                        (self.f_left, self.f_top), \
-                        (self.f_right, self.f_bottom), (0, 0, 255), 2)
 
                 return (ret, frame)
 
@@ -70,20 +50,32 @@ class _MainUI():
         self.mainui.place()
 
         self.mainui.root.protocol("WM_DELETE_WINDOW", self.destroy )
-
+         
+        # vid
         self.iru = None
         self.video_source = None
         self.vid = None
-        self.vid_frame = None
+        self.vid_ret_frame = None
         self.vid_refesh = 10
 
-        self.is_pause = False
+        # face
+        self.f_top = 0
+        self.f_right = 0
+        self.f_bottom  = 0
+        self.f_left = 0
+        self.f_x_start = 0
+        self.f_x_end = 0
+        self.f_y_start  = 0
+        self.f_y_end = 0
+        self.face_locations = []
+    
 
-        self.face_locations = None
+        self.is_pause = False
 
         self.mainui.lang_combobox.bind(
             '<<ComboboxSelected>>',
             self.change_language )
+            
         self.mainui.pause_button['command'] = self.pause_vid
         
         self.mainui.show_f_optionmenu_var.trace(
@@ -127,25 +119,47 @@ class _MainUI():
             self.is_pause = True
             self.mainui.pause_button['text'] = _('Play')
 
-    def pick_face( self ):
-        frame =  self.vid_frame[1][self.iru.f_left:self.iru.f_right,\
-            self.iru.f_top:self.iru.f_bottom]
-        face_img = Image.fromarray( frame )
-        faceimgtk = ImageTk.PhotoImage( image=face_img )
-        self.mainui.face_label.imgtk = faceimgtk
-        self.mainui.face_label.configure(image=faceimgtk)
-
     def play_video( self ):
         if self.iru is not None and not self.is_pause:
-            if len(self.iru.face_locations) > 0:
+            if len(self.face_locations) > 0:
                 self.pick_face()
-            self.vid_frame = self.iru.get_frame()
-            if self.vid_frame[0] is not None:
-                vid_img = Image.fromarray( self.vid_frame[1] )
+            self.vid_ret_frame = self.iru.get_ret_frame()
+            if self.vid_ret_frame[0] is not None:
+                
+                self.make_rect()
+
+                vid_img = Image.fromarray( self.vid_ret_frame[1] )
                 imgtk = ImageTk.PhotoImage( image=vid_img )
                 self.mainui.vid_label.imgtk = imgtk
                 self.mainui.vid_label.configure(image=imgtk)
             self.mainui.vid_label.after( self.vid_refesh,  self.play_video ) 
+    
+    def make_rect( self ):
+
+        small_frame = cv2.resize( self.vid_ret_frame[1], (0, 0), \
+            fx=self.iru.resize_rate, fy=self.iru.resize_rate)  
+        
+        self.face_locations = \
+            face_recognition.face_locations( small_frame )
+
+        for top, right, bottom, left in self.face_locations:
+            self.f_y_start = self.f_top = int(top/self.iru.resize_rate)
+            self.f_x_end   = self.f_right = int(right/self.iru.resize_rate)
+            self.f_y_end   = self.f_bottom = \
+                int(bottom/self.iru.resize_rate)
+            self.f_x_start = self.f_left = int(left/self.iru.resize_rate)
+
+            cv2.rectangle( self.vid_ret_frame[1], \
+                (self.f_left, self.f_top), \
+                (self.f_right, self.f_bottom), (0, 0, 255), 2)
+
+    def pick_face( self ):
+        frame =  self.vid_ret_frame[1][self.f_left:self.f_right,\
+            self.f_top:self.f_bottom]
+        face_img = Image.fromarray( frame )
+        faceimgtk = ImageTk.PhotoImage( image=face_img )
+        self.mainui.face_label.imgtk = faceimgtk
+        self.mainui.face_label.configure(image=faceimgtk)
 
 
     @db_session
