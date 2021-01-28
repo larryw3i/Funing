@@ -34,6 +34,11 @@ class MainUI():
         # entry_frame
         self.entry_frame = tk.Frame( self.root )
         self.face_label = tk.Label( self.entry_frame )
+
+        self.prev_f_button = tk.Button(self.entry_frame , text = _("Prev"))
+        self.face_num_label = tk.Label( self.entry_frame , text = _('*/*'))
+        self.next_f_button = tk.Button(self.entry_frame , text = _('Next'))
+
         self.name_label = tk.Label( self.entry_frame, text = _('Name') )
         self.name_entry = tk.Entry( self.entry_frame )
 
@@ -75,20 +80,23 @@ class MainUI():
         # place entry_frame
 
         self.face_label.grid( column = 0 , row = 0, columnspan = 2 )
+        self.prev_f_button.grid( column = 0 , row = 1)
+        self.face_num_label.grid( column = 1 , row = 1)
+        self.next_f_button.grid( column = 2 , row = 1)
         
-        self.name_label.grid(column = 0, row = 1 )
-        self.name_entry.grid(column = 1 ,row = 1)
+        self.name_label.grid(column = 0, row = 2 )
+        self.name_entry.grid(column = 1 ,row = 2)
 
-        self.DOB_label.grid(column = 0, row = 2 )
-        self.DOB_entry.grid(column = 1 ,row = 2 )
+        self.DOB_label.grid(column = 0, row = 3 )
+        self.DOB_entry.grid(column = 1 ,row = 3 )
 
-        self.address_label.grid(column = 0, row = 3 )
-        self.address_entry.grid(column = 1 ,row = 3 )
+        self.address_label.grid(column = 0, row = 4 )
+        self.address_entry.grid(column = 1 ,row = 4 )
 
-        self.note_label.grid(column = 0, row = 4 )
-        self.note_text.grid(column = 1 ,row = 4 )
+        self.note_label.grid(column = 0, row = 5 )
+        self.note_text.grid(column = 1 ,row = 5 )
         # save_button
-        self.save_button.grid( column = 1, row= 5)
+        self.save_button.grid( column = 1, row= 6)
 
         self.entry_frame.grid( column = 1, row = 0 )
 
