@@ -66,3 +66,9 @@ msgstr "继续"
 
 msgid "Save"
 msgstr "保存"
+
+msgid "Prev"
+msgstr "<<"
+
+msgid "Next"
+msgstr ">>"

@@ -57,7 +57,8 @@ class _MainUI():
 
         self.face_locations = []
         # face num for face_label
-        self.face_sum = self.face_num = 0
+        self.face_sum = 0
+        self.face_num = -1
         self.resize_rate = 0.25
 
     
@@ -101,17 +102,19 @@ class _MainUI():
         
         self.play_video()
 
-    def pick_next_face():
+    def pick_next_face(self):
         if self.face_num < self.face_sum - 1:
-            self.mainui.face_num_label = f'{self.face_num}/{self.face_sum}'
             self.face_num += 1
-            self.pick_face(self.face_num)
+            self.mainui.face_num_label['text'] = \
+                f'{self.face_num}/{self.face_sum}'
+            self.pick_face()
     
-    def pick_prev_face():
+    def pick_prev_face(self):
         if self.face_num > -1:
-            self.mainui.face_num_label = f'{self.face_num}/{self.face_sum}'
+            self.mainui.face_num_label['text'] = \
+                f'{self.face_num}/{self.face_sum}'
             self.face_num -= 1
-            self.pick_face(self.face_num)
+            self.pick_face()
 
     def pause_vid( self ):
         if self.is_pause:
@@ -133,7 +136,7 @@ class _MainUI():
 
                 self.face_sum = len(self.face_locations) 
                 if self.face_sum > 0:
-
+                    if self.face_num < 0 : self.face_num = 0
                     self.pick_face()
                     self.make_rect()
                 
@@ -176,7 +179,7 @@ class _MainUI():
         self.mainui.face_label.configure(image=faceimgtk)
 
         self.mainui.face_num_label['text'] = \
-            f'{self.face_num+1}/{(self.face_sum )}'
+            f'{self.face_num+1}/{self.face_sum}'
 
 
     @db_session
