@@ -66,6 +66,8 @@ class _MainUI():
             self.change_language )
             
         self.mainui.pause_button['command'] = self.pause_vid
+        self.mainui.prev_f_button['command'] = self.pick_prev_face
+        self.mainui.next_f_button['command'] = self.pick_next_face
         
         self.mainui.show_f_optionmenu_var.trace(
             'w', self.show_from )
@@ -98,6 +100,18 @@ class _MainUI():
             self.iru = IRU( self.video_source )
         
         self.play_video()
+
+    def pick_next_face():
+        if self.face_num < self.face_sum - 1:
+            self.mainui.face_num_label = f'{self.face_num}/{self.face_sum}'
+            self.face_num += 1
+            self.pick_face(self.face_num)
+    
+    def pick_prev_face():
+        if self.face_num > -1:
+            self.mainui.face_num_label = f'{self.face_num}/{self.face_sum}'
+            self.face_num -= 1
+            self.pick_face(self.face_num)
 
     def pause_vid( self ):
         if self.is_pause:
