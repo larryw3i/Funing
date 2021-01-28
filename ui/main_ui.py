@@ -4,6 +4,7 @@ import tkinter as tk
 from tkinter import ttk
 from _ui import _, lang_code
 from langcodes import Language
+from setting import base_dir, locale_path
 import os
 
 class MainUI():
@@ -55,7 +56,7 @@ class MainUI():
         self.lang_combobox_var = tk.StringVar( self.root )
         self.lang_code = lang_code
         self.lang_combobox_var.set(
-            Language.make( self.lang_code ).display_name( self.lang_code)
+            Language.make( self.lang_code ).autonym()
           )
         self.lang_combobox = ttk.Combobox(
             self.root,
@@ -108,10 +109,10 @@ class MainUI():
 
 
     def locale_lang_display_names( self ):
-        lang_codes = os.listdir('locale/')
+        lang_codes = os.listdir( locale_path )
         display_names = []
         for i in lang_codes:
-            display_names.append( Language.make(i).display_name(i) )
+            display_names.append( Language.make(i).autonym() )
             
         return display_names
 
