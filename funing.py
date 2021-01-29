@@ -8,10 +8,15 @@ from setting import base_dir
 
 class Funing():
     def __init__(self):
-        if not os.path\
-            .exists(base_dir + '/locale/en-US/LC_MESSAGES/funing.po'):
-            self.msgfmt()
-        pass    
+        if not os.path.exists(\
+            base_dir + '/locale/en-US/LC_MESSAGES/funing.mo'):
+            try:
+                self.msgfmt()
+            except Exception as e:
+                print( e )
+                print( 'Make sure gettext is installed, ' +
+                    'read https://www.gnu.org/software/gettext/ ' + 
+                    'and install it. (^_^)' )
 
     def start(self):
         from _ui._main_ui import _MainUI
