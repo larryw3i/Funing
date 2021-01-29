@@ -25,10 +25,10 @@ class Person( db.Entity ):
     name = Optional( str )
     dob = Optional( date )
     note = Optional( str )
-    face = Required( Json )
     
 class FuningData( db.Entity ):
     id = PrimaryKey( UUID, auto = True )
     lang_code = Optional( str )
+    face_encodings = Required( Json )
 
-db.generate_mapping(create_tables=True)
+db.generate_mapping( create_tables = True )

@@ -8,6 +8,7 @@ import gettext
 import sys,os
 from model import funing_m as fm
 from model.funing_m import FuningData as fd
+from model.funing_m import Person
 import  tkinter.filedialog as tkf
 import cv2
 from PIL import Image , ImageTk
@@ -56,11 +57,12 @@ class _MainUI():
         self.is_pause = False;  self.vid_refesh = 30
 
         self.face_locations = []
+        self.known_encodings = None 
         # face num for face_label
         self.face_sum = 0
         self.face_num = -1
         self.resize_rate = 0.25
-
+        self.get_face_encodings()
     
         self.mainui.lang_combobox.bind(
             '<<ComboboxSelected>>',
@@ -69,6 +71,8 @@ class _MainUI():
         self.mainui.pause_button['command'] = self.pause_vid
         self.mainui.prev_f_button['command'] = self.pick_prev_face
         self.mainui.next_f_button['command'] = self.pick_next_face
+
+        self.mainui.save_button['command'] = self.save_encoding
         
         self.mainui.show_f_optionmenu_var.trace(
             'w', self.show_from )
@@ -80,10 +84,19 @@ class _MainUI():
             self.iru.release()
         self.mainui.root.destroy()
 
+    @db_session
+    def get_face_encodings( self ):
+        self.known_encodings = (select d for d in fm.FuningData ).first()\
+            .face_encodings
+
+    @db_session
+    def save_encoding( self ):
+        p = Person()
+
     def show_from( self, *args  ):
         keys =  self.mainui.show_from_optionmenus.keys()
         values = self.mainui.show_from_optionmenus.values()
-        value = self.mainui.show_f_optionmenu_var.get()        
+        value = self.mainui.show_f_optionmenu_var.get()
         show_f = list(keys)[ list( values ).index( value )]
         
         if show_f == 'file':
@@ -110,10 +123,10 @@ class _MainUI():
             self.pick_face()
     
     def pick_prev_face(self):
-        if self.face_num > -1:
-            self.mainui.face_num_label['text'] = \
-                f'{self.face_num}/{self.face_sum}'
+        if self.face_num > 0:
             self.face_num -= 1
+            self.mainui.face_num_label['text'] = \
+                f'{self.face_num+1}/{self.face_sum}'
             self.pick_face()
 
     def pause_vid( self ):

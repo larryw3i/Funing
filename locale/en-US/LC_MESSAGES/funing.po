@@ -48,3 +48,9 @@ msgstr ""
 #: ../../../_ui/_main_ui.py:122
 msgid "Play"
 msgstr ""
+
+msgid "prev_symb"
+msgstr "<<"
+
+msgid "next_symb"
+msgstr ">>"

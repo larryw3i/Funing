@@ -36,9 +36,9 @@ class MainUI():
         self.entry_frame = tk.Frame( self.root )
         self.face_label = tk.Label( self.entry_frame )
 
-        self.prev_f_button = tk.Button(self.entry_frame , text = _("Prev"))
+        self.prev_f_button = tk.Button(self.entry_frame , text = _("prev_symb"))
         self.face_num_label = tk.Label( self.entry_frame , text = _('*/*'))
-        self.next_f_button = tk.Button(self.entry_frame , text = _('Next'))
+        self.next_f_button = tk.Button(self.entry_frame , text = _('next_symb'))
 
         self.name_label = tk.Label( self.entry_frame, text = _('Name') )
         self.name_entry = tk.Entry( self.entry_frame )
