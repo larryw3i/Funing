@@ -16,6 +16,7 @@ import dlib
 import face_recognition
 from _ui.locale import _
 from datetime import datetime , date
+import json
 
 class IRU():
     def __init__(self, video_source = 0 ):
@@ -61,7 +62,7 @@ class _MainUI():
         self.is_pause = False;  self.vid_refesh = 30
 
         self.face_locations = []
-        self.known_encodings = None 
+        self.known_encodings = {} 
         # face num for face_label
         self.face_sum = 0
         self.face_num = -1
@@ -98,15 +99,15 @@ class _MainUI():
             if not self.is_pause:
                 self.is_pause = True
             if self.iru is not None:
-                self.iru = None
                 self.iru.release()
+                self.iru = None
 
             self.image_path = tkf.askopenfilename(
                 title = _('Select a file'),
                 initialdir = '~/Videos'
             )
-
-            self.pick_image()
+            if len( self.image_path ) > 0:
+                self.pick_image()
 
         if show_f == 'camara':
             self.video_source = 0
@@ -119,7 +120,9 @@ class _MainUI():
             self.play_video()
         
     def pick_image( self ):
-        self.face_image  = cv2.imread( self.image_path )
+
+        face_image  = cv2.imread( self.image_path )
+        self.face_image = cv2.cvtColor( face_image, cv2.COLOR_BGR2RGB)
 
         img = Image.fromarray( self.face_image )
         imgtk = ImageTk.PhotoImage( image= img )
@@ -127,12 +130,13 @@ class _MainUI():
         self.mainui.vid_img_label.configure(image=imgtk)
 
         self.get_face_locations( self.face_image )
-        self.face_num = len( self.face_locations )
+        self.face_sum = len( self.face_locations )
 
-        self.mainui.face_num_label['text'] = \
-            f'{self.face_num}/{self.face_sum}'
-
-        self.pick_face( )
+        if self.face_sum > 0:
+            self.face_num += 1
+            self.mainui.face_num_label['text'] = \
+                f'{ self.face_num + 1 }/{self.face_sum}'
+            self.pick_face( )
 
 
     def pick_next_face(self):
@@ -193,7 +197,7 @@ class _MainUI():
         
         if self.face_sum > 0 :
             face_encoding = face_recognition.face_encodings( \
-                self.face_image, self.face_locations[ self.face_num ] )
+                self.face_image, [self.face_locations[ self.face_num ]] )
             return face_encoding
         return None
         
@@ -214,7 +218,7 @@ class _MainUI():
         b_t_sub = bottom - top
         r_l_sub = right - left
         size_add = b_t_sub if  b_t_sub > r_l_sub else r_l_sub
-        frame =  image[top:( top + size_add ), \
+        frame =  self.face_image[top:( top + size_add ), \
             left:(left + size_add)]
 
         frame = cv2.resize( frame, (200, 200) )
@@ -258,8 +262,10 @@ class _MainUI():
 
     @db_session
     def get_db_face_encodings( self ):
-        self.known_encodings = select( d for d in fm.FuningData ).first()\
+        known_encodings = select( d for d in fm.FuningData ).first()\
             .face_encodings
+        self.known_encodings = self.known_encodings if known_encodings is None \
+            else known_encodings
 
     @db_session
     def save_encoding( self ):
@@ -283,12 +289,21 @@ class _MainUI():
             name = self.mainui.name_entry.get() ,\
             dob =  datetime.strptime( \
                 self.mainui.DOB_entry.get(), '%Y-%m-%d').date(),
+            address = self.mainui.address_entry.get(),
             note = self.mainui.note_text.get(1.0, 'end') )
 
-            face_encoding = self.get_face_encoding()
+        face_encoding = self.get_face_encoding()
 
         if face_encoding is None:
             messagebox.showinfo( _('Information'), _('No face is detected'))
         else:
-            self.known_encodings[ str(p.id) ].append( face_encoding )
-            commit()
+            FuningData = select( d for d in fm.FuningData ).first()
+
+            if FuningData.face_encodings is None:
+                FuningData.face_encodings = {str(p.id):[face_encoding]}
+                self.known_encodings = FuningData.face_encodings
+            
+            else:                    
+                self.known_encodings[  str(p.id) ] +=  [ face_encoding ]
+                FuningData.face_encodings  = self.known_encodings
+        commit()
