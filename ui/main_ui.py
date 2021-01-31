@@ -26,7 +26,7 @@ class MainUI():
             *self.show_from_optionmenus.values() )
 
         # video label
-        self.vid_label = tk.Label( self.show_frame )
+        self.vid_img_label = tk.Label( self.show_frame )
 
         # shoot
         self.pause_button = tk.Button( self.show_frame, text = _('Pause') )
@@ -74,8 +74,8 @@ class MainUI():
 
     def place(self):
 
-        # place vid_label
-        self.vid_label.grid( column = 0, row = 0, rowspan = 3,
+        # place vid_img_label
+        self.vid_img_label.grid( column = 0, row = 0, rowspan = 3,
             columnspan = 3 )
 
         # place show_frame

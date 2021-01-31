@@ -55,6 +55,8 @@ class _MainUI():
          
         # vid
         self.iru =  self.video_source = self.vid =  self.vid_ret_frame = None
+        self.face_image_path = None
+        self.face_image = None
 
         self.is_pause = False;  self.vid_refesh = 30
 
@@ -93,20 +95,45 @@ class _MainUI():
         show_f = list(keys)[ list( values ).index( value )]
         
         if show_f == 'file':
-            self.video_source = tkf.askopenfile(
+            if not self.is_pause:
+                self.is_pause = True
+            if self.iru is not None:
+                self.iru = None
+                self.iru.release()
+
+            self.image_path = tkf.askopenfilename(
                 title = _('Select a file'),
                 initialdir = '~/Videos'
             )
 
+            self.pick_image()
+
         if show_f == 'camara':
             self.video_source = 0
             
-
-        if self.video_source is not None\
-            and self.iru is None:
-            self.iru = IRU( self.video_source )
+            if self.video_source is not None\
+                and self.iru is None:
+                self.is_pause = False
+                self.iru = IRU( self.video_source )
+            
+            self.play_video()
         
-        self.play_video()
+    def pick_image( self ):
+        self.face_image  = cv2.imread( self.image_path )
+
+        img = Image.fromarray( self.face_image )
+        imgtk = ImageTk.PhotoImage( image= img )
+        self.mainui.vid_img_label.imgtk = imgtk
+        self.mainui.vid_img_label.configure(image=imgtk)
+
+        self.get_face_locations( self.face_image )
+        self.face_num = len( self.face_locations )
+
+        self.mainui.face_num_label['text'] = \
+            f'{self.face_num}/{self.face_sum}'
+
+        self.pick_face( )
+
 
     def pick_next_face(self):
         if self.face_num < self.face_sum - 1:
@@ -120,7 +147,7 @@ class _MainUI():
             self.face_num -= 1
             self.mainui.face_num_label['text'] = \
                 f'{self.face_num+1}/{self.face_sum}'
-            self.pick_face()
+            self.pick_face( )
 
     def pause_vid( self ):
         if self.is_pause:
@@ -135,26 +162,27 @@ class _MainUI():
         if self.iru is not None and not self.is_pause:
             
 
-            self.vid_ret_frame = self.iru.get_ret_frame()
+            self.vid_ret_frame  = self.iru.get_ret_frame()
+            self.face_image = self.vid_ret_frame[1]
             if self.vid_ret_frame[0] is not None:
                 
-                self.get_face_locations()
+                self.get_face_locations(  self.face_image )
 
                 self.face_sum = len(self.face_locations) 
                 if self.face_sum > 0:
                     if self.face_num < 0 : self.face_num = 0
-                    self.pick_face()
+                    self.pick_face(  )
                     self.make_rect()
                 
-                vid_img = Image.fromarray( self.vid_ret_frame[1] )
+                vid_img = Image.fromarray( self.face_image )
                 imgtk = ImageTk.PhotoImage( image=vid_img )
-                self.mainui.vid_label.imgtk = imgtk
-                self.mainui.vid_label.configure(image=imgtk)
-            self.mainui.vid_label.after( self.vid_refesh,  self.play_video ) 
+                self.mainui.vid_img_label.imgtk = imgtk
+                self.mainui.vid_img_label.configure(image=imgtk)
+            self.mainui.vid_img_label.after( self.vid_refesh,  self.play_video ) 
     
-    def get_face_locations(self):
+    def get_face_locations(self, image):
 
-        small_frame = cv2.resize( self.vid_ret_frame[1], (0, 0), \
+        small_frame = cv2.resize( image, (0, 0), \
             fx=self.resize_rate, fy=self.resize_rate)  
         
         fs = face_recognition.face_locations( small_frame )
@@ -163,9 +191,9 @@ class _MainUI():
     
     def get_face_encoding( self ):
         
-        if face_sum > 0 :
-            face_encoding = face_recognition.face_encodings( vid_ret_frame[1],\
-                self.face_locations[ face_num ] )
+        if self.face_sum > 0 :
+            face_encoding = face_recognition.face_encodings( \
+                self.face_image, self.face_locations[ self.face_num ] )
             return face_encoding
         return None
         
@@ -175,7 +203,7 @@ class _MainUI():
     def make_rect( self ):
 
         for top, right, bottom, left in self.face_locations:
-            cv2.rectangle( self.vid_ret_frame[1], (left, top), \
+            cv2.rectangle( self.face_image, (left, top), \
             (right, bottom), (0, 0, 255), 2)
 
 
@@ -186,7 +214,7 @@ class _MainUI():
         b_t_sub = bottom - top
         r_l_sub = right - left
         size_add = b_t_sub if  b_t_sub > r_l_sub else r_l_sub
-        frame =  self.vid_ret_frame[1][top:( top + size_add ), \
+        frame =  image[top:( top + size_add ), \
             left:(left + size_add)]
 
         frame = cv2.resize( frame, (200, 200) )
@@ -236,25 +264,31 @@ class _MainUI():
     @db_session
     def save_encoding( self ):
         p = None
-        if len( seld.mainui.uuid_entry.get() ) > 0 and \
+        if len( self.mainui.uuid_entry.get() ) > 0 and \
             fm.Person.exists( id = self.mainui.uuid_entry.get() ):
-            p = select(p for p in fm.Person \
-                if id = self.mainui.uuid_entry.get() ).first()
+            p = select(p for p in fm.Person if \
+                id is self.mainui.uuid_entry.get() ).first()
+
             p.name = self.mainui.name_entry.get()
-            p.dob = datetime.strptime( 
-                self.mainui.DOB_entry.get(), "%Y-%m-%d").date()
-            p.note = self.mainui.note_text.get()
+            try:
+                p.dob = datetime.strptime( \
+                    self.mainui.DOB_entry.get(), "%Y-%m-%d").date()
+            except:
+                messagebox.showerror( _('Error'), \
+                    _('Check the DOB entry please!') ) 
+            p.note = self.mainui.note_text.get(1.0, 'end')
 
         else:
             p = Person( \
             name = self.mainui.name_entry.get() ,\
-            dob =  datetime.strptime( 
-                self.mainui.DOB_entry.get(), "%Y-%m-%d").date()\
-            note = self.mainui.note_text.get() )
+            dob =  datetime.strptime( \
+                self.mainui.DOB_entry.get(), '%Y-%m-%d').date(),
+            note = self.mainui.note_text.get(1.0, 'end') )
 
             face_encoding = self.get_face_encoding()
-            if face_encoding is None:
-                messagebox.showinfo( _('Information'), _('No face is detected'))
-            else:
-                self.known_encodings[ str(p.id) ].append( face_encoding )
-                commit()
+
+        if face_encoding is None:
+            messagebox.showinfo( _('Information'), _('No face is detected'))
+        else:
+            self.known_encodings[ str(p.id) ].append( face_encoding )
+            commit()

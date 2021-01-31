@@ -27,6 +27,7 @@ class Person( db.Entity ):
     id = PrimaryKey( UUID, auto = True )
     name = Optional( str )
     dob = Optional( date )
+    address = Optional( str )
     note = Optional( str )
     
 class FuningData( db.Entity ):
