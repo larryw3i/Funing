@@ -137,3 +137,5 @@ data/
 *.sqlite3
 *.sqlite
 *.db
+tests/*
+!tests/tests.py

@@ -36,9 +36,11 @@ class MainUI():
 
         self.face_label = tk.Label( self.entry_frame )
 
-        self.prev_f_button = tk.Button(self.entry_frame , text = _("prev_symb"))
+        self.prev_f_button = tk.Button(self.entry_frame , \
+            text = _("prev_symb"))
         self.face_num_label = tk.Label( self.entry_frame , text = _('*/*'))
-        self.next_f_button = tk.Button(self.entry_frame , text = _('next_symb'))
+        self.next_f_button = tk.Button(self.entry_frame , \
+            text = _('next_symb'))
 
         self.uuid_label = tk.Label( self.entry_frame, text = _('id') )
         self.uuid_entry = tk.Entry( self.entry_frame , state ='disabled')

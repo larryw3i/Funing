@@ -15,6 +15,7 @@ from PIL import Image , ImageTk
 import dlib
 import face_recognition
 from _ui.locale import _
+from datetime import datetime , date
 
 class IRU():
     def __init__(self, video_source = 0 ):
@@ -63,7 +64,7 @@ class _MainUI():
         self.face_sum = 0
         self.face_num = -1
         self.resize_rate = 0.25
-        self.get_face_encodings()
+        self.get_db_face_encodings()
     
         self.mainui.lang_combobox.bind(
             '<<ComboboxSelected>>',
@@ -84,18 +85,6 @@ class _MainUI():
         if self.iru is not None:
             self.iru.release()
         self.mainui.root.destroy()
-
-    @db_session
-    def get_face_encodings( self ):
-        self.known_encodings = select( d for d in fm.FuningData ).first()\
-            .face_encodings
-
-    @db_session
-    def save_encoding( self ):
-        p = Person( \
-        name = self.mainui.name_entry.get() ,\
-        dob = self.mainui.DOB_entry.get(),\
-        note = self.mainui.note_text.get() )
 
     def show_from( self, *args  ):
         keys =  self.mainui.show_from_optionmenus.keys()
@@ -171,6 +160,17 @@ class _MainUI():
         fs = face_recognition.face_locations( small_frame )
         self.face_locations = [ [ int(f_/self.resize_rate) for f_ in f ] \
             for f in fs]
+    
+    def get_face_encoding( self ):
+        
+        if face_sum > 0 :
+            face_encoding = face_recognition.face_encodings( vid_ret_frame[1],\
+                self.face_locations[ face_num ] )
+            return face_encoding
+        return None
+        
+
+    
         
     def make_rect( self ):
 
@@ -228,3 +228,33 @@ class _MainUI():
 
         pass
 
+    @db_session
+    def get_db_face_encodings( self ):
+        self.known_encodings = select( d for d in fm.FuningData ).first()\
+            .face_encodings
+
+    @db_session
+    def save_encoding( self ):
+        p = None
+        if len( seld.mainui.uuid_entry.get() ) > 0 and \
+            fm.Person.exists( id = self.mainui.uuid_entry.get() ):
+            p = select(p for p in fm.Person \
+                if id = self.mainui.uuid_entry.get() ).first()
+            p.name = self.mainui.name_entry.get()
+            p.dob = datetime.strptime( 
+                self.mainui.DOB_entry.get(), "%Y-%m-%d").date()
+            p.note = self.mainui.note_text.get()
+
+        else:
+            p = Person( \
+            name = self.mainui.name_entry.get() ,\
+            dob =  datetime.strptime( 
+                self.mainui.DOB_entry.get(), "%Y-%m-%d").date()\
+            note = self.mainui.note_text.get() )
+
+            face_encoding = self.get_face_encoding()
+            if face_encoding is None:
+                messagebox.showinfo( _('Information'), _('No face is detected'))
+            else:
+                self.known_encodings[ str(p.id) ].append( face_encoding )
+                commit()

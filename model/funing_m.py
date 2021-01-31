@@ -20,6 +20,7 @@ if not os.path.exists( data_file_p_path ):
 if not os.path.exists( data_file_path ):
     with open( data_file_path ,"w") : pass
 
+# https://docs.ponyorm.org/firststeps.html#database-binding
 db.bind(provider='sqlite', filename = data_file_path )
 
 class Person( db.Entity ):
