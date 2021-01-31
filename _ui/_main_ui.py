@@ -14,6 +14,7 @@ import cv2
 from PIL import Image , ImageTk
 import dlib
 import face_recognition
+from _ui.locale import _
 
 class IRU():
     def __init__(self, video_source = 0 ):
@@ -86,12 +87,15 @@ class _MainUI():
 
     @db_session
     def get_face_encodings( self ):
-        self.known_encodings = (select d for d in fm.FuningData ).first()\
+        self.known_encodings = select( d for d in fm.FuningData ).first()\
             .face_encodings
 
     @db_session
     def save_encoding( self ):
-        p = Person()
+        p = Person( \
+        name = self.mainui.name_entry.get() ,\
+        dob = self.mainui.DOB_entry.get(),\
+        note = self.mainui.note_text.get() )
 
     def show_from( self, *args  ):
         keys =  self.mainui.show_from_optionmenus.keys()

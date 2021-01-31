@@ -2,7 +2,7 @@
 
 import tkinter as tk
 from tkinter import ttk
-from _ui import _, lang_code
+from _ui.locale import _, lang_code
 from langcodes import Language
 from setting import base_dir, locale_path
 import os
@@ -13,7 +13,6 @@ class MainUI():
         self.root.title( _('Funing') )
 
 
-        
         # show_frame
         self.show_frame = tk.Frame( self.root )
         self.show_from_optionmenus =  {
@@ -34,11 +33,15 @@ class MainUI():
 
         # entry_frame
         self.entry_frame = tk.Frame( self.root )
+
         self.face_label = tk.Label( self.entry_frame )
 
         self.prev_f_button = tk.Button(self.entry_frame , text = _("prev_symb"))
         self.face_num_label = tk.Label( self.entry_frame , text = _('*/*'))
         self.next_f_button = tk.Button(self.entry_frame , text = _('next_symb'))
+
+        self.uuid_label = tk.Label( self.entry_frame, text = _('id') )
+        self.uuid_entry = tk.Entry( self.entry_frame , state ='disabled')
 
         self.name_label = tk.Label( self.entry_frame, text = _('Name') )
         self.name_entry = tk.Entry( self.entry_frame )
@@ -84,20 +87,23 @@ class MainUI():
         self.prev_f_button.grid( column = 0 , row = 1)
         self.face_num_label.grid( column = 1 , row = 1)
         self.next_f_button.grid( column = 2 , row = 1)
+
+        self.uuid_label.grid( column = 0, row = 2)
+        self.uuid_entry.grid( column = 1, row = 2)
         
-        self.name_label.grid(column = 0, row = 2 )
-        self.name_entry.grid(column = 1 ,row = 2)
+        self.name_label.grid(column = 0, row = 3 )
+        self.name_entry.grid(column = 1 ,row = 3)
 
-        self.DOB_label.grid(column = 0, row = 3 )
-        self.DOB_entry.grid(column = 1 ,row = 3 )
+        self.DOB_label.grid(column = 0, row = 4 )
+        self.DOB_entry.grid(column = 1 ,row = 4 )
 
-        self.address_label.grid(column = 0, row = 4 )
-        self.address_entry.grid(column = 1 ,row = 4 )
+        self.address_label.grid(column = 0, row = 5 )
+        self.address_entry.grid(column = 1 ,row = 5 )
 
-        self.note_label.grid(column = 0, row = 5 )
-        self.note_text.grid(column = 1 ,row = 5 )
+        self.note_label.grid(column = 0, row = 6 )
+        self.note_text.grid(column = 1 ,row = 6 )
         # save_button
-        self.save_button.grid( column = 1, row= 6)
+        self.save_button.grid( column = 1, row= 7)
 
         self.entry_frame.grid( column = 1, row = 0 )
 

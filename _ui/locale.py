@@ -28,4 +28,3 @@ default_lang = gettext.translation(
 default_lang.install()
 
 _ = default_lang.gettext
-

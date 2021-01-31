@@ -7,6 +7,8 @@ from uuid import UUID
 from datetime import date
 
 from setting import base_dir
+from pony.orm.dbapiprovider import OperationalError
+
 
 db = Database()
 
@@ -29,6 +31,10 @@ class Person( db.Entity ):
 class FuningData( db.Entity ):
     id = PrimaryKey( UUID, auto = True )
     lang_code = Optional( str )
-    face_encodings = Required( Json )
+    face_encodings = Optional( Json )
 
-db.generate_mapping( create_tables = True )
+try:
+    db.generate_mapping( create_tables = True )
+except OperationalError as e:
+    print( e )
+    print('\nAdd specific column to database (^_^)\n' )
