@@ -315,7 +315,8 @@ class _MainUI():
             messagebox.showinfo( _('Information'), _('No face is detected'))
         else:
             if len( self.known_encodings) > 0:
-                self.known_encodings[str(p.id)] += [self.current_face_encoding]
+                self.known_encodings.setdefault(str(p.id) ,\
+                    known_encodings.get(str(p.id))+[self.current_face_encoding]
             else:
                 self.known_encodings = { str(p.id):\
                     [self.current_face_encoding] }
