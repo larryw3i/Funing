@@ -165,10 +165,14 @@ class _MainUI():
             self.mainui.pause_button['text'] = _('Pause')
         else:
             self.is_pause = True
+
+            self.calc_current_face_encoding()
+            self.compare_faces()
+            
             self.mainui.pause_button['text'] = _('Play')
 
     def play_video( self ):
-        if self.iru is not None and not self.is_pause:
+        if self.iru != None and not self.is_pause:
             
 
             self.vid_ret_frame  = self.iru.get_ret_frame()
@@ -207,25 +211,29 @@ class _MainUI():
         if self.face_sum > 0 :
             self.current_face_encoding = face_recognition.face_encodings( \
                 self.face_image, [self.face_locations[ self.face_num ]] )[0]
-            print( self.current_face_encoding )
+
             
     def compare_faces( self ):
         for _id, encodings in self.known_encodings.items():
             comparisons = face_recognition.compare_faces( \
                 encodings, self.current_face_encoding )
             if True in comparisons:
-                print( true )
-                # self.update_entry_ui()
+                self.current_face_person_id = _id
+                self.update_entry_ui()
 
+    @db_session
     def update_entry_ui(self):
         if self.current_face_person_id != None:
             p = select(p for p in fm.Person \
                 if id == self.current_face_person_id).first()
-            if p != None:
+            print( p )
+            if p is not None:
+                self.mainui.uuid_entry['text'] = str(p.id)
                 self.mainui.name_entry['text'] = p.name
                 self.mainui.DOB_entry['text'] = p.dob
                 self.mainui.note_text['text'] = p.note
                 self.mainui.address_entry['text'] = p.address
+                print( 1 )
         
     def make_rect( self ):
 
