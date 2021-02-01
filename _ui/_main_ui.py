@@ -226,14 +226,12 @@ class _MainUI():
         if self.current_face_person_id != None:
             p = select(p for p in fm.Person \
                 if id == self.current_face_person_id).first()
-            print( p )
             if p is not None:
                 self.mainui.uuid_entry['text'] = str(p.id)
                 self.mainui.name_entry['text'] = p.name
                 self.mainui.DOB_entry['text'] = p.dob
                 self.mainui.note_text['text'] = p.note
                 self.mainui.address_entry['text'] = p.address
-                print( 1 )
         
     def make_rect( self ):
 
@@ -315,8 +313,13 @@ class _MainUI():
             messagebox.showinfo( _('Information'), _('No face is detected'))
         else:
             if len( self.known_encodings) > 0:
-                self.known_encodings.setdefault(str(p.id) ,\
-                    known_encodings.get(str(p.id))+[self.current_face_encoding]
+                if self.known_encodings.get(str(p.id)) is None:
+                    self.known_encodings.setdefault(str(p.id) ,\
+                        [self.current_face_encoding])
+                else:
+                    self.known_encodings.setdefault(str(p.id) ,\
+                        [self.known_encodings.get(str(p.id))]+\
+                        [self.current_face_encoding])
             else:
                 self.known_encodings = { str(p.id):\
                     [self.current_face_encoding] }
