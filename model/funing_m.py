@@ -9,7 +9,6 @@ from datetime import date
 from setting import base_dir
 from pony.orm.dbapiprovider import OperationalError
 
-
 db = Database()
 
 data_file_p_path = base_dir + '/data'
@@ -30,11 +29,6 @@ class Person( db.Entity ):
     address = Optional( str )
     note = Optional( str )
     
-class FuningData( db.Entity ):
-    id = PrimaryKey( UUID, auto = True )
-    lang_code = Optional( str )
-    face_encodings = Optional( Json )
-
 try:
     db.generate_mapping( create_tables = True )
 except OperationalError as e:

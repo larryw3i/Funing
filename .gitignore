@@ -133,9 +133,10 @@ dmypy.json
 ###############################################################################
 
 .vscode/
-data/
 *.sqlite3
 *.sqlite
 *.db
 tests/tests/*
 jupyter_notebok.ipynb
+setting.yml
+data/face_encodings.data

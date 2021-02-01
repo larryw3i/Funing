@@ -7,7 +7,6 @@ from langcodes import Language
 import gettext
 import sys,os
 from model import funing_m as fm
-from model.funing_m import FuningData as fd
 from model.funing_m import Person
 import  tkinter.filedialog as tkf
 import cv2
@@ -17,6 +16,9 @@ import face_recognition
 from _ui.locale import _
 from datetime import datetime , date
 import json
+from setting import setting_yml, setting_path, face_encodings_path
+import numpy as np
+import pickle
 
 class IRU():
     def __init__(self, video_source = 0 ):
@@ -62,12 +64,12 @@ class _MainUI():
         self.is_pause = False;  self.vid_refesh = 30
 
         self.face_locations = []
-        self.known_encodings = {} 
+        self.known_encodings = pickle.load( open(face_encodings_path , 'rb') )
+        self.current_face_encoding = None
         # face num for face_label
         self.face_sum = 0
         self.face_num = -1
         self.resize_rate = 0.25
-        self.get_db_face_encodings()
     
         self.mainui.lang_combobox.bind(
             '<<ComboboxSelected>>',
@@ -201,6 +203,10 @@ class _MainUI():
             return face_encoding
         return None
         
+    
+    def compare_faces( self ):
+        for _id, encodings in self.known_encodings.items():
+            comparisons = face_recognition.compare_faces( encodings,  )
 
     
         
@@ -231,26 +237,18 @@ class _MainUI():
             f'{self.face_num+1}/{self.face_sum}'
 
 
-    @db_session
     def change_language(self, lang ):
 
         restartapp = messagebox.askyesno(
             title = _('Restart Funing Now?')
         )
         if restartapp:
-
-            lang_code_exists = count( d for d in fm.FuningData ) > 0
-
+            
             lang_display_name = self.mainui.lang_combobox_var.get()
             lang_code = Language.find( lang_display_name ).to_tag()
-
-            if not lang_code_exists:
-                fd( lang_code = lang_code )
-            else :
-                select( d for d in fm.FuningData ).first()\
-                    .lang_code = lang_code
             
-            commit()
+            setting_yml['lang_code'] = lang_code
+            yaml.dump( setting_yml, open( setting_path, 'w') )
 
             if self.iru is not None:
                 self.iru.release()
@@ -260,12 +258,6 @@ class _MainUI():
 
         pass
 
-    @db_session
-    def get_db_face_encodings( self ):
-        known_encodings = select( d for d in fm.FuningData ).first()\
-            .face_encodings
-        self.known_encodings = self.known_encodings if known_encodings is None \
-            else known_encodings
 
     @db_session
     def save_encoding( self ):
@@ -292,18 +284,15 @@ class _MainUI():
             address = self.mainui.address_entry.get(),
             note = self.mainui.note_text.get(1.0, 'end') )
 
+        commit()
+
         face_encoding = self.get_face_encoding()
 
         if face_encoding is None:
             messagebox.showinfo( _('Information'), _('No face is detected'))
         else:
-            FuningData = select( d for d in fm.FuningData ).first()
-
-            if FuningData.face_encodings is None:
-                FuningData.face_encodings = {str(p.id):[face_encoding]}
-                self.known_encodings = FuningData.face_encodings
-            
-            else:                    
-                self.known_encodings[  str(p.id) ] +=  [ face_encoding ]
-                FuningData.face_encodings  = self.known_encodings
-        commit()
+            if len( self.known_encodings) > 0:
+                self.known_encodings[str(p.id)] += [face_encoding]
+            else:
+                self.known_encodings = { str(p.id):[face_encoding] }
+            pickle.dump( self.known_encodings, open(face_encodings_path, 'wb'))

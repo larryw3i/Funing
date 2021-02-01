@@ -8,23 +8,24 @@ import locale
 import tkinter as tk
 from pony.orm import *
 from model import funing_m as fm
-from setting import base_dir, locale_path
+from setting import base_dir, locale_path, lang_code, setting_yml
+import yaml
 
-lang_code = locale.getdefaultlocale()[0]\
+sys_lang_code = locale.getdefaultlocale()[0]\
     .replace('_','-')
 
-if not lang_code in os.listdir( locale_path ):
-    lang_code = 'en-US'
+if sys_lang_code != lang_code and \
+    sys_lang_code in os.listdir( locale_path ):
+    lang_code = sys_lang_code
+    setting_yml['lang_code'] = lang_code
+    yaml.dump( setting_yml, open( setting_path, 'w') )
+    
 
-with db_session:
-    fd_first = select( d for d in fm.FuningData ).first()
-    lang_code = lang_code if fd_first is None else fd_first.lang_code
-
-default_lang = gettext.translation(
+lang = gettext.translation(
     'funing',
     localedir = 'locale',
     languages = [ lang_code ])
 
-default_lang.install()
+lang.install()
 
-_ = default_lang.gettext
+_ = lang.gettext
