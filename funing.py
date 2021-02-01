@@ -5,7 +5,6 @@ import sys
 import getopt
 from setting import base_dir, initialized, data_dir, setting_path, setting_yml,\
     face_encodings_path
-from _ui.locale import _
 import yaml
 import numpy as np
 import json
@@ -38,7 +37,9 @@ class Funing():
             try: self.msgfmt()
             except Exception as e:
                 print( e )
-                print( _('gettext_exception_message') )
+                print( 'Make sure gettext is installed, '+\
+                    'read https://www.gnu.org/software/gettext/ '+\
+                    'and install it. (^_^)' )
 
         if not os.path.exists( data_dir ): os.mkdir( data_dir )
         if not os.path.exists( face_encodings_path ):
@@ -51,6 +52,7 @@ class Funing():
 
 if __name__ == '__main__':
     sys_argv = sys.argv[1:]
+    
     f = Funing()
 
     optlist , args  = getopt.getopt( sys_argv, '' )
