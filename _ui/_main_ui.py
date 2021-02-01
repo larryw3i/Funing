@@ -19,6 +19,7 @@ import json
 from setting import setting_yml, setting_path, face_encodings_path
 import numpy as np
 import pickle
+import yaml
 
 class IRU():
     def __init__(self, video_source = 0 ):
@@ -178,15 +179,19 @@ class _MainUI():
 
                 self.face_sum = len(self.face_locations) 
                 if self.face_sum > 0:
+
                     if self.face_num < 0 : self.face_num = 0
-                    self.pick_face(  )
+                    if self.face_num > self.face_sum - 1: 
+                        self.face_num = self.face_sum - 1
+
+                    self.pick_face()
                     self.make_rect()
                 
                 vid_img = Image.fromarray( self.face_image )
                 imgtk = ImageTk.PhotoImage( image=vid_img )
                 self.mainui.vid_img_label.imgtk = imgtk
                 self.mainui.vid_img_label.configure(image=imgtk)
-            self.mainui.vid_img_label.after( self.vid_refesh,  self.play_video ) 
+            self.mainui.vid_img_label.after( self.vid_refesh, self.play_video )
     
     def get_face_locations(self, image):
 
@@ -201,15 +206,16 @@ class _MainUI():
         
         if self.face_sum > 0 :
             self.current_face_encoding = face_recognition.face_encodings( \
-                self.face_image, [self.face_locations[ self.face_num ]] )
-        
-    
+                self.face_image, [self.face_locations[ self.face_num ]] )[0]
+            print( self.current_face_encoding )
+            
     def compare_faces( self ):
         for _id, encodings in self.known_encodings.items():
             comparisons = face_recognition.compare_faces( \
                 encodings, self.current_face_encoding )
             if True in comparisons:
-                self.update_entry_ui()
+                print( true )
+                # self.update_entry_ui()
 
     def update_entry_ui(self):
         if self.current_face_person_id != None:
@@ -247,9 +253,6 @@ class _MainUI():
         self.mainui.face_num_label['text'] = \
             f'{self.face_num+1}/{self.face_sum}'
         
-        self.calc_current_face_encoding()
-        self.compare_faces()
-
 
     def change_language(self, lang ):
 

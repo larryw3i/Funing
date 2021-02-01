@@ -8,13 +8,14 @@ import locale
 import tkinter as tk
 from pony.orm import *
 from model import funing_m as fm
-from setting import base_dir, locale_path, lang_code, setting_yml
+from setting import base_dir, locale_path, lang_code, setting_yml, setting_path
 import yaml
 
 sys_lang_code = locale.getdefaultlocale()[0]\
     .replace('_','-')
 
-if sys_lang_code != lang_code and \
+if lang_code == 'en-US' and \
+    sys_lang_code != lang_code and \
     sys_lang_code in os.listdir( locale_path ):
     lang_code = sys_lang_code
     setting_yml['lang_code'] = lang_code
