@@ -225,8 +225,11 @@ class _MainUI():
     def update_entry_ui(self):
         if self.current_face_person_id != None:
             p = select(p for p in fm.Person \
-                if id == self.current_face_person_id).first()
-            if p is not None:
+                if str(id) == self.current_face_person_id).first()
+            
+            print( self.current_face_person_id )
+            print(p)
+            if p != None:
                 self.mainui.uuid_entry['text'] = str(p.id)
                 self.mainui.name_entry['text'] = p.name
                 self.mainui.DOB_entry['text'] = p.dob
