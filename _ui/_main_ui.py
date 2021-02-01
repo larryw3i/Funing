@@ -70,6 +70,8 @@ class _MainUI():
         self.face_sum = 0
         self.face_num = -1
         self.resize_rate = 0.25
+
+        self.current_face_person_id = None
     
         self.mainui.lang_combobox.bind(
             '<<ComboboxSelected>>',
@@ -195,20 +197,29 @@ class _MainUI():
         self.face_locations = [ [ int(f_/self.resize_rate) for f_ in f ] \
             for f in fs]
     
-    def get_face_encoding( self ):
+    def calc_current_face_encoding( self ):
         
         if self.face_sum > 0 :
-            face_encoding = face_recognition.face_encodings( \
+            self.current_face_encoding = face_recognition.face_encodings( \
                 self.face_image, [self.face_locations[ self.face_num ]] )
-            return face_encoding
-        return None
         
     
     def compare_faces( self ):
         for _id, encodings in self.known_encodings.items():
-            comparisons = face_recognition.compare_faces( encodings,  )
+            comparisons = face_recognition.compare_faces( \
+                encodings, self.current_face_encoding )
+            if True in comparisons:
+                self.update_entry_ui()
 
-    
+    def update_entry_ui(self):
+        if self.current_face_person_id != None:
+            p = select(p for p in fm.Person \
+                if id == self.current_face_person_id).first()
+            if p != None:
+                self.mainui.name_entry['text'] = p.name
+                self.mainui.DOB_entry['text'] = p.dob
+                self.mainui.note_text['text'] = p.note
+                self.mainui.address_entry['text'] = p.address
         
     def make_rect( self ):
 
@@ -235,6 +246,9 @@ class _MainUI():
 
         self.mainui.face_num_label['text'] = \
             f'{self.face_num+1}/{self.face_sum}'
+        
+        self.calc_current_face_encoding()
+        self.compare_faces()
 
 
     def change_language(self, lang ):
@@ -265,7 +279,7 @@ class _MainUI():
         if len( self.mainui.uuid_entry.get() ) > 0 and \
             fm.Person.exists( id = self.mainui.uuid_entry.get() ):
             p = select(p for p in fm.Person if \
-                id is self.mainui.uuid_entry.get() ).first()
+                id == self.mainui.uuid_entry.get() ).first()
 
             p.name = self.mainui.name_entry.get()
             try:
@@ -286,13 +300,12 @@ class _MainUI():
 
         commit()
 
-        face_encoding = self.get_face_encoding()
-
-        if face_encoding is None:
+        if self.current_face_encoding is None:
             messagebox.showinfo( _('Information'), _('No face is detected'))
         else:
             if len( self.known_encodings) > 0:
-                self.known_encodings[str(p.id)] += [face_encoding]
+                self.known_encodings[str(p.id)] += [self.current_face_encoding]
             else:
-                self.known_encodings = { str(p.id):[face_encoding] }
+                self.known_encodings = { str(p.id):\
+                    [self.current_face_encoding] }
             pickle.dump( self.known_encodings, open(face_encodings_path, 'wb'))
