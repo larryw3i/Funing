@@ -2,6 +2,7 @@
 from pony.orm import *
 from tkinter import messagebox
 import tkinter as tk
+from tkinter import *
 from ui.main_ui import MainUI
 from langcodes import Language
 import gettext
@@ -20,6 +21,7 @@ from setting import setting_yml, setting_path, face_encodings_path
 import numpy as np
 import pickle
 import yaml
+import uuid
 
 class IRU():
     def __init__(self, video_source = 0 ):
@@ -225,16 +227,19 @@ class _MainUI():
     def update_entry_ui(self):
         if self.current_face_person_id != None:
             p = select(p for p in fm.Person \
-                if str(id) == self.current_face_person_id).first()
+                if p.id == self.current_face_person_id).first()
             
-            print( self.current_face_person_id )
-            print(p)
             if p != None:
-                self.mainui.uuid_entry['text'] = str(p.id)
-                self.mainui.name_entry['text'] = p.name
-                self.mainui.DOB_entry['text'] = p.dob
-                self.mainui.note_text['text'] = p.note
-                self.mainui.address_entry['text'] = p.address
+                self.mainui.uuid_entry.delete(0, END)
+                self.mainui.uuid_entry.insert(0 , p.id)
+                self.mainui.name_entry.delete(0, END)
+                self.mainui.name_entry.insert(0 , p.name)
+                self.mainui.DOB_entry.delete(0, END)
+                self.mainui.DOB_entry.insert(0 , str(p.dob) )
+                self.mainui.address_entry.delete(0, END)
+                self.mainui.address_entry.insert(0 , p.address)
+                self.mainui.note_text.delete('1.0', END)
+                self.mainui.note_text.insert(END , p.note)
         
     def make_rect( self ):
 
@@ -291,7 +296,7 @@ class _MainUI():
         if len( self.mainui.uuid_entry.get() ) > 0 and \
             fm.Person.exists( id = self.mainui.uuid_entry.get() ):
             p = select(p for p in fm.Person if \
-                id == self.mainui.uuid_entry.get() ).first()
+                p.id == self.mainui.uuid_entry.get() ).first()
 
             p.name = self.mainui.name_entry.get()
             try:
@@ -304,11 +309,12 @@ class _MainUI():
 
         else:
             p = Person( \
-            name = self.mainui.name_entry.get() ,\
-            dob =  datetime.strptime( \
-                self.mainui.DOB_entry.get(), '%Y-%m-%d').date(),
-            address = self.mainui.address_entry.get(),
-            note = self.mainui.note_text.get(1.0, 'end') )
+                id = str(uuid.uuid4()),\
+                name = self.mainui.name_entry.get() ,\
+                dob =  datetime.strptime( \
+                    self.mainui.DOB_entry.get(), '%Y-%m-%d').date(),
+                address = self.mainui.address_entry.get(),
+                note = self.mainui.note_text.get(1.0, 'end') )
 
         commit()
 

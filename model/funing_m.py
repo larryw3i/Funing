@@ -23,7 +23,7 @@ if not os.path.exists( data_file_path ):
 db.bind(provider='sqlite', filename = data_file_path )
 
 class Person( db.Entity ):
-    id = PrimaryKey( UUID, auto = True )
+    id = PrimaryKey( str )
     name = Optional( str )
     dob = Optional( date )
     address = Optional( str )
