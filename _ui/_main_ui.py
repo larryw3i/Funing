@@ -320,6 +320,8 @@ class _MainUI():
 
         commit()
 
+        self.current_face_encoding()
+        
         if self.current_face_encoding is None:
             messagebox.showinfo( _('Information'), _('No face is detected'))
         else:
