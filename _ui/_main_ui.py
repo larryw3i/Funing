@@ -230,8 +230,10 @@ class _MainUI():
                 if p.id == self.current_face_person_id).first()
             
             if p != None:
+                self.mainui.uuid_entry['state'] = 'normal'
                 self.mainui.uuid_entry.delete(0, END)
                 self.mainui.uuid_entry.insert(0 , p.id)
+                self.mainui.uuid_entry['state'] = 'disabled'
                 self.mainui.name_entry.delete(0, END)
                 self.mainui.name_entry.insert(0 , p.name)
                 self.mainui.DOB_entry.delete(0, END)
