@@ -69,6 +69,7 @@ class _MainUI():
         self.face_locations = []
         self.known_encodings = pickle.load( open(face_encodings_path , 'rb') )
         self.current_face_encoding = None
+        self.comparison_tolerance = 0.4
         # face num for face_label
         self.face_sum = 0
         self.face_num = -1
@@ -220,12 +221,20 @@ class _MainUI():
 
         self.calc_current_face_encoding()
 
+        self.current_face_person_id = None
+
         for _id, encodings in self.known_encodings.items():
+
             comparisons = face_recognition.compare_faces( \
-                encodings, self.current_face_encoding )
+                encodings, self.current_face_encoding , \
+                self.comparison_tolerance)
+                        
             if True in comparisons:
                 self.current_face_person_id = _id
-                self.update_entry_ui()
+                break
+
+        self.update_entry_ui()
+
 
     def calc_current_face_encoding( self ):
         
@@ -239,8 +248,7 @@ class _MainUI():
         if self.is_pause and \
             self.current_face_person_id != None:
             p = select(p for p in fm.Person \
-                if p.id == self.current_face_person_id).first()
-            
+                if p.id == self.current_face_person_id ).first()
             if p != None:
                 self.mainui.uuid_entry['state'] = 'normal'
                 self.mainui.uuid_entry.delete(0, END)
@@ -254,7 +262,8 @@ class _MainUI():
                 self.mainui.address_entry.insert(0 , p.address)
                 self.mainui.note_text.delete('1.0', END)
                 self.mainui.note_text.insert(END , p.note)
-        else:
+        elif (not self.is_pause) or \
+            (self.is_pause and (self.current_face_person_id is None) ):
                 self.mainui.uuid_entry['state'] = 'normal'
                 self.mainui.uuid_entry.delete(0, END)
                 self.mainui.uuid_entry['state'] = 'disabled'
@@ -262,6 +271,7 @@ class _MainUI():
                 self.mainui.DOB_entry.delete(0, END)
                 self.mainui.address_entry.delete(0, END)
                 self.mainui.note_text.delete('1.0', END)
+
     def make_rect( self ):
 
         for top, right, bottom, left in self.face_locations:
@@ -314,10 +324,16 @@ class _MainUI():
     @db_session
     def save_encoding( self ):
         p = None
-        if len( self.mainui.uuid_entry.get() ) > 0 and \
-            fm.Person.exists( id = self.mainui.uuid_entry.get() ):
+        
+        # dev: face_encoding exists and person is None sometimes
+        person_exists =  False if self.current_face_person_id is None else \
+            fm.Person.exists( id = self.current_face_person_id )
+
+        if self.current_face_person_id != None and \
+            person_exists:
+
             p = select(p for p in fm.Person if \
-                p.id == self.mainui.uuid_entry.get() ).first()
+                p.id == self.current_face_person_id ).first()
 
             p.name = self.mainui.name_entry.get()
             try:
@@ -330,7 +346,10 @@ class _MainUI():
 
         else:
             p = Person( \
-                id = str(uuid.uuid4()),\
+                id = self.current_face_person_id \
+                    if ( not person_exists and \
+                        self.current_face_person_id !=None) \
+                    else str(uuid.uuid4()),\
                 name = self.mainui.name_entry.get() ,\
                 dob =  datetime.strptime( \
                     self.mainui.DOB_entry.get(), '%Y-%m-%d').date(),
@@ -339,8 +358,6 @@ class _MainUI():
 
         commit()
 
-        self.calc_current_face_encoding()
-        
         if self.current_face_encoding is None:
             messagebox.showinfo( _('Information'), _('No face is detected'))
         else:
