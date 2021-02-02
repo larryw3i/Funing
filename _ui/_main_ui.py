@@ -152,6 +152,10 @@ class _MainUI():
             self.mainui.face_num_label['text'] = \
                 f'{self.face_num}/{self.face_sum}'
             self.pick_face()
+
+            if self.is_pause:
+                self.compare_faces()
+        
     
     def pick_prev_face(self):
         if self.face_num > 0:
@@ -160,15 +164,19 @@ class _MainUI():
                 f'{self.face_num+1}/{self.face_sum}'
             self.pick_face( )
 
+            if self.is_pause:
+                self.compare_faces()
+        
+
     def pause_vid( self ):
         if self.is_pause:
             self.is_pause = False
             self.play_video()
             self.mainui.rec_button['text'] = _('Pause')
+            self.update_entry_ui()
         else:
             self.is_pause = True
 
-            self.calc_current_face_encoding()
             self.compare_faces()
             
             self.mainui.rec_button['text'] = _('Play')
@@ -208,14 +216,10 @@ class _MainUI():
         self.face_locations = [ [ int(f_/self.resize_rate) for f_ in f ] \
             for f in fs]
     
-    def calc_current_face_encoding( self ):
-        
-        if self.face_sum > 0 :
-            self.current_face_encoding = face_recognition.face_encodings( \
-                self.face_image, [self.face_locations[ self.face_num ]] )[0]
-
-            
     def compare_faces( self ):
+
+        self.calc_current_face_encoding()
+
         for _id, encodings in self.known_encodings.items():
             comparisons = face_recognition.compare_faces( \
                 encodings, self.current_face_encoding )
@@ -223,9 +227,17 @@ class _MainUI():
                 self.current_face_person_id = _id
                 self.update_entry_ui()
 
+    def calc_current_face_encoding( self ):
+        
+        if self.face_sum > 0 :
+            self.current_face_encoding = face_recognition.face_encodings( \
+                self.face_image, [self.face_locations[ self.face_num ]] )[0]
+
+            
     @db_session
     def update_entry_ui(self):
-        if self.current_face_person_id != None:
+        if self.is_pause and \
+            self.current_face_person_id != None:
             p = select(p for p in fm.Person \
                 if p.id == self.current_face_person_id).first()
             
@@ -242,7 +254,14 @@ class _MainUI():
                 self.mainui.address_entry.insert(0 , p.address)
                 self.mainui.note_text.delete('1.0', END)
                 self.mainui.note_text.insert(END , p.note)
-        
+        else:
+                self.mainui.uuid_entry['state'] = 'normal'
+                self.mainui.uuid_entry.delete(0, END)
+                self.mainui.uuid_entry['state'] = 'disabled'
+                self.mainui.name_entry.delete(0, END)
+                self.mainui.DOB_entry.delete(0, END)
+                self.mainui.address_entry.delete(0, END)
+                self.mainui.note_text.delete('1.0', END)
     def make_rect( self ):
 
         for top, right, bottom, left in self.face_locations:
@@ -268,7 +287,7 @@ class _MainUI():
 
         self.mainui.face_num_label['text'] = \
             f'{self.face_num+1}/{self.face_sum}'
-        
+
 
     def change_language(self, lang ):
 
@@ -320,7 +339,7 @@ class _MainUI():
 
         commit()
 
-        self.current_face_encoding()
+        self.calc_current_face_encoding()
         
         if self.current_face_encoding is None:
             messagebox.showinfo( _('Information'), _('No face is detected'))
