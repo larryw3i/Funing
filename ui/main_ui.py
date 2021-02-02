@@ -29,7 +29,7 @@ class MainUI():
         self.vid_img_label = tk.Label( self.show_frame )
 
         # shoot
-        self.pause_button = tk.Button( self.show_frame, text = _('Pause') )
+        self.rec_button = tk.Button( self.show_frame, text = _('Recognize') )
 
         # entry_frame
         self.entry_frame = tk.Frame( self.root )
@@ -80,7 +80,7 @@ class MainUI():
 
         # place show_frame
         self.show_from_optionmenu.grid( column = 0, row = 4 )
-        self.pause_button.grid( column = 1, row = 4)
+        self.rec_button.grid( column = 1, row = 4)
         self.show_frame.grid( column = 0, row = 0 )
 
         # place entry_frame

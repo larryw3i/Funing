@@ -80,7 +80,7 @@ class _MainUI():
             '<<ComboboxSelected>>',
             self.change_language )
             
-        self.mainui.pause_button['command'] = self.pause_vid
+        self.mainui.rec_button['command'] = self.pause_vid
         self.mainui.prev_f_button['command'] = self.pick_prev_face
         self.mainui.next_f_button['command'] = self.pick_next_face
 
@@ -164,14 +164,14 @@ class _MainUI():
         if self.is_pause:
             self.is_pause = False
             self.play_video()
-            self.mainui.pause_button['text'] = _('Pause')
+            self.mainui.rec_button['text'] = _('Pause')
         else:
             self.is_pause = True
 
             self.calc_current_face_encoding()
             self.compare_faces()
             
-            self.mainui.pause_button['text'] = _('Play')
+            self.mainui.rec_button['text'] = _('Play')
 
     def play_video( self ):
         if self.iru != None and not self.is_pause:
