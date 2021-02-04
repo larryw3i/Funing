@@ -34,7 +34,7 @@ class _MainUI():
         self.iru =  self.video_source = \
         self.vid =  self.vid_ret_frame = None
 
-        self.face_image_path = None
+        self.face_src_path = None
         self.face_image = None
 
         self.is_pause = False;  self.vid_refesh = 30
@@ -82,6 +82,9 @@ class _MainUI():
         values = self.mainui.showframe.show_from_optionmenus.values()
         value = self.mainui.showframe.show_f_optionmenu_var.get()
         show_f = list(keys)[ list( values ).index( value )]
+
+        image_exts = ['jpg','png']
+        video_exts = ['mp4','avi','3gp']
         
         if show_f == 'file':
             if not self.is_pause:
@@ -90,12 +93,21 @@ class _MainUI():
                 self.iru.release()
                 self.iru = None
 
-            self.image_path = tkf.askopenfilename(
+            self.face_src_path = tkf.askopenfilename(
                 title = _('Select a file'),
+                filetypes = [\
+                    ( _('Image or video'), \
+                    '*.'+(' *.'.join( image_exts + video_exts)))\
+                ],
                 initialdir = '~'
             )
-            if len( self.image_path ) > 0:
-                self.pick_image()
+            if len( self.face_src_path ) > 0:
+                ext = os.path.splitext( self.face_src_path )[1][1:]
+                if ext in image_exts:
+                    self.pick_image()
+                if ext in video_exts:
+                    show_f = 'camara'
+                    self.video_source = self.face_src_path
 
         if show_f == 'camara':
             self.video_source = 0
@@ -109,7 +121,7 @@ class _MainUI():
         
     def pick_image( self ):
 
-        face_image  = cv2.imread( self.image_path )
+        face_image  = cv2.imread( self.face_src_path )
         self.face_image = cv2.cvtColor( face_image, cv2.COLOR_BGR2RGB)
 
         img = Image.fromarray( self.face_image )
@@ -331,19 +343,26 @@ class _MainUI():
                 p.dob = datetime.strptime( \
                     self.mainui.entryframe.DOB_entry.get(), "%Y-%m-%d").date()
             except:
-                messagebox.showerror( _('Error'), \
-                    _('Check the DOB entry please!') ) 
+                self.show_dob_error()
+                return
             p.note = self.mainui.entryframe.note_text.get(1.0, 'end')
 
         else:
+            p_dob = None
+
+            try:
+                p_dob = datetime.strptime( \
+                    self.mainui.entryframe.DOB_entry.get(), "%Y-%m-%d").date()
+            except:
+                self.show_dob_error()
+                return
             p = Person( \
                 id = self.current_face_person_id \
                     if ( not person_exists and \
                         self.current_face_person_id !=None) \
                     else str(uuid.uuid4()),\
                 name = self.mainui.entryframe.name_entry.get() ,\
-                dob =  datetime.strptime( \
-                    self.mainui.entryframe.DOB_entry.get(), '%Y-%m-%d').date(),
+                dob = p_dob,
                 address = self.mainui.entryframe.address_entry.get(),
                 note = self.mainui.entryframe.note_text.get(1.0, 'end') )
 
@@ -369,6 +388,9 @@ class _MainUI():
         messagebox.showinfo( _('No face detected'), \
             _('Oops.., No face detected!') )
 
+    def show_dob_error( self ):
+        messagebox.showerror( _('Error'), \
+            _('Check the DOB entry please!') ) 
 
 class IRU():
     def __init__(self, video_source = 0 ):

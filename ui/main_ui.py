@@ -83,7 +83,7 @@ class ShowFrame():
 
         # comparison_tolerance entry
         self.ct_label = tk.Label( \
-            self.frame, text = _('tolerance') )
+            self.frame, text = _('tolerance:') )
         self.ct_doublevar = DoubleVar( frame, ct )
         self.ct_entry = tk.Entry( \
             self.frame, width = 8,\
