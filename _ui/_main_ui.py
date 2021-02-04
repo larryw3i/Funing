@@ -60,14 +60,18 @@ class _MainUI():
         self.mainui.root.protocol("WM_DELETE_WINDOW", self.destroy )
          
         # vid
-        self.iru =  self.video_source = self.vid =  self.vid_ret_frame = None
+        self.iru =  self.video_source = \
+        self.vid =  self.vid_ret_frame = None
+
         self.face_image_path = None
         self.face_image = None
 
         self.is_pause = False;  self.vid_refesh = 30
 
         self.face_locations = []
-        self.known_encodings = pickle.load( open(face_encodings_path , 'rb') )
+        self.known_encodings = pickle.load( 
+                open(face_encodings_path , 'rb') )
+
         self.current_face_encoding = None
         self.comparison_tolerance = 0.4
         # face num for face_label
@@ -77,17 +81,17 @@ class _MainUI():
 
         self.current_face_person_id = None
     
-        self.mainui.lang_combobox.bind(
+        self.mainui.langcombobox.lang_combobox.bind(
             '<<ComboboxSelected>>',
             self.change_language )
             
-        self.mainui.rec_button['command'] = self.pause_vid
-        self.mainui.prev_f_button['command'] = self.pick_prev_face
-        self.mainui.next_f_button['command'] = self.pick_next_face
+        self.mainui.showframe.rec_button['command'] = self.pause_vid
 
-        self.mainui.save_button['command'] = self.save_encoding
+        self.mainui.entryframe.prev_f_button['command'] = self.pick_prev_face
+        self.mainui.entryframe.next_f_button['command'] = self.pick_next_face
+        self.mainui.entryframe.save_button['command'] = self.save_encoding
         
-        self.mainui.show_f_optionmenu_var.trace(
+        self.mainui.showframe.show_f_optionmenu_var.trace(
             'w', self.show_from )
 
         self.mainui.mainloop()
@@ -98,9 +102,9 @@ class _MainUI():
         self.mainui.root.destroy()
 
     def show_from( self, *args  ):
-        keys =  self.mainui.show_from_optionmenus.keys()
-        values = self.mainui.show_from_optionmenus.values()
-        value = self.mainui.show_f_optionmenu_var.get()
+        keys =  self.mainui.showframe.show_from_optionmenus.keys()
+        values = self.mainui.showframe.show_from_optionmenus.values()
+        value = self.mainui.showframe.show_f_optionmenu_var.get()
         show_f = list(keys)[ list( values ).index( value )]
         
         if show_f == 'file':
@@ -134,15 +138,15 @@ class _MainUI():
 
         img = Image.fromarray( self.face_image )
         imgtk = ImageTk.PhotoImage( image= img )
-        self.mainui.vid_img_label.imgtk = imgtk
-        self.mainui.vid_img_label.configure(image=imgtk)
+        self.mainui.entryframe.vid_img_label.imgtk = imgtk
+        self.mainui.entryframe.vid_img_label.configure(image=imgtk)
 
         self.get_face_locations( self.face_image )
         self.face_sum = len( self.face_locations )
 
         if self.face_sum > 0:
             self.face_num += 1
-            self.mainui.face_num_label['text'] = \
+            self.mainui.entryframe.face_num_label['text'] = \
                 f'{ self.face_num + 1 }/{self.face_sum}'
             self.pick_face( )
 
@@ -150,7 +154,7 @@ class _MainUI():
     def pick_next_face(self):
         if self.face_num < self.face_sum - 1:
             self.face_num += 1
-            self.mainui.face_num_label['text'] = \
+            self.mainui.entryframe.face_num_label['text'] = \
                 f'{self.face_num}/{self.face_sum}'
             self.pick_face()
 
@@ -161,7 +165,7 @@ class _MainUI():
     def pick_prev_face(self):
         if self.face_num > 0:
             self.face_num -= 1
-            self.mainui.face_num_label['text'] = \
+            self.mainui.entryframe.face_num_label['text'] = \
                 f'{self.face_num+1}/{self.face_sum}'
             self.pick_face( )
 
@@ -173,14 +177,14 @@ class _MainUI():
         if self.is_pause:
             self.is_pause = False
             self.play_video()
-            self.mainui.rec_button['text'] = _('Pause')
+            self.mainui.showframe.rec_button['text'] = _('Recognize')
             self.update_entry_ui()
         else:
             self.is_pause = True
 
             self.compare_faces()
             
-            self.mainui.rec_button['text'] = _('Play')
+            self.mainui.showframe.rec_button['text'] = _('Play')
 
     def play_video( self ):
         if self.iru != None and not self.is_pause:
@@ -204,9 +208,9 @@ class _MainUI():
                 
                 vid_img = Image.fromarray( self.face_image )
                 imgtk = ImageTk.PhotoImage( image=vid_img )
-                self.mainui.vid_img_label.imgtk = imgtk
-                self.mainui.vid_img_label.configure(image=imgtk)
-            self.mainui.vid_img_label.after( self.vid_refesh, self.play_video )
+                self.mainui.showframe.vid_img_label.imgtk = imgtk
+                self.mainui.showframe.vid_img_label.configure(image=imgtk)
+            self.mainui.showframe.vid_img_label.after( self.vid_refesh, self.play_video )
     
     def get_face_locations(self, image):
 
@@ -250,27 +254,27 @@ class _MainUI():
             p = select(p for p in fm.Person \
                 if p.id == self.current_face_person_id ).first()
             if p != None:
-                self.mainui.uuid_entry['state'] = 'normal'
-                self.mainui.uuid_entry.delete(0, END)
-                self.mainui.uuid_entry.insert(0 , p.id)
-                self.mainui.uuid_entry['state'] = 'disabled'
-                self.mainui.name_entry.delete(0, END)
-                self.mainui.name_entry.insert(0 , p.name)
-                self.mainui.DOB_entry.delete(0, END)
-                self.mainui.DOB_entry.insert(0 , str(p.dob) )
-                self.mainui.address_entry.delete(0, END)
-                self.mainui.address_entry.insert(0 , p.address)
-                self.mainui.note_text.delete('1.0', END)
-                self.mainui.note_text.insert(END , p.note)
+                self.mainui.entryframe.uuid_entry['state'] = 'normal'
+                self.mainui.entryframe.uuid_entry.delete(0, END)
+                self.mainui.entryframe.uuid_entry.insert(0 , p.id)
+                self.mainui.entryframe.uuid_entry['state'] = 'disabled'
+                self.mainui.entryframe.name_entry.delete(0, END)
+                self.mainui.entryframe.name_entry.insert(0 , p.name)
+                self.mainui.entryframe.DOB_entry.delete(0, END)
+                self.mainui.entryframe.DOB_entry.insert(0 , str(p.dob) )
+                self.mainui.entryframe.address_entry.delete(0, END)
+                self.mainui.entryframe.address_entry.insert(0 , p.address)
+                self.mainui.entryframe.note_text.delete('1.0', END)
+                self.mainui.entryframe.note_text.insert(END , p.note)
         elif (not self.is_pause) or \
             (self.is_pause and (self.current_face_person_id is None) ):
-                self.mainui.uuid_entry['state'] = 'normal'
-                self.mainui.uuid_entry.delete(0, END)
-                self.mainui.uuid_entry['state'] = 'disabled'
-                self.mainui.name_entry.delete(0, END)
-                self.mainui.DOB_entry.delete(0, END)
-                self.mainui.address_entry.delete(0, END)
-                self.mainui.note_text.delete('1.0', END)
+                self.mainui.entryframe.uuid_entry['state'] = 'normal'
+                self.mainui.entryframe.uuid_entry.delete(0, END)
+                self.mainui.entryframe.uuid_entry['state'] = 'disabled'
+                self.mainui.entryframe.name_entry.delete(0, END)
+                self.mainui.entryframe.DOB_entry.delete(0, END)
+                self.mainui.entryframe.address_entry.delete(0, END)
+                self.mainui.entryframe.note_text.delete('1.0', END)
 
     def make_rect( self ):
 
@@ -292,10 +296,10 @@ class _MainUI():
         frame = cv2.resize( frame, (200, 200) )
         face_img = Image.fromarray( frame )
         faceimgtk = ImageTk.PhotoImage( image=face_img )
-        self.mainui.face_label.imgtk = faceimgtk
-        self.mainui.face_label.configure(image=faceimgtk)
+        self.mainui.entryframe.face_label.imgtk = faceimgtk
+        self.mainui.entryframe.face_label.configure(image=faceimgtk)
 
-        self.mainui.face_num_label['text'] = \
+        self.mainui.entryframe.face_num_label['text'] = \
             f'{self.face_num+1}/{self.face_sum}'
 
 
@@ -306,7 +310,7 @@ class _MainUI():
         )
         if restartapp:
             
-            lang_display_name = self.mainui.lang_combobox_var.get()
+            lang_display_name = self.mainui.langcombobox.lang_combobox_var.get()
             lang_code = Language.find( lang_display_name ).to_tag()
             
             setting_yml['lang_code'] = lang_code
@@ -335,14 +339,14 @@ class _MainUI():
             p = select(p for p in fm.Person if \
                 p.id == self.current_face_person_id ).first()
 
-            p.name = self.mainui.name_entry.get()
+            p.name = self.mainui.entryframe.name_entry.get()
             try:
                 p.dob = datetime.strptime( \
-                    self.mainui.DOB_entry.get(), "%Y-%m-%d").date()
+                    self.mainui.entryframe.DOB_entry.get(), "%Y-%m-%d").date()
             except:
                 messagebox.showerror( _('Error'), \
                     _('Check the DOB entry please!') ) 
-            p.note = self.mainui.note_text.get(1.0, 'end')
+            p.note = self.mainui.entryframe.note_text.get(1.0, 'end')
 
         else:
             p = Person( \
@@ -350,11 +354,11 @@ class _MainUI():
                     if ( not person_exists and \
                         self.current_face_person_id !=None) \
                     else str(uuid.uuid4()),\
-                name = self.mainui.name_entry.get() ,\
+                name = self.mainui.entryframe.name_entry.get() ,\
                 dob =  datetime.strptime( \
-                    self.mainui.DOB_entry.get(), '%Y-%m-%d').date(),
-                address = self.mainui.address_entry.get(),
-                note = self.mainui.note_text.get(1.0, 'end') )
+                    self.mainui.entryframe.DOB_entry.get(), '%Y-%m-%d').date(),
+                address = self.mainui.entryframe.address_entry.get(),
+                note = self.mainui.entryframe.note_text.get(1.0, 'end') )
 
         commit()
 
