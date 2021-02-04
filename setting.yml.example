@@ -1,2 +1,3 @@
-initialized: true
+initialized: false
 lang_code: zh-Hans
+comparison_tolerance: 0.6

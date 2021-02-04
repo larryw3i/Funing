@@ -71,6 +71,7 @@ class ShowFrame():
             'camara': _('Camara') }
         self.show_f_optionmenu_var = tk.StringVar( self.frame )
         self.show_f_optionmenu_var.set( _('Open') )
+        
         self.show_from_optionmenu = tk.OptionMenu( 
             self.frame,
             self.show_f_optionmenu_var , 
@@ -93,7 +94,9 @@ class ShowFrame():
 
         # place frame
         self.show_from_optionmenu.grid( column = 0, row = 4 )
-        self.rec_button.grid( column = 1, row = 4)
+        self.comparison_tolerance_entry.grid( column = 1, row = 4 )
+        self.rec_button.grid( column = 2, row = 4)
+
         self.frame.grid( column = 0, row = 0 )
 
         pass

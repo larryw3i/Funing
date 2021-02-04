@@ -17,39 +17,12 @@ import face_recognition
 from _ui.locale import _
 from datetime import datetime , date
 import json
-from setting import setting_yml, setting_path, face_encodings_path
+from setting import setting_yml, setting_path, face_encodings_path,\
+    comparison_tolerance
 import numpy as np
 import pickle
 import yaml
 import uuid
-
-class IRU():
-    def __init__(self, video_source = 0 ):
-        self.video_source = video_source
-        self.vid = cv2.VideoCapture( self.video_source )
-
-        if not self.vid.isOpened():
-            messagebox.showerror( 
-                _('Unable to open video source'), 
-                self.video_source )
-        self.width = self.vid.get(cv2.CAP_PROP_FRAME_WIDTH)
-        self.height = self.vid.get(cv2.CAP_PROP_FRAME_HEIGHT)
-
-    def get_ret_frame(self):
-        if self.vid.isOpened():
-            ret, frame = self.vid.read()
-            if ret:
-                frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-
-                return (ret, frame)
-
-            else:                
-               return (ret, None ) 
-        else:
-            return (None, None)
-        
-    def release( self ):
-        self.vid.release()
 
 
 class _MainUI():
@@ -71,7 +44,7 @@ class _MainUI():
                 open(face_encodings_path , 'rb') )
 
         self.current_face_encoding = None
-        self.comparison_tolerance = 0.4
+        self.comparison_tolerance = comparison_tolerance
 
         # face num for face_label
         self.face_sum = 0
@@ -281,6 +254,7 @@ class _MainUI():
                 self.mainui.entryframe.DOB_entry.insert(0 , str(p.dob) )
                 self.mainui.entryframe.address_entry.insert(0 , p.address)
                 self.mainui.entryframe.note_text.insert(END , p.note)
+
         elif (not self.is_pause) or \
             (self.is_pause and (self.current_face_person_id is None) ):
                 self.mainui.entryframe.uuid_entry['state'] = 'normal'
@@ -393,3 +367,32 @@ class _MainUI():
                 self.known_encodings = { str(p.id):\
                     [self.current_face_encoding] }
             pickle.dump( self.known_encodings, open(face_encodings_path, 'wb'))
+
+
+class IRU():
+    def __init__(self, video_source = 0 ):
+        self.video_source = video_source
+        self.vid = cv2.VideoCapture( self.video_source )
+
+        if not self.vid.isOpened():
+            messagebox.showerror( 
+                _('Unable to open video source'), 
+                self.video_source )
+        self.width = self.vid.get(cv2.CAP_PROP_FRAME_WIDTH)
+        self.height = self.vid.get(cv2.CAP_PROP_FRAME_HEIGHT)
+
+    def get_ret_frame(self):
+        if self.vid.isOpened():
+            ret, frame = self.vid.read()
+            if ret:
+                frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+
+                return (ret, frame)
+
+            else:                
+               return (ret, None ) 
+        else:
+            return (None, None)
+        
+    def release( self ):
+        self.vid.release()
