@@ -49,6 +49,9 @@ class _MainUI():
         self.face_sum = 0
         self.face_num = -1
         self.resize_rate = 0.25
+        
+        self.screenwidth = self.mainui.winfo_screenwidth()
+        self.screenheight = self.mainui.winfo_screenheight()
 
         self.current_face_person_id = None
     
@@ -83,6 +86,8 @@ class _MainUI():
         value = self.mainui.showframe.show_f_optionmenu_var.get()
         show_f = list(keys)[ list( values ).index( value )]
 
+        self.video_source = 0
+
         image_exts = ['jpg','png']
         video_exts = ['mp4','avi','3gp']
         
@@ -110,7 +115,6 @@ class _MainUI():
                     self.video_source = self.face_src_path
 
         if show_f == 'camara':
-            self.video_source = 0
             
             if self.video_source is not None\
                 and self.iru is None:
@@ -196,14 +200,30 @@ class _MainUI():
 
                     self.pick_face()
                     self.make_rect()
-                
-                vid_img = Image.fromarray( self.face_image )
+
+                vid_img = cv2.resize( self.face_image, get_resize_dsize() )
+                vid_img = Image.fromarray( vid_img )
                 imgtk = ImageTk.PhotoImage( image=vid_img )
                 self.mainui.showframe.vid_img_label.imgtk = imgtk
                 self.mainui.showframe.vid_img_label.configure(image=imgtk)
 
             self.mainui.showframe.vid_img_label.after( \
                 self.vid_refesh, self.play_video )
+    
+    def get_resize_dsize():
+        w = screenwidth/2
+        h = screenheight/2
+        r = w/h 
+        r0 = self.iru.width/self.iru.height
+        r1= r0/r 
+        h_ = w_ = 0
+        if r1<1:
+            h_ = h
+            w_ = h_*r0
+        else:
+            w_ = w
+            h = w_/r0
+        return (int(h_),int(w_))
     
     def get_face_locations(self, image):
 
