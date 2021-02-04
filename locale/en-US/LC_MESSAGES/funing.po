@@ -57,3 +57,7 @@ msgstr ">>"
 
 msgid "gettext_exception_message"
 msgstr "Make sure gettext is installed, read https://www.gnu.org/software/gettext/ and install it. (^_^)"
+
+
+msgid "tolerance"
+msgstr "tolerance(0.1-0.6):"

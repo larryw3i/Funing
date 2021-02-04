@@ -107,8 +107,8 @@ class _MainUI():
                 and self.iru is None:
                 self.is_pause = False
                 self.iru = IRU( self.video_source )
-            
-            self.recognize_face()
+                # self.recognize_face()
+                self.play_video()
         
     def pick_image( self ):
 
@@ -117,8 +117,8 @@ class _MainUI():
 
         img = Image.fromarray( self.face_image )
         imgtk = ImageTk.PhotoImage( image= img )
-        self.mainui.entryframe.vid_img_label.imgtk = imgtk
-        self.mainui.entryframe.vid_img_label.configure(image=imgtk)
+        self.mainui.showframe.vid_img_label.imgtk = imgtk
+        self.mainui.showframe.vid_img_label.configure(image=imgtk)
 
         self.get_face_locations( self.face_image )
         self.face_sum = len( self.face_locations )
@@ -156,8 +156,7 @@ class _MainUI():
 
         
         if self.iru is None:
-            messagebox.showinfo( _('No face detected'), \
-                _('Oops.., No face detected!') )
+            self.show_nfd_info()
             return
 
         if self.is_pause:
@@ -196,7 +195,9 @@ class _MainUI():
                 imgtk = ImageTk.PhotoImage( image=vid_img )
                 self.mainui.showframe.vid_img_label.imgtk = imgtk
                 self.mainui.showframe.vid_img_label.configure(image=imgtk)
-            self.mainui.showframe.vid_img_label.after( self.vid_refesh, self.play_video )
+
+            self.mainui.showframe.vid_img_label.after( \
+                self.vid_refesh, self.play_video )
     
     def get_face_locations(self, image):
 
@@ -210,8 +211,7 @@ class _MainUI():
     def compare_faces( self ):
 
         if self.face_image is None:
-            messagebox.showinfo( _('No face detected'), \
-                _('Oops.., No face detected!') )
+            self.show_nfd_info()
             return
 
         self.calc_current_face_encoding()
@@ -274,6 +274,9 @@ class _MainUI():
 
     def pick_face( self ):
         
+        if self.face_num < 0:
+            self.show_nfd_info()
+
         top, right, bottom, left = self.face_locations[ self.face_num ]
 
         b_t_sub = bottom - top
@@ -367,6 +370,10 @@ class _MainUI():
                 self.known_encodings = { str(p.id):\
                     [self.current_face_encoding] }
             pickle.dump( self.known_encodings, open(face_encodings_path, 'wb'))
+    
+    def show_nfd_info():
+        messagebox.showinfo( _('No face detected'), \
+            _('Oops.., No face detected!') )
 
 
 class IRU():

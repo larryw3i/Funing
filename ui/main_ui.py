@@ -69,6 +69,7 @@ class ShowFrame():
         self.show_from_optionmenus =  {
             'file':_('File'),
             'camara': _('Camara') }
+
         self.show_f_optionmenu_var = tk.StringVar( self.frame )
         self.show_f_optionmenu_var.set( _('Open') )
         
@@ -81,6 +82,8 @@ class ShowFrame():
         self.vid_img_label = tk.Label( self.frame )
 
         # comparison_tolerance entry
+        self.comparison_tolerance_label = tk.Label( \
+            self.frame, text = _('tolerance') )
         self.comparison_tolerance_entry = tk.Entry( self.frame )
 
         # shoot
@@ -94,8 +97,9 @@ class ShowFrame():
 
         # place frame
         self.show_from_optionmenu.grid( column = 0, row = 4 )
-        self.comparison_tolerance_entry.grid( column = 1, row = 4 )
-        self.rec_button.grid( column = 2, row = 4)
+        self.comparison_tolerance_label.grid( column = 1, row = 4, sticky = E )
+        self.comparison_tolerance_entry.grid( column = 2, row = 4, sticky = W )
+        self.rec_button.grid( column = 3, row = 4)
 
         self.frame.grid( column = 0, row = 0 )
 

@@ -78,3 +78,6 @@ msgstr "确认一下 gettext安装了没, 没有的话阅读 https://www.gnu.org
 
 msgid "Recognize"
 msgstr "设别"
+
+msgid "tolerance"
+msgstr "误差（0.1-0.6）:"
