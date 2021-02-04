@@ -89,7 +89,7 @@ class _MainUI():
             '<<ComboboxSelected>>',
             self.change_language )
             
-        self.mainui.showframe.rec_button['command'] = self.pause_vid
+        self.mainui.showframe.rec_button['command'] = self.recognize_face
 
         self.mainui.entryframe.prev_f_button['command'] = \
             self.pick_prev_face
@@ -135,7 +135,7 @@ class _MainUI():
                 self.is_pause = False
                 self.iru = IRU( self.video_source )
             
-            self.play_video()
+            self.recognize_face()
         
     def pick_image( self ):
 
@@ -179,7 +179,14 @@ class _MainUI():
                 self.compare_faces()
         
 
-    def pause_vid( self ):
+    def recognize_face( self ):
+
+        
+        if self.iru is None:
+            messagebox.showinfo( _('No face detected'), \
+                _('Oops.., No face detected!') )
+            return
+
         if self.is_pause:
             self.is_pause = False
             self.play_video()
@@ -228,6 +235,11 @@ class _MainUI():
             for f in fs]
     
     def compare_faces( self ):
+
+        if self.face_image is None:
+            messagebox.showinfo( _('No face detected'), \
+                _('Oops.., No face detected!') )
+            return
 
         self.calc_current_face_encoding()
 
