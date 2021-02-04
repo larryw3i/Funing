@@ -50,8 +50,10 @@ class _MainUI():
         self.face_num = -1
         self.resize_rate = 0.25
         
-        self.screenwidth = self.mainui.winfo_screenwidth()
-        self.screenheight = self.mainui.winfo_screenheight()
+        self.fxfy = None
+
+        self.screenwidth = self.mainui.root.winfo_screenwidth()
+        self.screenheight = self.mainui.root.winfo_screenheight()
 
         self.current_face_person_id = None
     
@@ -184,7 +186,7 @@ class _MainUI():
     def play_video( self ):
         if self.iru != None and not self.is_pause:
             
-
+            self.get_resize_fxfy()
             self.vid_ret_frame  = self.iru.get_ret_frame()
             self.face_image = self.vid_ret_frame[1]
             if self.vid_ret_frame[0] is not None:
@@ -201,7 +203,8 @@ class _MainUI():
                     self.pick_face()
                     self.make_rect()
 
-                vid_img = cv2.resize( self.face_image, get_resize_dsize() )
+                vid_img = cv2.resize( self.face_image, (0,0) , \
+                    fx = self.fxfy, fy = self.fxfy )
                 vid_img = Image.fromarray( vid_img )
                 imgtk = ImageTk.PhotoImage( image=vid_img )
                 self.mainui.showframe.vid_img_label.imgtk = imgtk
@@ -210,20 +213,15 @@ class _MainUI():
             self.mainui.showframe.vid_img_label.after( \
                 self.vid_refesh, self.play_video )
     
-    def get_resize_dsize():
-        w = screenwidth/2
-        h = screenheight/2
+    def get_resize_fxfy( self ):
+        w = self.screenwidth/2
+        h = self.screenheight/2
         r = w/h 
         r0 = self.iru.width/self.iru.height
         r1= r0/r 
         h_ = w_ = 0
-        if r1<1:
-            h_ = h
-            w_ = h_*r0
-        else:
-            w_ = w
-            h = w_/r0
-        return (int(h_),int(w_))
+        self.fxfy = h/self.iru.height if r1<r else w/self.iru.width
+            
     
     def get_face_locations(self, image):
 
