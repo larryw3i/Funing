@@ -1,5 +1,5 @@
 
-
+from tkinter import *
 import tkinter as tk
 from tkinter import ttk
 from _ui.locale import _, lang_code
@@ -126,14 +126,22 @@ class EntryFrame():
         self.note_label = tk.Label( self.frame, text = _('Note') )
         self.note_text = tk.Text( self.frame, height = 6, width = 20 )
 
-
         # save_button
         self.save_button = tk.Button( self.frame, text = _('Save') )
+
+    def clear_content( self ):
+
+        self.uuid_entry['state'] = 'normal'
+        self.uuid_entry.delete(0, END)
+        self.uuid_entry['state'] = 'disabled'
+        self.name_entry.delete(0, END)
+        self.DOB_entry.delete(0, END)
+        self.address_entry.delete(0, END)
+        self.note_text.delete('1.0', END)
         
     def place( self ):
 
         # place frame
-
         self.face_label.grid( column = 0 , row = 0, columnspan = 2 )
         self.prev_f_button.grid( column = 0 , row = 1)
         self.face_num_label.grid( column = 1 , row = 1)

@@ -57,8 +57,6 @@ class _MainUI():
         self.mainui = MainUI()
         self.mainui.place()
 
-        self.mainui.root.protocol("WM_DELETE_WINDOW", self.destroy )
-         
         # vid
         self.iru =  self.video_source = \
         self.vid =  self.vid_ret_frame = None
@@ -74,6 +72,7 @@ class _MainUI():
 
         self.current_face_encoding = None
         self.comparison_tolerance = 0.4
+
         # face num for face_label
         self.face_sum = 0
         self.face_num = -1
@@ -81,21 +80,28 @@ class _MainUI():
 
         self.current_face_person_id = None
     
+        self.set_ui_events()
+        self.mainui.mainloop()
+    
+    def set_ui_events( self ):
+
         self.mainui.langcombobox.lang_combobox.bind(
             '<<ComboboxSelected>>',
             self.change_language )
             
         self.mainui.showframe.rec_button['command'] = self.pause_vid
 
-        self.mainui.entryframe.prev_f_button['command'] = self.pick_prev_face
-        self.mainui.entryframe.next_f_button['command'] = self.pick_next_face
+        self.mainui.entryframe.prev_f_button['command'] = \
+            self.pick_prev_face
+        self.mainui.entryframe.next_f_button['command'] = \
+            self.pick_next_face
         self.mainui.entryframe.save_button['command'] = self.save_encoding
         
         self.mainui.showframe.show_f_optionmenu_var.trace(
             'w', self.show_from )
 
-        self.mainui.mainloop()
-    
+        self.mainui.root.protocol("WM_DELETE_WINDOW", self.destroy )
+         
     def destroy( self ):
         if self.iru is not None:
             self.iru.release()
@@ -254,17 +260,14 @@ class _MainUI():
             p = select(p for p in fm.Person \
                 if p.id == self.current_face_person_id ).first()
             if p != None:
+                self.mainui.entryframe.clear_content()
+                
                 self.mainui.entryframe.uuid_entry['state'] = 'normal'
-                self.mainui.entryframe.uuid_entry.delete(0, END)
                 self.mainui.entryframe.uuid_entry.insert(0 , p.id)
                 self.mainui.entryframe.uuid_entry['state'] = 'disabled'
-                self.mainui.entryframe.name_entry.delete(0, END)
                 self.mainui.entryframe.name_entry.insert(0 , p.name)
-                self.mainui.entryframe.DOB_entry.delete(0, END)
                 self.mainui.entryframe.DOB_entry.insert(0 , str(p.dob) )
-                self.mainui.entryframe.address_entry.delete(0, END)
                 self.mainui.entryframe.address_entry.insert(0 , p.address)
-                self.mainui.entryframe.note_text.delete('1.0', END)
                 self.mainui.entryframe.note_text.insert(END , p.note)
         elif (not self.is_pause) or \
             (self.is_pause and (self.current_face_person_id is None) ):
@@ -327,6 +330,7 @@ class _MainUI():
 
     @db_session
     def save_encoding( self ):
+        
         p = None
         
         # dev: face_encoding exists and person is None sometimes
