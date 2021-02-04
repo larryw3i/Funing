@@ -40,12 +40,11 @@ class _MainUI():
         self.is_pause = False;  self.vid_refesh = 30
 
         self.face_locations = []
-        self.known_encodings = pickle.load( 
-                open(face_encodings_path , 'rb') )
+        self.known_encodings = pickle.load( open(face_encodings_path , 'rb') )
 
         self.current_face_encoding = None
         self.comparison_tolerance = comparison_tolerance
-
+            
         # face num for face_label
         self.face_sum = 0
         self.face_num = -1
@@ -58,27 +57,25 @@ class _MainUI():
     
     def set_ui_events( self ):
 
-        self.mainui.langcombobox.lang_combobox.bind(
-            '<<ComboboxSelected>>',
+        self.mainui.langcombobox.lang_combobox.bind('<<ComboboxSelected>>',
             self.change_language )
-            
+        self.mainui.showframe.ct_doublevar.trace('w', self.save_ct )
         self.mainui.showframe.rec_button['command'] = self.recognize_face
-
-        self.mainui.entryframe.prev_f_button['command'] = \
-            self.pick_prev_face
-        self.mainui.entryframe.next_f_button['command'] = \
-            self.pick_next_face
+        self.mainui.entryframe.prev_f_button['command'] = self.pick_prev_face
+        self.mainui.entryframe.next_f_button['command'] = self.pick_next_face
         self.mainui.entryframe.save_button['command'] = self.save_encoding
-        
-        self.mainui.showframe.show_f_optionmenu_var.trace(
-            'w', self.show_from )
-
+        self.mainui.showframe.show_f_optionmenu_var.trace('w', self.show_from )
         self.mainui.root.protocol("WM_DELETE_WINDOW", self.destroy )
          
     def destroy( self ):
         if self.iru is not None:
             self.iru.release()
         self.mainui.root.destroy()
+
+    def save_ct( self ):
+        self.comparison_tolerance = comparison_tolerance
+        setting_yml['comparison_tolerance'] = self.showframe.ct_doublevar.get()
+        yaml.dump( setting_yml, open( setting_path, 'w') )
 
     def show_from( self, *args  ):
         keys =  self.mainui.showframe.show_from_optionmenus.keys()
@@ -95,7 +92,7 @@ class _MainUI():
 
             self.image_path = tkf.askopenfilename(
                 title = _('Select a file'),
-                initialdir = '~/Videos'
+                initialdir = '~'
             )
             if len( self.image_path ) > 0:
                 self.pick_image()
@@ -125,16 +122,15 @@ class _MainUI():
 
         if self.face_sum > 0:
             self.face_num += 1
-            self.mainui.entryframe.face_num_label['text'] = \
-                f'{ self.face_num + 1 }/{self.face_sum}'
+            self.mainui.entryframe.face_num_stringvar.set(\
+                f'{ self.face_num + 1 }/{self.face_sum}')
             self.pick_face( )
-
 
     def pick_next_face(self):
         if self.face_num < self.face_sum - 1:
             self.face_num += 1
-            self.mainui.entryframe.face_num_label['text'] = \
-                f'{self.face_num}/{self.face_sum}'
+            self.mainui.entryframe.face_num_stringvar.set( \
+                f'{self.face_num}/{self.face_sum}' )
             self.pick_face()
 
             if self.is_pause:
@@ -144,8 +140,8 @@ class _MainUI():
     def pick_prev_face(self):
         if self.face_num > 0:
             self.face_num -= 1
-            self.mainui.entryframe.face_num_label['text'] = \
-                f'{self.face_num+1}/{self.face_sum}'
+            self.mainui.entryframe.face_num_stringvar.set( \
+                f'{self.face_num+1}/{self.face_sum}' )
             self.pick_face( )
 
             if self.is_pause:
@@ -162,14 +158,12 @@ class _MainUI():
         if self.is_pause:
             self.is_pause = False
             self.play_video()
-            self.mainui.showframe.rec_button['text'] = _('Recognize')
+            self.mainui.showframe.rec_stringvar.set(_('Recognize'))
             self.update_entry_ui()
         else:
             self.is_pause = True
-
             self.compare_faces()
-            
-            self.mainui.showframe.rec_button['text'] = _('Play')
+            self.mainui.showframe.rec_stringvar.set( _('Play') )
 
     def play_video( self ):
         if self.iru != None and not self.is_pause:
@@ -291,8 +285,8 @@ class _MainUI():
         self.mainui.entryframe.face_label.imgtk = faceimgtk
         self.mainui.entryframe.face_label.configure(image=faceimgtk)
 
-        self.mainui.entryframe.face_num_label['text'] = \
-            f'{self.face_num+1}/{self.face_sum}'
+        self.mainui.entryframe.face_num_stringvar.set(\
+            f'{self.face_num+1}/{self.face_sum}' )
 
 
     def change_language(self, lang ):
@@ -371,7 +365,7 @@ class _MainUI():
                     [self.current_face_encoding] }
             pickle.dump( self.known_encodings, open(face_encodings_path, 'wb'))
     
-    def show_nfd_info():
+    def show_nfd_info( self ):
         messagebox.showinfo( _('No face detected'), \
             _('Oops.., No face detected!') )
 

@@ -5,6 +5,7 @@ from tkinter import ttk
 from _ui.locale import _, lang_code
 from langcodes import Language
 from setting import base_dir, locale_path
+from setting import comparison_tolerance as ct
 import os
 
 class MainUI():
@@ -74,36 +75,38 @@ class ShowFrame():
         self.show_f_optionmenu_var.set( _('Open') )
         
         self.show_from_optionmenu = tk.OptionMenu( 
-            self.frame,
-            self.show_f_optionmenu_var , 
+            self.frame, self.show_f_optionmenu_var , 
             *self.show_from_optionmenus.values() )
 
         # video label
         self.vid_img_label = tk.Label( self.frame )
 
         # comparison_tolerance entry
-        self.comparison_tolerance_label = tk.Label( \
+        self.ct_label = tk.Label( \
             self.frame, text = _('tolerance') )
-        self.comparison_tolerance_entry = tk.Entry( self.frame )
+        self.ct_doublevar = DoubleVar( frame, ct )
+        self.ct_entry = tk.Entry( \
+            self.frame, width = 8,\
+            textvariable = self.ct_doublevar )
 
         # shoot
-        self.rec_button = tk.Button( self.frame, text = _('Recognize') )
+        self.rec_stringvar = StringVar( frame, _('Recognize'))
+        self.rec_button = tk.Button( self.frame, \
+            textvariable = self.rec_stringvar )
     
     def place( self ):
 
         # place vid_img_label
         self.vid_img_label.grid( column = 0, row = 0, rowspan = 3,
-            columnspan = 3 )
+            columnspan = 4 )
 
         # place frame
         self.show_from_optionmenu.grid( column = 0, row = 4 )
-        self.comparison_tolerance_label.grid( column = 1, row = 4, sticky = E )
-        self.comparison_tolerance_entry.grid( column = 2, row = 4, sticky = W )
+        self.ct_label.grid( column = 1, row = 4, sticky = E )
+        self.ct_entry.grid( column = 2, row = 4, sticky = W )
         self.rec_button.grid( column = 3, row = 4)
 
         self.frame.grid( column = 0, row = 0 )
-
-        pass
 
 class EntryFrame():
     
@@ -114,7 +117,9 @@ class EntryFrame():
 
         self.prev_f_button = tk.Button(self.frame , \
             text = _("prev_symb"))
-        self.face_num_label = tk.Label( self.frame , text = _('*/*'))
+        self.face_num_stringvar = StringVar( frame, '*/*' )
+        self.face_num_label = tk.Label( self.frame , \
+            textvariable = self.face_num_stringvar  )
         self.next_f_button = tk.Button(self.frame , \
             text = _('next_symb'))
 
