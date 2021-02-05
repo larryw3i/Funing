@@ -210,7 +210,7 @@ class _MainUI():
                 self.mainui.showframe.vid_img_label.configure(image=imgtk)
 
                 self.mainui.showframe.vid_img_label.after( \
-                    int(60/self.iru.fps), self.play_video )
+                    int(1000/self.iru.fps) , self.play_video )
             else:
                 return
     
@@ -428,8 +428,9 @@ class IRU():
         self.width = self.vid.get(cv2.CAP_PROP_FRAME_WIDTH)
         self.height = self.vid.get(cv2.CAP_PROP_FRAME_HEIGHT)
         self.fps = self.vid.get(cv2.CAP_PROP_FPS)
+        # self.frame_count = self.vid.get(cv2.CAP_PROP_FRAME_COUNT)
 
-    def get_ret_frame(self):
+    def get_ret_frame( self ):
         if self.vid.isOpened():
             ret, frame = self.vid.read()
             if ret:
