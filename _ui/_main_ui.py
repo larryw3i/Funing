@@ -37,7 +37,7 @@ class _MainUI():
         self.face_src_path = None
         self.face_image = None
 
-        self.is_pause = False;  self.vid_refesh = 30
+        self.is_pause = False;  self.vid_fps = 30
 
         self.face_locations = []
         self.known_encodings = pickle.load( open(face_encodings_path , 'rb') )
@@ -122,7 +122,8 @@ class _MainUI():
                 and self.iru is None:
                 self.is_pause = False
                 self.iru = IRU( self.video_source )
-                # self.recognize_face()
+                
+                self.get_resize_fxfy()
                 self.play_video()
         
     def pick_image( self ):
@@ -186,7 +187,6 @@ class _MainUI():
     def play_video( self ):
         if self.iru != None and not self.is_pause:
             
-            self.get_resize_fxfy()
             self.vid_ret_frame  = self.iru.get_ret_frame()
             self.face_image = self.vid_ret_frame[1]
             if self.vid_ret_frame[0] is not None:
@@ -211,7 +211,7 @@ class _MainUI():
                 self.mainui.showframe.vid_img_label.configure(image=imgtk)
 
             self.mainui.showframe.vid_img_label.after( \
-                self.vid_refesh, self.play_video )
+                int(60/self.iru.fps), self.play_video )
     
     def get_resize_fxfy( self ):
         w = self.screenwidth/2
@@ -239,6 +239,10 @@ class _MainUI():
             return
 
         self.calc_current_face_encoding()
+
+        if self.current_face_encoding is None:
+            self.show_nfd_info()
+            return
 
         self.current_face_person_id = None
 
@@ -421,6 +425,7 @@ class IRU():
                 self.video_source )
         self.width = self.vid.get(cv2.CAP_PROP_FRAME_WIDTH)
         self.height = self.vid.get(cv2.CAP_PROP_FRAME_HEIGHT)
+        self.fps = self.vid.get(cv2.CAP_PROP_FPS)
 
     def get_ret_frame(self):
         if self.vid.isOpened():
