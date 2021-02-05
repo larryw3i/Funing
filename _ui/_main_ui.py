@@ -24,7 +24,6 @@ import pickle
 import yaml
 import uuid
 
-
 class _MainUI():
     def __init__(self):
         self.mainui = MainUI()
@@ -51,9 +50,12 @@ class _MainUI():
         self.resize_rate = 0.25
         
         self.fxfy = None
-
-        self.screenwidth = self.mainui.root.winfo_screenwidth()
-        self.screenheight = self.mainui.root.winfo_screenheight()
+        try:
+            self.screenwidth = self.mainui.root.winfo_screenwidth()
+            self.screenheight = self.mainui.root.winfo_screenheight()
+        except:
+            print(_('No desktop environment is detected! (^_^)'))
+            exit()
 
         self.current_face_person_id = None
     
@@ -78,9 +80,11 @@ class _MainUI():
         self.mainui.root.destroy()
 
     def save_ct( self , event):
-        ct_doublevar = self.mainui.showframe.ct_doublevar.get()
-        self.comparison_tolerance = comparison_tolerance = ct_doublevar
-        setting_yml['comparison_tolerance'] = ct_doublevar
+        if not self.mainui.showframe.values_valid():
+            return
+        ct_stringvar_get = int(self.mainui.showframe.ct_stringvar.get())
+        self.comparison_tolerance = comparison_tolerance = ct_stringvar_get
+        setting_yml['comparison_tolerance'] = ct_stringvar_get
         yaml.dump( setting_yml, open( setting_path, 'w') )
 
     def show_from( self, *args  ):
@@ -350,8 +354,9 @@ class _MainUI():
     @db_session
     def save_encoding( self ):
         
-        p = None
-        
+        if not self.mainui.entryframe.values_valid():
+            return
+
         # dev: face_encoding exists and person is None sometimes
         person_exists =  False if self.current_face_person_id is None else \
             fm.Person.exists( id = self.current_face_person_id )
@@ -407,7 +412,7 @@ class _MainUI():
                 self.known_encodings = { str(p.id):\
                     [self.current_face_encoding] }
             pickle.dump( self.known_encodings, open(face_encodings_path, 'wb'))
-    
+        
     def show_nfd_info( self ):
         messagebox.showinfo( _('No face detected'), \
             _('Oops.., No face detected!') )

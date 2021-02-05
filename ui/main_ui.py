@@ -7,6 +7,7 @@ from langcodes import Language
 from setting import base_dir, locale_path
 from setting import comparison_tolerance as ct
 import os
+import re
 
 class MainUI():
     def __init__(self):
@@ -61,7 +62,6 @@ class LangCombobox():
 
 
 
-
 class ShowFrame():
 
     def __init__( self, frame ):
@@ -84,10 +84,10 @@ class ShowFrame():
         # comparison_tolerance entry
         self.ct_label = tk.Label( \
             self.frame, text = _('tolerance:') )
-        self.ct_doublevar = DoubleVar( frame, ct )
+        self.ct_stringvar = StringVar( frame, ct )
         self.ct_entry = tk.Entry( \
             self.frame, width = 8,\
-            textvariable = self.ct_doublevar )
+            textvariable = self.ct_stringvar )
 
         # shoot
         self.rec_stringvar = StringVar( frame, _('Recognize'))
@@ -107,6 +107,16 @@ class ShowFrame():
         self.rec_button.grid( column = 3, row = 4)
 
         self.frame.grid( column = 0, row = 0 )
+
+    def values_valid(self):
+        if re.search( '^0.[0-6]\d*$', self.ct_stringvar.get() ):
+            self.ct_entry['bg'] = 'white'
+            is_real = True
+        else:
+            self.ct_entry['bg'] = 'red'
+            is_real = False
+        return is_real
+             
 
 class EntryFrame():
     
@@ -177,3 +187,22 @@ class EntryFrame():
         self.save_button.grid( column = 1, row= 7)
 
         self.frame.grid( column = 1, row = 0 )
+
+    def values_valid(self):
+        is_real = True
+        if len(self.name_entry.get()) < 1:\
+                self.name_entry['bg'] = 'red';      is_real = False
+        else:   self.name_entry['bg'] = 'white'
+        
+        try:    datetime.strptime( self.DOB_entry.get(), '%Y-%m-%d')
+        except: self.DOB_entry['bg'] = 'red';       is_real = False
+
+        if len(self.address_entry.get()) < 1:\
+                self.address_entry['bg'] = 'red';   is_real = False
+        else:   self.address_entry['bg'] = 'white'
+
+        if len(self.note_text.get(1.0, 'end')) < 1:\
+                self.note_text['bg'] = 'red';       is_real = False
+        else:   self.note_text['bg'] = 'white'
+        
+        return is_real
