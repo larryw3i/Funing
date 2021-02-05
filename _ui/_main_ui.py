@@ -35,7 +35,7 @@ class _MainUI():
         self.vid =  self.vid_ret_frame = None
 
         self.face_src_path = None
-        self.face_image = None
+        self.iru_frame = None
 
         self.is_pause = False;  self.vid_fps = 30
 
@@ -91,7 +91,7 @@ class _MainUI():
         self.video_source = 0
 
         image_exts = ['jpg','png']
-        video_exts = ['mp4','avi','3gp','webm']
+        video_exts = ['mp4','avi','3gp','webm','mkv']
         
         if show_f == 'file':
             if not self.is_pause:
@@ -129,14 +129,14 @@ class _MainUI():
     def pick_image( self ):
 
         face_image  = cv2.imread( self.face_src_path )
-        self.face_image = cv2.cvtColor( face_image, cv2.COLOR_BGR2RGB)
+        self.iru_frame = cv2.cvtColor( face_image, cv2.COLOR_BGR2RGB)
 
-        img = Image.fromarray( self.face_image )
+        img = Image.fromarray( self.iru_frame )
         imgtk = ImageTk.PhotoImage( image= img )
         self.mainui.showframe.vid_img_label.imgtk = imgtk
         self.mainui.showframe.vid_img_label.configure(image=imgtk)
 
-        self.get_face_locations( self.face_image )
+        self.get_face_locations( self.iru_frame )
         self.face_sum = len( self.face_locations )
 
         if self.face_sum > 0:
@@ -168,7 +168,6 @@ class _MainUI():
         
 
     def recognize_face( self ):
-
         
         if self.iru is None:
             self.show_nfd_info()
@@ -188,10 +187,10 @@ class _MainUI():
         if self.iru != None and not self.is_pause:
             
             self.vid_ret_frame  = self.iru.get_ret_frame()
-            self.face_image = self.vid_ret_frame[1]
+            self.iru_frame = self.vid_ret_frame[1]
             if self.vid_ret_frame[0] is not None:
                 
-                self.get_face_locations(  self.face_image )
+                self.get_face_locations(  self.iru_frame )
 
                 self.face_sum = len(self.face_locations) 
                 if self.face_sum > 0:
@@ -203,15 +202,17 @@ class _MainUI():
                     self.pick_face()
                     self.make_rect()
 
-                vid_img = cv2.resize( self.face_image, (0,0) , \
+                vid_img = cv2.resize( self.iru_frame, (0,0) , \
                     fx = self.fxfy, fy = self.fxfy )
                 vid_img = Image.fromarray( vid_img )
                 imgtk = ImageTk.PhotoImage( image=vid_img )
                 self.mainui.showframe.vid_img_label.imgtk = imgtk
                 self.mainui.showframe.vid_img_label.configure(image=imgtk)
 
-            self.mainui.showframe.vid_img_label.after( \
-                int(60/self.iru.fps), self.play_video )
+                self.mainui.showframe.vid_img_label.after( \
+                    int(60/self.iru.fps), self.play_video )
+            else:
+                return
     
     def get_resize_fxfy( self ):
         w = self.screenwidth/2
@@ -234,7 +235,7 @@ class _MainUI():
     
     def compare_faces( self ):
 
-        if self.face_image is None:
+        if self.iru_frame is None:
             self.show_nfd_info()
             return
 
@@ -263,7 +264,7 @@ class _MainUI():
         
         if self.face_sum > 0 :
             self.current_face_encoding = face_recognition.face_encodings( \
-                self.face_image, [self.face_locations[ self.face_num ]] )[0]
+                self.iru_frame, [self.face_locations[ self.face_num ]] )[0]
 
             
     @db_session
@@ -296,7 +297,7 @@ class _MainUI():
     def make_rect( self ):
 
         for top, right, bottom, left in self.face_locations:
-            cv2.rectangle( self.face_image, (left, top), \
+            cv2.rectangle( self.iru_frame, (left, top), \
             (right, bottom), (0, 0, 255), 2)
 
 
@@ -310,7 +311,7 @@ class _MainUI():
         b_t_sub = bottom - top
         r_l_sub = right - left
         size_add = b_t_sub if  b_t_sub > r_l_sub else r_l_sub
-        frame =  self.face_image[top:( top + size_add ), \
+        frame =  self.iru_frame[top:( top + size_add ), \
             left:(left + size_add)]
 
         frame = cv2.resize( frame, (200, 200) )
@@ -423,6 +424,7 @@ class IRU():
             messagebox.showerror( 
                 _('Unable to open video source'), 
                 self.video_source )
+            return
         self.width = self.vid.get(cv2.CAP_PROP_FRAME_WIDTH)
         self.height = self.vid.get(cv2.CAP_PROP_FRAME_HEIGHT)
         self.fps = self.vid.get(cv2.CAP_PROP_FPS)
@@ -432,11 +434,10 @@ class IRU():
             ret, frame = self.vid.read()
             if ret:
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-
                 return (ret, frame)
 
             else:                
-               return (ret, None ) 
+               return (None, None ) 
         else:
             return (None, None)
         
