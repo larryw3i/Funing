@@ -91,7 +91,7 @@ class _MainUI():
         self.video_source = 0
 
         image_exts = ['jpg','png']
-        video_exts = ['mp4','avi','3gp']
+        video_exts = ['mp4','avi','3gp','webm']
         
         if show_f == 'file':
             if not self.is_pause:
