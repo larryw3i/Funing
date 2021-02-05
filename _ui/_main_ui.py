@@ -64,7 +64,7 @@ class _MainUI():
 
         self.mainui.langcombobox.lang_combobox.bind('<<ComboboxSelected>>',
             self.change_language )
-        self.mainui.showframe.ct_doublevar.trace('w', self.save_ct )
+        self.mainui.showframe.ct_entry.bind('<FocusOut>', self.save_ct )
         self.mainui.showframe.rec_button['command'] = self.recognize_face
         self.mainui.entryframe.prev_f_button['command'] = self.pick_prev_face
         self.mainui.entryframe.next_f_button['command'] = self.pick_next_face
@@ -77,9 +77,10 @@ class _MainUI():
             self.iru.release()
         self.mainui.root.destroy()
 
-    def save_ct( self ):
-        self.comparison_tolerance = comparison_tolerance
-        setting_yml['comparison_tolerance'] = self.showframe.ct_doublevar.get()
+    def save_ct( self , event):
+        ct_doublevar = self.mainui.showframe.ct_doublevar.get()
+        self.comparison_tolerance = comparison_tolerance = ct_doublevar
+        setting_yml['comparison_tolerance'] = ct_doublevar
         yaml.dump( setting_yml, open( setting_path, 'w') )
 
     def show_from( self, *args  ):
@@ -437,7 +438,7 @@ class IRU():
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 return (ret, frame)
 
-            else:                
+            else:
                return (None, None ) 
         else:
             return (None, None)
