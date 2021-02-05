@@ -82,7 +82,7 @@ class _MainUI():
     def save_ct( self , event):
         if not self.mainui.showframe.values_valid():
             return
-        ct_stringvar_get = int(self.mainui.showframe.ct_stringvar.get())
+        ct_stringvar_get = float(self.mainui.showframe.ct_stringvar.get())
         self.comparison_tolerance = comparison_tolerance = ct_stringvar_get
         setting_yml['comparison_tolerance'] = ct_stringvar_get
         yaml.dump( setting_yml, open( setting_path, 'w') )
