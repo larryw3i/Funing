@@ -1,14 +1,18 @@
 
 import os
+import shutil
 import yaml
 
-base_dir = os.path.abspath( os.path.dirname(  __file__  ) )
-
+usr_home = os.path.expanduser('~')
+base_dir = usr_home 
+project_path = os.path.abspath( os.path.dirname(  __file__  ) )
 locale_path = os.path.join( base_dir, 'locale')
 
-setting_path = os.path.join( base_dir , 'setting.yml') \
-    if os.path.exists( os.path.join( base_dir , 'setting.yml') ) \
-    else os.path.join( base_dir , 'setting.yml.example') 
+setting_path = os.path.join( base_dir , 'setting.yml') 
+setting_example_path = os.path.join( base_dir , 'setting.yml.example') 
+
+if not os.path.exists( setting_path ):
+    shutil.copyfile( setting_example_path, setting_path )
     
 data_dir = os.path.join( base_dir, 'data' )
 face_encodings_path = os.path.join( data_dir, 'face_encodings.data' )
