@@ -4,10 +4,11 @@ import tkinter as tk
 from tkinter import ttk
 from _ui.locale import _, lang_code
 from langcodes import Language
-from setting import base_dir, locale_path
+from setting import base_dir, locale_path, debug
 from setting import comparison_tolerance as ct
 import os
 import re
+from datetime import datetime
 
 class MainUI():
     def __init__(self):
@@ -195,7 +196,10 @@ class EntryFrame():
         else:   self.name_entry['bg'] = 'white'
         
         try:    datetime.strptime( self.DOB_entry.get(), '%Y-%m-%d')
-        except: self.DOB_entry['bg'] = 'red';       is_real = False
+        except Exception as e: 
+            self.DOB_entry['bg'] = 'red';       is_real = False
+            if debug:
+                print( e )
 
         if len(self.address_entry.get()) < 1:\
                 self.address_entry['bg'] = 'red';   is_real = False

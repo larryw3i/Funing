@@ -4,7 +4,7 @@ import os
 import sys
 import getopt
 from setting import base_dir, initialized, data_dir, setting_path, setting_yml,\
-    face_encodings_path
+    face_encodings_path, locale_path
 import yaml
 import numpy as np
 import json
@@ -21,7 +21,6 @@ class Funing():
         _MainUI()
     
     def msgfmt( self ):
-        locale_path =  base_dir + '/locale'
         for d in os.listdir( locale_path ):
             po_p_p =  f'{locale_path}/{d}/LC_MESSAGES'
             os.system(f'msgfmt -o {po_p_p}/funing.mo {po_p_p}/funing.po')

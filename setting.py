@@ -23,3 +23,4 @@ setting_yml = yaml.safe_load( open( setting_path, 'r' ) )
 lang_code = setting_yml['lang_code']
 initialized  = setting_yml['initialized']
 comparison_tolerance = setting_yml['comparison_tolerance']
+debug = setting_yml['debug']
