@@ -18,7 +18,7 @@ from _ui.locale import _
 from datetime import datetime , date
 import json
 from setting import setting_yml, setting_path, face_encodings_path,\
-    comparison_tolerance
+    comparison_tolerance, debug
 import numpy as np
 import pickle
 import yaml
@@ -97,10 +97,11 @@ class _MainUI():
 
         image_exts = ['jpg','png']
         video_exts = ['mp4','avi','3gp','webm','mkv']
-        
+    
+        if not self.is_pause:
+            self.is_pause = True
+
         if show_f == 'file':
-            if not self.is_pause:
-                self.is_pause = True
             if self.iru is not None:
                 self.iru.release()
                 self.iru = None
@@ -123,11 +124,12 @@ class _MainUI():
 
         if show_f == 'camara':
             
-            if self.video_source is not None\
-                and self.iru is None:
-                self.is_pause = False
+            if self.video_source is not None:
+                if self.iru is not None:
+                    self.iru.release()
+                    self.iru = None
                 self.iru = IRU( self.video_source )
-                
+                self.is_pause = False
                 self.get_resize_fxfy()
                 self.play_video()
         
@@ -189,7 +191,7 @@ class _MainUI():
             self.mainui.showframe.rec_stringvar.set( _('Play') )
 
     def play_video( self ):
-        if self.iru != None and not self.is_pause:
+        if self.iru is not None and not self.is_pause:
             
             self.vid_ret_frame  = self.iru.get_ret_frame()
             self.iru_frame = self.vid_ret_frame[1]
@@ -217,6 +219,8 @@ class _MainUI():
                 self.mainui.showframe.vid_img_label.after( \
                     int(1000/self.iru.fps) , self.play_video )
             else:
+                if debug:
+                    print('No frame rect returned.')
                 return
     
     def get_resize_fxfy( self ):

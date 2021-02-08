@@ -12,8 +12,7 @@ setting_path = os.path.join( base_dir , 'setting.yml')
 setting_example_path = os.path.join( project_path , 'setting.yml.example') 
 
 if not os.path.exists( setting_path ):
-    os.mkdir( base_dir )
-    shutil.copyfile( setting_example_path, setting_path )
+    os.mkdir( base_dir ); shutil.copyfile( setting_example_path, setting_path )
     
 data_dir = os.path.join( base_dir, 'data' )
 face_encodings_path = os.path.join( data_dir, 'face_encodings.data' )
