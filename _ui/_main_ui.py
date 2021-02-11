@@ -7,8 +7,8 @@ from ui.main_ui import MainUI
 from langcodes import Language
 import gettext
 import sys,os
-from model import funing_m as fm
-from model.funing_m import Person
+from models import funing_m as fm
+from models.funing_m import Person
 import  tkinter.filedialog as tkf
 import cv2
 from PIL import Image , ImageTk

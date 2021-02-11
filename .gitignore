@@ -140,3 +140,4 @@ tests/tests/*
 jupyter_notebok.ipynb
 setting.yml
 data/face_encodings.data
+.pypirc
