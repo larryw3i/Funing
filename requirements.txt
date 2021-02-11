@@ -1,8 +1,7 @@
 dlib
 face-recognition
+opencv-python
 langcodes
 pony
 pylint
-langcodes
-opencv-python
 pyyaml
