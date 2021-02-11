@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="funing",
-    version="0.2.3",
+    version="0.2.4",
     author="larryw3i",
     author_email="larryw3i@163.com",
     description="A face recognition gui",
@@ -20,7 +20,7 @@ setuptools.setup(
     ],
     entry_points={
         'console_scripts': [
-            'funing=funing:__main__',
+            'funing=funing:run',
         ]
     },
     python_requires='>=3.6',

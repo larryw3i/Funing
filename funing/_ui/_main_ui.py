@@ -3,21 +3,21 @@ from pony.orm import *
 from tkinter import messagebox
 import tkinter as tk
 from tkinter import *
-from ui.main_ui import MainUI
+from ..ui.main_ui import MainUI
 from langcodes import Language
 import gettext
 import sys,os
-from models import funing_m as fm
-from models.funing_m import Person
+from ..models import funing_m as fm
+from ..models.funing_m import Person
 import  tkinter.filedialog as tkf
 import cv2
 from PIL import Image , ImageTk
 import dlib
 import face_recognition
-from flocale.locale import _
+from ..flocale.locale import _
 from datetime import datetime , date
 import json
-from setting import setting_yml, setting_path, face_encodings_path,\
+from ..setting import setting_yml, setting_path, face_encodings_path,\
     comparison_tolerance, debug
 import numpy as np
 import pickle
