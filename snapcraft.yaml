@@ -9,19 +9,14 @@ base: core18
 parts:
   offlineimap:
     plugin: python
-    python-version: python2
+    python-version: python3
     source: .
     stage-packages:
-      - python-six
       - dlib
       - face-recognition
+      - language_data
       - langcodes
       - pony
-      - pylint
       - opencv-python
       - pyyaml
 
-
-apps:
-  offlineimap:
-    command: bin/offlineimap
