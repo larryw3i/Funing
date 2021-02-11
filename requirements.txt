@@ -4,5 +4,4 @@ opencv-python
 language_data
 langcodes
 pony
-pylint
 pyyaml
