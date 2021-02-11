@@ -7,7 +7,7 @@ import gettext
 import locale
 import tkinter as tk
 from pony.orm import *
-from model import funing_m as fm
+from models import funing_m as fm
 from setting import base_dir, locale_path, lang_code, setting_yml, setting_path
 import yaml
 
