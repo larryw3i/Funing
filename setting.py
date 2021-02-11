@@ -6,7 +6,7 @@ import yaml
 usr_home = os.path.expanduser('~')
 base_dir = os.path.join( usr_home , '.funing')
 project_path = os.path.abspath( os.path.dirname(  __file__  ) )
-locale_path = os.path.join( project_path, 'locale')
+locale_path = os.path.join( project_path, 'locales')
 
 setting_path = os.path.join( base_dir , 'setting.yml') 
 setting_example_path = os.path.join( project_path , 'setting.yml.example') 
