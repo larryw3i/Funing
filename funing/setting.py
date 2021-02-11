@@ -13,7 +13,8 @@ project_path = os.path.abspath( os.path.dirname(  __file__  ) )
 locale_path = os.path.join( project_path, 'flocale') 
 
 setting_path = os.path.join( base_dir , 'setting.yml') 
-setting_example_path = os.path.join( project_path , 'setting.yml.example') 
+setting_example_path = os.path.join( \
+    project_path ,'funing', 'setting.yml.example') 
 
 if not os.path.exists( setting_path ):
     os.mkdir( base_dir ); shutil.copyfile( setting_example_path, setting_path )
