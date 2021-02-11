@@ -13,6 +13,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/larryw3i/Funing",
     packages=setuptools.find_packages(),
+    scripts=['funing.py'],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
@@ -20,11 +21,12 @@ setuptools.setup(
     ],
     python_requires='>=3.6',
     data_files=[
-        ('setting',['setting.yml.example']),
+        ('setting',['setting.yml.example', 'setting.py']),
         ('requirements',['requirements.txt']),
         ('snapcraft',['snapcraft.yaml']),
         ('readme',['README.md']),
         ('LICENSE',['LICENSE']),
+        ('setup',['setup.py'])
     ],
     install_requires=[
         'dlib',
