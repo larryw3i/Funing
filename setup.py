@@ -12,10 +12,6 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/larryw3i/Funing",
-    scripts=[
-        'funing.py',
-        'setup.py',
-        'setting.py'],
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
