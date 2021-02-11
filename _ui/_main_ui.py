@@ -14,7 +14,7 @@ import cv2
 from PIL import Image , ImageTk
 import dlib
 import face_recognition
-from _ui.locale import _
+from flocale.locale import _
 from datetime import datetime , date
 import json
 from setting import setting_yml, setting_path, face_encodings_path,\

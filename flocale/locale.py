@@ -24,7 +24,7 @@ if lang_code == 'en-US' and \
 
 lang = gettext.translation(
     'funing',
-    localedir = 'locale',
+    localedir = 'flocale',
     languages = [ lang_code ])
 
 lang.install()

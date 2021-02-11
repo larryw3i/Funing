@@ -2,9 +2,9 @@
 from tkinter import *
 import tkinter as tk
 from tkinter import ttk
-from _ui.locale import _, lang_code
+from flocale.locale import _, lang_code
 from langcodes import Language
-from setting import base_dir, locale_path, debug
+from setting import base_dir, locale_path, debug, f_lang_codes
 from setting import comparison_tolerance as ct
 import os
 import re
@@ -54,9 +54,8 @@ class LangCombobox():
         self.lang_combobox.grid( column = 1, row = 2 )
     
     def locale_lang_display_names( self ):
-        lang_codes = os.listdir( locale_path )
         display_names = []
-        for i in lang_codes:
+        for i in f_lang_codes:
             display_names.append( Language.make(i).autonym() )
             
         return display_names

@@ -4,7 +4,7 @@ import os
 import sys
 import getopt
 from setting import base_dir, initialized, data_dir, setting_path, setting_yml,\
-    face_encodings_path, locale_path
+    face_encodings_path, locale_path, f_lang_codes
 import yaml
 import numpy as np
 import json
@@ -21,8 +21,9 @@ class Funing():
         _MainUI()
     
     def msgfmt( self ):
-        for d in os.listdir( locale_path ):
-            if d.startswith('_'): continue
+        for d in f_lang_codes:
+            if os.path.isfile( f'{locale_path}/{d}' ) or \
+                d.startswith('_'): continue
             po_p_p =  f'{locale_path}/{d}/LC_MESSAGES'
             os.system(f'msgfmt -o {po_p_p}/funing.mo {po_p_p}/funing.po')
 
@@ -31,7 +32,7 @@ class Funing():
 
     def initialize( self ):
         first_mo_path = os.path.join( \
-            base_dir, 'locale','en-US', 'LC_MESSAGES', 'funing.mo')
+            base_dir, 'flocale','en-US', 'LC_MESSAGES', 'funing.mo')
         
         if not os.path.exists( first_mo_path ):
             try: self.msgfmt()

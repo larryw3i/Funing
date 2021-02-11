@@ -2,11 +2,12 @@
 import os
 import shutil
 import yaml
+import re
 
 usr_home = os.path.expanduser('~')
 base_dir = os.path.join( usr_home , '.funing')
 project_path = os.path.abspath( os.path.dirname(  __file__  ) )
-locale_path = os.path.join( project_path, 'locales')
+locale_path = os.path.join( project_path, 'flocale')
 
 setting_path = os.path.join( base_dir , 'setting.yml') 
 setting_example_path = os.path.join( project_path , 'setting.yml.example') 
@@ -23,3 +24,7 @@ lang_code = setting_yml['lang_code']
 initialized  = setting_yml['initialized']
 comparison_tolerance = setting_yml['comparison_tolerance']
 debug = setting_yml['debug']
+
+f_lang_codes =  [ d for d in os.listdir(locale_path) \
+    if re.match('^\w+-\w+$', d) ]
+
