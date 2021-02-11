@@ -3,7 +3,7 @@
 import os
 import sys
 import getopt
-from setting import base_dir, initialized, data_dir, setting_path, setting_yml,\
+from _ui.setting import base_dir, initialized, data_dir, setting_path, setting_yml,\
     face_encodings_path, locale_path, f_lang_codes
 import yaml
 import numpy as np

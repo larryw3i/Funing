@@ -3,11 +3,14 @@ import os
 import shutil
 import yaml
 import re
+from pathlib import Path
 
 usr_home = os.path.expanduser('~')
 base_dir = os.path.join( usr_home , '.funing')
-project_path = os.path.abspath( os.path.dirname(  __file__  ) )
-locale_path = os.path.join( project_path, 'flocale')
+project_path =str( Path(  \
+    os.path.abspath( os.path.dirname(  __file__  ) ) ).parent )
+    
+locale_path = os.path.join( project_path, 'flocale') 
 
 setting_path = os.path.join( base_dir , 'setting.yml') 
 setting_example_path = os.path.join( project_path , 'setting.yml.example') 

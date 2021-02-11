@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="funing",
-    version="0.2.02",
+    version="0.2.3",
     author="larryw3i",
     author_email="larryw3i@163.com",
     description="A face recognition gui",
@@ -20,14 +20,14 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.6',
-    data_files=[
-        ('setting',['setting.yml.example', 'setting.py']),
-        ('requirements',['requirements.txt']),
-        ('snapcraft',['snapcraft.yaml']),
-        ('readme',['README.md']),
-        ('LICENSE',['LICENSE']),
-        ('setup',['setup.py'])
-    ],
+    # data_files=[
+    #     ('setting',['setting.yml.example', 'setting.py']),
+    #     ('requirements',['requirements.txt']),
+    #     ('snapcraft',['snapcraft.yaml']),
+    #     ('readme',['README.md']),
+    #     ('LICENSE',['LICENSE']),
+    #     ('setup',['setup.py'])
+    # ],
     install_requires=[
         'dlib',
         'face-recognition',
