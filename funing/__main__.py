@@ -3,13 +3,12 @@
 import os
 import sys
 import getopt
-from _ui.setting import base_dir, initialized, data_dir, setting_path, setting_yml,\
-    face_encodings_path, locale_path, f_lang_codes
+from .setting import base_dir, initialized, data_dir, setting_path, \
+    setting_yml, face_encodings_path, locale_path, f_lang_codes
 import yaml
 import numpy as np
 import json
 import pickle
-
 
 class Funing():
     def __init__(self):
@@ -51,22 +50,21 @@ class Funing():
         yaml.dump( setting_yml, open( setting_path, 'w') )
 
 
-if __name__ == '__main__':
-    sys_argv = sys.argv[1:]
+sys_argv = sys.argv[1:]
+
+f = Funing()
+
+optlist , args  = getopt.getopt( sys_argv, '' )
+
+for a in args:
+    if a in [ '','s' ,'st', 'start' ]:
+        f.start()
+    elif a in [ 'm' , 'msg' , 'msgfmt' ]:
+        f.msgfmt()
     
-    f = Funing()
-
-    optlist , args  = getopt.getopt( sys_argv, '' )
-
-    for a in args:
-        if a in [ 's' ,'st', 'start' ]:
-            f.start()
-        elif a in [ 'm' , 'msg' , 'msgfmt' ]:
-            f.msgfmt()
-        
-        elif a in ['pip' , 'pip_install']:
-            f.pip_install_r()
-        
-        elif a in [ 'init', 'initial' ]:
-            f.initialize()
-      
+    elif a in ['pip' , 'pip_install']:
+        f.pip_install_r()
+    
+    elif a in [ 'init', 'initial' ]:
+        f.initialize()
+    

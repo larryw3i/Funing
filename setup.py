@@ -13,21 +13,17 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/larryw3i/Funing",
     packages=setuptools.find_packages(),
-    scripts=['funing.py'],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
+    entry_points={
+        'console_scripts': [
+            'funing=funing:__main__',
+        ]
+    },
     python_requires='>=3.6',
-    # data_files=[
-    #     ('setting',['setting.yml.example', 'setting.py']),
-    #     ('requirements',['requirements.txt']),
-    #     ('snapcraft',['snapcraft.yaml']),
-    #     ('readme',['README.md']),
-    #     ('LICENSE',['LICENSE']),
-    #     ('setup',['setup.py'])
-    # ],
     install_requires=[
         'dlib',
         'face-recognition',

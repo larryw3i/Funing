@@ -6,7 +6,7 @@ import sys
 from uuid import UUID
 from datetime import date
 
-from _ui.setting import base_dir
+from setting import base_dir
 from pony.orm.dbapiprovider import OperationalError
 
 db = Database()

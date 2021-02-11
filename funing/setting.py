@@ -7,8 +7,7 @@ from pathlib import Path
 
 usr_home = os.path.expanduser('~')
 base_dir = os.path.join( usr_home , '.funing')
-project_path =str( Path(  \
-    os.path.abspath( os.path.dirname(  __file__  ) ) ).parent )
+project_path = os.path.abspath( os.path.dirname(  __file__  ) )
     
 locale_path = os.path.join( project_path, 'flocale') 
 

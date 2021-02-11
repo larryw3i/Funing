@@ -8,7 +8,7 @@ import locale
 import tkinter as tk
 from pony.orm import *
 from models import funing_m as fm
-from _ui.setting import base_dir, locale_path, lang_code, setting_yml, setting_path
+from setting import base_dir, locale_path, lang_code, setting_yml, setting_path
 import yaml
 
 sys_lang_code = locale.getdefaultlocale()[0]\
@@ -24,7 +24,7 @@ if lang_code == 'en-US' and \
 
 lang = gettext.translation(
     'funing',
-    localedir = 'flocale',
+    localedir = locale_path,
     languages = [ lang_code ])
 
 lang.install()
