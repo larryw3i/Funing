@@ -438,6 +438,8 @@ class IRU():
         self.width = self.vid.get(cv2.CAP_PROP_FRAME_WIDTH)
         self.height = self.vid.get(cv2.CAP_PROP_FRAME_HEIGHT)
         self.fps = self.vid.get(cv2.CAP_PROP_FPS)
+        # 0 got when I tested it on msys.
+        self.fps = 25 if self.fps == 0 else self.fps
         # self.frame_count = self.vid.get(cv2.CAP_PROP_FRAME_COUNT)
 
     def get_ret_frame( self ):
