@@ -7,17 +7,16 @@ from pathlib import Path
 
 usr_home = os.path.expanduser('~')
 base_dir = os.path.join( usr_home , '.funing')
-project_path = os.path.abspath( os.path.dirname(  __file__  ) )
-    
+project_path = os.path.dirname(  __file__  )    
 
 locale_path = os.path.join( project_path, 'flocale') 
 
 setting_path = os.path.join( base_dir , 'setting.yml') 
-setting_example_path = os.path.join( \
-    project_path ,'funing', 'setting.yml.example') 
+setting_example_path = os.path.join( project_path , 'setting.yml.example') 
 
 if not os.path.exists( setting_path ):
-    os.mkdir( base_dir ); shutil.copyfile( setting_example_path, setting_path )
+    if not os.path.exists( base_dir): os.mkdir( base_dir )
+    shutil.copyfile( setting_example_path, setting_path )
     
 data_dir = os.path.join( base_dir, 'data' )
 face_encodings_path = os.path.join( data_dir, 'face_encodings.data' )

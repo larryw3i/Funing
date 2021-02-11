@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="funing",
-    version="0.2.7",
+    version="0.2.12",
     author="larryw3i",
     author_email="larryw3i@163.com",
     description="A face recognition gui",
@@ -32,5 +32,6 @@ setuptools.setup(
         'langcodes',
         'pony',
         'pyyaml',
-    ]
+    ],
+    include_package_data = True,
 )
