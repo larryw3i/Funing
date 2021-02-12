@@ -9,6 +9,7 @@ from setting import comparison_tolerance as ct
 import os
 import re
 from datetime import datetime
+from fui import dregex_dict_ks
 
 class MainUI():
     def __init__(self):
@@ -125,18 +126,11 @@ class InsInfoFrame():
         self.il_entry_svar = StringVar( self.frame )
         self.infolabel_entry = tk.Entry(self.frame, textvariable= il_entry_svar)
 
-        self.dregex_label = tk.Label( self.frame, text=_('Date'))
-        self.dtype_dict = {
-            'str',['',_('string')],
-            'int',['\d+'_('integer')],
-            'float', ['\d+.\d+',_('float')],
-            'bool',[_('[0|1]','boolean')],
-        }
-
+        self.dregex_label = tk.Label( self.frame, text=_('Data type'))
         self.dtype_combobox_svar = tk.StringVar( self.frame )
         self.dtype_combobox = ttk.Combobox( self.frame ,
             textvariable = self.dtype_combobox_svar,
-            values = 
+            values = dregex_dict_ks
         )
         
         '''
