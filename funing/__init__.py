@@ -4,7 +4,8 @@ import os
 import sys
 import getopt
 from .setting import base_dir, initialized, data_dir, setting_path, \
-    setting_yml, face_encodings_path, locale_path, f_lang_codes
+    setting_yml, face_encodings_path, locale_path, f_lang_codes, debug,\
+    data_file_path
 import yaml
 import numpy as np
 import json
@@ -44,6 +45,9 @@ class Funing():
         if not os.path.exists( data_dir ): os.mkdir( data_dir )
         if not os.path.exists( face_encodings_path ):
             pickle.dump({}, open(face_encodings_path, 'wb'))
+        
+        if not os.path.exists( data_file_path ):
+            with open( data_file_path ,"w") : pass
 
         initialized = True
         setting_yml['initialized'] = initialized
@@ -57,7 +61,8 @@ def run():
     optlist , args  = getopt.getopt( sys_argv, '' )
 
     for a in args:
-        if a in [ 's' ,'st', 'start' ]:
+        # arg 'ts' with test
+        if a in [ 'ts' ,'st', 'start' ]:
             f.start()
         elif a in [ 'm' , 'msg' , 'msgfmt' ]:
             f.msgfmt()
@@ -67,4 +72,5 @@ def run():
         
         elif a in [ 'init', 'initial' ]:
             f.initialize()
+
         

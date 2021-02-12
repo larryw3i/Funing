@@ -142,3 +142,4 @@ setting.yml
 data/face_encodings.data
 .pypirc
 funing/venv/
+funing/test_home/*

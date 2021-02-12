@@ -439,7 +439,8 @@ class IRU():
         self.height = self.vid.get(cv2.CAP_PROP_FRAME_HEIGHT)
         self.fps = self.vid.get(cv2.CAP_PROP_FPS)
         # 0 got when I tested it on msys.
-        self.fps = 25 if self.fps == 0 else self.fps
+        if debug and self.fps == 0 :
+            print('self.pfs got 0, 25 insteaded')
         # self.frame_count = self.vid.get(cv2.CAP_PROP_FRAME_COUNT)
 
     def get_ret_frame( self ):
