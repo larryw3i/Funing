@@ -45,7 +45,8 @@ class LangCombobox():
           )
         self.lang_combobox = ttk.Combobox( self.frame ,
             textvariable = self.lang_combobox_var,
-            values = tuple( self.locale_lang_display_names() )
+            values = tuple( self.locale_lang_display_names() ),
+            state = "readonly"
         )
 
     def place(self):
