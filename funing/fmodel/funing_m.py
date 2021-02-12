@@ -26,7 +26,7 @@ class Person( db.Entity ):
 class PersonInfo( db.Entity ):
     id = PrimaryKey( str )
     label = Required( str )
-    dtype = Required( str )
+    dregex = Required( str )
     value = Required( str )
     note = Optional( str )
     

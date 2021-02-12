@@ -118,6 +118,34 @@ class ShowFrame():
         return is_real
              
 
+class InsInfoFrame():
+    def __init__(self, frame):
+        self.frame = frame
+        self.infolabel_label = tk.Label( self.frame, text = _('Label') )
+        self.il_entry_svar = StringVar( self.frame )
+        self.infolabel_entry = tk.Entry(self.frame, textvariable= il_entry_svar)
+
+        self.dregex_label = tk.Label( self.frame, text=_('Date'))
+        self.dtype_dict = {
+            'str',_('string'),
+            'int',('integer'),
+            'float', _('float'),
+            'bool',_('boolean'),
+        }
+
+        self.dtype_combobox_svar = tk.StringVar( self.frame )
+        self.dtype_combobox = ttk.Combobox( self.frame ,
+            textvariable = self.dtype_combobox_svar,
+            values = 
+        )
+        
+        '''
+        
+    label = Required( str )
+    dtype = Required( str )
+    value = Required( str )
+    note = Optional( str )'''
+
 class EntryFrame():
     
     def __init__(self, frame):
@@ -127,7 +155,7 @@ class EntryFrame():
 
         self.prev_f_button = tk.Button(self.frame , \
             text = _("prev_symb"))
-        self.face_num_stringvar = StringVar( frame, '*/*' )
+        self.face_num_stringvar = StringVar( self.frame, '*/*' )
         self.face_num_label = tk.Label( self.frame , \
             textvariable = self.face_num_stringvar  )
         self.next_f_button = tk.Button(self.frame , \

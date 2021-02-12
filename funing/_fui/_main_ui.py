@@ -19,7 +19,6 @@ from datetime import datetime , date
 import json
 from setting import setting_yml, setting_path, face_encodings_path,\
     comparison_tolerance, debug
-import numpy as np
 import pickle
 import yaml
 import uuid
