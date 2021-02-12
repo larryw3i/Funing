@@ -8,7 +8,7 @@ from langcodes import Language
 import gettext
 import sys,os
 from fmodel import funing_m as fm
-from fmodel.funing_m import Person
+from fmodel.funing_m import Person, PersonInfo
 import  tkinter.filedialog as tkf
 import cv2
 from PIL import Image , ImageTk
@@ -22,6 +22,7 @@ from setting import setting_yml, setting_path, face_encodings_path,\
 import pickle
 import yaml
 import uuid
+
 
 class _MainUI():
     def __init__(self):
@@ -397,22 +398,35 @@ class _MainUI():
                 dob = p_dob,
                 address = self.mainui.entryframe.address_entry.get(),
                 note = self.mainui.entryframe.note_text.get(1.0, 'end') )
+        person_id = str(p.id)
 
+        for i in self.mainui.insinfoframe.ins_vars:
+            label_value = i[0].get()
+            dregex_value = i[1].get()
+            value_v = i[2].get()
+            note_value = i[3].get()
+            if len( label_value+dtype_value+value_v+note_value ) > 0:
+                PersonInfo( 
+                    person_id = person_id,  label = label_value,
+                    dregex = dregex_value,  value = value_v,
+                    note = note_value
+                )
+                
         commit()
 
         if self.current_face_encoding is None:
             messagebox.showinfo( _('Information'), _('No face is detected'))
         else:
             if len( self.known_encodings) > 0:
-                if self.known_encodings.get(str(p.id)) is None:
-                    self.known_encodings.setdefault(str(p.id) ,\
+                if self.known_encodings.get(person_id) is None:
+                    self.known_encodings.setdefault(person_id ,\
                         [self.current_face_encoding])
                 else:
-                    self.known_encodings.setdefault(str(p.id) ,\
-                        [self.known_encodings.get(str(p.id))]+\
+                    self.known_encodings.setdefault(person_id ,\
+                        [self.known_encodings.get(person_id)]+\
                         [self.current_face_encoding])
             else:
-                self.known_encodings = { str(p.id):\
+                self.known_encodings = { person_id:\
                     [self.current_face_encoding] }
             pickle.dump( self.known_encodings, open(face_encodings_path, 'wb'))
         
@@ -423,6 +437,7 @@ class _MainUI():
     def show_dob_error( self ):
         messagebox.showerror( _('Error'), \
             _('Check the DOB entry please!') ) 
+
 
 class IRU():
     def __init__(self, video_source = 0 ):

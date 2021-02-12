@@ -23,6 +23,7 @@ class Person( db.Entity ):
     address = Optional( str )
     note = Optional( str )
 
+# additional informations
 class PersonInfo( db.Entity ):
     id = PrimaryKey( str )
     person_id = Required( str )

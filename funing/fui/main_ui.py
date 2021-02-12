@@ -25,7 +25,7 @@ class MainUI():
         # lang_combobox
         self.langcombobox = LangCombobox( self.root )
         
-        #
+        # insinfoframe
         self.insinfoframe = InsInfoFrame( tk.Frame( self.root ) )
 
     def place(self):
@@ -33,7 +33,6 @@ class MainUI():
         self.entryframe.place()
         self.langcombobox.place()
         self.insinfoframe.place()
-
     
     def mainloop(self):
         self.root.mainloop()
@@ -143,9 +142,9 @@ class InsInfoFrame():
 
         tk.Label( row_frame, text=_('Data type'))\
             .grid( column = 0, row = 1)
-        dtype_combobox_sv = tk.StringVar( row_frame )
+        dregex_combobox_sv = tk.StringVar( row_frame )
         ttk.Combobox( row_frame ,
-            textvariable = dtype_combobox_sv,
+            textvariable = dregex_combobox_sv,
             values = dregex_dict_v_ts )\
             .grid(  column = 1,  row =  1 )
 
@@ -162,7 +161,10 @@ class InsInfoFrame():
             .grid(  column = 1 ,  row = 3 )
         row_frame.pack( side = TOP )
 
-        self.ins_vars.append( [il_entry_svar,dtype_combobox_sv, value_sv,\
+        ttk.Separator(row_frame, orient='horizontal')\
+            .place(relx=0, rely=0, relwidth=1, relheight=0.01)   
+
+        self.ins_vars.append( [il_entry_svar, dregex_combobox_sv, value_sv,\
             note_sv] )
         
     def place( self ):
