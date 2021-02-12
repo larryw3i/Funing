@@ -25,6 +25,7 @@ class Person( db.Entity ):
 
 class PersonInfo( db.Entity ):
     id = PrimaryKey( str )
+    person_id = Required( str )
     label = Required( str )
     dregex = Required( str )
     value = Required( str )
