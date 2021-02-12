@@ -6,7 +6,7 @@ import sys
 from uuid import UUID
 from datetime import date
 
-from ..setting import base_dir, data_file_path
+from setting import base_dir, data_file_path
 from pony.orm.dbapiprovider import OperationalError
 
 db = Database()
@@ -21,6 +21,13 @@ class Person( db.Entity ):
     name = Optional( str )
     dob = Optional( date )
     address = Optional( str )
+    note = Optional( str )
+
+class PersonInfo( db.Entity ):
+    id = PrimaryKey( str )
+    label = Required( str )
+    dtype = Required( str )
+    value = Required( str )
     note = Optional( str )
     
 try:

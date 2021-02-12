@@ -7,8 +7,8 @@ import gettext
 import locale
 import tkinter as tk
 from pony.orm import *
-from ..models import funing_m as fm
-from ..setting import base_dir, locale_path, lang_code, setting_yml, setting_path, debug, f_lang_codes
+from fmodel import funing_m as fm
+from setting import base_dir, locale_path, lang_code, setting_yml, setting_path, debug, f_lang_codes
 import yaml
 
 sys_lang_code = locale.getdefaultlocale()[0]\

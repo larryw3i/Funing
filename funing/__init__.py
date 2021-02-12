@@ -1,9 +1,12 @@
 #!/usr/bin/python3
 
+
 import os
 import sys
+from pathlib import Path
+sys.path.append( str(Path( os.path.abspath( __file__)  ).parent.absolute() )  )
 import getopt
-from .setting import base_dir, initialized, data_dir, setting_path, \
+from setting import base_dir, initialized, data_dir, setting_path, \
     setting_yml, face_encodings_path, locale_path, f_lang_codes, debug,\
     data_file_path
 import yaml
@@ -17,7 +20,7 @@ class Funing():
             self.initialize()
 
     def start(self):
-        from ._ui._main_ui import _MainUI
+        from _fui._main_ui import _MainUI
         _MainUI()
     
     def msgfmt( self ):

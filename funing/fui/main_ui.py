@@ -2,10 +2,10 @@
 from tkinter import *
 import tkinter as tk
 from tkinter import ttk
-from ..flocale.locale import _, lang_code
+from flocale.locale import _, lang_code
 from langcodes import Language
-from ..setting import base_dir, locale_path, debug, f_lang_codes
-from ..setting import comparison_tolerance as ct
+from setting import base_dir, locale_path, debug, f_lang_codes
+from setting import comparison_tolerance as ct
 import os
 import re
 from datetime import datetime
