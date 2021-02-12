@@ -9,7 +9,7 @@ from setting import comparison_tolerance as ct
 import os
 import re
 from datetime import datetime
-from fui import dregex_dict_v_ts
+from fui import dregex_dict_v_ts, dregex_dict_ks
 import uuid
 
 class MainUI():
@@ -136,9 +136,18 @@ class InsInfoFrame():
         self.ins_vars.pop(frame_name)
         if debug:
             print( frame_name, self.ins_vars )
+    
+    def remove_all_row_frame(self):
+        for i in self.ins_vars.keys():
+            self.frame.nametowidget(i).pack_forget()
+        self.ins_vars = {}
         
 
-    def add_row_frame( self ):
+    def add_row_frame( self, il_entry_value='', dregex_cb_value = '',\
+        v_value = '', note_value = ''  ):
+        dregex_cb_value = \
+            dregex_dict_v_ts[dregex_dict_ks.index(dregex_cb_value)] if \
+            dregex_cb_value in dregex_dict_ks else dregex_cb_value
 
         frame_name = str( uuid.uuid4() )
         row_frame = tk.Frame( self.frame, name = frame_name )
@@ -149,14 +158,15 @@ class InsInfoFrame():
         
         tk.Label( info_frame, text = _('Label') )\
             .grid( column =  0, row =  0 )
-        il_entry_svar = StringVar( info_frame )
+        il_entry_svar = StringVar( info_frame , value = il_entry_value)
         tk.Entry(info_frame, \
             textvariable= il_entry_svar)\
             .grid( column =  1,  row =  0)
 
         tk.Label( info_frame, text=_('Data type'))\
             .grid( column = 0, row = 1)
-        dregex_combobox_sv = tk.StringVar( info_frame )
+        dregex_combobox_sv = tk.StringVar( info_frame, \
+            value = dregex_cb_value )
         ttk.Combobox( info_frame ,
             textvariable = dregex_combobox_sv,
             values = dregex_dict_v_ts )\
@@ -164,13 +174,13 @@ class InsInfoFrame():
 
         tk.Label( info_frame, text=_('Value'))\
             .grid( column = 0, row = 2)
-        value_sv = StringVar( info_frame )
+        value_sv = StringVar( info_frame, value = v_value )
         tk.Entry( info_frame, textvariable = value_sv )\
             .grid(  column = 1 ,  row =  2 )
 
         tk.Label( info_frame, text=_('Note'))\
             .grid( column = 0, row = 3)
-        note_sv = StringVar( info_frame )
+        note_sv = StringVar( info_frame, note_value )
         tk.Entry( info_frame, textvariable = note_sv )\
             .grid(  column = 1 ,  row = 3 )
         

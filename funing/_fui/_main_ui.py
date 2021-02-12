@@ -280,6 +280,7 @@ class _MainUI():
             
     @db_session
     def update_entry_ui(self):
+        # update entryframe
         if self.is_pause and \
             self.current_face_person_id != None:
             p = select(p for p in fm.Person \
@@ -294,7 +295,15 @@ class _MainUI():
                 self.mainui.entryframe.DOB_entry.insert(0 , str(p.dob) )
                 self.mainui.entryframe.address_entry.insert(0 , p.address)
                 self.mainui.entryframe.note_text.insert(END , p.note)
-
+        
+                # update insinfoframe
+                i_s = select( i for i in PersonInfo \
+                    if i.person_id == self.current_face_person_id )
+                for i in i_s:
+                    self.mainui.insinfoframe.add_row_frame( 
+                        il_entry_value=i.label,  dregex_cb_value = i.dregex,\
+                        v_value = i.value, note_value = i.note
+                    )
         elif (not self.is_pause) or \
             (self.is_pause and (self.current_face_person_id is None) ):
                 self.mainui.entryframe.uuid_entry['state'] = 'normal'
@@ -305,12 +314,14 @@ class _MainUI():
                 self.mainui.entryframe.address_entry.delete(0, END)
                 self.mainui.entryframe.note_text.delete('1.0', END)
 
+                self.mainui.insinfoframe.remove_all_row_frame()
+                
+
     def make_rect( self ):
 
         for top, right, bottom, left in self.face_locations:
             cv2.rectangle( self.iru_frame, (left, top), \
             (right, bottom), (0, 0, 255), 2)
-
 
     def pick_face( self ):
         
@@ -346,8 +357,7 @@ class _MainUI():
             title = _('Restart Funing Now?')
         )
         if restartapp:
-            
-            
+                        
             setting_yml['lang_code'] = new_lang_code
             yaml.dump( setting_yml, open( setting_path, 'w') )
 
@@ -367,7 +377,7 @@ class _MainUI():
 
         # dev: face_encoding exists and person is None sometimes
         person_exists =  False if self.current_face_person_id is None else \
-            fm.Person.exists( id = self.current_face_person_id )
+            Person.exists( id = self.current_face_person_id )
 
         if self.current_face_person_id != None and \
             person_exists:
@@ -405,6 +415,7 @@ class _MainUI():
         person_id = str(p.id)
         if debug:
             print( self.mainui.insinfoframe.ins_vars )
+
         for k,v in self.mainui.insinfoframe.ins_vars.items():
             label_value = v[0].get()
             dregex_value = v[1].get()
@@ -413,13 +424,28 @@ class _MainUI():
             if debug:
                 print( label_value, dregex_value, value_v, note_value)
             if len( label_value+ dregex_value+ value_v+ note_value ) > 0:
-                PersonInfo( 
-                    id = str(uuid.uuid4()),
-                    person_id = person_id,  label = label_value,
-                    dregex = dregex_value,  value = value_v,
-                    note = note_value
-                )
-            self.mainui.insinfoframe.remove_row_frame( k )
+                if PersonInfo.exists( person_id = person_id, \
+                    label =label_value ):
+                    p_i = select( p for p in PersonInfo \
+                        if person_id == person_id and label == label_value )\
+                        .first()
+
+                    if debug:
+                        print( 'PersonInfo exists' )
+                    p_i.dregex = dregex_value;  p_i.value = value_v
+                    p_i.note = note_value
+                else:
+
+                    if debug:
+                        print( 'New PersonInfo' )
+
+                    PersonInfo( 
+                        id = str(uuid.uuid4()),
+                        person_id = person_id,  label = label_value,
+                        dregex = dregex_value,  value = value_v,
+                        note = note_value
+                    )
+            # self.mainui.insinfoframe.remove_row_frame( k )
                 
         commit()
 
