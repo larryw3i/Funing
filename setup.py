@@ -1,11 +1,12 @@
 import setuptools
+from funing.setting import version
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description=fh.read()
 
 setuptools.setup(
     name="funing",
-    version="0.2.12",
+    version= version,
     author="larryw3i",
     author_email="larryw3i@163.com",
     description="A face recognition gui",
