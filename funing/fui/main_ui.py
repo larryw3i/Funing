@@ -127,10 +127,10 @@ class InsInfoFrame():
 
         self.dregex_label = tk.Label( self.frame, text=_('Date'))
         self.dtype_dict = {
-            'str',_('string'),
-            'int',('integer'),
-            'float', _('float'),
-            'bool',_('boolean'),
+            'str',['',_('string')],
+            'int',['\d+'_('integer')],
+            'float', ['\d+.\d+',_('float')],
+            'bool',[_('[0|1]','boolean')],
         }
 
         self.dtype_combobox_svar = tk.StringVar( self.frame )
