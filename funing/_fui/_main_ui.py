@@ -2,6 +2,7 @@
 from pony.orm import *
 from tkinter import messagebox
 import tkinter as tk
+from tkinter import ttk
 from tkinter import *
 from fui.main_ui import MainUI
 from langcodes import Language
@@ -21,6 +22,7 @@ from setting import setting_yml, setting_path, face_encodings_path,\
     comparison_tolerance, debug, lang_code
 import pickle
 import yaml
+from fui import dregex_dict_v_ts, dregex_dict_ks
 import uuid
 
 
@@ -52,6 +54,8 @@ class _MainUI():
         self.lang_code = lang_code
         
         self.fxfy = None
+
+        self.ins_vars = {}
         try:
             self.screenwidth = self.mainui.root.winfo_screenwidth()
             self.screenheight = self.mainui.root.winfo_screenheight()
@@ -75,6 +79,88 @@ class _MainUI():
         self.mainui.entryframe.save_button['command'] = self.save_encoding
         self.mainui.showframe.show_f_optionmenu_var.trace('w', self.show_from )
         self.mainui.root.protocol("WM_DELETE_WINDOW", self.destroy )
+        self.mainui.insinfoframe.add_rf_button['command'] = self.add_ins_rf 
+    
+    def add_ins_rf( self, frame_name = '', il_entry_value='', \
+        dregex_cb_value = '', v_value = '', note_value = ''  ):
+        
+        dregex_cb_value = \
+            dregex_dict_v_ts[dregex_dict_ks.index(dregex_cb_value)] if \
+            dregex_cb_value in dregex_dict_ks else dregex_cb_value
+
+        frame_name = str( uuid.uuid4() ) if len( frame_name )<1 else frame_name
+        row_frame = tk.Frame( self.mainui.insinfoframe.frame, \
+            name = frame_name )
+
+        info_frame = tk.Frame( row_frame )
+        del_button = tk.Button( row_frame , text = _('Delete'), \
+            command =lambda: self.remove_ins_row_frame(frame_name) )
+        
+        tk.Label( info_frame, text = _('Label') )\
+            .grid( column =  0, row =  0 )
+        il_entry_svar = StringVar( info_frame , value = il_entry_value)
+        tk.Entry(info_frame, \
+            textvariable= il_entry_svar)\
+            .grid( column =  1,  row =  0)
+
+        tk.Label( info_frame, text=_('Data type'))\
+            .grid( column = 0, row = 1)
+        dregex_combobox_sv = tk.StringVar( info_frame, \
+            value = dregex_cb_value )
+        ttk.Combobox( info_frame ,
+            textvariable = dregex_combobox_sv,
+            values = dregex_dict_v_ts )\
+            .grid(  column = 1,  row =  1 )
+
+        tk.Label( info_frame, text=_('Value'))\
+            .grid( column = 0, row = 2)
+        value_sv = StringVar( info_frame, value = v_value )
+        tk.Entry( info_frame, textvariable = value_sv )\
+            .grid(  column = 1 ,  row =  2 )
+
+        tk.Label( info_frame, text=_('Note'))\
+            .grid( column = 0, row = 3)
+        note_sv = StringVar( info_frame, note_value )
+        tk.Entry( info_frame, textvariable = note_sv )\
+            .grid(  column = 1 ,  row = 3 )
+        
+        info_frame.grid(column = 0, row = 0)
+        del_button.grid(column = 1, row = 0)
+        row_frame.pack( side = TOP )
+
+
+        ttk.Separator(info_frame, orient='horizontal')\
+            .place(relx=0, rely=0, relwidth=1, relheight=0.01)
+        
+
+        self.ins_vars[frame_name] = [il_entry_svar, dregex_combobox_sv,\
+            value_sv, note_sv]
+        
+        if debug:
+            print( self.ins_vars )
+            
+    @db_session
+    def remove_ins_row_frame( self , frame_name):
+        # update UI
+        self.mainui.insinfoframe.frame.nametowidget(frame_name).pack_forget()
+        self.ins_vars.pop(frame_name)
+        if debug:
+            print( frame_name, self.ins_vars )
+        
+        # update database
+        if self.current_face_person_id is not None:
+            if PersonInfo.exists( person_id =self.current_face_person_id,\
+                id = frame_name ):
+                PersonInfo.get( frame_name ).delete()
+                commit()
+
+    
+    def remove_all_ins_row_frames(self):
+        for i in self.ins_vars.keys():
+            self.mainui.insinfoframe.frame.nametowidget(i).pack_forget()
+        self.ins_vars = {}
+        
+
          
     def destroy( self ):
         if self.iru is not None:
@@ -187,6 +273,7 @@ class _MainUI():
             self.play_video()
             self.mainui.showframe.rec_stringvar.set(_('Recognize'))
             self.update_entry_ui()
+            self.current_face_person_id = None
         else:
             self.is_pause = True
             self.compare_faces()
@@ -300,9 +387,10 @@ class _MainUI():
                 i_s = select( i for i in PersonInfo \
                     if i.person_id == self.current_face_person_id )
                 for i in i_s:
-                    self.mainui.insinfoframe.add_row_frame( 
-                        il_entry_value=i.label,  dregex_cb_value = i.dregex,\
-                        v_value = i.value, note_value = i.note
+                    self.add_ins_rf( 
+                        il_entry_value=i.label, dregex_cb_value = i.dregex,\
+                        v_value = i.value,      note_value = i.note,
+                        frame_name  = i.id
                     )
         elif (not self.is_pause) or \
             (self.is_pause and (self.current_face_person_id is None) ):
@@ -314,7 +402,7 @@ class _MainUI():
                 self.mainui.entryframe.address_entry.delete(0, END)
                 self.mainui.entryframe.note_text.delete('1.0', END)
 
-                self.mainui.insinfoframe.remove_all_row_frame()
+                self.remove_all_ins_row_frames()
                 
 
     def make_rect( self ):
