@@ -9,7 +9,7 @@ from setting import comparison_tolerance as ct
 import os
 import re
 from datetime import datetime
-from fui import dregex_dict_ks
+from fui import dregex_dict_v_ts
 
 class MainUI():
     def __init__(self):
@@ -24,11 +24,15 @@ class MainUI():
 
         # lang_combobox
         self.langcombobox = LangCombobox( self.root )
+        
+        #
+        self.insinfoframe = InsInfoFrame( tk.Frame( self.root ) )
 
     def place(self):
         self.showframe.place()
         self.entryframe.place()
         self.langcombobox.place()
+        self.insinfoframe.place()
 
     
     def mainloop(self):
@@ -46,7 +50,8 @@ class LangCombobox():
           )
         self.lang_combobox = ttk.Combobox( self.frame ,
             textvariable = self.lang_combobox_var,
-            values = tuple( self.locale_lang_display_names() )
+            values = tuple( self.locale_lang_display_names() ),
+            state = "readonly"
         )
 
     def place(self):
@@ -122,23 +127,48 @@ class ShowFrame():
 class InsInfoFrame():
     def __init__(self, frame):
         self.frame = frame
-        self.infolabel_label = tk.Label( self.frame, text = _('Label') )
-        self.il_entry_svar = StringVar( self.frame )
-        self.infolabel_entry = tk.Entry(self.frame, textvariable= il_entry_svar)
+        self.ins_vars = []
+        self.add_rf_button = tk.Button( self.frame, \
+            text = _('Add information'), command = self.add_row_frame )
 
-        self.dregex_label = tk.Label( self.frame, text=_('Data type'))
-        self.dtype_combobox_svar = tk.StringVar( self.frame )
-        self.dtype_combobox = ttk.Combobox( self.frame ,
-            textvariable = self.dtype_combobox_svar,
-            values = dregex_dict_ks
-        )
+    def add_row_frame( self ):
+        row_frame = tk.Frame( self.frame )
         
-        '''
+        tk.Label( row_frame, text = _('Label') )\
+            .grid( column =  0, row =  0 )
+        il_entry_svar = StringVar( row_frame )
+        tk.Entry(row_frame, \
+            textvariable= il_entry_svar)\
+            .grid( column =  1,  row =  0)
+
+        tk.Label( row_frame, text=_('Data type'))\
+            .grid( column = 0, row = 1)
+        dtype_combobox_sv = tk.StringVar( row_frame )
+        ttk.Combobox( row_frame ,
+            textvariable = dtype_combobox_sv,
+            values = dregex_dict_v_ts )\
+            .grid(  column = 1,  row =  1 )
+
+        tk.Label( row_frame, text=_('Value'))\
+            .grid( column = 0, row = 2)
+        value_sv = StringVar( row_frame )
+        tk.Entry( row_frame, textvariable = value_sv )\
+            .grid(  column = 1 ,  row =  2 )
+
+        tk.Label( row_frame, text=_('Note'))\
+            .grid( column = 0, row = 3)
+        note_sv = StringVar( row_frame )
+        tk.Entry( row_frame, textvariable = note_sv )\
+            .grid(  column = 1 ,  row = 3 )
+        row_frame.pack( side = TOP )
+
+        self.ins_vars.append( [il_entry_svar,dtype_combobox_sv, value_sv,\
+            note_sv] )
         
-    label = Required( str )
-    dtype = Required( str )
-    value = Required( str )
-    note = Optional( str )'''
+    def place( self ):
+        self.add_rf_button.pack( side = BOTTOM )
+        self.frame.grid( column = 3, row = 0 )
+        pass
 
 class EntryFrame():
     
