@@ -18,7 +18,7 @@ from flocale.locale import _
 from datetime import datetime , date
 import json
 from setting import setting_yml, setting_path, face_encodings_path,\
-    comparison_tolerance, debug
+    comparison_tolerance, debug, lang_code
 import pickle
 import yaml
 import uuid
@@ -48,6 +48,8 @@ class _MainUI():
         self.face_sum = 0
         self.face_num = -1
         self.resize_rate = 0.25
+
+        self.lang_code = lang_code
         
         self.fxfy = None
         try:
@@ -335,15 +337,18 @@ class _MainUI():
 
     def change_language(self, lang ):
 
+        lang_display_name = self.mainui.langcombobox.lang_combobox_var.get()
+        new_lang_code = Language.find( lang_display_name ).to_tag()
+
+        if new_lang_code == lang_code: return
+
         restartapp = messagebox.askyesno(
             title = _('Restart Funing Now?')
         )
         if restartapp:
             
-            lang_display_name = self.mainui.langcombobox.lang_combobox_var.get()
-            lang_code = Language.find( lang_display_name ).to_tag()
             
-            setting_yml['lang_code'] = lang_code
+            setting_yml['lang_code'] = new_lang_code
             yaml.dump( setting_yml, open( setting_path, 'w') )
 
             if self.iru is not None:
@@ -353,7 +358,6 @@ class _MainUI():
             os.execl(sys_executable, sys_executable, * sys.argv)
 
         pass
-
 
     @db_session
     def save_encoding( self ):
@@ -399,18 +403,23 @@ class _MainUI():
                 address = self.mainui.entryframe.address_entry.get(),
                 note = self.mainui.entryframe.note_text.get(1.0, 'end') )
         person_id = str(p.id)
-
-        for i in self.mainui.insinfoframe.ins_vars:
-            label_value = i[0].get()
-            dregex_value = i[1].get()
-            value_v = i[2].get()
-            note_value = i[3].get()
-            if len( label_value+dtype_value+value_v+note_value ) > 0:
+        if debug:
+            print( self.mainui.insinfoframe.ins_vars )
+        for k,v in self.mainui.insinfoframe.ins_vars.items():
+            label_value = v[0].get()
+            dregex_value = v[1].get()
+            value_v = v[2].get()
+            note_value = v[3].get()
+            if debug:
+                print( label_value, dregex_value, value_v, note_value)
+            if len( label_value+ dregex_value+ value_v+ note_value ) > 0:
                 PersonInfo( 
+                    id = str(uuid.uuid4()),
                     person_id = person_id,  label = label_value,
                     dregex = dregex_value,  value = value_v,
                     note = note_value
                 )
+            self.mainui.insinfoframe.remove_row_frame( k )
                 
         commit()
 

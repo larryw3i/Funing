@@ -10,6 +10,7 @@ import os
 import re
 from datetime import datetime
 from fui import dregex_dict_v_ts
+import uuid
 
 class MainUI():
     def __init__(self):
@@ -54,9 +55,8 @@ class LangCombobox():
         )
 
     def place(self):
-
         # place lang_combobox
-        self.lang_combobox.grid( column = 1, row = 2 )
+        self.lang_combobox.grid( column = 3, row = 2, sticky = NE )
     
     def locale_lang_display_names( self ):
         display_names = []
@@ -111,7 +111,7 @@ class ShowFrame():
         self.ct_entry.grid( column = 2, row = 4, sticky = W )
         self.rec_button.grid( column = 3, row = 4)
 
-        self.frame.grid( column = 0, row = 0 )
+        self.frame.grid( column = 0, row = 0 , sticky = N)
 
     def values_valid(self):
         if re.search( '^0.[0-6]\d*$', self.ct_stringvar.get() ):
@@ -126,50 +126,74 @@ class ShowFrame():
 class InsInfoFrame():
     def __init__(self, frame):
         self.frame = frame
-        self.ins_vars = []
+        self.ins_vars = {}
+        self.row_frame_index = -1
         self.add_rf_button = tk.Button( self.frame, \
             text = _('Add information'), command = self.add_row_frame )
 
-    def add_row_frame( self ):
-        row_frame = tk.Frame( self.frame )
+    def remove_row_frame( self , frame_name):
+        self.frame.nametowidget(frame_name).pack_forget()
+        self.ins_vars.pop(frame_name)
+        if debug:
+            print( frame_name, self.ins_vars )
         
-        tk.Label( row_frame, text = _('Label') )\
+
+    def add_row_frame( self ):
+
+        frame_name = str( uuid.uuid4() )
+        row_frame = tk.Frame( self.frame, name = frame_name )
+
+        info_frame = tk.Frame( row_frame )
+        del_button = tk.Button( row_frame , text = _('Delete'), \
+            command =lambda: self.remove_row_frame(frame_name) )
+        
+        tk.Label( info_frame, text = _('Label') )\
             .grid( column =  0, row =  0 )
-        il_entry_svar = StringVar( row_frame )
-        tk.Entry(row_frame, \
+        il_entry_svar = StringVar( info_frame )
+        tk.Entry(info_frame, \
             textvariable= il_entry_svar)\
             .grid( column =  1,  row =  0)
 
-        tk.Label( row_frame, text=_('Data type'))\
+        tk.Label( info_frame, text=_('Data type'))\
             .grid( column = 0, row = 1)
-        dregex_combobox_sv = tk.StringVar( row_frame )
-        ttk.Combobox( row_frame ,
+        dregex_combobox_sv = tk.StringVar( info_frame )
+        ttk.Combobox( info_frame ,
             textvariable = dregex_combobox_sv,
             values = dregex_dict_v_ts )\
             .grid(  column = 1,  row =  1 )
 
-        tk.Label( row_frame, text=_('Value'))\
+        tk.Label( info_frame, text=_('Value'))\
             .grid( column = 0, row = 2)
-        value_sv = StringVar( row_frame )
-        tk.Entry( row_frame, textvariable = value_sv )\
+        value_sv = StringVar( info_frame )
+        tk.Entry( info_frame, textvariable = value_sv )\
             .grid(  column = 1 ,  row =  2 )
 
-        tk.Label( row_frame, text=_('Note'))\
+        tk.Label( info_frame, text=_('Note'))\
             .grid( column = 0, row = 3)
-        note_sv = StringVar( row_frame )
-        tk.Entry( row_frame, textvariable = note_sv )\
+        note_sv = StringVar( info_frame )
+        tk.Entry( info_frame, textvariable = note_sv )\
             .grid(  column = 1 ,  row = 3 )
+        
+        info_frame.grid(column = 0, row = 0)
+        del_button.grid(column = 1, row = 0)
         row_frame.pack( side = TOP )
 
-        ttk.Separator(row_frame, orient='horizontal')\
-            .place(relx=0, rely=0, relwidth=1, relheight=0.01)   
 
-        self.ins_vars.append( [il_entry_svar, dregex_combobox_sv, value_sv,\
-            note_sv] )
+        ttk.Separator(info_frame, orient='horizontal')\
+            .place(relx=0, rely=0, relwidth=1, relheight=0.01)
+        
+
+        self.ins_vars[frame_name] = [il_entry_svar, dregex_combobox_sv,\
+            value_sv, note_sv]
+        
+        if debug:
+            print( self.ins_vars )
+            
+        self.row_frame_index += 1
         
     def place( self ):
         self.add_rf_button.pack( side = BOTTOM )
-        self.frame.grid( column = 3, row = 0 )
+        self.frame.grid( column = 3, row = 0, sticky = S )
         pass
 
 class EntryFrame():
@@ -240,7 +264,7 @@ class EntryFrame():
         # save_button
         self.save_button.grid( column = 1, row= 7)
 
-        self.frame.grid( column = 1, row = 0 )
+        self.frame.grid( column = 1, row = 0, sticky = N )
 
     def values_valid(self):
         is_real = True

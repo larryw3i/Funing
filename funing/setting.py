@@ -7,10 +7,10 @@ from pathlib import Path
 import getopt
 import sys
 
-args = getopt.getopt( sys.argv[1:], '' )[1]; test_args = ['ts','test']
+args = getopt.getopt( sys.argv[1:], '' )[1]; test_args = ['ts','st','test']
 debug =  len( set(args)&set(test_args) ) > 0
 
-project_path = os.path.dirname(  __file__  )    
+project_path = os.path.dirname(  __file__  )
 
 usr_home = os.path.join( project_path, '_home' ) if debug \
     else os.path.expanduser('~')
@@ -20,7 +20,6 @@ locale_path = os.path.join( project_path, 'flocale')
 
 setting_path = os.path.join( base_dir , 'setting.yml') 
 setting_example_path = os.path.join( project_path , 'setting.yml.example') 
-
 
 if not os.path.exists( setting_path ):
     if not os.path.exists( base_dir): os.makedirs( base_dir, exist_ok = True )
