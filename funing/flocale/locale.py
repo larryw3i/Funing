@@ -21,6 +21,8 @@ if lang_code == 'en-US' and \
     setting_yml['lang_code'] = lang_code
     yaml.dump( setting_yml, open( setting_path, 'w') )
 
+if debug:
+    print(lang_code, locale_path)
 
 lang = gettext.translation(
     'funing',

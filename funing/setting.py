@@ -10,7 +10,7 @@ import sys
 args = getopt.getopt( sys.argv[1:], '' )[1]; test_args = ['ts','st','test']
 debug =  len( set(args)&set(test_args) ) > 0
 
-project_path = os.path.dirname(  __file__  )
+project_path = os.path.abspath( os.path.dirname(  __file__  ) )
 
 usr_home = os.path.join( project_path, '_home' ) if debug \
     else os.path.expanduser('~')

@@ -132,7 +132,6 @@ class _MainUI():
         ttk.Separator(info_frame, orient='horizontal')\
             .place(relx=0, rely=0, relwidth=1, relheight=0.01)
         
-
         self.ins_vars[frame_name] = [il_entry_svar, dregex_combobox_sv,\
             value_sv, note_sv]
         
@@ -151,7 +150,7 @@ class _MainUI():
         if self.current_face_person_id is not None:
             if PersonInfo.exists( person_id =self.current_face_person_id,\
                 id = frame_name ):
-                PersonInfo.get( frame_name ).delete()
+                PersonInfo.get( id=frame_name ).delete()
                 commit()
 
     
@@ -504,7 +503,7 @@ class _MainUI():
         if debug:
             print( self.mainui.insinfoframe.ins_vars )
 
-        for k,v in self.mainui.insinfoframe.ins_vars.items():
+        for k,v in self.ins_vars.items():
             label_value = v[0].get()
             dregex_value = v[1].get()
             value_v = v[2].get()
