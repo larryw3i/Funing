@@ -37,7 +37,7 @@ class _MainUI():
         self.face_src_path =        self.iru_frame = None
         self.pause = False;         self.vid_fps = 30
 
-        self.face_locations = []    self.curr_f_encoding = None
+        self.face_locations = [];   self.curr_f_encoding = None
         
         # face num for face_label
         self.face_sum = 0;          self.face_num = -1

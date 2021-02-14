@@ -112,7 +112,7 @@ class ShowFrame():
         self.ct_entry.grid( column = 2, row = 4, sticky = W )
         self.rec_button.grid( column = 3, row = 4)
 
-        self.frame.grid( column = 0, row = 0 , sticky = N)
+        self.frame.grid( column = 0, row = 0 )
 
              
 
