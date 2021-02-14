@@ -245,7 +245,9 @@ class _MainUI():
 
     def play_video( self ):
         if self.iru is None: return
-        if self.pause: return
+        if self.pause: 
+            self.update_ui()
+            return
         
         self.vid_ret_frame  = self.iru.get_ret_frame()
         self.iru_frame = self.vid_ret_frame[1]
@@ -280,7 +282,6 @@ class _MainUI():
         r = w/h 
         r0 = self.iru.width/self.iru.height
         r1= r0/r 
-        h_ = w_ = 0
         self.fxfy = h/self.iru.height if r1<r else w/self.iru.width
     
     def get_f_loc_and_sum( self ):
@@ -303,14 +304,6 @@ class _MainUI():
     def get_f_sum( self ):
         self.face_sum = len(self.face_locations) 
     
-    def compare_faces( self ):
-
-        if self.iru_frame is None: self.show_nfd_info() ; return
-        self.get_curr_f_encoding()
-        self.get_p_id()
-        self.update_ui()
-
-
     def get_curr_f_encoding( self ):
         
         if self.face_sum > 0 :
@@ -325,8 +318,13 @@ class _MainUI():
         '''
         Update self.mainui.entryframe and self.mainui.addinfoframe
         '''
+
+        if self.iru_frame is None: self.show_nfd_info() ; return
+        
+        self.get_curr_f_encoding_and_id()
+
         # update entryframe
-        if self.pause and self.curr_face_id != None:
+        if self.pause and (self.curr_face_id is not None):
             p = select(p for p in fm.Person \
                 if p.id == self.curr_face_id ).first()
             if p is not None:
@@ -348,8 +346,7 @@ class _MainUI():
                     self.ins_rf( il_entry_value=i.label, v_value = i.value,\
                         note_value = i.note,    frame_name  = i.id )
 
-        elif (not self.pause) or \
-            (self.pause and (self.curr_face_id is None) ):
+        else:
                 self.mainui.entryframe.uuid_entry['state'] = 'normal'
                 self.mainui.entryframe.uuid_entry.delete(0, END)
                 self.mainui.entryframe.uuid_entry['state'] = 'disabled'
@@ -359,6 +356,10 @@ class _MainUI():
                 self.mainui.entryframe.note_text.delete('1.0', END)
 
                 self.rm_all_ins_rfs()
+    
+    def get_curr_f_encoding_and_id( self ):
+        self.get_curr_f_encoding()
+        self.get_curr_f_id()
                 
     def mk_frame_rect( self ):
 
@@ -447,14 +448,14 @@ class _MainUI():
 
     @db_session
     def save_db_encoding( self ):
-        
-        if self.curr_face_id is  None: 
-            if debug: print('Current person id is None')
-            return 
+        if self.pause: 
+            if self.debug: print('Video is palying');   return
+        if self.curr_f_encoding is None:  
+            self.show_nfd_info() ;  return
 
         person_exists = Person.exists( id = self.curr_face_id )
         if person_exists:
-            if debug:
+            if self.debug:
                 print( 'Person exists')
             p = select(p for p in fm.Person if \
                 p.id == self.curr_face_id ).first()
@@ -464,15 +465,13 @@ class _MainUI():
 
         else:
             print('New person')
-            p = Person( \
-                id = str(uuid.uuid4()),\
+            p = Person( id = str(uuid.uuid4()),\
                 name = self.mainui.entryframe.name_entry.get() ,\
                 dob = self.mainui.entryframe.DOB_entry.get(), 
                 address = self.mainui.entryframe.address_entry.get(),
                 note = self.mainui.entryframe.note_text.get(1.0, 'end') )
         
-        p_id = p.id
-        if debug:
+        if self.debug:
             print( self.mainui.addinfoframe.ins_vars )
 
         for frame_name, info_widgets in self.ins_vars.items():
@@ -480,19 +479,20 @@ class _MainUI():
             value_v = info_widgets[1].get()
             note_value = info_widgets[2].get()
 
-            if debug:
+            if self.debug:
                 print( label_value,  value_v, note_value)
 
             if len(label_value+  value_v+ note_value )< 1: continue
             
-            if PersonInfo.exists(person_id =p_id, label =label_value):
+            if PersonInfo.exists(person_id =p.id, label =label_value):
                 p_i = select( p for p in PersonInfo \
-                    if p.person_id == p_id and p.label == label_value)\
+                    if p.person_id == p.id and p.label == label_value)\
                     .first()
-                if debug: print( 'PersonInfo exists' )
+
+                if self.debug: print( 'PersonInfo exists' )
                 p_i.value = value_v;    p_i.note = note_value
             else:
-                if debug: print( 'New PersonInfo' )
+                if self.debug: print( 'New PersonInfo' )
                 PersonInfo( id = frame_name,
                     note = note_value,      person_id = person_id,      
                     label = label_value,    value = value_v
@@ -520,7 +520,7 @@ class _MainUI():
 
 # OTHER FUNCTIONS
 ###############################################################################
-    def get_p_id( self ):
+    def get_curr_f_id( self ):
 
         if self.curr_f_encoding is None: self.show_nfd_info(); return
 
