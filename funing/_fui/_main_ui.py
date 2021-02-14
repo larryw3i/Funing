@@ -31,31 +31,22 @@ class _MainUI():
         self.mainui.place()
 
         # vid
-        self.iru =  self.video_source = \
-        self.vid =  self.vid_ret_frame = None
+        self.iru =                  self.video_source = \
+        self.vid =                  self.vid_ret_frame = None
 
-        self.face_src_path = None
-        self.iru_frame = None
+        self.face_src_path =        self.iru_frame = None
+        self.pause = False;         self.vid_fps = 30
 
-        self.pause = False;  self.vid_fps = 30
+        self.face_locations = []    self.curr_f_encoding = None
+        
+        # face num for face_label
+        self.face_sum = 0;          self.face_num = -1
+        self.resize_rate = 0.25;    self.lang_code = lang_code
+        self.fxfy = None;           self.ins_vars = {}
 
-        self.face_locations = []
         self.known_encodings = pickle.load( open(face_encodings_path , 'rb') )
-
-        self.curr_f_encoding = None
         self.comparison_tolerance = comparison_tolerance
             
-        # face num for face_label
-        self.face_sum = 0
-        self.face_num = -1
-        self.resize_rate = 0.25
-
-        self.lang_code = lang_code
-        
-        self.fxfy = None
-
-        self.ins_vars = {}
-
         try:self.screenwidth = self.mainui.root.winfo_screenwidth();\
             self.screenheight = self.mainui.root.winfo_screenheight()
         except: print(_('No desktop environment is detected! (^_^)')); exit()
@@ -79,67 +70,14 @@ class _MainUI():
         self.mainui.showframe.show_f_optionmenu_var.trace('w', self.show_from )
         self.mainui.root.protocol("WM_DELETE_WINDOW", self.destroy )
         self.mainui.addinfoframe.add_rf_button['command'] = self.ins_rf 
-     
-    def ins_rf( self, frame_name = '', il_entry_value='',  v_value = '', \
-        note_value = ''  ):
-
-        frame_name = str( uuid.uuid4() ) if len( frame_name )<1 else frame_name
-        row_frame = tk.Frame(self.mainui.addinfoframe.frame, name =frame_name )
-
-        info_frame = tk.Frame( row_frame )
-        del_button = tk.Button( row_frame , text = _('Delete'), \
-            command =lambda: self.rm_ins_rf(frame_name) )
-        
-        tk.Label( info_frame, text = _('Label') ).grid( column =  0, row =  0 )
-        il_entry_svar = StringVar( info_frame , value = il_entry_value)
-        tk.Entry(info_frame, textvariable= il_entry_svar).grid(column=1, row= 0)
-
-        tk.Label( info_frame, text=_('Value')).grid( column = 0, row = 2)
-        value_sv = StringVar( info_frame, value = v_value )
-        tk.Entry( info_frame, textvariable = value_sv).grid(column = 1,row= 2 )
-
-        tk.Label( info_frame, text=_('Note')).grid( column = 0, row = 3)
-        note_sv = StringVar( info_frame, note_value )
-        tk.Entry( info_frame, textvariable = note_sv ).grid(column =1 ,row= 3 )
-        
-        info_frame.grid(column = 0, row = 0)
-        del_button.grid(column = 1, row = 0)
-        row_frame.pack( side = TOP )
-
-        ttk.Separator(info_frame, orient='horizontal')\
-            .place(relx=0, rely=0, relwidth=1, relheight=0.01)
-        
-        self.ins_vars[frame_name] = [il_entry_svar, value_sv, note_sv]
-        
-        if debug:
-            print( self.ins_vars )
-            
-    @db_session
-    def rm_ins_rf( self , frame_name):
-        # update UI
-        self.mainui.addinfoframe.frame.nametowidget(frame_name).pack_forget()
-        self.ins_vars.pop(frame_name)
-        if debug:
-            print( frame_name, self.ins_vars )
-        
-        # update database
-        if self.curr_face_id is not None:
-            if PersonInfo.exists( person_id =self.curr_face_id,\
-                id = frame_name ):
-                PersonInfo.get( id=frame_name ).delete()
-                commit()
-    
-    def rm_all_ins_rfs(self):
-        for i in self.ins_vars.keys():
-            self.mainui.addinfoframe.frame.nametowidget(i).pack_forget()
-        self.ins_vars = {}
-        
-
          
     def destroy( self ):
         if self.iru is not None:
             self.iru.release()
         self.mainui.root.destroy()
+
+# SHOW_FRAME FUNCTIONS 
+###############################################################################
 
     def save_ct( self , event):
         ct_stringvar_get = float(self.mainui.showframe.ct_stringvar.get())
@@ -211,14 +149,6 @@ class _MainUI():
             self.pause = True
             self.mainui.showframe.rec_stringvar.set( _('Play') )
 
-    def correct_f_num_ui( self ):
-
-        self.face_num = 0 if self.face_num < 0 else \
-            self.face_sum if self.face_num > self.face_sum \
-            else self.face_num
-        self.mainui.entryframe.face_num_stringvar.set( \
-            f'{self.face_num+1}/{self.face_sum}' )
-        
 
     def view_image( self ):
 
@@ -277,6 +207,7 @@ class _MainUI():
         r1= r0/r 
         self.fxfy = h/self.iru.height if r1<r else w/self.iru.width
     
+
     def get_f_loc_and_sum( self ):
         self.get_f_loc()
         self.get_f_sum()
@@ -303,9 +234,40 @@ class _MainUI():
             self.curr_f_encoding = face_recognition.face_encodings( \
                 self.iru_frame, [self.face_locations[ self.face_num ]] )[0]
 
-            
-    # @db_session
-    # def update_ui(self):
+     
+    def get_curr_f_encoding_and_id( self ):
+        self.get_curr_f_encoding()
+        self.get_curr_f_id()
+                
+    def mk_frame_rect( self ):
+
+        for top, right, bottom, left in self.face_locations:
+            cv2.rectangle( self.iru_frame, (left, top), \
+            (right, bottom), (0, 0, 255), 2)
+
+    def show_nfd_info( self ):
+        messagebox.showinfo( _('No face detected'), \
+            _('Oops.., No face detected!') )
+
+    def show_dob_error( self ):
+        messagebox.showerror( _('Error'), \
+            _('Check the DOB entry please!') ) 
+
+###############################################################################
+# SHOW_FRAME FUNCTIONS END
+
+# ENTRY_FRAME FUNCTIONS
+###############################################################################
+
+
+    def correct_f_num_ui( self ):
+
+        self.face_num = 0 if self.face_num < 0 else \
+            self.face_sum if self.face_num > self.face_sum \
+            else self.face_num
+        self.mainui.entryframe.face_num_stringvar.set( \
+            f'{self.face_num+1}/{self.face_sum}' )
+        
     @db_session
     def update_ui(self):
         '''
@@ -353,16 +315,6 @@ class _MainUI():
 
                 self.rm_all_ins_rfs()
     
-    def get_curr_f_encoding_and_id( self ):
-        self.get_curr_f_encoding()
-        self.get_curr_f_id()
-                
-    def mk_frame_rect( self ):
-
-        for top, right, bottom, left in self.face_locations:
-            cv2.rectangle( self.iru_frame, (left, top), \
-            (right, bottom), (0, 0, 255), 2)
-
     def pick_f_mk_rect( self ):
         '''
         Pick face image to self.entryframe.face_label and make rectangles for 
@@ -371,8 +323,10 @@ class _MainUI():
         self.pick_face_by_num()
         self.mk_frame_rect()
     
-    #def pick_face( self,  ):
     def pick_face_by_num( self, p_n = 0 ):
+        '''
+        Pick face image to self.mainui.entryframe.face_label
+        '''
 
         if not self.pause: return
         self.face_num = self.face_num + p_n
@@ -399,48 +353,6 @@ class _MainUI():
         self.mainui.entryframe.face_label.imgtk = faceimgtk
         self.mainui.entryframe.face_label.configure(image=faceimgtk)
 
-
-    def change_language(self, lang ):
-
-        lang_display_name = self.mainui.langcombobox.lang_combobox_var.get()
-        new_lang_code = Language.find( lang_display_name ).to_tag()
-
-        if new_lang_code == lang_code: return
-
-        restartapp = messagebox.askyesno(
-            title = _('Restart Funing Now?')
-        )
-        if restartapp:
-                        
-            setting_yml['lang_code'] = new_lang_code
-            yaml.dump( setting_yml, open( setting_path, 'w') )
-
-            if self.iru is not None:
-                self.iru.release()
-
-            sys_executable = sys.executable
-            os.execl(sys_executable, sys_executable, * sys.argv)
-
-        pass
-
-
-
-# SHOW_FRAME FUNCTIONS 
-###############################################################################
-
-    def show_nfd_info( self ):
-        messagebox.showinfo( _('No face detected'), \
-            _('Oops.., No face detected!') )
-
-    def show_dob_error( self ):
-        messagebox.showerror( _('Error'), \
-            _('Check the DOB entry please!') ) 
-
-###############################################################################
-# SHOW_FRAME FUNCTIONS END
-
-# ENTRY_FRAME FUNCTIONS
-###############################################################################
 
     @db_session
     def save_db_encoding( self ):
@@ -512,11 +424,90 @@ class _MainUI():
 # ADD_INFO_FRAME FUNCTIONS
 ###############################################################################
 
+    def ins_rf( self, frame_name = '', il_entry_value='',  v_value = '', \
+        note_value = ''  ):
+
+        frame_name = str( uuid.uuid4() ) if len( frame_name )<1 else frame_name
+        row_frame = tk.Frame(self.mainui.addinfoframe.frame, name =frame_name )
+
+        info_frame = tk.Frame( row_frame )
+        del_button = tk.Button( row_frame , text = _('Delete'), \
+            command =lambda: self.rm_ins_rf(frame_name) )
+        
+        tk.Label( info_frame, text = _('Label') ).grid( column =  0, row =  0 )
+        il_entry_svar = StringVar( info_frame , value = il_entry_value)
+        tk.Entry(info_frame, textvariable= il_entry_svar).grid(column=1, row= 0)
+
+        tk.Label( info_frame, text=_('Value')).grid( column = 0, row = 2)
+        value_sv = StringVar( info_frame, value = v_value )
+        tk.Entry( info_frame, textvariable = value_sv).grid(column = 1,row= 2 )
+
+        tk.Label( info_frame, text=_('Note')).grid( column = 0, row = 3)
+        note_sv = StringVar( info_frame, note_value )
+        tk.Entry( info_frame, textvariable = note_sv ).grid(column =1 ,row= 3 )
+        
+        info_frame.grid(column = 0, row = 0)
+        del_button.grid(column = 1, row = 0)
+        row_frame.pack( side = TOP )
+
+        ttk.Separator(info_frame, orient='horizontal')\
+            .place(relx=0, rely=0, relwidth=1, relheight=0.01)
+        
+        self.ins_vars[frame_name] = [il_entry_svar, value_sv, note_sv]
+        
+        if debug:
+            print( self.ins_vars )
+            
+    @db_session
+    def rm_ins_rf( self , frame_name):
+        # update UI
+        self.mainui.addinfoframe.frame.nametowidget(frame_name).pack_forget()
+        self.ins_vars.pop(frame_name)
+        if debug:
+            print( frame_name, self.ins_vars )
+        
+        # update database
+        if self.curr_face_id is not None:
+            if PersonInfo.exists( person_id =self.curr_face_id,\
+                id = frame_name ):
+                PersonInfo.get( id=frame_name ).delete()
+                commit()
+    
+    def rm_all_ins_rfs(self):
+        for i in self.ins_vars.keys():
+            self.mainui.addinfoframe.frame.nametowidget(i).pack_forget()
+        self.ins_vars = {}
+        
+
+     
 ###############################################################################
 # ADD_INFO_FRAME FUNCTIONS  END
 
 # LANGCOMBOBOX FUNCTIONS
 ###############################################################################
+
+    def change_language(self, lang ):
+
+        lang_display_name = self.mainui.langcombobox.lang_combobox_var.get()
+        new_lang_code = Language.find( lang_display_name ).to_tag()
+
+        if new_lang_code == lang_code: return
+
+        restartapp = messagebox.askyesno(
+            title = _('Restart Funing Now?')
+        )
+        if restartapp:
+                        
+            setting_yml['lang_code'] = new_lang_code
+            yaml.dump( setting_yml, open( setting_path, 'w') )
+
+            if self.iru is not None:
+                self.iru.release()
+
+            sys_executable = sys.executable
+            os.execl(sys_executable, sys_executable, * sys.argv)
+
+        pass
 
 ###############################################################################
 # LANGCOMBOBOX FUNCTIONS END
