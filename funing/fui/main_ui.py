@@ -9,7 +9,6 @@ from setting import comparison_tolerance as ct
 import os
 import re
 from datetime import datetime
-from fui import dregex_dict_v_ts, dregex_dict_ks
 import uuid
 
 class MainUI():
@@ -113,14 +112,6 @@ class ShowFrame():
 
         self.frame.grid( column = 0, row = 0 , sticky = N)
 
-    def values_valid(self):
-        if re.search( '^0.[0-6]\d*$', self.ct_stringvar.get() ):
-            self.ct_entry['bg'] = 'white'
-            is_real = True
-        else:
-            self.ct_entry['bg'] = 'red'
-            is_real = False
-        return is_real
              
 
 class AddInfoFrame():
@@ -204,25 +195,3 @@ class EntryFrame():
         self.save_button.grid( column = 1, row= 7)
 
         self.frame.grid( column = 1, row = 0, sticky = N )
-
-    def values_valid(self):
-        is_real = True
-        if len(self.name_entry.get()) < 1:\
-                self.name_entry['bg'] = 'red';      is_real = False
-        else:   self.name_entry['bg'] = 'white'
-        
-        try:    datetime.strptime( self.DOB_entry.get(), '%Y-%m-%d')
-        except Exception as e: 
-            self.DOB_entry['bg'] = 'red';       is_real = False
-            if debug:
-                print( e )
-
-        if len(self.address_entry.get()) < 1:\
-                self.address_entry['bg'] = 'red';   is_real = False
-        else:   self.address_entry['bg'] = 'white'
-
-        if len(self.note_text.get(1.0, 'end')) < 1:\
-                self.note_text['bg'] = 'red';       is_real = False
-        else:   self.note_text['bg'] = 'white'
-        
-        return is_real

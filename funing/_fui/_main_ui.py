@@ -22,7 +22,6 @@ from setting import setting_yml, setting_path, face_encodings_path,\
     comparison_tolerance, debug, lang_code
 import pickle
 import yaml
-from fui import dregex_dict_v_ts, dregex_dict_ks
 import uuid
 
 
@@ -79,14 +78,11 @@ class _MainUI():
         self.mainui.entryframe.save_button['command'] = self.save_encoding
         self.mainui.showframe.show_f_optionmenu_var.trace('w', self.show_from )
         self.mainui.root.protocol("WM_DELETE_WINDOW", self.destroy )
-        self.mainui.addinfoframe.add_rf_button['command'] = self.add_ins_rf 
+        self.mainui.addinfoframe.add_rf_button['command'] = self.ins_rf 
     
-    def add_ins_rf( self, frame_name = '', il_entry_value='', \
-        dregex_cb_value = '', v_value = '', note_value = ''  ):
+    def ins_rf( self, frame_name = '', il_entry_value='',  v_value = '', \
+        note_value = ''  ):
         
-        dregex_cb_value = \
-            dregex_dict_v_ts[dregex_dict_ks.index(dregex_cb_value)] if \
-            dregex_cb_value in dregex_dict_ks else dregex_cb_value
 
         frame_name = str( uuid.uuid4() ) if len( frame_name )<1 else frame_name
         row_frame = tk.Frame( self.mainui.addinfoframe.frame, \
@@ -102,15 +98,6 @@ class _MainUI():
         tk.Entry(info_frame, \
             textvariable= il_entry_svar)\
             .grid( column =  1,  row =  0)
-
-        tk.Label( info_frame, text=_('Data type'))\
-            .grid( column = 0, row = 1)
-        dregex_combobox_sv = tk.StringVar( info_frame, \
-            value = dregex_cb_value )
-        ttk.Combobox( info_frame ,
-            textvariable = dregex_combobox_sv,
-            values = dregex_dict_v_ts )\
-            .grid(  column = 1,  row =  1 )
 
         tk.Label( info_frame, text=_('Value'))\
             .grid( column = 0, row = 2)
@@ -128,12 +115,10 @@ class _MainUI():
         del_button.grid(column = 1, row = 0)
         row_frame.pack( side = TOP )
 
-
         ttk.Separator(info_frame, orient='horizontal')\
             .place(relx=0, rely=0, relwidth=1, relheight=0.01)
         
-        self.ins_vars[frame_name] = [il_entry_svar, dregex_combobox_sv,\
-            value_sv, note_sv]
+        self.ins_vars[frame_name] = [il_entry_svar, value_sv, note_sv]
         
         if debug:
             print( self.ins_vars )
@@ -167,8 +152,6 @@ class _MainUI():
         self.mainui.root.destroy()
 
     def save_ct( self , event):
-        if not self.mainui.showframe.values_valid():
-            return
         ct_stringvar_get = float(self.mainui.showframe.ct_stringvar.get())
         self.comparison_tolerance = comparison_tolerance = ct_stringvar_get
         setting_yml['comparison_tolerance'] = ct_stringvar_get
@@ -358,7 +341,7 @@ class _MainUI():
                 self.mainui.entryframe.uuid_entry.insert(0 , p.id)
                 self.mainui.entryframe.uuid_entry['state'] = 'disabled'
                 self.mainui.entryframe.name_entry.insert(0 , p.name)
-                self.mainui.entryframe.DOB_entry.insert(0 , str(p.dob) )
+                self.mainui.entryframe.DOB_entry.insert(0 , p.dob )
                 self.mainui.entryframe.address_entry.insert(0 , p.address)
                 self.mainui.entryframe.note_text.insert(END , p.note)
         
@@ -366,10 +349,8 @@ class _MainUI():
                 i_s = select( i for i in PersonInfo \
                     if i.person_id == self.curr_face_id )
                 for i in i_s:
-                    self.add_ins_rf( 
-                        il_entry_value=i.label, dregex_cb_value = i.dregex,\
-                        v_value = i.value,      note_value = i.note,
-                        frame_name  = i.id
+                    self.ins_rf( 
+                        il_entry_value=i.label, v_value = i.value,      note_value = i.note,    frame_name  = i.id
                     )
         elif (not self.pause) or \
             (self.pause and (self.curr_face_id is None) ):
@@ -458,17 +439,14 @@ class _MainUI():
     @db_session
     def save_encoding( self ):
         
-        if not self.mainui.entryframe.values_valid(): return
-
-        # dev: face_encoding exists and person is None sometimes
-        person_exists = Person.exists( id = self.curr_face_id )
         if self.curr_face_id is  None: return 
+        
+        person_exists = Person.exists( id = self.curr_face_id )
         if person_exists:
 
             p = select(p for p in fm.Person if \
                 p.id == self.curr_face_id ).first()
-            p.dob = datetime.strptime( \
-                self.mainui.entryframe.DOB_entry.get(), "%Y-%m-%d").date()
+            p.dob = self.mainui.entryframe.DOB_entry.get()
             p.name = self.mainui.entryframe.name_entry.get()
             p.note = self.mainui.entryframe.note_text.get(1.0, 'end')
 
@@ -476,8 +454,7 @@ class _MainUI():
             p = Person( \
                 id = str(uuid.uuid4()),\
                 name = self.mainui.entryframe.name_entry.get() ,\
-                dob = datetime.strptime( \
-                    self.mainui.entryframe.DOB_entry.get(), "%Y-%m-%d").date(),
+                dob = self.mainui.entryframe.DOB_entry.get(), 
                 address = self.mainui.entryframe.address_entry.get(),
                 note = self.mainui.entryframe.note_text.get(1.0, 'end') )
         
@@ -487,29 +464,26 @@ class _MainUI():
 
         for frame_name, info_widgets in self.ins_vars.items():
             label_value = info_widgets[0].get()
-            dregex_value = info_widgets[1].get()
-            value_v = info_widgets[2].get()
-            note_value = info_widgets[3].get()
+            value_v = info_widgets[1].get()
+            note_value = info_widgets[2].get()
 
             if debug:
-                print( label_value, dregex_value, value_v, note_value)
+                print( label_value,  value_v, note_value)
 
-            if len(label_value+ dregex_value+ value_v+ note_value )< 1: continue
-                
-                if PersonInfo.exists(person_id =p_id, label =label_value):
-                    p_i = select( p for p in PersonInfo \
-                        if p.person_id == p_id and p.label == label_value)\
-                        .first()
-
-                    if debug: print( 'PersonInfo exists' )
-                    p_i.value = value_v;    p_i.note = note_value
-
-                else:
-                    if debug: print( 'New PersonInfo' )
-                    PersonInfo( id = frame_name,
-                        note = note_value,      person_id = person_id,      
-                        label = label_value,    value = value_v
-                    )
+            if len(label_value+  value_v+ note_value )< 1: continue
+            
+            if PersonInfo.exists(person_id =p_id, label =label_value):
+                p_i = select( p for p in PersonInfo \
+                    if p.person_id == p_id and p.label == label_value)\
+                    .first()
+                if debug: print( 'PersonInfo exists' )
+                p_i.value = value_v;    p_i.note = note_value
+            else:
+                if debug: print( 'New PersonInfo' )
+                PersonInfo( id = frame_name,
+                    note = note_value,      person_id = person_id,      
+                    label = label_value,    value = value_v
+                )
         commit()
 
         self.known_encodings[ person_id] = self.known_encodings[ person_id] +\
