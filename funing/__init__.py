@@ -22,7 +22,7 @@ def run():
 
     for a in args:
         # arg 'ts' with test
-        if a in ['s', 'ts' ,'st', 'start' ]:
+        if a in ['','s', 'ts' ,'st', 'start' ]:
             f.start()
         if a in [ 'm' , 'msg' , 'msgfmt' ]:
             f.msgfmt()
