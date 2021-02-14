@@ -38,7 +38,7 @@ class _MainUI():
         self.face_src_path = None
         self.iru_frame = None
 
-        self.is_pause = False;  self.vid_fps = 30
+        self.pause = False;  self.vid_fps = 30
 
         self.face_locations = []
         self.known_encodings = pickle.load( open(face_encodings_path , 'rb') )
@@ -63,7 +63,7 @@ class _MainUI():
             print(_('No desktop environment is detected! (^_^)'))
             exit()
 
-        self.current_face_person_id = None
+        self.curr_face_id = None
     
         self.set_ui_events()
         self.mainui.mainloop()
@@ -79,7 +79,7 @@ class _MainUI():
         self.mainui.entryframe.save_button['command'] = self.save_encoding
         self.mainui.showframe.show_f_optionmenu_var.trace('w', self.show_from )
         self.mainui.root.protocol("WM_DELETE_WINDOW", self.destroy )
-        self.mainui.insinfoframe.add_rf_button['command'] = self.add_ins_rf 
+        self.mainui.addinfoframe.add_rf_button['command'] = self.add_ins_rf 
     
     def add_ins_rf( self, frame_name = '', il_entry_value='', \
         dregex_cb_value = '', v_value = '', note_value = ''  ):
@@ -89,7 +89,7 @@ class _MainUI():
             dregex_cb_value in dregex_dict_ks else dregex_cb_value
 
         frame_name = str( uuid.uuid4() ) if len( frame_name )<1 else frame_name
-        row_frame = tk.Frame( self.mainui.insinfoframe.frame, \
+        row_frame = tk.Frame( self.mainui.addinfoframe.frame, \
             name = frame_name )
 
         info_frame = tk.Frame( row_frame )
@@ -141,14 +141,14 @@ class _MainUI():
     @db_session
     def remove_ins_row_frame( self , frame_name):
         # update UI
-        self.mainui.insinfoframe.frame.nametowidget(frame_name).pack_forget()
+        self.mainui.addinfoframe.frame.nametowidget(frame_name).pack_forget()
         self.ins_vars.pop(frame_name)
         if debug:
             print( frame_name, self.ins_vars )
         
         # update database
-        if self.current_face_person_id is not None:
-            if PersonInfo.exists( person_id =self.current_face_person_id,\
+        if self.curr_face_id is not None:
+            if PersonInfo.exists( person_id =self.curr_face_id,\
                 id = frame_name ):
                 PersonInfo.get( id=frame_name ).delete()
                 commit()
@@ -156,7 +156,7 @@ class _MainUI():
     
     def remove_all_ins_row_frames(self):
         for i in self.ins_vars.keys():
-            self.mainui.insinfoframe.frame.nametowidget(i).pack_forget()
+            self.mainui.addinfoframe.frame.nametowidget(i).pack_forget()
         self.ins_vars = {}
         
 
@@ -185,8 +185,7 @@ class _MainUI():
         image_exts = ['jpg','png']
         video_exts = ['mp4','avi','3gp','webm','mkv']
     
-        if not self.is_pause:
-            self.is_pause = True
+        self.pause = True
 
         if show_f == 'file':
             if self.iru is not None:
@@ -216,7 +215,7 @@ class _MainUI():
                     self.iru.release()
                     self.iru = None
                 self.iru = IRU( self.video_source )
-                self.is_pause = False
+                self.pause = False
                 self.get_resize_fxfy()
                 self.play_video()
         
@@ -246,7 +245,7 @@ class _MainUI():
                 f'{self.face_num}/{self.face_sum}' )
             self.pick_face()
 
-            if self.is_pause:
+            if self.pause:
                 self.compare_faces()
         
     
@@ -257,60 +256,57 @@ class _MainUI():
                 f'{self.face_num+1}/{self.face_sum}' )
             self.pick_face( )
 
-            if self.is_pause:
+            if self.pause:
                 self.compare_faces()
         
 
     def recognize_face( self ):
         
-        if self.iru is None:
-            self.show_nfd_info()
-            return
+        if self.iru is None: self.show_nfd_info() ; return
 
-        if self.is_pause:
-            self.is_pause = False
+        if self.pause:
+            self.pause = False
             self.play_video()
             self.mainui.showframe.rec_stringvar.set(_('Recognize'))
             self.update_entry_ui()
-            self.current_face_person_id = None
+            self.curr_face_id = None
         else:
-            self.is_pause = True
+            self.pause = True
             self.compare_faces()
             self.mainui.showframe.rec_stringvar.set( _('Play') )
 
     def play_video( self ):
-        if self.iru is not None and not self.is_pause:
+        if self.iru is None: return
+        if self.pause: return
+        
+        self.vid_ret_frame  = self.iru.get_ret_frame()
+        self.iru_frame = self.vid_ret_frame[1]
+
+        if self.vid_ret_frame[0] is None:
+            if debug: print('No frame rect returned.'); return
+        
+        self.get_face_locations(  self.iru_frame )
+
+        self.face_sum = len(self.face_locations) 
+        if self.face_sum > 0:
             
-            self.vid_ret_frame  = self.iru.get_ret_frame()
-            self.iru_frame = self.vid_ret_frame[1]
-            if self.vid_ret_frame[0] is not None:
-                
-                self.get_face_locations(  self.iru_frame )
+            if self.face_num < 0 : self.face_num = 0
+            if self.face_num > self.face_sum - 1: 
+                self.face_num = self.face_sum - 1
 
-                self.face_sum = len(self.face_locations) 
-                if self.face_sum > 0:
+            self.pick_face()
+            self.make_rect()
 
-                    if self.face_num < 0 : self.face_num = 0
-                    if self.face_num > self.face_sum - 1: 
-                        self.face_num = self.face_sum - 1
+            vid_img = cv2.resize( self.iru_frame, (0,0) , \
+                fx = self.fxfy, fy = self.fxfy )
+            vid_img = Image.fromarray( vid_img )
+            imgtk = ImageTk.PhotoImage( image=vid_img )
+            self.mainui.showframe.vid_img_label.imgtk = imgtk
+            self.mainui.showframe.vid_img_label.configure(image=imgtk)
 
-                    self.pick_face()
-                    self.make_rect()
+        self.mainui.showframe.vid_img_label.after( \
+            int(1000/self.iru.fps) , self.play_video )
 
-                vid_img = cv2.resize( self.iru_frame, (0,0) , \
-                    fx = self.fxfy, fy = self.fxfy )
-                vid_img = Image.fromarray( vid_img )
-                imgtk = ImageTk.PhotoImage( image=vid_img )
-                self.mainui.showframe.vid_img_label.imgtk = imgtk
-                self.mainui.showframe.vid_img_label.configure(image=imgtk)
-
-                self.mainui.showframe.vid_img_label.after( \
-                    int(1000/self.iru.fps) , self.play_video )
-            else:
-                if debug:
-                    print('No frame rect returned.')
-                return
-    
     def get_resize_fxfy( self ):
         w = self.screenwidth/2
         h = self.screenheight/2
@@ -332,32 +328,16 @@ class _MainUI():
     
     def compare_faces( self ):
 
-        if self.iru_frame is None:
-            self.show_nfd_info()
-            return
+        if self.iru_frame is None: self.show_nfd_info() ; return
 
-        self.calc_current_face_encoding()
+        self.get_curr_fc_encoding()
 
-        if self.current_face_encoding is None:
-            self.show_nfd_info()
-            return
-
-        self.current_face_person_id = None
-
-        for _id, encodings in self.known_encodings.items():
-
-            comparisons = face_recognition.compare_faces( \
-                encodings, self.current_face_encoding , \
-                self.comparison_tolerance)
-                        
-            if True in comparisons:
-                self.current_face_person_id = _id
-                break
+        self.get_p_id()
 
         self.update_entry_ui()
 
 
-    def calc_current_face_encoding( self ):
+    def get_curr_fc_encoding( self ):
         
         if self.face_sum > 0 :
             self.current_face_encoding = face_recognition.face_encodings( \
@@ -367,10 +347,10 @@ class _MainUI():
     @db_session
     def update_entry_ui(self):
         # update entryframe
-        if self.is_pause and \
-            self.current_face_person_id != None:
+        if self.pause and \
+            self.curr_face_id != None:
             p = select(p for p in fm.Person \
-                if p.id == self.current_face_person_id ).first()
+                if p.id == self.curr_face_id ).first()
             if p != None:
                 self.mainui.entryframe.clear_content()
                 
@@ -382,17 +362,17 @@ class _MainUI():
                 self.mainui.entryframe.address_entry.insert(0 , p.address)
                 self.mainui.entryframe.note_text.insert(END , p.note)
         
-                # update insinfoframe
+                # update addinfoframe
                 i_s = select( i for i in PersonInfo \
-                    if i.person_id == self.current_face_person_id )
+                    if i.person_id == self.curr_face_id )
                 for i in i_s:
                     self.add_ins_rf( 
                         il_entry_value=i.label, dregex_cb_value = i.dregex,\
                         v_value = i.value,      note_value = i.note,
                         frame_name  = i.id
                     )
-        elif (not self.is_pause) or \
-            (self.is_pause and (self.current_face_person_id is None) ):
+        elif (not self.pause) or \
+            (self.pause and (self.curr_face_id is None) ):
                 self.mainui.entryframe.uuid_entry['state'] = 'normal'
                 self.mainui.entryframe.uuid_entry.delete(0, END)
                 self.mainui.entryframe.uuid_entry['state'] = 'disabled'
@@ -456,102 +436,11 @@ class _MainUI():
 
         pass
 
-    @db_session
-    def save_encoding( self ):
-        
-        if not self.mainui.entryframe.values_valid():
-            return
 
-        # dev: face_encoding exists and person is None sometimes
-        person_exists =  False if self.current_face_person_id is None else \
-            Person.exists( id = self.current_face_person_id )
 
-        if self.current_face_person_id != None and \
-            person_exists:
+# SHOW_FRAME FUNCTIONS 
+###############################################################################
 
-            p = select(p for p in fm.Person if \
-                p.id == self.current_face_person_id ).first()
-
-            p.name = self.mainui.entryframe.name_entry.get()
-            try:
-                p.dob = datetime.strptime( \
-                    self.mainui.entryframe.DOB_entry.get(), "%Y-%m-%d").date()
-            except:
-                self.show_dob_error()
-                return
-            p.note = self.mainui.entryframe.note_text.get(1.0, 'end')
-
-        else:
-            p_dob = None
-
-            try:
-                p_dob = datetime.strptime( \
-                    self.mainui.entryframe.DOB_entry.get(), "%Y-%m-%d").date()
-            except:
-                self.show_dob_error()
-                return
-            p = Person( \
-                id = self.current_face_person_id \
-                    if ( not person_exists and \
-                        self.current_face_person_id !=None) \
-                    else str(uuid.uuid4()),\
-                name = self.mainui.entryframe.name_entry.get() ,\
-                dob = p_dob,
-                address = self.mainui.entryframe.address_entry.get(),
-                note = self.mainui.entryframe.note_text.get(1.0, 'end') )
-        person_id = str(p.id)
-        if debug:
-            print( self.mainui.insinfoframe.ins_vars )
-
-        for k,v in self.ins_vars.items():
-            label_value = v[0].get()
-            dregex_value = v[1].get()
-            value_v = v[2].get()
-            note_value = v[3].get()
-            if debug:
-                print( label_value, dregex_value, value_v, note_value)
-            if len( label_value+ dregex_value+ value_v+ note_value ) > 0:
-                if PersonInfo.exists( person_id = person_id, \
-                    label =label_value ):
-                    p_i = select( p for p in PersonInfo \
-                        if person_id == person_id and label == label_value )\
-                        .first()
-
-                    if debug:
-                        print( 'PersonInfo exists' )
-                    p_i.dregex = dregex_value;  p_i.value = value_v
-                    p_i.note = note_value
-                else:
-
-                    if debug:
-                        print( 'New PersonInfo' )
-
-                    PersonInfo( 
-                        id = str(uuid.uuid4()),
-                        person_id = person_id,  label = label_value,
-                        dregex = dregex_value,  value = value_v,
-                        note = note_value
-                    )
-            # self.mainui.insinfoframe.remove_row_frame( k )
-                
-        commit()
-
-        if self.current_face_encoding is None:
-            messagebox.showinfo( _('Information'), _('No face is detected'))
-        else:
-            if len( self.known_encodings) > 0:
-                if self.known_encodings.get(person_id) is None:
-                    self.known_encodings.setdefault(person_id ,\
-                        [self.current_face_encoding])
-                else:
-                    self.known_encodings.setdefault(person_id ,\
-                        [self.known_encodings.get(person_id)]+\
-                        [self.current_face_encoding])
-            else:
-                self.known_encodings = { person_id:\
-                    [self.current_face_encoding] }
-            pickle.dump( self.known_encodings, open(face_encodings_path, 'wb'))
-        
     def show_nfd_info( self ):
         messagebox.showinfo( _('No face detected'), \
             _('Oops.., No face detected!') )
@@ -559,6 +448,105 @@ class _MainUI():
     def show_dob_error( self ):
         messagebox.showerror( _('Error'), \
             _('Check the DOB entry please!') ) 
+
+###############################################################################
+# SHOW_FRAME FUNCTIONS END
+
+# ENTRY_FRAME FUNCTIONS
+###############################################################################
+
+    @db_session
+    def save_encoding( self ):
+        
+        if not self.mainui.entryframe.values_valid(): return
+
+        # dev: face_encoding exists and person is None sometimes
+        person_exists = Person.exists( id = self.curr_face_id )
+        if self.curr_face_id is  None: return 
+        if person_exists:
+
+            p = select(p for p in fm.Person if \
+                p.id == self.curr_face_id ).first()
+            p.dob = datetime.strptime( \
+                self.mainui.entryframe.DOB_entry.get(), "%Y-%m-%d").date()
+            p.name = self.mainui.entryframe.name_entry.get()
+            p.note = self.mainui.entryframe.note_text.get(1.0, 'end')
+
+        else:
+            p = Person( \
+                id = str(uuid.uuid4()),\
+                name = self.mainui.entryframe.name_entry.get() ,\
+                dob = datetime.strptime( \
+                    self.mainui.entryframe.DOB_entry.get(), "%Y-%m-%d").date(),
+                address = self.mainui.entryframe.address_entry.get(),
+                note = self.mainui.entryframe.note_text.get(1.0, 'end') )
+        
+        p_id = p.id
+        if debug:
+            print( self.mainui.addinfoframe.ins_vars )
+
+        for frame_name, info_widgets in self.ins_vars.items():
+            label_value = info_widgets[0].get()
+            dregex_value = info_widgets[1].get()
+            value_v = info_widgets[2].get()
+            note_value = info_widgets[3].get()
+
+            if debug:
+                print( label_value, dregex_value, value_v, note_value)
+
+            if len(label_value+ dregex_value+ value_v+ note_value )< 1: continue
+                
+                if PersonInfo.exists(person_id =p_id, label =label_value):
+                    p_i = select( p for p in PersonInfo \
+                        if p.person_id == p_id and p.label == label_value)\
+                        .first()
+
+                    if debug: print( 'PersonInfo exists' )
+                    p_i.value = value_v;    p_i.note = note_value
+
+                else:
+                    if debug: print( 'New PersonInfo' )
+                    PersonInfo( id = frame_name,
+                        note = note_value,      person_id = person_id,      
+                        label = label_value,    value = value_v
+                    )
+        commit()
+
+        self.known_encodings[ person_id] = self.known_encodings[ person_id] +\
+            [ self.current_face_encoding ]
+        pickle.dump( self.known_encodings, open(face_encodings_path, 'wb'))
+        
+###############################################################################
+# ENTRY_FRAME FUNCTIONS END
+
+# ADD_INFO_FRAME FUNCTIONS
+###############################################################################
+
+###############################################################################
+# ADD_INFO_FRAME FUNCTIONS  END
+
+# LANGCOMBOBOX FUNCTIONS
+###############################################################################
+
+###############################################################################
+# LANGCOMBOBOX FUNCTIONS END
+
+# OTHER FUNCTIONS
+###############################################################################
+    def get_p_id():
+
+        if self.current_face_encoding is None: self.show_nfd_info(); return
+
+        for _id, encodings in self.known_encodings.items():
+
+            comparisons = face_recognition.compare_faces( \
+                encodings, self.current_face_encoding , \
+                self.comparison_tolerance)
+                        
+            if True in comparisons: self.curr_face_id = _id ; break
+        
+###############################################################################
+# OTHER FUNCTIONS END
 
 
 class IRU():

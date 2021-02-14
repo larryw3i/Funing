@@ -24,13 +24,13 @@ def run():
         # arg 'ts' with test
         if a in ['s' , 'ts' ,'st', 'start' ]:
             f.start()
-        elif a in [ 'm' , 'msg' , 'msgfmt' ]:
+        if a in [ 'm' , 'msg' , 'msgfmt' ]:
             f.msgfmt()
         
-        elif a in ['pip' , 'pip_install']:
+        if a in ['pip' , 'pip_install']:
             f.pip_install_r()
         
-        elif a in [ 'init', 'initial' ]:
+        if a in [ 'init', 'initial' ]:
             f.initialize()
 
         

@@ -26,14 +26,14 @@ class MainUI():
         # lang_combobox
         self.langcombobox = LangCombobox( self.root )
         
-        # insinfoframe
-        self.insinfoframe = InsInfoFrame( tk.Frame( self.root ) )
+        # addinfoframe
+        self.addinfoframe = AddInfoFrame( tk.Frame( self.root ) )
 
     def place(self):
         self.showframe.place()
         self.entryframe.place()
         self.langcombobox.place()
-        self.insinfoframe.place()
+        self.addinfoframe.place()
     
     def mainloop(self):
         self.root.mainloop()
@@ -123,7 +123,7 @@ class ShowFrame():
         return is_real
              
 
-class InsInfoFrame():
+class AddInfoFrame():
     def __init__(self, frame):
         self.frame = frame
         self.ins_vars = {}
