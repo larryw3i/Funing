@@ -6,7 +6,7 @@ import sys
 from uuid import UUID
 from datetime import date
 
-from ..setting import base_dir, data_file_path
+from setting import base_dir, data_file_path
 from pony.orm.dbapiprovider import OperationalError
 
 db = Database()
@@ -19,8 +19,16 @@ db.bind(provider='sqlite', filename = data_file_path )
 class Person( db.Entity ):
     id = PrimaryKey( str )
     name = Optional( str )
-    dob = Optional( date )
+    dob = Optional( str )
     address = Optional( str )
+    note = Optional( str )
+
+# additional informations
+class PersonInfo( db.Entity ):
+    id = PrimaryKey( str )
+    person_id = Required( str )
+    label = Required( str )
+    value = Required( str )
     note = Optional( str )
     
 try:

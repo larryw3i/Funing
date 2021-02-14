@@ -4,10 +4,11 @@ include README.md
 include setup.py
 recursive-include funing setting.yml.example
 
+recursive-include funing setting.yml.example requirements.txt
+recursive-include docs *.rst conf.py Makefile make.bat *.jpg *.png *.gif
+
 recursive-include * *.po
 recursive-exclude * __pycache__
 recursive-exclude * *.py[co]
 recursive-exclude * venv
-
-recursive-include funing setting.yml.example requirements.txt
-recursive-include docs *.rst conf.py Makefile make.bat *.jpg *.png *.gif
+recursive-exclude funing _home *

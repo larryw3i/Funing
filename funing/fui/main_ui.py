@@ -2,13 +2,14 @@
 from tkinter import *
 import tkinter as tk
 from tkinter import ttk
-from ..flocale.locale import _, lang_code
+from flocale.locale import _, lang_code
 from langcodes import Language
-from ..setting import base_dir, locale_path, debug, f_lang_codes
-from ..setting import comparison_tolerance as ct
+from setting import base_dir, locale_path, debug, f_lang_codes
+from setting import comparison_tolerance as ct
 import os
 import re
 from datetime import datetime
+import uuid
 
 class MainUI():
     def __init__(self):
@@ -23,12 +24,15 @@ class MainUI():
 
         # lang_combobox
         self.langcombobox = LangCombobox( self.root )
+        
+        # addinfoframe
+        self.addinfoframe = AddInfoFrame( tk.Frame( self.root ) )
 
     def place(self):
         self.showframe.place()
         self.entryframe.place()
         self.langcombobox.place()
-
+        self.addinfoframe.place()
     
     def mainloop(self):
         self.root.mainloop()
@@ -50,9 +54,8 @@ class LangCombobox():
         )
 
     def place(self):
-
         # place lang_combobox
-        self.lang_combobox.grid( column = 1, row = 2 )
+        self.lang_combobox.grid( column = 3, row = 2, sticky = NE )
     
     def locale_lang_display_names( self ):
         display_names = []
@@ -68,6 +71,10 @@ class ShowFrame():
     def __init__( self, frame ):
 
         self.frame = frame
+
+        # video label
+        self.vid_frame_label = tk.Label( self.frame )
+
         self.show_from_optionmenus =  {
             'file':_('File'),
             'camara': _('Camara') }
@@ -79,8 +86,6 @@ class ShowFrame():
             self.frame, self.show_f_optionmenu_var , 
             *self.show_from_optionmenus.values() )
 
-        # video label
-        self.vid_img_label = tk.Label( self.frame )
 
         # comparison_tolerance entry
         self.ct_label = tk.Label( \
@@ -97,8 +102,8 @@ class ShowFrame():
     
     def place( self ):
 
-        # place vid_img_label
-        self.vid_img_label.grid( column = 0, row = 0, rowspan = 3,
+        # place vid_frame_label
+        self.vid_frame_label.grid( column = 0, row = 0, rowspan = 3,
             columnspan = 4 )
 
         # place frame
@@ -109,15 +114,19 @@ class ShowFrame():
 
         self.frame.grid( column = 0, row = 0 )
 
-    def values_valid(self):
-        if re.search( '^0.[0-6]\d*$', self.ct_stringvar.get() ):
-            self.ct_entry['bg'] = 'white'
-            is_real = True
-        else:
-            self.ct_entry['bg'] = 'red'
-            is_real = False
-        return is_real
              
+
+class AddInfoFrame():
+    def __init__(self, frame):
+        self.frame = frame
+        self.ins_vars = {}
+        self.add_rf_button = tk.Button( self.frame, \
+            text = _('Add information') )
+        
+    def place( self ):
+        self.add_rf_button.pack( side = BOTTOM )
+        self.frame.grid( column = 3, row = 0, sticky = S )
+        pass
 
 class EntryFrame():
     
@@ -128,7 +137,7 @@ class EntryFrame():
 
         self.prev_f_button = tk.Button(self.frame , \
             text = _("prev_symb"))
-        self.face_num_stringvar = StringVar( frame, '*/*' )
+        self.face_num_stringvar = StringVar( self.frame, '*/*' )
         self.face_num_label = tk.Label( self.frame , \
             textvariable = self.face_num_stringvar  )
         self.next_f_button = tk.Button(self.frame , \
@@ -187,26 +196,4 @@ class EntryFrame():
         # save_button
         self.save_button.grid( column = 1, row= 7)
 
-        self.frame.grid( column = 1, row = 0 )
-
-    def values_valid(self):
-        is_real = True
-        if len(self.name_entry.get()) < 1:\
-                self.name_entry['bg'] = 'red';      is_real = False
-        else:   self.name_entry['bg'] = 'white'
-        
-        try:    datetime.strptime( self.DOB_entry.get(), '%Y-%m-%d')
-        except Exception as e: 
-            self.DOB_entry['bg'] = 'red';       is_real = False
-            if debug:
-                print( e )
-
-        if len(self.address_entry.get()) < 1:\
-                self.address_entry['bg'] = 'red';   is_real = False
-        else:   self.address_entry['bg'] = 'white'
-
-        if len(self.note_text.get(1.0, 'end')) < 1:\
-                self.note_text['bg'] = 'red';       is_real = False
-        else:   self.note_text['bg'] = 'white'
-        
-        return is_real
+        self.frame.grid( column = 1, row = 0, sticky = N )
