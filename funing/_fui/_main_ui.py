@@ -490,6 +490,8 @@ class _MainUI():
 
         lang_display_name = self.mainui.langcombobox.lang_combobox_var.get()
         new_lang_code = Language.find( lang_display_name ).to_tag()
+        if debug:
+            print( 'new_lang_code: ', new_lang_code, 'lang_code: ', lang_code )
 
         if new_lang_code == lang_code: return
 
@@ -497,7 +499,6 @@ class _MainUI():
             title = _('Restart Funing Now?')
         )
         if restartapp:
-                        
             setting_yml['lang_code'] = new_lang_code
             yaml.dump( setting_yml, open( setting_path, 'w') )
 

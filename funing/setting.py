@@ -18,22 +18,34 @@ base_dir = os.path.join( usr_home , '.funing')
 
 locale_path = os.path.join( project_path, 'flocale') 
 
-setting_path = os.path.join( base_dir , 'setting.yml') 
 setting_example_path = os.path.join( project_path , 'setting.yml.example') 
 
-if not os.path.exists( setting_path ):
+setting_example_yaml = yaml.safe_load( open( setting_example_path, 'r' ))
+
+prev_version = setting_example_yaml.get('prev_version','unknown')
+version =  setting_example_yaml.get('version','unknown')
+
+prev_setting_path = os.path.join(base_dir, f'setting_{prev_version}_.yml') 
+setting_path = os.path.join( base_dir , f'setting_{version}_.yml') 
+
+if os.path.exists( setting_path ):
+    setting_yml = yaml.safe_load( open( setting_path , 'r' ) )
+elif os.path.exists( prev_setting_path ):
+    setting_yml = yaml.safe_load( open( prev_setting_path , 'r' ) )
+    setting_yml = setting_example_yaml.update( setting_yml )
+    setting_yml['prev_version']= prev_version; setting_yml['version'] = version
+    yaml.dump( setting_yml, open( setting_path, 'w') )
+else:
     if not os.path.exists( base_dir): os.makedirs( base_dir, exist_ok = True )
     shutil.copyfile( setting_example_path, setting_path )
-    
-setting_yml = yaml.safe_load( open( setting_path, 'r' ) )
+    setting_yml = setting_example_yaml
 
-version = setting_yml.get('version','unknown')
 
 data_dir = os.path.join( base_dir, 'data' )
 face_encodings_path = os.path.join( data_dir, \
-    f'{version}_face_encodings.data' )
+    f'face_encodings_{version}_.data' )
 data_file_path = os.path.join( data_dir, \
-    f'{version}_funing.sqlite')
+    f'funing_{version}_.sqlite')
 
 lang_code = setting_yml.get('lang_code', 'en-US')
 initialized  = setting_yml.get('initialized', False)
