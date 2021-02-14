@@ -82,34 +82,25 @@ class _MainUI():
      
     def ins_rf( self, frame_name = '', il_entry_value='',  v_value = '', \
         note_value = ''  ):
-        
 
         frame_name = str( uuid.uuid4() ) if len( frame_name )<1 else frame_name
-        row_frame = tk.Frame( self.mainui.addinfoframe.frame, \
-            name = frame_name )
+        row_frame = tk.Frame(self.mainui.addinfoframe.frame, name =frame_name )
 
         info_frame = tk.Frame( row_frame )
         del_button = tk.Button( row_frame , text = _('Delete'), \
             command =lambda: self.rm_ins_rf(frame_name) )
         
-        tk.Label( info_frame, text = _('Label') )\
-            .grid( column =  0, row =  0 )
+        tk.Label( info_frame, text = _('Label') ).grid( column =  0, row =  0 )
         il_entry_svar = StringVar( info_frame , value = il_entry_value)
-        tk.Entry(info_frame, \
-            textvariable= il_entry_svar)\
-            .grid( column =  1,  row =  0)
+        tk.Entry(info_frame, textvariable= il_entry_svar).grid(column=1, row= 0)
 
-        tk.Label( info_frame, text=_('Value'))\
-            .grid( column = 0, row = 2)
+        tk.Label( info_frame, text=_('Value')).grid( column = 0, row = 2)
         value_sv = StringVar( info_frame, value = v_value )
-        tk.Entry( info_frame, textvariable = value_sv )\
-            .grid(  column = 1 ,  row =  2 )
+        tk.Entry( info_frame, textvariable = value_sv).grid(column = 1,row= 2 )
 
-        tk.Label( info_frame, text=_('Note'))\
-            .grid( column = 0, row = 3)
+        tk.Label( info_frame, text=_('Note')).grid( column = 0, row = 3)
         note_sv = StringVar( info_frame, note_value )
-        tk.Entry( info_frame, textvariable = note_sv )\
-            .grid(  column = 1 ,  row = 3 )
+        tk.Entry( info_frame, textvariable = note_sv ).grid(column =1 ,row= 3 )
         
         info_frame.grid(column = 0, row = 0)
         del_button.grid(column = 1, row = 0)
@@ -209,12 +200,14 @@ class _MainUI():
         if self.iru is None: self.show_nfd_info() ; return
 
         if self.pause:
+            # Play
             self.pause = False
             self.mainui.showframe.rec_stringvar.set(_('Recognize'))
             self.play_video()
             self.update_ui()
             self.curr_face_id = None
         else:
+            # Pause
             self.pause = True
             self.mainui.showframe.rec_stringvar.set( _('Play') )
 
@@ -324,27 +317,30 @@ class _MainUI():
         self.get_curr_f_encoding_and_id()
 
         # update entryframe
-        if self.pause and (self.curr_face_id is not None):
+        if self.pause:
+            if self.curr_face_id is None: return
+
             p = select(p for p in fm.Person \
                 if p.id == self.curr_face_id ).first()
-            if p is not None:
-                self.mainui.entryframe.clear_content()
+            if p is None: return
+
+            self.mainui.entryframe.clear_content()
+            
+            self.mainui.entryframe.uuid_entry['state'] = 'normal'
+            self.mainui.entryframe.uuid_entry.insert(0 , p.id)
+            self.mainui.entryframe.uuid_entry['state'] = 'disabled'
+            self.mainui.entryframe.name_entry.insert(0 , p.name)
+            self.mainui.entryframe.DOB_entry.insert(0 , p.dob )
+            self.mainui.entryframe.address_entry.insert(0 , p.address)
+            self.mainui.entryframe.note_text.insert(END , p.note)
+    
+            # update addinfoframe
+            i_s = select( i for i in PersonInfo \
+                if i.person_id == self.curr_face_id )
                 
-                self.mainui.entryframe.uuid_entry['state'] = 'normal'
-                self.mainui.entryframe.uuid_entry.insert(0 , p.id)
-                self.mainui.entryframe.uuid_entry['state'] = 'disabled'
-                self.mainui.entryframe.name_entry.insert(0 , p.name)
-                self.mainui.entryframe.DOB_entry.insert(0 , p.dob )
-                self.mainui.entryframe.address_entry.insert(0 , p.address)
-                self.mainui.entryframe.note_text.insert(END , p.note)
-        
-                # update addinfoframe
-                i_s = select( i for i in PersonInfo \
-                    if i.person_id == self.curr_face_id )
-                    
-                for i in i_s:
-                    self.ins_rf( il_entry_value=i.label, v_value = i.value,\
-                        note_value = i.note,    frame_name  = i.id )
+            for i in i_s:
+                self.ins_rf( il_entry_value=i.label, v_value = i.value,\
+                    note_value = i.note,    frame_name  = i.id )
 
         else:
                 self.mainui.entryframe.uuid_entry['state'] = 'normal'
@@ -448,14 +444,16 @@ class _MainUI():
 
     @db_session
     def save_db_encoding( self ):
-        if self.pause: 
-            if self.debug: print('Video is palying');   return
+        if not self.pause: 
+            if debug: print('Video is palying');   return
         if self.curr_f_encoding is None:  
             self.show_nfd_info() ;  return
 
-        person_exists = Person.exists( id = self.curr_face_id )
+        person_exists = False if self.curr_face_id is None else \
+            Person.exists( id = self.curr_face_id )
+
         if person_exists:
-            if self.debug:
+            if debug:
                 print( 'Person exists')
             p = select(p for p in fm.Person if \
                 p.id == self.curr_face_id ).first()
@@ -471,7 +469,7 @@ class _MainUI():
                 address = self.mainui.entryframe.address_entry.get(),
                 note = self.mainui.entryframe.note_text.get(1.0, 'end') )
         
-        if self.debug:
+        if debug:
             print( self.mainui.addinfoframe.ins_vars )
 
         for frame_name, info_widgets in self.ins_vars.items():
@@ -479,7 +477,7 @@ class _MainUI():
             value_v = info_widgets[1].get()
             note_value = info_widgets[2].get()
 
-            if self.debug:
+            if debug:
                 print( label_value,  value_v, note_value)
 
             if len(label_value+  value_v+ note_value )< 1: continue
@@ -489,19 +487,24 @@ class _MainUI():
                     if p.person_id == p.id and p.label == label_value)\
                     .first()
 
-                if self.debug: print( 'PersonInfo exists' )
+                if debug: print( 'PersonInfo exists' )
                 p_i.value = value_v;    p_i.note = note_value
             else:
-                if self.debug: print( 'New PersonInfo' )
+                if debug: print( 'New PersonInfo' )
                 PersonInfo( id = frame_name,
-                    note = note_value,      person_id = person_id,      
+                    note = note_value,      person_id = p.id,      
                     label = label_value,    value = value_v
                 )
-        commit()
 
-        self.known_encodings[ person_id] = self.known_encodings[ person_id] +\
-            [ self.curr_f_encoding ]
+        if len(self.known_encodings) > 0:
+            self.known_encodings[ p.id] = self.known_encodings[ p.id ] +\
+                [ self.curr_f_encoding ]
+        else:
+            self.known_encodings[ p.id] = [ self.curr_f_encoding ]
+
         pickle.dump( self.known_encodings, open(face_encodings_path, 'wb'))
+        
+        commit()
         
 ###############################################################################
 # ENTRY_FRAME FUNCTIONS END
