@@ -42,7 +42,7 @@ class _MainUI():
         self.face_locations = []
         self.known_encodings = pickle.load( open(face_encodings_path , 'rb') )
 
-        self.current_face_encoding = None
+        self.curr_f_encoding = None
         self.comparison_tolerance = comparison_tolerance
             
         # face num for face_label
@@ -55,12 +55,10 @@ class _MainUI():
         self.fxfy = None
 
         self.ins_vars = {}
-        try:
-            self.screenwidth = self.mainui.root.winfo_screenwidth()
+
+        try:self.screenwidth = self.mainui.root.winfo_screenwidth();\
             self.screenheight = self.mainui.root.winfo_screenheight()
-        except:
-            print(_('No desktop environment is detected! (^_^)'))
-            exit()
+        except: print(_('No desktop environment is detected! (^_^)')); exit()
 
         self.curr_face_id = None
     
@@ -72,14 +70,14 @@ class _MainUI():
         self.mainui.langcombobox.lang_combobox.bind('<<ComboboxSelected>>',
             self.change_language )
         self.mainui.showframe.ct_entry.bind('<FocusOut>', self.save_ct )
-        self.mainui.showframe.rec_button['command'] = self.recognize_face
+        self.mainui.showframe.rec_button['command'] = self.rec_now
         self.mainui.entryframe.prev_f_button['command'] = self.pick_prev_face
         self.mainui.entryframe.next_f_button['command'] = self.pick_next_face
         self.mainui.entryframe.save_button['command'] = self.save_encoding
         self.mainui.showframe.show_f_optionmenu_var.trace('w', self.show_from )
         self.mainui.root.protocol("WM_DELETE_WINDOW", self.destroy )
         self.mainui.addinfoframe.add_rf_button['command'] = self.ins_rf 
-    
+     
     def ins_rf( self, frame_name = '', il_entry_value='',  v_value = '', \
         note_value = ''  ):
         
@@ -186,7 +184,10 @@ class _MainUI():
             if len( self.face_src_path ) > 0:
                 ext = os.path.splitext( self.face_src_path )[1][1:]
                 if ext in image_exts:
+                    self.mainui.showframe.rec_button['state'] = 'disabled'
                     self.pick_image()
+                else: self.mainui.showframe.rec_button['state'] = 'normal'
+
                 if ext in video_exts:
                     show_f = 'camara'
                     self.video_source = self.face_src_path
@@ -243,7 +244,7 @@ class _MainUI():
                 self.compare_faces()
         
 
-    def recognize_face( self ):
+    def rec_now( self ):
         
         if self.iru is None: self.show_nfd_info() ; return
 
@@ -299,7 +300,6 @@ class _MainUI():
         h_ = w_ = 0
         self.fxfy = h/self.iru.height if r1<r else w/self.iru.width
             
-    
     def get_face_locations(self, image):
 
         small_frame = cv2.resize( image, (0, 0), \
@@ -312,18 +312,15 @@ class _MainUI():
     def compare_faces( self ):
 
         if self.iru_frame is None: self.show_nfd_info() ; return
-
         self.get_curr_fc_encoding()
-
         self.get_p_id()
-
         self.update_entry_ui()
 
 
     def get_curr_fc_encoding( self ):
         
         if self.face_sum > 0 :
-            self.current_face_encoding = face_recognition.face_encodings( \
+            self.curr_f_encoding = face_recognition.face_encodings( \
                 self.iru_frame, [self.face_locations[ self.face_num ]] )[0]
 
             
@@ -439,11 +436,14 @@ class _MainUI():
     @db_session
     def save_encoding( self ):
         
-        if self.curr_face_id is  None: return 
-        
+        if self.curr_face_id is  None: 
+            if debug: print('Current person id is None')
+            return 
+
         person_exists = Person.exists( id = self.curr_face_id )
         if person_exists:
-
+            if debug:
+                print( 'Person exists')
             p = select(p for p in fm.Person if \
                 p.id == self.curr_face_id ).first()
             p.dob = self.mainui.entryframe.DOB_entry.get()
@@ -451,6 +451,7 @@ class _MainUI():
             p.note = self.mainui.entryframe.note_text.get(1.0, 'end')
 
         else:
+            print('New person')
             p = Person( \
                 id = str(uuid.uuid4()),\
                 name = self.mainui.entryframe.name_entry.get() ,\
@@ -487,7 +488,7 @@ class _MainUI():
         commit()
 
         self.known_encodings[ person_id] = self.known_encodings[ person_id] +\
-            [ self.current_face_encoding ]
+            [ self.curr_f_encoding ]
         pickle.dump( self.known_encodings, open(face_encodings_path, 'wb'))
         
 ###############################################################################
@@ -507,14 +508,14 @@ class _MainUI():
 
 # OTHER FUNCTIONS
 ###############################################################################
-    def get_p_id():
+    def get_p_id( self ):
 
-        if self.current_face_encoding is None: self.show_nfd_info(); return
+        if self.curr_f_encoding is None: self.show_nfd_info(); return
 
         for _id, encodings in self.known_encodings.items():
 
             comparisons = face_recognition.compare_faces( \
-                encodings, self.current_face_encoding , \
+                encodings, self.curr_f_encoding , \
                 self.comparison_tolerance)
                         
             if True in comparisons: self.curr_face_id = _id ; break
@@ -530,8 +531,7 @@ class IRU():
 
         if not self.vid.isOpened():
             messagebox.showerror( 
-                _('Unable to open video source'), 
-                self.video_source )
+                _('Unable to open video source'), self.video_source )
             return
         self.width = self.vid.get(cv2.CAP_PROP_FRAME_WIDTH)
         self.height = self.vid.get(cv2.CAP_PROP_FRAME_HEIGHT)
