@@ -259,7 +259,7 @@ class _MainUI():
 
             self.correct_f_num_ui()
             self.pick_f_mk_rect()
-            
+
         self.update_vid_frame()
 
         self.mainui.showframe.vid_frame_label.after( \
@@ -360,7 +360,6 @@ class _MainUI():
 
                 self.rm_all_ins_rfs()
                 
-
     def mk_frame_rect( self ):
 
         for top, right, bottom, left in self.face_locations:
