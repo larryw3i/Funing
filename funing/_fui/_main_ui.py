@@ -71,9 +71,11 @@ class _MainUI():
             self.change_language )
         self.mainui.showframe.ct_entry.bind('<FocusOut>', self.save_ct )
         self.mainui.showframe.rec_button['command'] = self.rec_now
-        self.mainui.entryframe.prev_f_button['command'] = self.pick_prev_face
-        self.mainui.entryframe.next_f_button['command'] = self.pick_next_face
-        self.mainui.entryframe.save_button['command'] = self.save_encoding
+        self.mainui.entryframe.prev_f_button['command'] = \
+            lambda: self.pick_face_by_num(-1)
+        self.mainui.entryframe.next_f_button['command'] = \
+            lambda: self.pick_face_by_num(1)
+        self.mainui.entryframe.save_button['command'] = self.save_db_encoding
         self.mainui.showframe.show_f_optionmenu_var.trace('w', self.show_from )
         self.mainui.root.protocol("WM_DELETE_WINDOW", self.destroy )
         self.mainui.addinfoframe.add_rf_button['command'] = self.ins_rf 
@@ -88,7 +90,7 @@ class _MainUI():
 
         info_frame = tk.Frame( row_frame )
         del_button = tk.Button( row_frame , text = _('Delete'), \
-            command =lambda: self.remove_ins_row_frame(frame_name) )
+            command =lambda: self.rm_ins_rf(frame_name) )
         
         tk.Label( info_frame, text = _('Label') )\
             .grid( column =  0, row =  0 )
@@ -122,7 +124,7 @@ class _MainUI():
             print( self.ins_vars )
             
     @db_session
-    def remove_ins_row_frame( self , frame_name):
+    def rm_ins_rf( self , frame_name):
         # update UI
         self.mainui.addinfoframe.frame.nametowidget(frame_name).pack_forget()
         self.ins_vars.pop(frame_name)
@@ -135,9 +137,8 @@ class _MainUI():
                 id = frame_name ):
                 PersonInfo.get( id=frame_name ).delete()
                 commit()
-
     
-    def remove_all_ins_row_frames(self):
+    def rm_all_ins_rfs(self):
         for i in self.ins_vars.keys():
             self.mainui.addinfoframe.frame.nametowidget(i).pack_forget()
         self.ins_vars = {}
@@ -169,9 +170,7 @@ class _MainUI():
         self.pause = True
 
         if show_f == 'file':
-            if self.iru is not None:
-                self.iru.release()
-                self.iru = None
+            if self.iru is not None: self.iru.release() ; self.iru = None
 
             self.face_src_path = tkf.askopenfilename(
                 title = _('Select a file'),
@@ -181,11 +180,12 @@ class _MainUI():
                 ],
                 initialdir = '~'
             )
+
             if len( self.face_src_path ) > 0:
                 ext = os.path.splitext( self.face_src_path )[1][1:]
                 if ext in image_exts:
                     self.mainui.showframe.rec_button['state'] = 'disabled'
-                    self.pick_image()
+                    self.view_image()
                 else: self.mainui.showframe.rec_button['state'] = 'normal'
 
                 if ext in video_exts:
@@ -202,47 +202,7 @@ class _MainUI():
                 self.pause = False
                 self.get_resize_fxfy()
                 self.play_video()
-        
-    def pick_image( self ):
-
-        face_image  = cv2.imread( self.face_src_path )
-        self.iru_frame = cv2.cvtColor( face_image, cv2.COLOR_BGR2RGB)
-
-        img = Image.fromarray( self.iru_frame )
-        imgtk = ImageTk.PhotoImage( image= img )
-        self.mainui.showframe.vid_img_label.imgtk = imgtk
-        self.mainui.showframe.vid_img_label.configure(image=imgtk)
-
-        self.get_face_locations( self.iru_frame )
-        self.face_sum = len( self.face_locations )
-
-        if self.face_sum > 0:
-            self.face_num += 1
-            self.mainui.entryframe.face_num_stringvar.set(\
-                f'{ self.face_num + 1 }/{self.face_sum}')
-            self.pick_face( )
-
-    def pick_next_face(self):
-        if self.face_num < self.face_sum - 1:
-            self.face_num += 1
-            self.mainui.entryframe.face_num_stringvar.set( \
-                f'{self.face_num}/{self.face_sum}' )
-            self.pick_face()
-
-            if self.pause:
-                self.compare_faces()
-        
-    
-    def pick_prev_face(self):
-        if self.face_num > 0:
-            self.face_num -= 1
-            self.mainui.entryframe.face_num_stringvar.set( \
-                f'{self.face_num+1}/{self.face_sum}' )
-            self.pick_face( )
-
-            if self.pause:
-                self.compare_faces()
-        
+           
 
     def rec_now( self ):
         
@@ -250,14 +210,38 @@ class _MainUI():
 
         if self.pause:
             self.pause = False
-            self.play_video()
             self.mainui.showframe.rec_stringvar.set(_('Recognize'))
-            self.update_entry_ui()
+            self.play_video()
+            self.update_ui()
             self.curr_face_id = None
         else:
             self.pause = True
-            self.compare_faces()
             self.mainui.showframe.rec_stringvar.set( _('Play') )
+
+    def correct_f_num_ui( self ):
+
+        self.face_num = 0 if self.face_num < 0 else \
+            self.face_sum if self.face_num > self.face_sum \
+            else self.face_num
+        self.mainui.entryframe.face_num_stringvar.set( \
+            f'{self.face_num+1}/{self.face_sum}' )
+        
+
+    def view_image( self ):
+
+        face_image  = cv2.imread( self.face_src_path )
+        self.iru_frame = cv2.cvtColor( face_image, cv2.COLOR_BGR2RGB)
+
+        img = Image.fromarray( self.iru_frame )
+        imgtk = ImageTk.PhotoImage( image= img )
+        self.mainui.showframe.vid_frame_label.imgtk = imgtk
+        self.mainui.showframe.vid_frame_label.configure(image=imgtk)
+
+        self.get_f_loc_and_sum()
+        
+        if self.face_sum > 0:
+            self.correct_f_num_ui()
+            self.pick_face_by_num()    
 
     def play_video( self ):
         if self.iru is None: return
@@ -269,27 +253,26 @@ class _MainUI():
         if self.vid_ret_frame[0] is None:
             if debug: print('No frame rect returned.'); return
         
-        self.get_face_locations(  self.iru_frame )
+        self.get_f_loc_and_sum()
 
-        self.face_sum = len(self.face_locations) 
         if self.face_sum > 0:
+
+            self.correct_f_num_ui()
+            self.pick_f_mk_rect()
             
-            if self.face_num < 0 : self.face_num = 0
-            if self.face_num > self.face_sum - 1: 
-                self.face_num = self.face_sum - 1
+        self.update_vid_frame()
 
-            self.pick_face()
-            self.make_rect()
-
-            vid_img = cv2.resize( self.iru_frame, (0,0) , \
-                fx = self.fxfy, fy = self.fxfy )
-            vid_img = Image.fromarray( vid_img )
-            imgtk = ImageTk.PhotoImage( image=vid_img )
-            self.mainui.showframe.vid_img_label.imgtk = imgtk
-            self.mainui.showframe.vid_img_label.configure(image=imgtk)
-
-        self.mainui.showframe.vid_img_label.after( \
+        self.mainui.showframe.vid_frame_label.after( \
             int(1000/self.iru.fps) , self.play_video )
+    
+    def update_vid_frame( self ):
+        vid_img = cv2.resize( self.iru_frame, (0,0) , \
+            fx = self.fxfy, fy = self.fxfy )
+        vid_img = Image.fromarray( vid_img )
+        imgtk = ImageTk.PhotoImage( image=vid_img )
+        self.mainui.showframe.vid_frame_label.imgtk = imgtk
+        self.mainui.showframe.vid_frame_label.configure(image=imgtk)
+
 
     def get_resize_fxfy( self ):
         w = self.screenwidth/2
@@ -299,39 +282,54 @@ class _MainUI():
         r1= r0/r 
         h_ = w_ = 0
         self.fxfy = h/self.iru.height if r1<r else w/self.iru.width
+    
+    def get_f_loc_and_sum( self ):
+        self.get_f_loc()
+        self.get_f_sum()
             
-    def get_face_locations(self, image):
+    def get_f_loc(self ):
 
-        small_frame = cv2.resize( image, (0, 0), \
+        if self.iru_frame is None:
+            if debug: print('get_f_loc: self.iru_frame is None')
+            return
+
+        small_frame = cv2.resize( self.iru_frame , (0, 0), \
             fx=self.resize_rate, fy=self.resize_rate)  
         
         fs = face_recognition.face_locations( small_frame )
         self.face_locations = [ [ int(f_/self.resize_rate) for f_ in f ] \
             for f in fs]
+
+    def get_f_sum( self ):
+        self.face_sum = len(self.face_locations) 
     
     def compare_faces( self ):
 
         if self.iru_frame is None: self.show_nfd_info() ; return
-        self.get_curr_fc_encoding()
+        self.get_curr_f_encoding()
         self.get_p_id()
-        self.update_entry_ui()
+        self.update_ui()
 
 
-    def get_curr_fc_encoding( self ):
+    def get_curr_f_encoding( self ):
         
         if self.face_sum > 0 :
             self.curr_f_encoding = face_recognition.face_encodings( \
                 self.iru_frame, [self.face_locations[ self.face_num ]] )[0]
 
             
+    # @db_session
+    # def update_ui(self):
     @db_session
-    def update_entry_ui(self):
+    def update_ui(self):
+        '''
+        Update self.mainui.entryframe and self.mainui.addinfoframe
+        '''
         # update entryframe
-        if self.pause and \
-            self.curr_face_id != None:
+        if self.pause and self.curr_face_id != None:
             p = select(p for p in fm.Person \
                 if p.id == self.curr_face_id ).first()
-            if p != None:
+            if p is not None:
                 self.mainui.entryframe.clear_content()
                 
                 self.mainui.entryframe.uuid_entry['state'] = 'normal'
@@ -345,10 +343,11 @@ class _MainUI():
                 # update addinfoframe
                 i_s = select( i for i in PersonInfo \
                     if i.person_id == self.curr_face_id )
+                    
                 for i in i_s:
-                    self.ins_rf( 
-                        il_entry_value=i.label, v_value = i.value,      note_value = i.note,    frame_name  = i.id
-                    )
+                    self.ins_rf( il_entry_value=i.label, v_value = i.value,\
+                        note_value = i.note,    frame_name  = i.id )
+
         elif (not self.pause) or \
             (self.pause and (self.curr_face_id is None) ):
                 self.mainui.entryframe.uuid_entry['state'] = 'normal'
@@ -359,19 +358,36 @@ class _MainUI():
                 self.mainui.entryframe.address_entry.delete(0, END)
                 self.mainui.entryframe.note_text.delete('1.0', END)
 
-                self.remove_all_ins_row_frames()
+                self.rm_all_ins_rfs()
                 
 
-    def make_rect( self ):
+    def mk_frame_rect( self ):
 
         for top, right, bottom, left in self.face_locations:
             cv2.rectangle( self.iru_frame, (left, top), \
             (right, bottom), (0, 0, 255), 2)
 
-    def pick_face( self ):
-        
+    def pick_f_mk_rect( self ):
+        '''
+        Pick face image to self.entryframe.face_label and make rectangles for 
+        self.showframe.vid_frame_label.
+        '''
+        self.pick_face_by_num()
+        self.mk_frame_rect()
+    
+    #def pick_face( self,  ):
+    def pick_face_by_num( self, p_n = 0 ):
+
+        if not self.pause: return
+        self.face_num = self.face_num + p_n
+
+        self.correct_f_num_ui()
+                   
         if self.face_num < 0:
             self.show_nfd_info()
+            if debug:
+                print('No face detected')
+            return
 
         top, right, bottom, left = self.face_locations[ self.face_num ]
 
@@ -386,9 +402,6 @@ class _MainUI():
         faceimgtk = ImageTk.PhotoImage( image=face_img )
         self.mainui.entryframe.face_label.imgtk = faceimgtk
         self.mainui.entryframe.face_label.configure(image=faceimgtk)
-
-        self.mainui.entryframe.face_num_stringvar.set(\
-            f'{self.face_num+1}/{self.face_sum}' )
 
 
     def change_language(self, lang ):
@@ -434,7 +447,7 @@ class _MainUI():
 ###############################################################################
 
     @db_session
-    def save_encoding( self ):
+    def save_db_encoding( self ):
         
         if self.curr_face_id is  None: 
             if debug: print('Current person id is None')

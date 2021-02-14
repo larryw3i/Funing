@@ -71,6 +71,10 @@ class ShowFrame():
     def __init__( self, frame ):
 
         self.frame = frame
+
+        # video label
+        self.vid_frame_label = tk.Label( self.frame )
+
         self.show_from_optionmenus =  {
             'file':_('File'),
             'camara': _('Camara') }
@@ -82,8 +86,6 @@ class ShowFrame():
             self.frame, self.show_f_optionmenu_var , 
             *self.show_from_optionmenus.values() )
 
-        # video label
-        self.vid_img_label = tk.Label( self.frame )
 
         # comparison_tolerance entry
         self.ct_label = tk.Label( \
@@ -100,8 +102,8 @@ class ShowFrame():
     
     def place( self ):
 
-        # place vid_img_label
-        self.vid_img_label.grid( column = 0, row = 0, rowspan = 3,
+        # place vid_frame_label
+        self.vid_frame_label.grid( column = 0, row = 0, rowspan = 3,
             columnspan = 4 )
 
         # place frame
