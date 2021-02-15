@@ -1,11 +1,14 @@
 import setuptools
-
+import re
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description=fh.read()
 
+setting_yml_example = open('funing/setting.yml.example', 'r').read()
+version = re.findall('[^_]version:\s*(\S+)\s*', setting_yml_example, re.S)[0]
+
 setuptools.setup(
     name="funing",
-    version= '0.2.17',
+    version=version,
     author="larryw3i",
     author_email="larryw3i@163.com",
     description="A face recognition gui",

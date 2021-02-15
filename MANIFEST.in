@@ -2,12 +2,13 @@
 include LICENSE
 include README.md
 include setup.py
+include requirements.txt
 
-recursive-include funing setting.yml.example requirements.txt
+recursive-include funing setting.yml.example
 recursive-include docs *.rst conf.py Makefile make.bat *.jpg *.png *.gif
 recursive-include * *.po
 
 recursive-exclude * __pycache__
 recursive-exclude * *.py[co]
-recursive-exclude * venv
+recursive-exclude venv *
 recursive-exclude funing/_home *
