@@ -1,16 +1,24 @@
 name: funing
+title: funing
+base: core18
 version: git
 summary: funing
-description: 
+description: |
+  a face recognition GUI
+icon: src/logo.svg
+license: MIT
+apps: 
+  funing:
+    command: usr/sbin
 
-confinement: devmode
-base: core18
+confinement: classic
 
 parts:
-  offlineimap:
+  funing:
     plugin: python
     python-version: python3
-    source: .
+    source: ./funing/
+    source-type: git
     stage-packages:
       - dlib
       - face-recognition

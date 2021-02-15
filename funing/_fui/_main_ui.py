@@ -23,6 +23,7 @@ from setting import setting_yml, setting_path, face_encodings_path,\
 import pickle
 import yaml
 import uuid
+import time
 
 
 class _MainUI():
@@ -35,9 +36,9 @@ class _MainUI():
         self.vid =                  self.vid_ret_frame = None
 
         self.face_src_path =        self.iru_frame = None
-        self.pause = False;         self.vid_fps = 30
-
-        self.face_locations = [];   self.curr_f_encoding = None
+        self.pause = False;         self.face_locations = []
+        self.curr_f_encoding = None
+        self.root_after = -1
         
         # face num for face_label
         self.face_sum = 0;          self.face_num = -1
@@ -73,7 +74,7 @@ class _MainUI():
          
     def destroy( self ):
         if self.iru is not None:
-            self.iru.release()
+            self.iru.vid_release()
         self.mainui.root.destroy()
 
 # SHOW_FRAME FUNCTIONS 
@@ -90,16 +91,15 @@ class _MainUI():
         values = self.mainui.showframe.show_from_optionmenus.values()
         value = self.mainui.showframe.show_f_optionmenu_var.get()
         show_f = list(keys)[ list( values ).index( value )]
-
-        self.video_source = 0
-
+        
         image_exts = ['jpg','png']
         video_exts = ['mp4','avi','3gp','webm','mkv']
-    
-        self.pause = True
 
+        if self.root_after != -1:
+            self.mainui.root.after_cancel( self.root_after )
+    
         if show_f == 'file':
-            if self.iru is not None: self.iru.release() ; self.iru = None
+            if self.iru is not None: self.iru.vid_release() ; self.iru = None
 
             self.face_src_path = tkf.askopenfilename(
                 title = _('Select a file'),
@@ -114,23 +114,29 @@ class _MainUI():
                 ext = os.path.splitext( self.face_src_path )[1][1:]
                 if ext in image_exts:
                     self.mainui.showframe.rec_button['state'] = 'disabled'
+                    # Pause
+                    self.pause = True
                     self.view_image()
                 else: self.mainui.showframe.rec_button['state'] = 'normal'
 
                 if ext in video_exts:
-                    show_f = 'camara'
                     self.video_source = self.face_src_path
+                    self.play_video()
 
-        if show_f == 'camara':
-            
-            if self.video_source is not None:
-                if self.iru is not None:
-                    self.iru.release()
-                    self.iru = None
-                self.iru = IRU( self.video_source )
-                self.pause = False
-                self.get_resize_fxfy()
-                self.play_video()
+        elif show_f == 'camara':
+            self.video_source = 0
+            self.play_video()
+
+    def play_video( self ):
+        if self.iru is not None: self.iru.vid_release()
+        self.iru = IRU( self.video_source )
+        # Play
+        self.pause = False
+        self.get_resize_fxfy()
+        self.refresh_frame()
+
+        if debug:
+            print('fps: ', self.iru.fps)
            
 
     def rec_now( self ):
@@ -141,7 +147,7 @@ class _MainUI():
             # Play
             self.pause = False
             self.mainui.showframe.rec_stringvar.set(_('Recognize'))
-            self.play_video()
+            self.refresh_frame()
             self.update_ui()
             self.curr_face_id = None
         else:
@@ -166,10 +172,11 @@ class _MainUI():
             self.correct_f_num_ui()
             self.pick_face_by_num()    
 
-    def play_video( self ):
+    def refresh_frame( self ):
         if self.iru is None: return
         if self.pause: 
             self.update_ui()
+            self.pick_face_by_num()
             return
         
         self.vid_ret_frame  = self.iru.get_ret_frame()
@@ -186,11 +193,18 @@ class _MainUI():
             self.pick_f_mk_rect()
 
         self.update_vid_frame()
-
-        self.mainui.showframe.vid_frame_label.after( \
-            int(1000/self.iru.fps) , self.play_video )
+        self.root_after = self.mainui.root.after( \
+            int(1000/self.iru.fps) , self.refresh_frame )
     
     def update_vid_frame( self ):
+
+        if self.fxfy is None: 
+            if debug: print('self.fxfy is None'); 
+            return
+        if self.iru_frame is None: 
+            if debug: print('self.iru_frame is None'); 
+            return
+
         vid_img = cv2.resize( self.iru_frame, (0,0) , \
             fx = self.fxfy, fy = self.fxfy )
         vid_img = Image.fromarray( vid_img )
@@ -200,12 +214,17 @@ class _MainUI():
 
 
     def get_resize_fxfy( self ):
+        if self.iru.width == self.iru.height == 0: 
+            if debug: print('self.iru is None')
+            return
         w = self.screenwidth/2
         h = self.screenheight/2
         r = w/h 
         r0 = self.iru.width/self.iru.height
         r1= r0/r 
         self.fxfy = h/self.iru.height if r1<r else w/self.iru.width
+        if debug:
+            print('self.fxfy: ', self.fxfy)
     
 
     def get_f_loc_and_sum( self ):
@@ -263,8 +282,8 @@ class _MainUI():
     def correct_f_num_ui( self ):
 
         self.face_num = 0 if self.face_num < 0 else \
-            self.face_sum if self.face_num > self.face_sum \
-            else self.face_num
+             self.face_num if self.face_num < self.face_sum \
+            else self.face_sum-1
         self.mainui.entryframe.face_num_stringvar.set( \
             f'{self.face_num+1}/{self.face_sum}' )
         
@@ -534,19 +553,19 @@ class _MainUI():
 class IRU():
     def __init__(self, video_source = 0 ):
         self.video_source = video_source
-        self.vid = cv2.VideoCapture( self.video_source )
-
-        if not self.vid.isOpened():
-            messagebox.showerror( 
-                _('Unable to open video source'), self.video_source )
-            return
+        self.vid = cv2.VideoCapture( video_source )        
+        if not self.vid.isOpened(): self.show_vid_src_error(); return
         self.width = self.vid.get(cv2.CAP_PROP_FRAME_WIDTH)
         self.height = self.vid.get(cv2.CAP_PROP_FRAME_HEIGHT)
         self.fps = self.vid.get(cv2.CAP_PROP_FPS)
         # 0 got when I tested it on msys.
-        if debug and self.fps == 0 :
+        if self.fps == 0 : 
+            self.fps = 25
             print('self.pfs got 0, 25 insteaded')
-        # self.frame_count = self.vid.get(cv2.CAP_PROP_FRAME_COUNT)
+
+        if debug:
+            print( 'width: ', self.width, 'height: ', self.height, \
+                'fps: ', self.fps )
 
     def get_ret_frame( self ):
         if self.vid.isOpened():
@@ -559,6 +578,12 @@ class IRU():
                return (None, None ) 
         else:
             return (None, None)
+    
+    def show_vid_src_error( self ):
+        messagebox.showerror( 
+            _('Unable to open video source'), self.video_source )
         
-    def release( self ):
+    def vid_release( self ):
+        if self.vid is None: return
         self.vid.release()
+        cv2.destroyAllWindows()

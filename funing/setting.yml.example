@@ -2,4 +2,4 @@ comparison_tolerance: 0.6
 initialized: false
 lang_code: en-US
 prev_version: 0.2.13
-version: 0.2.15
+version: 0.2.17
