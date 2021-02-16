@@ -45,7 +45,8 @@ class _MainUI():
         self.resize_rate = 0.25;    self.lang_code = lang_code
         self.fxfy = None;           self.ins_vars = {}
 
-        self.known_encodings = pickle.load( open(face_encodings_path , 'rb') )
+        self.known_encodings = dict(\
+            pickle.load( open(face_encodings_path , 'rb') ))
         self.comparison_tolerance = comparison_tolerance
             
         try:self.screenwidth = self.mainui.root.winfo_screenwidth();\
@@ -75,7 +76,7 @@ class _MainUI():
     def destroy( self ):
         if self.iru is not None:
             self.iru.vid_release()
-        self.mainui.root.destroy()
+        exit()
 
 # SHOW_FRAME FUNCTIONS 
 ###############################################################################
@@ -427,11 +428,14 @@ class _MainUI():
                     label = label_value,    value = value_v
                 )
 
-        if len(self.known_encodings) > 0:
-            self.known_encodings[ p.id] = self.known_encodings[ p.id ] +\
-                [ self.curr_f_encoding ]
+        if len( self.known_encodings) < 1 \
+            or self.known_encodings.get(p.id) is None:
+                self.known_encodings.setdefault(p.id ,\
+                    [self.curr_f_encoding])
         else:
-            self.known_encodings[ p.id] = [ self.curr_f_encoding ]
+            self.known_encodings.setdefault( p.id ,\
+                [self.known_encodings.get(p.id)]+\
+                [self.curr_f_encoding])
 
         pickle.dump( self.known_encodings, open(face_encodings_path, 'wb'))
         
@@ -520,9 +524,6 @@ class _MainUI():
         if restartapp:
             setting_yml['lang_code'] = new_lang_code
             yaml.dump( setting_yml, open( setting_path, 'w') )
-
-            if self.iru is not None:
-                self.release()
 
             sys_executable = sys.executable
             os.execl(sys_executable, sys_executable, * sys.argv)
