@@ -11,14 +11,13 @@ from pony.orm.dbapiprovider import OperationalError
 
 db = Database()
 
-
-
 # https://docs.ponyorm.org/firststeps.html#database-binding
 db.bind(provider='sqlite', filename = data_file_path )
 
 class Person( db.Entity ):
     id = PrimaryKey( str )
     name = Optional( str )
+    gender = Optional( str )
     dob = Optional( str )
     address = Optional( str )
     note = Optional( str )

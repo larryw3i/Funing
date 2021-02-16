@@ -20,10 +20,10 @@ locale_path = os.path.join( project_path, 'flocale')
 
 setting_example_path = os.path.join( project_path , 'setting.yml.example') 
 
-setting_example_yaml = yaml.safe_load( open( setting_example_path, 'r' ))
+setting_exam_yml = yaml.safe_load( open( setting_example_path, 'r' ))
 
-prev_version = setting_example_yaml.get('prev_version','unknown')
-version =  setting_example_yaml.get('version','unknown')
+prev_version = setting_exam_yml.get('prev_version','unknown')
+version =  setting_exam_yml.get('version','unknown')
 if debug:
     print('prev_version: ', prev_version, 'version: ', version)
 
@@ -32,22 +32,22 @@ setting_path = os.path.join( base_dir , f'setting_{version}_.yml')
 
 if os.path.exists( setting_path ):
     setting_yml = yaml.safe_load( open( setting_path , 'r' ) )
+    
 elif os.path.exists( prev_setting_path ):
     setting_yml = yaml.safe_load( open( prev_setting_path , 'r' ) )
     if debug: print( 'setting_yml: ', setting_yml, \
-        'setting_example_yaml:', setting_example_yaml )
+        'setting_exam_yml:', setting_exam_yml )
+    setting_exam_yml.update( setting_yml )    
+    if debug: print('setting_yml.update( setting_exam_yml )', setting_yml)
+    setting_exam_yml['prev_version']= prev_version
+    setting_exam_yml['version'] = version
+    yaml.dump( setting_exam_yml , open( setting_path, 'w') )
+    os.remove( prev_setting_path )
 
-    setting_yml.update( setting_example_yaml )
-    
-    if debug:
-        print('setting_yml.update( setting_example_yaml )', setting_yml)
-
-    setting_yml['prev_version']= prev_version; setting_yml['version'] = version
-    yaml.dump( setting_yml, open( setting_path, 'w') )
 else:
     if not os.path.exists( base_dir): os.makedirs( base_dir, exist_ok = True )
     shutil.copyfile( setting_example_path, setting_path )
-    setting_yml = setting_example_yaml
+    setting_yml = setting_exam_yml
 
 
 data_dir = os.path.join( base_dir, 'data' )
@@ -63,3 +63,5 @@ comparison_tolerance = setting_yml.get('comparison_tolerance', 0.6)
 f_lang_codes =  [ d for d in os.listdir(locale_path) \
     if re.match('^\w+-\w+$', d) ]
 
+class MigrateDB():
+    pass

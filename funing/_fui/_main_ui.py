@@ -394,7 +394,8 @@ class _MainUI():
             p.note = self.mainui.entryframe.note_text.get(1.0, 'end')
 
         else:
-            print('New person')
+            if debug:
+                print('New person')
             p = Person( id = str(uuid.uuid4()),\
                 name = self.mainui.entryframe.name_entry.get() ,\
                 dob = self.mainui.entryframe.DOB_entry.get(), 
@@ -500,9 +501,7 @@ class _MainUI():
         for i in self.ins_vars.keys():
             self.mainui.addinfoframe.frame.nametowidget(i).pack_forget()
         self.ins_vars = {}
-        
-
-     
+             
 ###############################################################################
 # ADD_INFO_FRAME FUNCTIONS  END
 
@@ -524,10 +523,8 @@ class _MainUI():
         if restartapp:
             setting_yml['lang_code'] = new_lang_code
             yaml.dump( setting_yml, open( setting_path, 'w') )
-
             sys_executable = sys.executable
             os.execl(sys_executable, sys_executable, * sys.argv)
-
         pass
 
 ###############################################################################
@@ -549,7 +546,6 @@ class _MainUI():
         
 ###############################################################################
 # OTHER FUNCTIONS END
-
 
 class IRU():
     def __init__(self, video_source = 0 ):
