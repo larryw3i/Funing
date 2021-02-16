@@ -34,4 +34,6 @@ try:
     db.generate_mapping( create_tables = True )
 except OperationalError as e:
     print( e )
+    print('::::::::::::::::::::::::::::::::::::::::::::')
     print('\nAdd specific column to database (^_^)\n' )
+    print('::::::::::::::::::::::::::::::::::::::::::::')

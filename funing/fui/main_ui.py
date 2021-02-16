@@ -148,6 +148,9 @@ class EntryFrame():
 
         self.name_label = tk.Label( self.frame, text = _('Name') )
         self.name_entry = tk.Entry( self.frame )
+        
+        self.gender_label = tk.Label( self.frame, text = _('Gender') )
+        self.gender_entry = tk.Entry( self.frame )
 
         self.DOB_label = tk.Label( self.frame, text = _('DOB') )
         self.DOB_entry = tk.Entry( self.frame )
@@ -172,7 +175,6 @@ class EntryFrame():
         self.note_text.delete('1.0', END)
         
     def place( self ):
-
         # place frame
         self.face_label.grid( column = 0 , row = 0, columnspan = 2 )
         self.prev_f_button.grid( column = 0 , row = 1)
@@ -184,16 +186,19 @@ class EntryFrame():
         
         self.name_label.grid(column = 0, row = 3 )
         self.name_entry.grid(column = 1 ,row = 3)
+        
+        self.gender_label.grid(column = 0, row = 4 )
+        self.gender_entry.grid(column = 1 ,row = 4 )
+        
+        self.DOB_label.grid(column = 0, row = 5 )
+        self.DOB_entry.grid(column = 1 ,row = 5 )
 
-        self.DOB_label.grid(column = 0, row = 4 )
-        self.DOB_entry.grid(column = 1 ,row = 4 )
+        self.address_label.grid(column = 0, row = 6 )
+        self.address_entry.grid(column = 1 ,row = 6 )
 
-        self.address_label.grid(column = 0, row = 5 )
-        self.address_entry.grid(column = 1 ,row = 5 )
-
-        self.note_label.grid(column = 0, row = 6 )
-        self.note_text.grid(column = 1 ,row = 6 )
+        self.note_label.grid(column = 0, row = 7 )
+        self.note_text.grid(column = 1 ,row = 7 )
         # save_button
-        self.save_button.grid( column = 1, row= 7)
+        self.save_button.grid( column = 1, row= 8)
 
         self.frame.grid( column = 1, row = 0, sticky = N )

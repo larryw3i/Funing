@@ -312,6 +312,7 @@ class _MainUI():
             self.mainui.entryframe.uuid_entry.insert(0 , p.id)
             self.mainui.entryframe.uuid_entry['state'] = 'disabled'
             self.mainui.entryframe.name_entry.insert(0 , p.name)
+            self.mainui.entryframe.gender_entry.insert(0 , p.gender_entry)
             self.mainui.entryframe.DOB_entry.insert(0 , p.dob )
             self.mainui.entryframe.address_entry.insert(0 , p.address)
             self.mainui.entryframe.note_text.insert(END , p.note)
@@ -391,13 +392,15 @@ class _MainUI():
                 p.id == self.curr_face_id ).first()
             p.dob = self.mainui.entryframe.DOB_entry.get()
             p.name = self.mainui.entryframe.name_entry.get()
+            p.gender = self.mainui.entryframe.gender_entry.get()
             p.note = self.mainui.entryframe.note_text.get(1.0, 'end')
 
         else:
             if debug:
                 print('New person')
             p = Person( id = str(uuid.uuid4()),\
-                name = self.mainui.entryframe.name_entry.get() ,\
+                name = self.mainui.entryframe.name_entry.get() ,
+                gender = self.mainui.entryframe.gender_entry.get(),
                 dob = self.mainui.entryframe.DOB_entry.get(), 
                 address = self.mainui.entryframe.address_entry.get(),
                 note = self.mainui.entryframe.note_text.get(1.0, 'end') )
