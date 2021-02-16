@@ -15,7 +15,7 @@ def fp_r_i( notfound, url):
     
 def cv2_nf(self):
     fp_r_i('cv2',
-'https://docs.opencv.org/master/df/d65/tutorial_table_of_content_introduction.html'
+'https://docs.opencv.org/4.5.1/da/df6/tutorial_py_table_of_contents_setup.html'
     )
 
 def gettext_nf( ):
