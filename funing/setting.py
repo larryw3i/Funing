@@ -18,9 +18,9 @@ base_dir = os.path.join( usr_home , '.funing')
 
 locale_path = os.path.join( project_path, 'flocale') 
 
-setting_example_path = os.path.join( project_path , 'setting.yml.example') 
+setting_exam_path = os.path.join( project_path , 'setting.yml.example') 
 
-setting_exam_yml = yaml.safe_load( open( setting_example_path, 'r' ))
+setting_exam_yml = yaml.safe_load( open( setting_exam_path, 'r' ))
 
 prev_version = setting_exam_yml.get('prev_version','unknown')
 version =  setting_exam_yml.get('version','unknown')
@@ -30,38 +30,24 @@ if debug:
 prev_setting_path = os.path.join(base_dir, f'setting_{prev_version}_.yml') 
 setting_path = os.path.join( base_dir , f'setting_{version}_.yml') 
 
-if os.path.exists( setting_path ):
-    setting_yml = yaml.safe_load( open( setting_path , 'r' ) )
+setting_yml = yaml.safe_load( open( \
+    setting_path if os.path.exists( setting_path ) else \
+    setting_exam_path , 'r' ) )
     
-elif os.path.exists( prev_setting_path ):
-    setting_yml = yaml.safe_load( open( prev_setting_path , 'r' ) )
-    if debug: print( 'setting_yml: ', setting_yml, \
-        'setting_exam_yml:', setting_exam_yml )
-    setting_exam_yml.update( setting_yml )    
-    if debug: print('setting_yml.update( setting_exam_yml )', setting_yml)
-    setting_exam_yml['prev_version']= prev_version
-    setting_exam_yml['version'] = version
-    yaml.dump( setting_exam_yml , open( setting_path, 'w') )
-    os.remove( prev_setting_path )
-
-else:
-    if not os.path.exists( base_dir): os.makedirs( base_dir, exist_ok = True )
-    shutil.copyfile( setting_example_path, setting_path )
-    setting_yml = setting_exam_yml
-
-
 data_dir = os.path.join( base_dir, 'data' )
 face_encodings_path = os.path.join( data_dir, \
     f'face_encodings_{version}_.data' )
+
 data_file_path = os.path.join( data_dir, \
     f'funing_{version}_.sqlite')
+
+p_data_file_path = os.path.join( data_dir, \
+    f'funing_{prev_version}_.sqlite')
 
 lang_code = setting_yml.get('lang_code', 'en-US')
 initialized  = setting_yml.get('initialized', False)
 comparison_tolerance = setting_yml.get('comparison_tolerance', 0.6)
+bk_db_upd = setting_yml.get('bk_db_upd', True)
 
 f_lang_codes =  [ d for d in os.listdir(locale_path) \
     if re.match('^\w+-\w+$', d) ]
-
-class MigrateDB():
-    pass
