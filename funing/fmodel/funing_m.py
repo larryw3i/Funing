@@ -8,6 +8,7 @@ from datetime import date
 
 from setting import base_dir, data_file_path
 from pony.orm.dbapiprovider import OperationalError
+from _fui.error import db_no_col
 
 db = Database()
 
@@ -34,6 +35,4 @@ try:
     db.generate_mapping( create_tables = True )
 except OperationalError as e:
     print( e )
-    print('::::::::::::::::::::::::::::::::::::::::::::')
-    print('\nAdd specific column to database (^_^)\n' )
-    print('::::::::::::::::::::::::::::::::::::::::::::')
+    db_no_col( data_file_path )

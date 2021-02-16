@@ -1,6 +1,5 @@
 
 import os
-import gettext
 import sys
 from langcodes import Language
 import gettext

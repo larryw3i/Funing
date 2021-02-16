@@ -1,13 +1,6 @@
 
-try:
-    import cv2
-except Exception as e:
-    print(e)
-    print('::::::::::::::::::::::::::::::::::::::::::::')
-    print("cv2 can't be found, read "+\
-    "https://docs.opencv.org/master/d5/de5/tutorial_py_setup_in_windows.html "+\
-        'and install it. (^_^)')
-    print('::::::::::::::::::::::::::::::::::::::::::::')
+from .error import lib_check; lib_check()
+
 import os
 import sys
 import yaml
@@ -46,12 +39,7 @@ class _Fui():
         if not os.path.exists( first_mo_path ):
             try: self.msgfmt()
             except Exception as e:
-                print( e )
-                print('::::::::::::::::::::::::::::::::::::::::::::')
-                print( 'Make sure gettext is installed, '+\
-                    'read https://www.gnu.org/software/gettext/ '+\
-                    'and install it. (^_^)' )
-                print('::::::::::::::::::::::::::::::::::::::::::::')
+                print( e );     gettext_nf();   exit()
 
         if not os.path.exists( data_dir ): os.mkdir( data_dir )
         if not os.path.exists( face_encodings_path ):
