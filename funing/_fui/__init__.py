@@ -5,7 +5,7 @@ except Exception as e:
     print(e)
     print('::::::::::::::::::::::::::::::::::::::::::::')
     print("cv2 can't be found, read "+\
-        "https://github.com/larryw3i/Funing/blob/main/README.md "+\
+    "https://docs.opencv.org/master/d5/de5/tutorial_py_setup_in_windows.html "+\
         'and install it. (^_^)')
     print('::::::::::::::::::::::::::::::::::::::::::::')
 import os
