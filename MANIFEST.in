@@ -3,6 +3,7 @@ include LICENSE
 include README.md
 include setup.py
 include requirements.txt
+include setup.cfg
 
 recursive-include funing setting.yml.example
 recursive-include docs *.rst conf.py Makefile make.bat *.jpg *.png *.gif

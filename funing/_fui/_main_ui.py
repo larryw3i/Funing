@@ -522,7 +522,7 @@ class _MainUI():
             yaml.dump( setting_yml, open( setting_path, 'w') )
 
             if self.iru is not None:
-                self.iru.release()
+                self.release()
 
             sys_executable = sys.executable
             os.execl(sys_executable, sys_executable, * sys.argv)

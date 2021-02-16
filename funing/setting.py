@@ -24,6 +24,8 @@ setting_example_yaml = yaml.safe_load( open( setting_example_path, 'r' ))
 
 prev_version = setting_example_yaml.get('prev_version','unknown')
 version =  setting_example_yaml.get('version','unknown')
+if debug:
+    print('prev_version: ', prev_version, 'version: ', version)
 
 prev_setting_path = os.path.join(base_dir, f'setting_{prev_version}_.yml') 
 setting_path = os.path.join( base_dir , f'setting_{version}_.yml') 
@@ -32,7 +34,14 @@ if os.path.exists( setting_path ):
     setting_yml = yaml.safe_load( open( setting_path , 'r' ) )
 elif os.path.exists( prev_setting_path ):
     setting_yml = yaml.safe_load( open( prev_setting_path , 'r' ) )
-    setting_yml = setting_example_yaml.update( setting_yml )
+    if debug: print( 'setting_yml: ', setting_yml, \
+        'setting_example_yaml:', setting_example_yaml )
+
+    setting_yml.update( setting_example_yaml )
+    
+    if debug:
+        print('setting_yml.update( setting_example_yaml )', setting_yml)
+
     setting_yml['prev_version']= prev_version; setting_yml['version'] = version
     yaml.dump( setting_yml, open( setting_path, 'w') )
 else:
