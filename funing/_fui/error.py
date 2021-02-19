@@ -1,19 +1,24 @@
 import platform
-
 system = platform.system()
 
-def read_install( notfound, url ):
-    return f"{notfound} can't be found, read {url} and install it. (^_^)"
+import webbrowser
 
 def fp( content ):
     print('::::::::::::::::::::::::::::::::::::::::::::')
     print( content )
     print('::::::::::::::::::::::::::::::::::::::::::::')
 
+def read_install( notfound, url ):
+    try: webbrowser.open( url )
+    except Exception as e: print( e ); fp('The browser could not be started')
+
+    return f"{notfound} can't be found, read {url} and install it. (^_^)"
+
+
 def fp_r_i( notfound, url): 
-    fp(self.read_install( notfound, url ))
+    fp(read_install( notfound, url ))
     
-def cv2_nf(self):
+def cv2_nf():
     fp_r_i('cv2',
 'https://docs.opencv.org/4.5.1/da/df6/tutorial_py_table_of_contents_setup.html'
     )
