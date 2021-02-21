@@ -22,8 +22,8 @@ setting_exam_path = os.path.join( project_path , 'setting.yml.example')
 
 setting_exam_yml = yaml.safe_load( open( setting_exam_path, 'r' ))
 
-prev_version = setting_exam_yml.get('prev_version','unknown')
 version =  setting_exam_yml.get('version','unknown')
+prev_version = setting_exam_yml.get('prev_version','unknown')
 if debug:
     print('prev_version: ', prev_version, 'version: ', version)
 
