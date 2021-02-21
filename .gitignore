@@ -144,3 +144,4 @@ data/face_encodings.data
 funing/venv/
 funing/_home/*
 *.data
+.idea/

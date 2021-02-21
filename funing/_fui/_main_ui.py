@@ -2,15 +2,14 @@
 from pony.orm import *
 from tkinter import messagebox
 import tkinter as tk
-from tkinter import ttk
 from tkinter import *
 from fui.main_ui import MainUI
 from langcodes import Language
 import gettext
-import sys,os
-from fmodel import funing_m as fm
+import sys
+import os
 from fmodel.funing_m import Person, PersonInfo
-import  tkinter.filedialog as tkf
+import tkinter.filedialog as tkf
 import cv2
 from PIL import Image , ImageTk
 import dlib
@@ -302,7 +301,7 @@ class _MainUI():
         if self.pause:
             if self.curr_face_id is None: return
 
-            p = select(p for p in fm.Person \
+            p = select(p for p in Person \
                 if p.id == self.curr_face_id ).first()
             if p is None: return
 
@@ -388,7 +387,7 @@ class _MainUI():
         if person_exists:
             if debug:
                 print( 'Person exists')
-            p = select(p for p in fm.Person if \
+            p = select(p for p in Person if \
                 p.id == self.curr_face_id ).first()
             p.dob = self.mainui.entryframe.DOB_entry.get()
             p.name = self.mainui.entryframe.name_entry.get()

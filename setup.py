@@ -28,9 +28,9 @@ setuptools.setup(
     },
     python_requires='>=3.6',
     install_requires=[
-#        'dlib',
-#        'face-recognition',
-#        'opencv-python',
+        # 'dlib',
+        # 'face-recognition',
+        # 'opencv-python',
         'language_data',
         'langcodes',
         'pony',
