@@ -44,7 +44,7 @@ class _MainUI():
         # face num for face_label
         self.face_sum = 0;          self.face_num = -1
         self.resize_rate = 0.25;    self.lang_code = lang_code
-        self.fxfy = None;           self.ins_f_names = []
+        self.fxfy = None;           self.ins_vars = {}
 
         self.known_encodings = dict(\
             pickle.load( open(face_encodings_path , 'rb') ))
@@ -52,10 +52,9 @@ class _MainUI():
         self.image_exts = ['jpg','png']
         self.video_exts = ['mp4','avi','3gp','webm','mkv']
         self.showf_sv = None;       self.rec_img = False
-        self.showframe = self.mainui.showframe
-        self.entryframe = self.mainui.entryframe
-        self.addinfoframe = self.mainui.addinfoframe
-        self.ins_vars_prefixs = ['il_entry_svar_','value_sv_', 'cmt_sv_']
+        self.showfm = self.mainui.showframe
+        self.entryfm = self.mainui.entryframe
+        self.addinfofm = self.mainui.addinfoframe
             
         try:self.screenwidth = self.mainui.root.winfo_screenwidth();\
             self.screenheight = self.mainui.root.winfo_screenheight()
@@ -69,17 +68,17 @@ class _MainUI():
     def set_ui_events( self ):
         self.mainui.langcombobox.lang_combobox.bind('<<ComboboxSelected>>',
             self.change_language )
-        self.showframe.ct_entry.bind('<FocusOut>', self.save_ct )
-        self.showframe.rec_button['command'] = self.rec_now
-        self.showframe.showf_go_btn['command'] = self.showf_go
-        self.showframe.showf_optionmenu_sv.trace('w', self.show_from )
-        self.entryframe.prev_f_button['command'] = \
+        self.showfm.ct_entry.bind('<FocusOut>', self.save_ct )
+        self.showfm.rec_button['command'] = self.rec_now
+        self.showfm.showf_go_btn['command'] = self.showf_go
+        self.showfm.showf_optionmenu_sv.trace('w', self.show_from )
+        self.entryfm.prev_f_button['command'] = \
             lambda: self.pick_face_by_num(-1)
-        self.entryframe.next_f_button['command'] = \
+        self.entryfm.next_f_button['command'] = \
             lambda: self.pick_face_by_num(1)
-        self.entryframe.save_button['command'] = self.save_db_encoding
+        self.entryfm.save_button['command'] = self.save_db_encoding
         self.mainui.root.protocol("WM_DELETE_WINDOW", self.destroy )
-        self.addinfoframe.add_rf_button['command'] = self.ins_rf 
+        self.addinfofm.add_rf_button['command'] = self.ins_rf 
          
     def destroy( self ):
         if self.iru is not None: self.iru.vid_release()
@@ -89,13 +88,13 @@ class _MainUI():
 ###############################################################################
 
     def save_ct( self , event):
-        ct_stringvar_get = float(self.showframe.ct_stringvar.get())
+        ct_stringvar_get = float(self.showfm.ct_stringvar.get())
         self.comparison_tolerance = comparison_tolerance = ct_stringvar_get
         setting_yml['comparison_tolerance'] = ct_stringvar_get
         yaml.dump( setting_yml, open( setting_path, 'w') )
     
     def showf_go( self):
-        self.showf_sv = self.showframe.showf_sv.get()
+        self.showf_sv = self.showfm.showf_sv.get()
         self.rec_img = False
         self.after_cancel()
 
@@ -110,13 +109,13 @@ class _MainUI():
         if showf_ext in self.image_exts:
             self.pause = True;  self.rec_img = True;    self.view_image()
             return 
-        self.showframe.showf_sv.set('')
+        self.showfm.showf_sv.set('')
         self.show_nsrc_error()
             
     def show_from( self, *args  ):
-        keys =  self.showframe.showf_t_dict.keys()
-        values = self.showframe.showf_t_dict.values()
-        value = self.showframe.showf_optionmenu_sv.get()
+        keys =  self.showfm.showf_t_dict.keys()
+        values = self.showfm.showf_t_dict.values()
+        value = self.showfm.showf_optionmenu_sv.get()
         show_f = list(keys)[ list( values ).index( value )]
         
         self.after_cancel()
@@ -137,7 +136,7 @@ class _MainUI():
             if len( self.face_src_path ) > 0:
                 ext = os.path.splitext( self.face_src_path )[1][1:]
 
-                self.showframe.showf_sv.set( self.face_src_path )
+                self.showfm.showf_sv.set( self.face_src_path )
 
                 if ext in self.image_exts:
                     # Pause
@@ -150,7 +149,7 @@ class _MainUI():
 
         elif show_f == 'camera':
             self.video_source = 0
-            self.showframe.showf_sv.set( self.video_source )
+            self.showfm.showf_sv.set( self.video_source )
             self.play_video()
     
     def after_cancel( self ):
@@ -179,14 +178,14 @@ class _MainUI():
         if self.pause:
             # Play
             self.pause = False
-            self.showframe.rec_stringvar.set(_('Recognize'))
+            self.showfm.rec_stringvar.set(_('Recognize'))
             self.refresh_frame()
             self.update_ui()
             self.curr_face_id = None
         else:
             # Pause
             self.pause = True
-            self.showframe.rec_stringvar.set( _('Play') )
+            self.showfm.rec_stringvar.set( _('Play') )
 
 
     def view_image( self ):
@@ -195,8 +194,8 @@ class _MainUI():
 
         img = Image.fromarray( self.iru_frame )
         imgtk = ImageTk.PhotoImage( image= img )
-        self.showframe.vid_frame_label.imgtk = imgtk
-        self.showframe.vid_frame_label.configure(image=imgtk)
+        self.showfm.vid_frame_label.imgtk = imgtk
+        self.showfm.vid_frame_label.configure(image=imgtk)
 
         self.get_f_loc_and_sum()
         
@@ -240,8 +239,8 @@ class _MainUI():
             fx = self.fxfy, fy = self.fxfy )
         vid_img = Image.fromarray( vid_img )
         imgtk = ImageTk.PhotoImage( image=vid_img )
-        self.showframe.vid_frame_label.imgtk = imgtk
-        self.showframe.vid_frame_label.configure(image=imgtk)
+        self.showfm.vid_frame_label.imgtk = imgtk
+        self.showfm.vid_frame_label.configure(image=imgtk)
 
     def get_resize_fxfy( self ):
         if self.iru.width == self.iru.height == 0: 
@@ -316,13 +315,13 @@ class _MainUI():
         self.face_num = 0 if self.face_num < 0 else \
              self.face_num if self.face_num < self.face_sum \
             else self.face_sum-1
-        self.entryframe.face_num_stringvar.set( \
+        self.entryfm.face_num_stringvar.set( \
             f'{self.face_num+1}/{self.face_sum}' )
         
     @db_session
     def update_ui(self):
         '''
-        Update self.entryframe and self.addinfoframe
+        Update self.entryfm and self.addinfofm
         '''
 
         if self.iru_frame is None: self.show_nfd_info() ; return
@@ -336,15 +335,15 @@ class _MainUI():
             p = Person.get(id = self.curr_face_id)
 
             if p is None: return
-            self.entryframe.clear_content()            
-            self.entryframe.uuid_entry['state'] = 'normal'
-            self.entryframe.uuid_entry.insert(0 , p.id)
-            self.entryframe.uuid_entry['state'] = 'disabled'
-            self.entryframe.name_entry.insert(0 , p.name)
-            self.entryframe.gender_entry.insert(0 , p.gender)
-            self.entryframe.DOB_entry.insert(0 , p.dob )
-            self.entryframe.address_entry.insert(0 , p.address)
-            self.entryframe.cmt_text.insert(END , p.comment)
+            self.entryfm.clear_content()            
+            self.entryfm.uuid_entry['state'] = 'normal'
+            self.entryfm.uuid_entry.insert(0 , p.id)
+            self.entryfm.uuid_entry['state'] = 'disabled'
+            self.entryfm.name_entry.insert(0 , p.name)
+            self.entryfm.gender_entry.insert(0 , p.gender)
+            self.entryfm.DOB_entry.insert(0 , p.dob )
+            self.entryfm.address_entry.insert(0 , p.address)
+            self.entryfm.cmt_text.insert(END , p.comment)
     
             # update addinfoframe
             i_s = select( i for i in PersonInfo \
@@ -355,28 +354,28 @@ class _MainUI():
                     cmt_value = i.comment, frame_name  = i.id )
 
         else:
-            self.entryframe.uuid_entry['state'] = 'normal'
-            self.entryframe.uuid_entry.delete(0, END)
-            self.entryframe.uuid_entry['state'] = 'disabled'
-            self.entryframe.name_entry.delete(0, END)
-            self.entryframe.gender_entry.delete(0 , END)
-            self.entryframe.DOB_entry.delete(0, END)
-            self.entryframe.address_entry.delete(0, END)
-            self.entryframe.cmt_text.delete('1.0', END)
+            self.entryfm.uuid_entry['state'] = 'normal'
+            self.entryfm.uuid_entry.delete(0, END)
+            self.entryfm.uuid_entry['state'] = 'disabled'
+            self.entryfm.name_entry.delete(0, END)
+            self.entryfm.gender_entry.delete(0 , END)
+            self.entryfm.DOB_entry.delete(0, END)
+            self.entryfm.address_entry.delete(0, END)
+            self.entryfm.cmt_text.delete('1.0', END)
 
             self.rm_all_ins_rfs()
     
     def pick_f_mk_rect( self ):
         '''
-        Pick face image to self.entryframe.face_label and make rectangles for 
-        self.showframe.vid_frame_label.
+        Pick face image to self.entryfm.face_label and make rectangles for 
+        self.showfm.vid_frame_label.
         '''
         self.pick_face_by_num()
         self.mk_frame_rect()
     
     def pick_face_by_num( self, p_n = 0 ):
         '''
-        Pick face image to self.entryframe.face_label
+        Pick face image to self.entryfm.face_label
         '''
 
         if not self.pause: return
@@ -401,11 +400,8 @@ class _MainUI():
         frame = cv2.resize( frame, (200, 200) )
         face_img = Image.fromarray( frame )
         faceimgtk = ImageTk.PhotoImage( image=face_img )
-        self.entryframe.face_label.imgtk = faceimgtk
-        self.entryframe.face_label.configure(image=faceimgtk)
-
-    def nametowidget(self, name):
-        return self.addinfoframe.frame.nametowidget( name )
+        self.entryfm.face_label.imgtk = faceimgtk
+        self.entryfm.face_label.configure(image=faceimgtk)
 
     @db_session
     def save_db_encoding( self ):
@@ -422,31 +418,28 @@ class _MainUI():
                 print( 'Person exists')
             p = select(p for p in Person if \
                 p.id == self.curr_face_id ).first()
-            p.dob = self.entryframe.DOB_entry.get()
-            p.name = self.entryframe.name_entry.get()
-            p.gender = self.entryframe.gender_entry.get()
-            p.comment = self.entryframe.cmt_text.get(1.0, 'end')
+            p.dob = self.entryfm.DOB_entry.get()
+            p.name = self.entryfm.name_entry.get()
+            p.gender = self.entryfm.gender_entry.get()
+            p.comment = self.entryfm.cmt_text.get(1.0, 'end')
 
         else:
             if debug:
                 print('New person')
             p = Person( id = str(uuid.uuid4()),\
-                name = self.entryframe.name_entry.get() ,
-                gender = self.entryframe.gender_entry.get(),
-                dob = self.entryframe.DOB_entry.get(), 
-                address = self.entryframe.address_entry.get(),
-                comment = self.entryframe.cmt_text.get(1.0, 'end') )
+                name = self.entryfm.name_entry.get() ,
+                gender = self.entryfm.gender_entry.get(),
+                dob = self.entryfm.DOB_entry.get(), 
+                address = self.entryfm.address_entry.get(),
+                comment = self.entryfm.cmt_text.get(1.0, 'end') )
         
         if debug:
-            print( self.addinfoframe.ins_vars )
+            print( self.addinfofm.ins_vars )
 
-        for frame_name in self.ins_f_names:
-            label_value= self.nametowidget(self.ins_vars_prefixs[0]+frame_name)\
-                .get()
-            value_v = self.nametowidget(self.ins_vars_prefixs[1]+frame_name)\
-                .get()
-            cmt_value = self.nametowidget(self.ins_vars_prefixs[2]+frame_name)\
-                .get()
+        for frame_name, sv in self.ins_vars.items():
+            label_value= sv[0].get()
+            value_v = sv[1].get()
+            cmt_value = sv[2].get()
 
             if debug:
                 print( label_value,  value_v, cmt_value)
@@ -487,28 +480,25 @@ class _MainUI():
         cmt_value = ''  ):
 
         frame_name = str( uuid.uuid4() ) if len( frame_name )<1 else frame_name
-        row_frame = tk.Frame(self.addinfoframe.frame, name = frame_name )
+        row_frame = tk.Frame(self.addinfofm.frame, name = frame_name )
 
         info_frame = tk.Frame( row_frame )
         del_button = tk.Button( row_frame , text = _('Delete'), \
             command =lambda: self.rm_ins_rf(frame_name) )
         
-        il_entry_svar = StringVar( info_frame , value = il_entry_value, \
-            name = self.ins_vars_prefixs[0]+frame_name)
-        tk.Entry(info_frame, textvariable= il_entry_svar, justify = RIGHT)\
+        il_entry_sv = StringVar( info_frame , value = il_entry_value )
+        tk.Entry(info_frame, textvariable= il_entry_sv, justify = RIGHT)\
             .grid( column=1, row= 0)
 
         tk.Label(info_frame, text = ':').grid(column = 2, row = 0)
 
-        value_sv = StringVar( info_frame, value = v_value, \
-            name = self.ins_vars_prefixs[1]+frame_name)
+        value_sv = StringVar( info_frame, value = v_value)
         tk.Entry( info_frame, textvariable = value_sv).grid(\
             column = 3,row= 0)
 
         tk.Label(info_frame, text = f"{_('Comment')}:")\
             .grid(column = 4, row = 0)
-        cmt_sv = StringVar( info_frame, cmt_value, \
-            name = self.ins_vars_prefixs[2]+frame_name)
+        cmt_sv = StringVar( info_frame, cmt_value)
         tk.Entry( info_frame, textvariable = cmt_sv ).grid(column = 5 ,row= 0 )
         
         info_frame.grid(column = 0, row = 0)
@@ -519,18 +509,18 @@ class _MainUI():
         ttk.Separator(info_frame, orient='horizontal')\
             .place(relx=0, rely=0, relwidth=1, relheight=0.01)
         
-        self.ins_f_names.append( frame_name )
+        self.ins_vars[frame_name] = [il_entry_sv , value_sv, cmt_sv ]
         
         if debug:
-            print( self.ins_f_names )
+            print( self.ins_vars )
             
     @db_session
     def rm_ins_rf( self , frame_name):
         # update UI
-        self.nametowidget(frame_name).pack_forget()
-        self.ins_f_names.remove(frame_name)
+        self.addinfofm.frame.nametowidget(frame_name).pack_forget()
+        self.ins_vars.pop(frame_name)
         if debug:
-            print( frame_name, self.ins_f_names )
+            print( frame_name, self.ins_vars )
         
         # update database
         if self.curr_face_id is not None:
@@ -540,9 +530,9 @@ class _MainUI():
                 commit()
     
     def rm_all_ins_rfs(self):
-        for i in self.ins_f_names:
-            self.nametowidget(i).pack_forget()
-        self.ins_f_names = []
+        for i in self.ins_vars.keys():
+            self.addinfofm.frame.nametowidget(i).pack_forget()
+        self.ins_vars = {}
              
 ###############################################################################
 # ADD_INFO_FRAME FUNCTIONS  END
