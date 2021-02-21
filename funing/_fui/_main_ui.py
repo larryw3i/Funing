@@ -140,10 +140,8 @@ class _MainUI():
             print('fps: ', self.iru.fps)
            
 
-    def rec_now( self ):
-        
+    def rec_now( self ):        
         if self.iru is None: self.show_nfd_info() ; return
-
         if self.pause:
             # Play
             self.pause = False
@@ -158,7 +156,6 @@ class _MainUI():
 
 
     def view_image( self ):
-
         face_image  = cv2.imread( self.face_src_path )
         self.iru_frame = cv2.cvtColor( face_image, cv2.COLOR_BGR2RGB)
 
@@ -198,7 +195,6 @@ class _MainUI():
             int(1000/self.iru.fps) , self.refresh_frame )
     
     def update_vid_frame( self ):
-
         if self.fxfy is None: 
             if debug: print('self.fxfy is None'); 
             return
@@ -213,7 +209,6 @@ class _MainUI():
         self.mainui.showframe.vid_frame_label.imgtk = imgtk
         self.mainui.showframe.vid_frame_label.configure(image=imgtk)
 
-
     def get_resize_fxfy( self ):
         if self.iru.width == self.iru.height == 0: 
             if debug: print('self.iru is None')
@@ -227,7 +222,6 @@ class _MainUI():
         if debug:
             print('self.fxfy: ', self.fxfy)
     
-
     def get_f_loc_and_sum( self ):
         self.get_f_loc()
         self.get_f_sum()
@@ -253,14 +247,12 @@ class _MainUI():
         if self.face_sum > 0 :
             self.curr_f_encoding = face_recognition.face_encodings( \
                 self.iru_frame, [self.face_locations[ self.face_num ]] )[0]
-
      
     def get_curr_f_encoding_and_id( self ):
         self.get_curr_f_encoding()
         self.get_curr_f_id()
                 
     def mk_frame_rect( self ):
-
         for top, right, bottom, left in self.face_locations:
             cv2.rectangle( self.iru_frame, (left, top), \
             (right, bottom), (0, 0, 255), 2)
@@ -302,12 +294,10 @@ class _MainUI():
         if self.pause:
             if self.curr_face_id is None: return
 
-            p = select(p for p in Person \
-                if p.id == self.curr_face_id ).first()
-            if p is None: return
+            p = Person.get(id = self.curr_face_id)
 
-            self.mainui.entryframe.clear_content()
-            
+            if p is None: return
+            self.mainui.entryframe.clear_content()            
             self.mainui.entryframe.uuid_entry['state'] = 'normal'
             self.mainui.entryframe.uuid_entry.insert(0 , p.id)
             self.mainui.entryframe.uuid_entry['state'] = 'disabled'
@@ -315,7 +305,7 @@ class _MainUI():
             self.mainui.entryframe.gender_entry.insert(0 , p.gender)
             self.mainui.entryframe.DOB_entry.insert(0 , p.dob )
             self.mainui.entryframe.address_entry.insert(0 , p.address)
-            self.mainui.entryframe.note_text.insert(END , p.note)
+            self.mainui.entryframe.cmt_text.insert(END , p.comment)
     
             # update addinfoframe
             i_s = select( i for i in PersonInfo \
@@ -323,18 +313,19 @@ class _MainUI():
                 
             for i in i_s:
                 self.ins_rf( il_entry_value=i.label, v_value = i.value,\
-                    note_value = i.note,    frame_name  = i.id )
+                    cmt_value = i.comment, frame_name  = i.id )
 
         else:
-                self.mainui.entryframe.uuid_entry['state'] = 'normal'
-                self.mainui.entryframe.uuid_entry.delete(0, END)
-                self.mainui.entryframe.uuid_entry['state'] = 'disabled'
-                self.mainui.entryframe.name_entry.delete(0, END)
-                self.mainui.entryframe.DOB_entry.delete(0, END)
-                self.mainui.entryframe.address_entry.delete(0, END)
-                self.mainui.entryframe.note_text.delete('1.0', END)
+            self.mainui.entryframe.uuid_entry['state'] = 'normal'
+            self.mainui.entryframe.uuid_entry.delete(0, END)
+            self.mainui.entryframe.uuid_entry['state'] = 'disabled'
+            self.mainui.entryframe.name_entry.delete(0, END)
+            self.mainui.entryframe.gender_entry.delete(0 , END)
+            self.mainui.entryframe.DOB_entry.delete(0, END)
+            self.mainui.entryframe.address_entry.delete(0, END)
+            self.mainui.entryframe.cmt_text.delete('1.0', END)
 
-                self.rm_all_ins_rfs()
+            self.rm_all_ins_rfs()
     
     def pick_f_mk_rect( self ):
         '''
@@ -393,7 +384,7 @@ class _MainUI():
             p.dob = self.mainui.entryframe.DOB_entry.get()
             p.name = self.mainui.entryframe.name_entry.get()
             p.gender = self.mainui.entryframe.gender_entry.get()
-            p.note = self.mainui.entryframe.note_text.get(1.0, 'end')
+            p.comment = self.mainui.entryframe.cmt_text.get(1.0, 'end')
 
         else:
             if debug:
@@ -403,7 +394,7 @@ class _MainUI():
                 gender = self.mainui.entryframe.gender_entry.get(),
                 dob = self.mainui.entryframe.DOB_entry.get(), 
                 address = self.mainui.entryframe.address_entry.get(),
-                note = self.mainui.entryframe.note_text.get(1.0, 'end') )
+                comment = self.mainui.entryframe.cmt_text.get(1.0, 'end') )
         
         if debug:
             print( self.mainui.addinfoframe.ins_vars )
@@ -411,24 +402,21 @@ class _MainUI():
         for frame_name, info_widgets in self.ins_vars.items():
             label_value = info_widgets[0].get()
             value_v = info_widgets[1].get()
-            note_value = info_widgets[2].get()
+            cmt_value = info_widgets[2].get()
 
             if debug:
-                print( label_value,  value_v, note_value)
+                print( label_value,  value_v, cmt_value)
 
-            if len(label_value+  value_v+ note_value )< 1: continue
+            if len(label_value+  value_v+ cmt_value )< 1: continue
             
-            if PersonInfo.exists(person_id =p.id, label =label_value):
-                p_i = select( _p_i for _p_i in PersonInfo \
-                    if _p_i.person_id == p.id and _p_i.label == label_value)\
-                    .first()
-
+            p_i = PersonInfo.get(person_id =p.id, label =label_value)
+            if p_i:
                 if debug: print( 'PersonInfo exists' )
-                p_i.value = value_v;    p_i.note = note_value
+                p_i.value = value_v;    p_i.comment = cmt_value
             else:
                 if debug: print( 'New PersonInfo' )
-                PersonInfo( id = frame_name,
-                    note = note_value,      person_id = p.id,      
+                p_i = PersonInfo( id = frame_name,
+                    comment = cmt_value,      person_id = p.id,      
                     label = label_value,    value = value_v
                 )
 
@@ -452,7 +440,7 @@ class _MainUI():
 ###############################################################################
 
     def ins_rf( self, frame_name = '', il_entry_value='',  v_value = '', \
-        note_value = ''  ):
+        cmt_value = ''  ):
 
         frame_name = str( uuid.uuid4() ) if len( frame_name )<1 else frame_name
         row_frame = tk.Frame(self.mainui.addinfoframe.frame, name =frame_name )
@@ -461,17 +449,20 @@ class _MainUI():
         del_button = tk.Button( row_frame , text = _('Delete'), \
             command =lambda: self.rm_ins_rf(frame_name) )
         
-        tk.Label( info_frame, text = _('Label') ).grid( column =  0, row =  0 )
         il_entry_svar = StringVar( info_frame , value = il_entry_value)
-        tk.Entry(info_frame, textvariable= il_entry_svar).grid(column=1, row= 0)
+        tk.Entry(info_frame, textvariable= il_entry_svar, justify = RIGHT)\
+            .grid( column=1, row= 0)
 
-        tk.Label( info_frame, text=_('Value')).grid( column = 0, row = 2)
+        tk.Label(info_frame, text = ':').grid(column = 2, row = 0)
+
         value_sv = StringVar( info_frame, value = v_value )
-        tk.Entry( info_frame, textvariable = value_sv).grid(column = 1,row= 2 )
+        tk.Entry( info_frame, textvariable = value_sv).grid(\
+            column = 3,row= 0)
 
-        tk.Label( info_frame, text=_('Note')).grid( column = 0, row = 3)
-        note_sv = StringVar( info_frame, note_value )
-        tk.Entry( info_frame, textvariable = note_sv ).grid(column =1 ,row= 3 )
+        tk.Label(info_frame, text = f"{_('Comment')}:")\
+            .grid(column = 4, row = 0)
+        cmt_sv = StringVar( info_frame, cmt_value )
+        tk.Entry( info_frame, textvariable = cmt_sv ).grid(column = 5 ,row= 0 )
         
         info_frame.grid(column = 0, row = 0)
         del_button.grid(column = 1, row = 0)
@@ -480,7 +471,7 @@ class _MainUI():
         ttk.Separator(info_frame, orient='horizontal')\
             .place(relx=0, rely=0, relwidth=1, relheight=0.01)
         
-        self.ins_vars[frame_name] = [il_entry_svar, value_sv, note_sv]
+        self.ins_vars[frame_name] = [il_entry_svar, value_sv, cmt_sv]
         
         if debug:
             print( self.ins_vars )

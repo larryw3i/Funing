@@ -54,7 +54,7 @@ msgid "Address"
 msgstr "地址"
 
 #: ../../../ui/main_ui.py:38
-msgid "Note"
+msgid "Comment"
 msgstr "备注"
 
 #: ../../../_ui/_main_ui.py:119

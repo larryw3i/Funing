@@ -158,8 +158,8 @@ class EntryFrame():
         self.address_label = tk.Label( self.frame, text = _('Address') )
         self.address_entry = tk.Entry( self.frame )
 
-        self.note_label = tk.Label( self.frame, text = _('Note') )
-        self.note_text = tk.Text( self.frame, height = 6, width = 20 )
+        self.cmt_label = tk.Label( self.frame, text = _('Comment') )
+        self.cmt_text = tk.Text( self.frame, height = 6, width = 20 )
 
         # save_button
         self.save_button = tk.Button( self.frame, text = _('Save') )
@@ -172,7 +172,7 @@ class EntryFrame():
         self.name_entry.delete(0, END)
         self.DOB_entry.delete(0, END)
         self.address_entry.delete(0, END)
-        self.note_text.delete('1.0', END)
+        self.cmt_text.delete('1.0', END)
         
     def place( self ):
         # place frame
@@ -196,8 +196,8 @@ class EntryFrame():
         self.address_label.grid(column = 0, row = 6 )
         self.address_entry.grid(column = 1 ,row = 6 )
 
-        self.note_label.grid(column = 0, row = 7 )
-        self.note_text.grid(column = 1 ,row = 7 )
+        self.cmt_label.grid(column = 0, row = 7 )
+        self.cmt_text.grid(column = 1 ,row = 7 )
         # save_button
         self.save_button.grid( column = 1, row= 8)
 

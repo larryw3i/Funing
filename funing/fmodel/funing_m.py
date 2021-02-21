@@ -21,7 +21,7 @@ class Person( db.Entity ):
     gender = Optional( str )
     dob = Optional( str )
     address = Optional( str )
-    note = Optional( str )
+    comment = Optional( str )
 
 # additional informations
 class PersonInfo( db.Entity ):
@@ -29,7 +29,7 @@ class PersonInfo( db.Entity ):
     person_id = Required( str )
     label = Required( str )
     value = Required( str )
-    note = Optional( str )
+    comment = Optional( str )
     
 try:
     db.generate_mapping( create_tables = True )

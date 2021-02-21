@@ -10,7 +10,8 @@ import shutil
 
 from setting import base_dir, initialized, data_dir, setting_path, \
     setting_yml, face_encodings_path, locale_path, f_lang_codes, debug,\
-    data_file_path, prev_setting_path, bk_db_upd, p_data_file_path
+    data_file_path, prev_setting_path, bk_db_upd, p_data_file_path, \
+    prev_version, version
 
 from fmodel import migrate_db
 
