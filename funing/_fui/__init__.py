@@ -41,7 +41,7 @@ class _Fui():
             except Exception as e:
                 print( e );     gettext_nf();   exit()
 
-        if not os.path.exists( data_dir ): os.mkdir( data_dir )
+        if not os.path.exists( data_dir ): os.makedirs(data_dir, exist_ok=True )
         if not os.path.exists( face_encodings_path ):
             pickle.dump({}, open(face_encodings_path, 'wb'))
         

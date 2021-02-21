@@ -419,8 +419,8 @@ class _MainUI():
             if len(label_value+  value_v+ note_value )< 1: continue
             
             if PersonInfo.exists(person_id =p.id, label =label_value):
-                p_i = select( p for p in PersonInfo \
-                    if p.person_id == p.id and p.label == label_value)\
+                p_i = select( _p_i for _p_i in PersonInfo \
+                    if _p_i.person_id == p.id and _p_i.label == label_value)\
                     .first()
 
                 if debug: print( 'PersonInfo exists' )
