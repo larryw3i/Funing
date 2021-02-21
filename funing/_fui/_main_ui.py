@@ -3,6 +3,7 @@ from pony.orm import *
 from tkinter import messagebox
 import tkinter as tk
 from tkinter import *
+from tkinter import ttk
 from fui.main_ui import MainUI
 from langcodes import Language
 import gettext
@@ -311,7 +312,7 @@ class _MainUI():
             self.mainui.entryframe.uuid_entry.insert(0 , p.id)
             self.mainui.entryframe.uuid_entry['state'] = 'disabled'
             self.mainui.entryframe.name_entry.insert(0 , p.name)
-            self.mainui.entryframe.gender_entry.insert(0 , p.gender_entry)
+            self.mainui.entryframe.gender_entry.insert(0 , p.gender)
             self.mainui.entryframe.DOB_entry.insert(0 , p.dob )
             self.mainui.entryframe.address_entry.insert(0 , p.address)
             self.mainui.entryframe.note_text.insert(END , p.note)
