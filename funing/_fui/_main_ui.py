@@ -24,6 +24,7 @@ import pickle
 import yaml
 import uuid
 import time
+import re
 
 
 class _MainUI():
@@ -48,6 +49,10 @@ class _MainUI():
         self.known_encodings = dict(\
             pickle.load( open(face_encodings_path , 'rb') ))
         self.comparison_tolerance = comparison_tolerance
+        self.image_exts = ['jpg','png']
+        self.video_exts = ['mp4','avi','3gp','webm','mkv']
+        self.showf_sv = None;       self.rec_img = False
+
             
         try:self.screenwidth = self.mainui.root.winfo_screenwidth();\
             self.screenheight = self.mainui.root.winfo_screenheight()
@@ -64,12 +69,13 @@ class _MainUI():
             self.change_language )
         self.mainui.showframe.ct_entry.bind('<FocusOut>', self.save_ct )
         self.mainui.showframe.rec_button['command'] = self.rec_now
+        self.mainui.showframe.showf_go_btn['command'] = self.showf_go
+        self.mainui.showframe.showf_optionmenu_sv.trace('w', self.show_from )
         self.mainui.entryframe.prev_f_button['command'] = \
             lambda: self.pick_face_by_num(-1)
         self.mainui.entryframe.next_f_button['command'] = \
             lambda: self.pick_face_by_num(1)
         self.mainui.entryframe.save_button['command'] = self.save_db_encoding
-        self.mainui.showframe.show_f_optionmenu_var.trace('w', self.show_from )
         self.mainui.root.protocol("WM_DELETE_WINDOW", self.destroy )
         self.mainui.addinfoframe.add_rf_button['command'] = self.ins_rf 
          
@@ -86,18 +92,32 @@ class _MainUI():
         self.comparison_tolerance = comparison_tolerance = ct_stringvar_get
         setting_yml['comparison_tolerance'] = ct_stringvar_get
         yaml.dump( setting_yml, open( setting_path, 'w') )
+    
+    def showf_go( self, event):
+        self.showf_sv = self.mainui.showframe.showf_sv.get()
+        self.rec_img = False
+        showf_ext = self.showf_sv.split('.')[-1]
 
+        if (showf_ext in self.video_exts) or (re.match(r'\d+', self.showf_sv)):
+            self.video_source = self.showf_sv;  self.play_video()
+            return
+        
+        if showf_ext in self.image_exts:
+            self.pause = True;  self.rec_img = True;    self.view_image()
+            return 
+        self.showf_sv.set('')
+        self.show_nsrc()
+            
     def show_from( self, *args  ):
-        keys =  self.mainui.showframe.show_from_optionmenus.keys()
-        values = self.mainui.showframe.show_from_optionmenus.values()
-        value = self.mainui.showframe.show_f_optionmenu_var.get()
+        keys =  self.mainui.showframe.showf_t_dict.keys()
+        values = self.mainui.showframe.showf_t_dict.values()
+        value = self.mainui.showframe.showf_optionmenu_sv.get()
         show_f = list(keys)[ list( values ).index( value )]
         
-        image_exts = ['jpg','png']
-        video_exts = ['mp4','avi','3gp','webm','mkv']
-
         if self.root_after != -1:
             self.mainui.root.after_cancel( self.root_after )
+            
+        self.rec_img = False
     
         if show_f == 'file':
             if self.iru is not None: self.iru.vid_release() ; self.iru = None
@@ -106,21 +126,20 @@ class _MainUI():
                 title = _('Select a file'),
                 filetypes = [\
                     ( _('Image or video'), \
-                    '*.'+(' *.'.join( image_exts + video_exts)))\
+                    '*.'+(' *.'.join( self.image_exts + self.video_exts)))\
                 ],
                 initialdir = '~'
             )
 
             if len( self.face_src_path ) > 0:
                 ext = os.path.splitext( self.face_src_path )[1][1:]
-                if ext in image_exts:
-                    self.mainui.showframe.rec_button['state'] = 'disabled'
+
+                if ext in self.image_exts:
                     # Pause
                     self.pause = True
+                    self.rec_img = True
                     self.view_image()
-                else: self.mainui.showframe.rec_button['state'] = 'normal'
-
-                if ext in video_exts:
+                if ext in self.video_exts:
                     self.video_source = self.face_src_path
                     self.play_video()
 
@@ -141,6 +160,7 @@ class _MainUI():
            
 
     def rec_now( self ):        
+        if self.rec_img: return
         if self.iru is None: self.show_nfd_info() ; return
         if self.pause:
             # Play
@@ -573,7 +593,11 @@ class IRU():
     def show_vid_src_error( self ):
         messagebox.showerror( 
             _('Unable to open video source'), self.video_source )
-        
+
+    def show_nsrc( self ):
+        messagebox.showerror( 
+            _('Unable to open video source'), self.showf_sv )
+
     def vid_release( self ):
         if self.vid is None: return
         self.vid.release()

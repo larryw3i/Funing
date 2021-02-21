@@ -75,21 +75,19 @@ class ShowFrame():
         # video label
         self.vid_frame_label = tk.Label( self.frame )
 
-        self.show_from_optionmenus =  {
-            'file':_('File'),
-            'camara': _('Camara') }
+        self.showf_sv = tk.StringVar( self.frame )
+        self.showf_entry = tk.Entry( \
+            self.frame , width = 10, textvariable = self.showf_sv)
+        self.showf_go_btn = tk.Button(self.frame, text = _('GO') )
 
-        self.show_f_optionmenu_var = tk.StringVar( self.frame )
-        self.show_f_optionmenu_var.set( _('Open') )
-        
-        self.show_from_optionmenu = tk.OptionMenu( 
-            self.frame, self.show_f_optionmenu_var , 
-            *self.show_from_optionmenus.values() )
-
+        self.showf_t_dict =  { 'file':_('File'), 'camara': _('Camara') }
+        self.showf_optionmenu_sv = tk.StringVar(self.frame, value = _('Open'))
+        self.showf_optionmenu = tk.OptionMenu( self.frame, \
+            self.showf_optionmenu_sv , *self.showf_t_dict.values() )
 
         # comparison_tolerance entry
         self.ct_label = tk.Label( \
-            self.frame, text = _('tolerance:') )
+            self.frame, text = _('tolerance') + ':' )
         self.ct_stringvar = StringVar( frame, ct )
         self.ct_entry = tk.Entry( \
             self.frame, width = 8,\
@@ -104,14 +102,16 @@ class ShowFrame():
 
         # place vid_frame_label
         self.vid_frame_label.grid( column = 0, row = 0, rowspan = 3,
-            columnspan = 4 )
+            columnspan = 6 )
 
+        self.showf_entry.grid( column = 0, row = 4, sticky = E)
+        self.showf_go_btn.grid( column = 1, row = 4, sticky = W)
+        self.showf_optionmenu.grid( column = 2, row = 4 , sticky = W)
+        self.ct_label.grid( column = 3, row = 4, sticky = E )
+        self.ct_entry.grid( column = 4, row = 4, sticky = W )
+        self.rec_button.grid( column = 5, row = 4)
+        
         # place frame
-        self.show_from_optionmenu.grid( column = 0, row = 4 )
-        self.ct_label.grid( column = 1, row = 4, sticky = E )
-        self.ct_entry.grid( column = 2, row = 4, sticky = W )
-        self.rec_button.grid( column = 3, row = 4)
-
         self.frame.grid( column = 0, row = 0 )
 
              

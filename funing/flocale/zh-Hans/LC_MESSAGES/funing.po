@@ -82,8 +82,8 @@ msgstr ""
 msgid "Recognize"
 msgstr "识别"
 
-msgid "tolerance:"
-msgstr "误差（0.1-0.6）:"
+msgid "tolerance"
+msgstr "误差（0.1-0.6）"
 
 msgid "Check the DOB entry please!"
 msgstr "请检查出生日期输入框!"
