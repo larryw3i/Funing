@@ -80,7 +80,7 @@ class ShowFrame():
             self.frame , width = 10, textvariable = self.showf_sv)
         self.showf_go_btn = tk.Button(self.frame, text = _('GO') )
 
-        self.showf_t_dict =  { 'file':_('File'), 'camara': _('Camara') }
+        self.showf_t_dict =  { 'file':_('File'), 'camera': _('Camera') }
         self.showf_optionmenu_sv = tk.StringVar(self.frame, value = _('Open'))
         self.showf_optionmenu = tk.OptionMenu( self.frame, \
             self.showf_optionmenu_sv , *self.showf_t_dict.values() )
@@ -89,8 +89,7 @@ class ShowFrame():
         self.ct_label = tk.Label( \
             self.frame, text = _('tolerance') + ':' )
         self.ct_stringvar = StringVar( frame, ct )
-        self.ct_entry = tk.Entry( \
-            self.frame, width = 8,\
+        self.ct_entry = tk.Entry( self.frame, width = 8,\
             textvariable = self.ct_stringvar )
 
         # shoot
@@ -200,5 +199,4 @@ class EntryFrame():
         self.cmt_text.grid(column = 1 ,row = 7 )
         # save_button
         self.save_button.grid( column = 1, row= 8)
-
         self.frame.grid( column = 1, row = 0, sticky = N )

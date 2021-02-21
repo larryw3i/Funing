@@ -34,7 +34,7 @@ msgid "File"
 msgstr "文件"
 
 #: ../../../ui/main_ui.py:19
-msgid "Camara"
+msgid "Camera"
 msgstr "摄像头"
 
 #: ../../../ui/main_ui.py:21
