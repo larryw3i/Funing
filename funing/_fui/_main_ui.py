@@ -64,7 +64,6 @@ class _MainUI():
         self.mainui.mainloop()
     
     def set_ui_events( self ):
-
         self.mainui.langcombobox.lang_combobox.bind('<<ComboboxSelected>>',
             self.change_language )
         self.mainui.showframe.ct_entry.bind('<FocusOut>', self.save_ct )
@@ -80,8 +79,7 @@ class _MainUI():
         self.mainui.addinfoframe.add_rf_button['command'] = self.ins_rf 
          
     def destroy( self ):
-        if self.iru is not None:
-            self.iru.vid_release()
+        if self.iru is not None: self.iru.vid_release()
         exit()
 
 # SHOW_FRAME FUNCTIONS 
@@ -96,6 +94,8 @@ class _MainUI():
     def showf_go( self):
         self.showf_sv = self.mainui.showframe.showf_sv.get()
         self.rec_img = False
+        self.after_cancel()
+
         showf_ext = self.showf_sv.split('.')[-1]
 
         if showf_ext in self.video_exts:
@@ -107,8 +107,8 @@ class _MainUI():
         if showf_ext in self.image_exts:
             self.pause = True;  self.rec_img = True;    self.view_image()
             return 
-        self.showf_sv.set('')
-        self.show_nsrc()
+        self.mainui.showframe.showf_sv.set('')
+        self.show_nsrc_error()
             
     def show_from( self, *args  ):
         keys =  self.mainui.showframe.showf_t_dict.keys()
@@ -116,9 +116,7 @@ class _MainUI():
         value = self.mainui.showframe.showf_optionmenu_sv.get()
         show_f = list(keys)[ list( values ).index( value )]
         
-        if self.root_after != -1:
-            self.mainui.root.after_cancel( self.root_after )
-            
+        self.after_cancel()
         self.rec_img = False
     
         if show_f == 'file':
@@ -136,6 +134,8 @@ class _MainUI():
             if len( self.face_src_path ) > 0:
                 ext = os.path.splitext( self.face_src_path )[1][1:]
 
+                self.mainui.showframe.showf_sv.set( self.face_src_path )
+
                 if ext in self.image_exts:
                     # Pause
                     self.pause = True
@@ -147,11 +147,20 @@ class _MainUI():
 
         elif show_f == 'camara':
             self.video_source = 0
+            self.mainui.showframe.showf_sv.set( self.video_source )
             self.play_video()
-
+    
+    def after_cancel( self ):
+        if self.root_after != -1:
+            self.mainui.root.after_cancel( self.root_after )
+        
     def play_video( self ):
         if self.iru is not None: self.iru.vid_release()
         self.iru = IRU( self.video_source )
+        if not self.iru.vid.isOpened():
+            self.show_nsrc_error()
+            if debug: print('play_video: Unable to open video source')
+            return
         # Play
         self.pause = False
         self.get_resize_fxfy()
@@ -286,6 +295,11 @@ class _MainUI():
     def show_dob_error( self ):
         messagebox.showerror( _('Error'), \
             _('Check the DOB entry please!') ) 
+
+    def show_nsrc_error( self ):
+        unable_open_s = _('Unable to open video source')
+        messagebox.showerror(  unable_open_s, unable_open_s+': '+self.showf_sv )
+
 
 ###############################################################################
 # SHOW_FRAME FUNCTIONS END
@@ -559,6 +573,7 @@ class _MainUI():
                 self.comparison_tolerance)
                         
             if True in comparisons: self.curr_face_id = _id ; break
+
         
 ###############################################################################
 # OTHER FUNCTIONS END
@@ -595,10 +610,6 @@ class IRU():
     def show_vid_src_error( self ):
         messagebox.showerror( 
             _('Unable to open video source'), self.video_source )
-
-    def show_nsrc( self ):
-        messagebox.showerror( 
-            _('Unable to open video source'), self.showf_sv )
 
     def vid_release( self ):
         if self.vid is None: return
