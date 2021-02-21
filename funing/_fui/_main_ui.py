@@ -93,15 +93,17 @@ class _MainUI():
         setting_yml['comparison_tolerance'] = ct_stringvar_get
         yaml.dump( setting_yml, open( setting_path, 'w') )
     
-    def showf_go( self, event):
+    def showf_go( self):
         self.showf_sv = self.mainui.showframe.showf_sv.get()
         self.rec_img = False
         showf_ext = self.showf_sv.split('.')[-1]
 
-        if (showf_ext in self.video_exts) or (re.match(r'\d+', self.showf_sv)):
+        if showf_ext in self.video_exts:
             self.video_source = self.showf_sv;  self.play_video()
             return
-        
+        if re.match(r'\d+', self.showf_sv):
+            self.video_source = int(self.showf_sv);  self.play_video()
+            return
         if showf_ext in self.image_exts:
             self.pause = True;  self.rec_img = True;    self.view_image()
             return 
