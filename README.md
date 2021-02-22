@@ -1,8 +1,4 @@
 # Funing
-<details>
-    <summary>
-        install_requires
-    </summary>  
 ```python
 install_requires=[
     ########################################################################
@@ -20,7 +16,6 @@ install_requires=[
     'pyyaml',
 ]
 ```
-</details>
 a simple face recognition GUI, try it just do:  
 ```bash
 pip3 install funing; funing
