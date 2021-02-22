@@ -176,7 +176,7 @@ class _MainUI():
         if self.rec_img: return
         if self.face_sum < 1:
             if debug: print('No face detected')
-            self.pause = True
+            return
         if self.iru is None: self.show_nfd_info() ; return
         if self.pause:
             # Play
