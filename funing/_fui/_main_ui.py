@@ -174,6 +174,9 @@ class _MainUI():
 
     def rec_now( self ):        
         if self.rec_img: return
+        if self.face_sum < 1:
+            if debug: print('No face detected')
+            self.pause = True
         if self.iru is None: self.show_nfd_info() ; return
         if self.pause:
             # Play
@@ -199,17 +202,12 @@ class _MainUI():
 
         self.get_f_loc_and_sum()
         
-        if self.face_sum > 0:
-            self.correct_f_num_ui()
-            self.pick_face_by_num()    
+        if self.face_sum < 1 : return
+        self.correct_f_num_ui()
+        self.pick_face_by_num()    
 
     def refresh_frame( self ):
         if self.iru is None: return
-        if self.pause: 
-            self.update_ui()
-            self.pick_face_by_num()
-            return
-        
         self.vid_ret_frame  = self.iru.get_ret_frame()
         self.iru_frame = self.vid_ret_frame[1]
 
@@ -217,11 +215,14 @@ class _MainUI():
             if debug: print('No frame rect returned.'); return
         
         self.get_f_loc_and_sum()
-
         if self.face_sum > 0:
-
-            self.correct_f_num_ui()
-            self.pick_f_mk_rect()
+            if self.pause:
+                self.update_ui()
+                self.pick_face_by_num()
+                return
+            else:
+                self.correct_f_num_ui()
+                self.mk_frame_rect()
 
         self.update_vid_frame()
         self.root_after = self.mainui.root.after( \
@@ -377,20 +378,17 @@ class _MainUI():
         '''
         Pick face image to self.entryfm.face_label
         '''
-
-        if not self.pause: return
-        self.face_num = self.face_num + p_n
-
-        self.correct_f_num_ui()
-                   
-        if self.face_num < 0:
-            self.show_nfd_info()
-            if debug:
-                print('No face detected')
+        if not self.pause: 
+            print('Video is playing')
             return
-
+        self.get_f_sum()
+        if self.face_sum < 1: 
+            if debug: print('No face detected')
+            return
+        self.face_num = self.face_num + p_n
+        self.correct_f_num_ui()
+        
         top, right, bottom, left = self.face_locations[ self.face_num ]
-
         b_t_sub = bottom - top
         r_l_sub = right - left
         size_add = b_t_sub if  b_t_sub > r_l_sub else r_l_sub

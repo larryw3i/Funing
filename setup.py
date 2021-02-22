@@ -29,13 +29,14 @@ setuptools.setup(
     python_requires='>=3.6',
     install_requires=[
         ########################################################################
-        # Installing them on Windows requires installing Visual Studio, so you \
-        # should install them manually, and it will guide you when the app \
-        # starts.
+        # 'dlib',                                                              #
+        # 'face-recognition',                                                  #
+        # 'opencv-python',                                                     #
         ########################################################################
-        # 'dlib',
-        # 'face-recognition',
-        # 'opencv-python',
+        # Installing them on Windows requires installing Visual Studio, so you #
+        # should install them manually, and it will guide you when the app     #
+        # starts.                                                              #
+        ########################################################################
         'language_data',
         'langcodes',
         'pony',

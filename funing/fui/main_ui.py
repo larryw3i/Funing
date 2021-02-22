@@ -15,16 +15,12 @@ class MainUI():
     def __init__(self):
         self.root = tk.Tk()
         self.root.title( _('Funing')+' ' + version )
-
         # frame
         self.showframe = ShowFrame( tk.Frame( self.root ) ) 
-
         # entry_frame
         self.entryframe = EntryFrame( tk.Frame( self.root ) )
-
         # lang_combobox
-        self.langcombobox = LangCombobox( self.root )
-        
+        self.langcombobox = LangCombobox( self.root )        
         # addinfoframe
         self.addinfoframe = AddInfoFrame( tk.Frame( self.root ) )
 
