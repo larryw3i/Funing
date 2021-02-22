@@ -2,7 +2,7 @@
 <details>
     <summary>
         install_requires
-    </summary>
+    </summary>  
 ```python
 install_requires=[
     ########################################################################
