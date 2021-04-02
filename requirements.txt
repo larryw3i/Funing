@@ -5,3 +5,4 @@ language_data
 langcodes
 pony
 pyyaml
+babel

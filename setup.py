@@ -10,7 +10,7 @@ setuptools.setup(
     name="funing",
     version=version,
     author="larryw3i",
-    author_email="larryw3i@163.com",
+    author_email="",
     description="A face recognition gui",
     long_description=long_description,
     long_description_content_type="text/markdown",
