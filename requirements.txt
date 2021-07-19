@@ -1,8 +1,4 @@
-dlib
-face-recognition
 opencv-python
-language_data
-langcodes
-pony
+langcodes[data]
 pyyaml
-babel
+pony

@@ -7,7 +7,8 @@ from pathlib import Path
 import getopt
 import sys
 
-args = getopt.getopt( sys.argv[1:], '' )[1]; test_args = ['ts','st','test']
+args = getopt.getopt( sys.argv[1:], '' )[1]
+test_args = ['ts','st','test']
 debug =  len( set(args)&set(test_args) ) > 0
 
 project_path = os.path.abspath( os.path.dirname(  __file__  ) )
@@ -24,6 +25,7 @@ setting_exam_yml = yaml.safe_load( open( setting_exam_path, 'r' ))
 
 version =  setting_exam_yml.get('version','unknown')
 prev_version = setting_exam_yml.get('prev_version','unknown')
+
 if debug:
     print('prev_version: ', prev_version, 'version: ', version)
 

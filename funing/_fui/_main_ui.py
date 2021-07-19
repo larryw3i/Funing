@@ -13,8 +13,8 @@ from fmodel.funing_m import Person, PersonInfo
 import tkinter.filedialog as tkf
 import cv2
 from PIL import Image , ImageTk
-import dlib
-import face_recognition
+# import dlib
+# import face_recognition
 from flocale.locale import _
 from datetime import datetime , date
 import json
