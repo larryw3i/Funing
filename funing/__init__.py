@@ -3,19 +3,18 @@
 import os
 import sys
 from pathlib import Path
-sys.path.append( str(Path( os.path.abspath( __file__)  ).parent.absolute() ) )
 import getopt
-from setting import base_dir, initialized, data_dir, setting_path, \
-    setting_yml, face_encodings_path, locale_path, f_lang_codes, debug,\
-    data_file_path
+from funing import settings
 import yaml
 import json
 import pickle
-from _fui import _Fui
+from funing._fui import enjoy
 
+sys.path.append( 
+    str( Path( os.path.abspath( __file__)  ).parent.absolute() ) )
 def run():
     sys_argv = sys.argv[1:]
-    f = _Fui()
+    f = enjoy()
     optlist , args  = getopt.getopt( sys_argv, '' )    
     if len(args) < 1: f.start()
     for a in args:
@@ -24,5 +23,3 @@ def run():
         if a in [ 'm' , 'msg' , 'msgfmt' ]:     f.msgfmt()
         if a in [ 'pip' , 'pip_install']:       f.pip_install_r()
         if a in [ 'init', 'initial' ]:          f.initialize()
-
-        

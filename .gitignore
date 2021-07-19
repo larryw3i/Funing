@@ -138,10 +138,11 @@ dmypy.json
 *.db
 tests/tests/*
 jupyter_notebok.ipynb
-setting.yml
 data/face_encodings.data
 .pypirc
 funing/venv/
 funing/_home/*
 *.data
 .idea/
+
+##

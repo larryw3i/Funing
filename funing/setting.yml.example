@@ -1,7 +1,0 @@
-comparison_tolerance: 0.6
-initialized: false
-lang_code: en-US
-prev_version: 0.2.25
-version: 0.2.26
-# backup database when updating
-bk_db_upd: true

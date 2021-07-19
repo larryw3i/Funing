@@ -1,34 +1,35 @@
 
-from tkinter import *
 import tkinter as tk
 from tkinter import ttk
-from flocale.locale import _, lang_code
+from tkinter import *
+from funing.locale.lang import _
 from langcodes import Language
-from setting import base_dir, locale_path, debug, f_lang_codes, version
-from setting import comparison_tolerance as ct
+from funing import settings
 import os
 import re
 from datetime import datetime
 import uuid
 
+ct = settings.comparison_tolerance
+
 class MainUI():
     def __init__(self):
         self.root = tk.Tk()
-        self.root.title( _('Funing')+' ' + version )
+        self.root.title( _('Funing')+' ' + settings.version )
         # frame
         self.showframe = ShowFrame( tk.Frame( self.root ) ) 
         # entry_frame
         self.entryframe = EntryFrame( tk.Frame( self.root ) )
         # lang_combobox
         self.langcombobox = LangCombobox( self.root )        
-        # addinfoframe
-        self.addinfoframe = AddInfoFrame( tk.Frame( self.root ) )
+        # infoframe
+        self.infoframe = InfoFrame( tk.Frame( self.root ) )
 
     def place(self):
         self.showframe.place()
         self.entryframe.place()
         self.langcombobox.place()
-        self.addinfoframe.place()
+        self.infoframe.place()
     
     def mainloop(self):
         self.root.mainloop()
@@ -39,7 +40,7 @@ class LangCombobox():
         self.frame = frame
         # language_combobox
         self.lang_combobox_var = tk.StringVar( self.frame )
-        self.lang_code = lang_code
+        self.lang_code = settings.lang_code
         self.lang_combobox_var.set(
             Language.make( self.lang_code ).autonym()
           )
@@ -49,25 +50,19 @@ class LangCombobox():
             state = "readonly"
         )
 
+    def locale_lang_display_names( self ):
+        display_names = []
+        for i in settings.locale_langcodes:
+            display_names.append( Language.make(i).autonym() )
+        return display_names
+
     def place(self):
         # place lang_combobox
         self.lang_combobox.grid( column = 3, row = 2, sticky = NE )
     
-    def locale_lang_display_names( self ):
-        display_names = []
-        for i in f_lang_codes:
-            display_names.append( Language.make(i).autonym() )
-            
-        return display_names
-
-
-
 class ShowFrame():
-
     def __init__( self, frame ):
-
         self.frame = frame
-
         # video label
         self.vid_frame_label = tk.Label( self.frame )
 
@@ -84,12 +79,12 @@ class ShowFrame():
         # comparison_tolerance entry
         self.ct_label = tk.Label( \
             self.frame, text = _('tolerance') + ':' )
-        self.ct_stringvar = StringVar( frame, ct )
+        self.ct_stringvar = tk.StringVar( frame, ct )
         self.ct_entry = tk.Entry( self.frame, width = 8,\
             textvariable = self.ct_stringvar )
 
         # shoot
-        self.rec_stringvar = StringVar( frame, _('Recognize'))
+        self.rec_stringvar = tk.StringVar( frame, _('Recognize'))
         self.rec_button = tk.Button( self.frame, \
             textvariable = self.rec_stringvar )
     
@@ -111,23 +106,24 @@ class ShowFrame():
 
              
 
-class AddInfoFrame():
+class InfoFrame():
     def __init__(self, frame):
         self.frame = frame
-        self.ins_vars = {}
-        self.add_rf_button = tk.Button( self.frame, \
-            text = _('Add information') )
         
     def place( self ):
-        self.add_rf_button.pack( side = BOTTOM )
-        self.frame.grid( column = 3, row = 0, sticky = S )
         pass
 
 class EntryFrame():
     
     def __init__(self, frame):
         self.frame = frame
+        pass
+    
+    def place( self ):
+        pass
 
+
+'''
         self.face_label = tk.Label( self.frame )
 
         self.prev_f_button = tk.Button(self.frame , \
@@ -196,3 +192,5 @@ class EntryFrame():
         # save_button
         self.save_button.grid( column = 1, row= 8)
         self.frame.grid( column = 1, row = 0, sticky = N )
+
+'''

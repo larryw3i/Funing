@@ -1,11 +1,7 @@
 import setuptools
 import re
-with open("README.md", "r", encoding="utf-8") as fh:
-    long_description=fh.read()
 
-setting_yml_example = open('funing/setting.yml.example', 'r').read()
-version = re.findall('[^_]version:\s*(\S+)\s*', setting_yml_example, re.S)[0]
-
+long_description = open("README.md", "r", encoding="utf-8").read()
 setuptools.setup(
     name="funing",
     version=version,
@@ -28,18 +24,8 @@ setuptools.setup(
     },
     python_requires='>=3.6',
     install_requires=[
-        ########################################################################
-        # 'dlib',                                                              #
-        # 'face-recognition',                                                  #
-        # 'opencv-python',                                                     #
-        ########################################################################
-        # Installing them on Windows requires installing Visual Studio, so you #
-        # should install them manually, and it will guide you when the app     #
-        # starts.                                                              #
-        ########################################################################
-        'language_data',
-        'langcodes',
-        'pony',
+        'opencv-python',
+        'langcodes[data]',
         'pyyaml',
     ],
     include_package_data = True,
