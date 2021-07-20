@@ -9,7 +9,7 @@ import numpy as np
 import shutil
 import cv2
 from funing import settings
-from funing._fui import error; 
+from funing._fui import error
 
 error.lib_check()
 
@@ -52,4 +52,3 @@ class Enjoy():
             for f in files:
                 if f.endswith( '.mo' ): rm_dirs += [os.path.join(root,f)]
         os.system('rm -rf '+' '.join( rm_dirs ))
-

@@ -144,8 +144,14 @@ funing/venv/
 funing/_home/*
 *.data
 .idea/
+
 # funing/config.yml
 funing/config.yml
+
 # funing/data/
 funing/data/
+
+# output
+output/
+
 ##

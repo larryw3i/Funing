@@ -3,7 +3,7 @@
 from tkinter import messagebox
 import tkinter as tk
 from tkinter import *
-from fui.main_ui import MainUI
+from funing.fui.main_ui import MainUI
 from langcodes import Language
 import gettext
 import sys

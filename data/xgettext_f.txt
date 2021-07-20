@@ -1,0 +1,9 @@
+/home/larry/fun/larryw3i/Funing/funing/__init__.py
+/home/larry/fun/larryw3i/Funing/funing/settings.py
+/home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py
+/home/larry/fun/larryw3i/Funing/funing/fui/__init__.py
+/home/larry/fun/larryw3i/Funing/funing/locale/lang.py
+/home/larry/fun/larryw3i/Funing/funing/locale/__init__.py
+/home/larry/fun/larryw3i/Funing/funing/_fui/error.py
+/home/larry/fun/larryw3i/Funing/funing/_fui/__init__.py
+/home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py
