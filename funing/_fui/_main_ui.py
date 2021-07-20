@@ -108,7 +108,8 @@ class _MainUI():
     
     def close_vid_cap( self ):
         if self.vid is None: return
-        self.vid.release()    
+        self.vid.release()  
+        self.vid= None  
     
     def set_ui_events( self ):
         self.mainui.langcombobox.lang_combobox.bind('<<ComboboxSelected>>',
@@ -135,13 +136,19 @@ class _MainUI():
             self.pause = False
             if self.vid is None: return
             self.root_after_cancel()
+            if settings.data_empty(): 
+                if settings.debug: print('data is empty!')
+                self.show_data_empty_error()
+                return
+            if self.cur_frame is None: return
             self.recf()
             self.showfm.pp_sv.set( _('Play') )
             # self.pick()
         else:
             self.pause = True
+            if self.cur_frame is None: return
             self.refresh_frame()
-            self.showfm.pp_sv.set( _('Pause') )
+            self.showfm.pp_sv.set( _('Recognize') )
 
     def pick(self):
         if self.vid is None: return
@@ -213,7 +220,7 @@ class _MainUI():
     def root_after_cancel( self ):
         if self.root_after != -1:
             self.mainui.root.after_cancel( self.root_after )
-            self.vid.release()
+            self.close_vid_cap()
             self.vid = None
         
     def play_video( self ):
@@ -224,6 +231,7 @@ class _MainUI():
     
     def refresh_frame(self):
         if self.vid == None: self.vid = cv2.VideoCapture( self.source )
+        if not self.vid.isOpened(): self.show_nsrc_error(); return
         ret, self.cur_frame = self.vid.read()        
         self.cur_frame2label()
         self.root_after = self.mainui.root.after( \
@@ -338,12 +346,8 @@ class _MainUI():
             open( info_file_path, 'r' ).read() )
     
     def recf(self):
-        if settings.data_empty(): 
-            if settings.debug: print('data is empty!')
-            return
         self.face_frames = []
         self.recfs = []
-        if self.cur_frame is None: return
         if settings.debug: 
             print('self.cur_frame not None')
         self.rec_gray_img=cv2.cvtColor(self.cur_frame,cv2.COLOR_BGR2GRAY)
@@ -393,6 +397,10 @@ class _MainUI():
     def show_nsrc_error( self ):
         unable_open_s = _('Unable to open video source')
         messagebox.showerror(  unable_open_s, unable_open_s+': '+self.showf_sv )
+    def show_data_empty_error( self ):
+        unable_open_s = _('Nothing enter')
+        msg  = _("You haven't entered anything yet! ")
+        messagebox.showerror(  unable_open_s, msg, )
 
 ###############################################################################
 # OTHER FUNCTIONS END

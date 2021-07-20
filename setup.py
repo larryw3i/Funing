@@ -1,10 +1,11 @@
 import setuptools
 import re
+from funing.settings import version
 
 long_description = open("README.md", "r", encoding="utf-8").read()
 setuptools.setup(
     name="funing",
-    version='0.1.0',
+    version=version,
     author="larryw3i",
     author_email="",
     description="A face recognition gui",

@@ -29,7 +29,7 @@ if not os.path.exists( config_path ): config_path = \
 config_yml = \
     yaml.safe_load( open( config_path, 'r' ))
 version =  \
-    config_yml.get('version','unknown')
+    config_yml.get('version','0.2.28')
 data_dir = \
     os.path.join( base_dir, 'data' )
 faces_path = \

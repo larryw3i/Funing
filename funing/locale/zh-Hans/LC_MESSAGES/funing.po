@@ -120,3 +120,10 @@ msgstr "性别"
 
 msgid "Pick"
 msgstr "录入"
+
+
+msgid "You haven't entered anything yet! "
+msgstr "你还没有录入任何数据, 打开摄像头或文件然后点击'录入'"
+
+msgid "Nothing enter"
+msgstr "没有录入任何数据"

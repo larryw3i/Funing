@@ -96,7 +96,7 @@ class ShowFrame():
 
         # place vid_frame_label
         self.vid_frame_label.grid( column = 0, row = 0, rowspan = 3,
-            columnspan = 6 )
+            columnspan = 7 )
 
         self.showf_entry.grid( column = 0, row = 4, sticky = E)
         self.showf_go_btn.grid( column = 1, row = 4, sticky = W)

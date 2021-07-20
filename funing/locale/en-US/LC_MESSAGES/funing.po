@@ -63,3 +63,11 @@ msgstr "tolerance(0.1-0.6)"
 
 msgid "Pick"
 msgstr "Pick"
+
+
+msgid "You haven't entered anything yet! "
+msgstr "You haven't entered data yet! Open a source and click 'Pick' to enter"
+
+
+msgid "Nothing enter"
+msgstr "Nothing enter"
