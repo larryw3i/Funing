@@ -117,3 +117,6 @@ msgstr "删除"
 
 msgid "Gender"
 msgstr "性别"
+
+msgid "Pick"
+msgstr "录入"

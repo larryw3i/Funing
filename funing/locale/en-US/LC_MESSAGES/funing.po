@@ -60,3 +60,6 @@ msgstr "Make sure gettext is installed, read https://www.gnu.org/software/gettex
 
 msgid "tolerance"
 msgstr "tolerance(0.1-0.6)"
+
+msgid "Pick"
+msgstr "Pick"

@@ -4,7 +4,7 @@ import re
 long_description = open("README.md", "r", encoding="utf-8").read()
 setuptools.setup(
     name="funing",
-    version=version,
+    version='0.1.0',
     author="larryw3i",
     author_email="",
     description="A face recognition gui",
@@ -24,7 +24,7 @@ setuptools.setup(
     },
     python_requires='>=3.6',
     install_requires=[
-        'opencv-python',
+        'opencv-contrib-python',
         'langcodes[data]',
         'pyyaml',
     ],

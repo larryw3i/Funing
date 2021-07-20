@@ -20,7 +20,9 @@ import yaml
 import uuid
 import time
 import re
+from funing._fui import error
 import numpy as np
+from cv2 import haarcascades
 
 class _MainUI():
     def __init__(self):
@@ -44,12 +46,9 @@ class _MainUI():
         self.vid_fps = 0
         self.cur_frame = None
         self.pause = True
-        self.faces = []
         self.face_frames = []
         self.curf_index = 0
         # rec_result
-        self.result_frames = []
-        self.result_ids = []
         self.rec_gray_img = None
         # rec_faces
         self.recfs = []
@@ -58,18 +57,19 @@ class _MainUI():
         self.info_ids = []
         # self.rec_results = []
         # cv2
+        self.hff_xml_path = os.path.join( haarcascades ,\
+         "haarcascade_frontalface_default.xml" )
         self.recognizer=cv2.face.EigenFaceRecognizer_create()
-        self.face_casecade=cv2.CascadeClassifier( settings.hff_xml_path )   
+        self.face_casecade=cv2.CascadeClassifier( self.hff_xml_path )   
         self.face_enter_count = settings.face_enter_count
         #screen
         try:self.screenwidth = self.mainui.root.winfo_screenwidth();\
             self.screenheight = self.mainui.root.winfo_screenheight()
         except: print(_('No desktop environment is detected! (^_^)')); exit()  
-        if not settings.data_empty:
+        if not settings.data_empty():
             self.recognizer_train()           
         self.set_ui_events()
-        self.mainui.mainloop()
-    
+        self.mainui.mainloop()    
 
     def load_images( self ):
         '''
@@ -80,7 +80,6 @@ class _MainUI():
         labels=[]   
         label=0        
         subdirs = os.listdir( settings.faces_path )
-        if len(subdirs) <1 : self.training_data_empty = True
         for subdir in subdirs:
             subpath=os.path.join( settings.faces_path ,subdir)            
             if os.path.isdir(subpath):
@@ -154,9 +153,9 @@ class _MainUI():
             ret, self.frame=self.vid.read()
             if ret:
                 gray_img=cv2.cvtColor(self.frame,cv2.COLOR_BGR2GRAY)
-                self.faces = self.face_casecade.detectMultiScale(gray_img,1.3,5)
-                if len( self.faces ) < 1:continue
-                x,y,w,h = self.faces[0]
+                faces = self.face_casecade.detectMultiScale(gray_img,1.3,5)
+                if len( faces ) < 1:continue
+                x,y,w,h = faces[0]
                 new_frame=cv2.resize( self.frame[y:y+h,x:x+w], (92,112),\
                     interpolation=cv2.INTER_LINEAR)
                 self.face_frames.append( new_frame )
@@ -299,6 +298,7 @@ class _MainUI():
             count+=1
         self.cur_info_id = None
         if settings.debug:print( 'info > ' + info )
+        self.recognizer_train()
             
     def change_face_show(self, _as):
         if len(self.face_frames) >0:
@@ -338,6 +338,9 @@ class _MainUI():
             open( info_file_path, 'r' ).read() )
     
     def recf(self):
+        if settings.data_empty(): 
+            if settings.debug: print('data is empty!')
+            return
         self.face_frames = []
         self.recfs = []
         if self.cur_frame is None: return
@@ -351,26 +354,6 @@ class _MainUI():
             self.cur_frame=cv2.rectangle(\
             self.cur_frame,(x,y),(x+w,y+h),(255,0,0),2)  
         self.cur_frame2label()
-
-    def show_rec_result(self, _as):
-        _len = len( self.recfs )
-        self.curf_index+=_as
-        self.curf_index = 0 if self.curf_index < 0 else _len - 1\
-        if self.curf_index >= _len else self.curf_index 
-
-        for (x,y,w,h) in faces:
-            self.cur_frame=cv2.rectangle(self.cur_frame,(x,y),(x+w,y+h),(255,0,0),2) 
-            roi_gray= gray_img[y:y+h,x:x+w]
-            roi_gray= cv2.resize( roi_gray, (92,112),\
-            interpolation=cv2.INTER_LINEAR)
-            result=self.recognizer.predict(roi_gray)
-            _id = self.info_ids[result[0]]
-            self.result_frames.append( self.cur_frame[y:y+h,x:x+w] )
-            self.result_ids.append( _id )
-
-        if settings.debug:
-            print( self.rec_results )
-        self.change_face_show(0)
 
 
 

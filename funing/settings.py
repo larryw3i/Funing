@@ -6,7 +6,6 @@ import re
 from pathlib import Path
 import getopt
 import sys
-from cv2 import haarcascades
 
 args = \
     getopt.getopt( sys.argv[1:], '' )[1]
@@ -35,7 +34,7 @@ data_dir = \
     os.path.join( base_dir, 'data' )
 faces_path = \
     os.path.join( data_dir, 'faces' )
-data_empty = \
+data_empty = lambda:\
     (not os.path.exists( faces_path )) or len( os.listdir( faces_path ) ) < 1
 infos_path = \
     os.path.join( data_dir, 'infos' )
@@ -47,8 +46,6 @@ comparison_tolerance = \
     config_yml.get('comparison_tolerance', 0.6)
 locale_langcodes =  \
     [ d for d in os.listdir(locale_path) if re.match('^\w+-\w+$', d) ]
-hff_xml_path = \
-    os.path.join( haarcascades , "haarcascade_frontalface_default.xml" )
 infos_len = \
     config_yml.get( "infos_len", 5 )
 face_enter_count = \

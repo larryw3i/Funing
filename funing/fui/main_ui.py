@@ -101,8 +101,8 @@ class ShowFrame():
         self.showf_entry.grid( column = 0, row = 4, sticky = E)
         self.showf_go_btn.grid( column = 1, row = 4, sticky = W)
         self.showf_optionmenu.grid( column = 2, row = 4 , sticky = W)
-        self.ct_label.grid( column = 3, row = 4, sticky = E )
-        self.ct_entry.grid( column = 4, row = 4, sticky = W )
+        # self.ct_label.grid( column = 3, row = 4, sticky = E )
+        # self.ct_entry.grid( column = 4, row = 4, sticky = W )
         self.pp_btn.grid( column = 5, row = 4)
         self.pick_btn.grid( column = 6, row = 4 )        
         # place frame
@@ -113,9 +113,9 @@ class InfoFrame():
         self.frame = frame
         self.face_show_frame = tk.Frame( self.frame )
         self.info_enter_frame = tk.Frame( self.frame )
-        self.prevf_btn = tk.Button( self.face_show_frame, text = _('Prev') )
+        self.prevf_btn = tk.Button( self.face_show_frame, text = _('prev_symb') )
         self.curf_label = tk.Label( self.face_show_frame )
-        self.nextf_btn = tk.Button( self.face_show_frame, text = _('Next') )
+        self.nextf_btn = tk.Button( self.face_show_frame, text = _('next_symb') )
         self.ft_sb = tk.Scrollbar(self.info_enter_frame, orient=VERTICAL)
         self.faces_text = Text( self.info_enter_frame,  \
         yscrollcommand = self.ft_sb.set)  

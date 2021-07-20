@@ -23,3 +23,4 @@ def run():
         if a in [ 'm' , 'msg' , 'msgfmt' ]:     f.msgfmt()
         if a in [ 'pip' , 'pip_install']:       f.pip_install_r()
         if a in [ 'init', 'initial' ]:          f.initialize()
+        if a in [ 'kc', 'keep_code' ]:          f.keep_code()
