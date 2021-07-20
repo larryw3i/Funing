@@ -146,5 +146,6 @@ funing/_home/*
 .idea/
 # funing/config.yml
 funing/config.yml
-
+# funing/data/
+funing/data/
 ##

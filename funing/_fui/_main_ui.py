@@ -20,6 +20,7 @@ import yaml
 import uuid
 import time
 import re
+import numpy as np
 
 class _MainUI():
     def __init__(self):
@@ -48,6 +49,8 @@ class _MainUI():
         self.curf_index = 0
         # info
         self.cur_info_id = None
+        self.info_ids = []
+        self.rec_results = {}
         # cv2
         self.recognizer=cv2.face.EigenFaceRecognizer_create()
         self.face_casecade=cv2.CascadeClassifier( settings.hff_xml_path )   
@@ -55,9 +58,42 @@ class _MainUI():
         #screen
         try:self.screenwidth = self.mainui.root.winfo_screenwidth();\
             self.screenheight = self.mainui.root.winfo_screenheight()
-        except: print(_('No desktop environment is detected! (^_^)')); exit()             
+        except: print(_('No desktop environment is detected! (^_^)')); exit()  
+        if not settings.data_empty:
+            self.recognizer_train()           
         self.set_ui_events()
         self.mainui.mainloop()
+    
+
+    def load_images( self ):
+        '''
+        :reference https://www.cnblogs.com/do-hardworking/p/9867708.html
+        '''
+        images=[]
+        ids=[]
+        labels=[]   
+        label=0        
+        subdirs = os.listdir( settings.faces_path )
+        if len(subdirs) <1 : self.training_data_empty = True
+        for subdir in subdirs:
+            subpath=os.path.join( settings.faces_path ,subdir)            
+            if os.path.isdir(subpath):
+                ids.append(subdir)
+                for filename in os.listdir(subpath):
+                    imgpath=os.path.join(subpath,filename)
+                    img=cv2.imread(imgpath,cv2.IMREAD_COLOR)
+                    gray_img=cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+                    images.append(gray_img)
+                    labels.append(label)
+                label+=1
+        images=np.asarray(images)
+        labels=np.asarray(labels)
+        return images,labels,ids
+
+    def recognizer_train( self ):
+        images,labels,self.info_ids = self.load_images()
+        self.recognizer.train( images, labels)
+
     def open_vid_cap( self ):
         self.vid = cv2.VideoCapture( self.video_source )
         if not self.vid.isOpened(): self.show_nsrc_error(); return
@@ -77,9 +113,9 @@ class _MainUI():
         self.showfm.pick_btn['command'] = self.pick
         self.showfm.showf_go_btn['command'] = self.show_go
         self.showfm.showf_optionmenu_sv.trace('w', self.show_from )
-        self.infofm.prevf_btn['command'] = self.prevf()
-        self.infofm.nextf_btn['command'] = self.nextf()
-        self.infofm.save_btn['command'] = self.savef()
+        self.infofm.prevf_btn['command'] = self.prevf
+        self.infofm.nextf_btn['command'] = self.nextf
+        self.infofm.save_btn['command'] = self.savef
         self.mainui.root.protocol("WM_DELETE_WINDOW", self.destroy )
          
     def destroy( self ):
@@ -92,19 +128,21 @@ class _MainUI():
     def pause_play( self, *args ):
         if self.vid is None: return
         if self.pause: 
-            self.pause = False
-            self.root_after_cancel()
-            self.showfm.pp_sv.set( _('Play') )
-        else:
             self.pause = True
             self.refresh_frame()
             self.showfm.pp_sv.set( _('Pause') )
-            self.pick()
+        else:
+            self.pause = False
+            self.root_after_cancel()
+            self.recf()
+            self.showfm.pp_sv.set( _('Play') )
+            # self.pick()
 
     def pick(self):
         if self.vid is None: return
         count = 0
         self.cur_info_id = str(uuid.uuid4())
+        self.rec_results = {}
         self.face_frames = []
         while(True):
             ret, self.frame=self.vid.read()
@@ -113,12 +151,9 @@ class _MainUI():
                 self.faces = self.face_casecade.detectMultiScale(gray_img,1.3,5)
                 if len( self.faces ) < 1:continue
                 x,y,w,h = self.faces[0]
-                new_frame=cv2.resize( self.frame[y:y+h,x:x+w], None, \
-                fx=0.6, fy=0.6, interpolation=cv2.INTER_AREA )
+                new_frame=cv2.resize( self.frame[y:y+h,x:x+w], (92,112),\
+                    interpolation=cv2.INTER_LINEAR)
                 self.face_frames.append( new_frame )
-                img_path =os.path.join( settings.faces_path , \
-                self.cur_info_id, str(count) )
-                cv2.imwrite( img_path+'.png' , new_frame)
                 count+=1
                 if count > self.face_enter_count: break
         self.change_face_show(0)
@@ -244,22 +279,68 @@ class _MainUI():
     
     def savef( self ):
         if self.cur_info_id == None: return
-        info =self.info_enter_frame.faces_text.get("1.0", "end-1c")
+        info =self.infofm.faces_text.get("1.0", "end-1c")
         info_file_path = os.path.join( settings.infos_path, self.cur_info_id )
         open( info_file_path, 'w+' ).write( info )
+        img_path =os.path.join( settings.faces_path , self.cur_info_id )
+        os.makedirs(img_path,exist_ok=True )
+        count = 0
+        for f in self.face_frames:
+            cv2.imwrite( f'{img_path}/{count}.png' , f)
+            count+=1
+        self.cur_info_id = None
         if settings.debug:print( 'info > ' + info )
             
     def change_face_show(self, _as):
-        if len(self.face_frames) < 1: return 
-        self.curf_index + _as
-        self.curf_index = 0 if self.curf_index < 0 else self.face_enter_count-1\
-        if self.curf_index >= self.face_enter_count else self.curf_index 
-        vid_img = cv2.cvtColor( self.face_frames[ self.curf_index ], \
-        cv2.COLOR_BGR2RGB )
-        vid_img = Image.fromarray( vid_img )
-        imgtk = ImageTk.PhotoImage( image=vid_img )
-        self.infofm.curf_label.imgtk = imgtk
-        self.infofm.curf_label.configure(image=imgtk)
+        if len(self.face_frames) >0:
+            self.curf_index + _as
+            self.curf_index = 0 if self.curf_index < 0 else self.face_enter_count-1\
+            if self.curf_index >= self.face_enter_count else self.curf_index 
+            vid_img = cv2.cvtColor( self.face_frames[ self.curf_index ], \
+            cv2.COLOR_BGR2RGB )
+            vid_img = Image.fromarray( vid_img )
+            imgtk = ImageTk.PhotoImage( image=vid_img )
+            self.infofm.curf_label.imgtk = imgtk
+            self.infofm.curf_label.configure(image=imgtk)
+        elif len(self.rec_results) >1:
+            _keys = list( self.rec_results.keys() )
+            _len = len( _keys )
+            if settings.debug:
+                print(_keys); print(_len)
+            self.curf_index = 0 if self.curf_index < 0 else _len - 1\
+            if self.curf_index >= _len else self.curf_index 
+            vid_img = Image.fromarray( \
+            self.rec_results[_keys[ self.curf_index ]]  )
+            imgtk = ImageTk.PhotoImage( image=vid_img )
+            self.infofm.curf_label.imgtk = imgtk
+            self.infofm.curf_label.configure(image=imgtk)
+            info_file_path = os.path.join( \
+            settings.info_file_path,  _keys[ self.curf_index  ] )
+            self.infofm.faces_text.insert('1.0', \
+            open( info_file_path, 'r' ) )
+
+    
+    def recf(self):
+        self.rec_results = {}
+        self.face_frames = []
+        gray_img=cv2.cvtColor(self.cur_frame,cv2.COLOR_BGR2GRAY)
+        faces=self.face_casecade.detectMultiScale(gray_img,1.3,5)        
+        for (x,y,w,h) in faces:
+            self.cur_frame=cv2.rectangle(self.cur_frame,(x,y),(x+w,y+h),(255,0,0),2) 
+            roi_gray= gray_img[y:y+h,x:x+w]
+            roi_gray= cv2.resize( roi_gray, (92,112),\
+            interpolation=cv2.INTER_LINEAR)
+            result=self.recognizer.predict(roi_gray)
+            _id = self.info_ids[result[0]]
+            # self.rec_results[_id] 
+            # self.cur_frame[y:y+h,x:x+w]
+
+        if settings.debug:
+            print( self.rec_results )
+        self.change_face_show(0)
+
+
+
 
              
 ###############################################################################

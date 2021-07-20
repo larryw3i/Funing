@@ -119,7 +119,7 @@ class InfoFrame():
         self.ft_sb = tk.Scrollbar(self.info_enter_frame, orient=VERTICAL)
         self.faces_text = Text( self.info_enter_frame,  \
         yscrollcommand = self.ft_sb.set)  
-        self.save_btn = tk.Button( self.info_enter_frame, text = _("Save") )
+        self.save_btn = tk.Button( self.frame, text = _("Save") )
         self.ft_sb.config(command = self.faces_text.yview)      
     def place( self ):
         self.prevf_btn.pack(side = LEFT)
@@ -129,6 +129,7 @@ class InfoFrame():
         self.ft_sb.pack(side=tk.RIGHT,fill=tk.Y)
         self.face_show_frame.grid( column = 0, row = 0, columnspan = 5)
         self.info_enter_frame.grid( column = 0, row = 1, columnspan = 5)
+        self.save_btn.grid( column = 2, row = 2 )
         self.frame.grid( column = 1, row = 0 )
         pass
 

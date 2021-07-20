@@ -36,7 +36,7 @@ data_dir = \
 faces_path = \
     os.path.join( data_dir, 'faces' )
 data_empty = \
-    len( os.listdir( faces_path ) ) < 1
+    (not os.path.exists( faces_path )) or len( os.listdir( faces_path ) ) < 1
 infos_path = \
     os.path.join( data_dir, 'infos' )
 lang_code = \
