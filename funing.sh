@@ -18,5 +18,8 @@ update_gitignore(){
     echo "gitignore updated!"
 }
 
+gp(){ git_push; }
+ug(){ update_gitignore; }
+
 
 $1
