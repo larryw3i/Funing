@@ -84,9 +84,13 @@ class ShowFrame():
             textvariable = self.ct_stringvar )
 
         # shoot
-        self.rec_stringvar = tk.StringVar( frame, _('Recognize'))
-        self.rec_button = tk.Button( self.frame, \
-            textvariable = self.rec_stringvar )
+        self.pp_sv = tk.StringVar( frame, _('Pause'))
+        self.pp_btn = tk.Button( self.frame, \
+            textvariable = self.pp_sv )
+
+        self.pick_sv = tk.StringVar( frame, _('Pick'))
+        self.pick_btn = tk.Button( self.frame, \
+            textvariable = self.pick_sv )
     
     def place( self ):
 
@@ -99,18 +103,33 @@ class ShowFrame():
         self.showf_optionmenu.grid( column = 2, row = 4 , sticky = W)
         self.ct_label.grid( column = 3, row = 4, sticky = E )
         self.ct_entry.grid( column = 4, row = 4, sticky = W )
-        self.rec_button.grid( column = 5, row = 4)
-        
+        self.pp_btn.grid( column = 5, row = 4)
+        self.pick_btn.grid( column = 6, row = 4 )        
         # place frame
-        self.frame.grid( column = 0, row = 0 )
-
-             
+        self.frame.grid( column = 0, row = 0 )             
 
 class InfoFrame():
     def __init__(self, frame):
         self.frame = frame
-        
+        self.face_show_frame = tk.Frame( self.frame )
+        self.info_enter_frame = tk.Frame( self.frame )
+        self.prevf_btn = tk.Button( self.face_show_frame, text = _('Prev') )
+        self.curf_label = tk.Label( self.face_show_frame )
+        self.nextf_btn = tk.Button( self.face_show_frame, text = _('Next') )
+        self.ft_sb = tk.Scrollbar(self.info_enter_frame, orient=VERTICAL)
+        self.faces_text = Text( self.info_enter_frame,  \
+        yscrollcommand = self.ft_sb.set)  
+        self.save_btn = tk.Button( self.info_enter_frame, text = _("Save") )
+        self.ft_sb.config(command = self.faces_text.yview)      
     def place( self ):
+        self.prevf_btn.pack(side = LEFT)
+        self.curf_label.pack(side = LEFT)
+        self.nextf_btn.pack(side = LEFT)
+        self.faces_text.pack(side=tk.LEFT,fill=tk.Y)
+        self.ft_sb.pack(side=tk.RIGHT,fill=tk.Y)
+        self.face_show_frame.grid( column = 0, row = 0, columnspan = 5)
+        self.info_enter_frame.grid( column = 0, row = 1, columnspan = 5)
+        self.frame.grid( column = 1, row = 0 )
         pass
 
 class EntryFrame():
@@ -121,76 +140,3 @@ class EntryFrame():
     
     def place( self ):
         pass
-
-
-'''
-        self.face_label = tk.Label( self.frame )
-
-        self.prev_f_button = tk.Button(self.frame , \
-            text = _("prev_symb"))
-        self.face_num_stringvar = StringVar( self.frame, '*/*' )
-        self.face_num_label = tk.Label( self.frame , \
-            textvariable = self.face_num_stringvar  )
-        self.next_f_button = tk.Button(self.frame , \
-            text = _('next_symb'))
-
-        self.uuid_label = tk.Label( self.frame, text = _('id') )
-        self.uuid_entry = tk.Entry( self.frame , state ='disabled')
-
-        self.name_label = tk.Label( self.frame, text = _('Name') )
-        self.name_entry = tk.Entry( self.frame )
-        
-        self.gender_label = tk.Label( self.frame, text = _('Gender') )
-        self.gender_entry = tk.Entry( self.frame )
-
-        self.DOB_label = tk.Label( self.frame, text = _('DOB') )
-        self.DOB_entry = tk.Entry( self.frame )
-
-        self.address_label = tk.Label( self.frame, text = _('Address') )
-        self.address_entry = tk.Entry( self.frame )
-
-        self.cmt_label = tk.Label( self.frame, text = _('Comment') )
-        self.cmt_text = tk.Text( self.frame, height = 6, width = 20 )
-
-        # save_button
-        self.save_button = tk.Button( self.frame, text = _('Save') )
-
-    def clear_content( self ):
-
-        self.uuid_entry['state'] = 'normal'
-        self.uuid_entry.delete(0, END)
-        self.uuid_entry['state'] = 'disabled'
-        self.name_entry.delete(0, END)
-        self.DOB_entry.delete(0, END)
-        self.address_entry.delete(0, END)
-        self.cmt_text.delete('1.0', END)
-        
-    def place( self ):
-        # place frame
-        self.face_label.grid( column = 0 , row = 0, columnspan = 2 )
-        self.prev_f_button.grid( column = 0 , row = 1)
-        self.face_num_label.grid( column = 1 , row = 1)
-        self.next_f_button.grid( column = 2 , row = 1)
-
-        self.uuid_label.grid( column = 0, row = 2)
-        self.uuid_entry.grid( column = 1, row = 2)
-        
-        self.name_label.grid(column = 0, row = 3 )
-        self.name_entry.grid(column = 1 ,row = 3)
-        
-        self.gender_label.grid(column = 0, row = 4 )
-        self.gender_entry.grid(column = 1 ,row = 4 )
-        
-        self.DOB_label.grid(column = 0, row = 5 )
-        self.DOB_entry.grid(column = 1 ,row = 5 )
-
-        self.address_label.grid(column = 0, row = 6 )
-        self.address_entry.grid(column = 1 ,row = 6 )
-
-        self.cmt_label.grid(column = 0, row = 7 )
-        self.cmt_text.grid(column = 1 ,row = 7 )
-        # save_button
-        self.save_button.grid( column = 1, row= 8)
-        self.frame.grid( column = 1, row = 0, sticky = N )
-
-'''

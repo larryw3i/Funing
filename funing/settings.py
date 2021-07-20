@@ -25,6 +25,8 @@ locale_path = \
     os.path.join( project_path, 'locale') 
 config_path = \
     os.path.join( project_path , 'config.yml') 
+if not os.path.exists( config_path ): config_path = \
+    os.path.join( project_path , 'config.example.yml') 
 config_yml = \
     yaml.safe_load( open( config_path, 'r' ))
 version =  \
@@ -33,6 +35,8 @@ data_dir = \
     os.path.join( base_dir, 'data' )
 faces_path = \
     os.path.join( data_dir, 'faces' )
+data_empty = \
+    len( os.listdir( faces_path ) ) < 1
 infos_path = \
     os.path.join( data_dir, 'infos' )
 lang_code = \
@@ -47,3 +51,5 @@ hff_xml_path = \
     os.path.join( haarcascades , "haarcascade_frontalface_default.xml" )
 infos_len = \
     config_yml.get( "infos_len", 5 )
+face_enter_count = \
+    config_yml.get( "face_enter_count", 5 )

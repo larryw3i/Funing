@@ -1,5 +1,5 @@
 comparison_tolerance: 0.6
 infos_len: 5
-initialized: true
+initialized: false
 lang_code: zh-Hans
 version: 0.0.9

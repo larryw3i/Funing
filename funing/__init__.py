@@ -8,13 +8,13 @@ from funing import settings
 import yaml
 import json
 import pickle
-from funing._fui import enjoy
+from funing._fui import Enjoy
 
 sys.path.append( 
     str( Path( os.path.abspath( __file__)  ).parent.absolute() ) )
 def run():
     sys_argv = sys.argv[1:]
-    f = enjoy()
+    f = Enjoy()
     optlist , args  = getopt.getopt( sys_argv, '' )    
     if len(args) < 1: f.start()
     for a in args:
