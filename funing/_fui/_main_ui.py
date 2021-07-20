@@ -47,10 +47,16 @@ class _MainUI():
         self.faces = []
         self.face_frames = []
         self.curf_index = 0
+        # rec_result
+        self.result_frames = []
+        self.result_ids = []
+        self.rec_gray_img = None
+        # rec_faces
+        self.recfs = []
         # info
         self.cur_info_id = None
         self.info_ids = []
-        self.rec_results = {}
+        # self.rec_results = []
         # cv2
         self.recognizer=cv2.face.EigenFaceRecognizer_create()
         self.face_casecade=cv2.CascadeClassifier( settings.hff_xml_path )   
@@ -95,7 +101,7 @@ class _MainUI():
         self.recognizer.train( images, labels)
 
     def open_vid_cap( self ):
-        self.vid = cv2.VideoCapture( self.video_source )
+        self.vid = cv2.VideoCapture( self.source )
         if not self.vid.isOpened(): self.show_nsrc_error(); return
         self.vid_width = self.vid.get(cv2.CAP_PROP_FRAME_WIDTH)
         self.vid_height = self.vid.get(cv2.CAP_PROP_FRAME_HEIGHT)
@@ -126,23 +132,23 @@ class _MainUI():
 ###############################################################################
 
     def pause_play( self, *args ):
-        if self.vid is None: return
         if self.pause: 
-            self.pause = True
-            self.refresh_frame()
-            self.showfm.pp_sv.set( _('Pause') )
-        else:
             self.pause = False
+            if self.vid is None: return
             self.root_after_cancel()
             self.recf()
             self.showfm.pp_sv.set( _('Play') )
             # self.pick()
+        else:
+            self.pause = True
+            self.refresh_frame()
+            self.showfm.pp_sv.set( _('Pause') )
 
     def pick(self):
         if self.vid is None: return
         count = 0
         self.cur_info_id = str(uuid.uuid4())
-        self.rec_results = {}
+        self.recfs = []
         self.face_frames = []
         while(True):
             ret, self.frame=self.vid.read()
@@ -198,16 +204,18 @@ class _MainUI():
             if ext in self.image_exts: 
                 self.view_image()
             elif ext in self.video_exts: 
-                self.video_source = self.face_src_path
+                self.source = self.face_src_path
                 self.play_video()
         elif show_f == 'camera':
-            self.video_source = 0
-            self.showfm.showf_sv.set( self.video_source )
+            self.source = 0
+            self.showfm.showf_sv.set( self.source )
             self.play_video()
     
     def root_after_cancel( self ):
         if self.root_after != -1:
             self.mainui.root.after_cancel( self.root_after )
+            self.vid.release()
+            self.vid = None
         
     def play_video( self ):
         self.close_vid_cap()
@@ -216,6 +224,8 @@ class _MainUI():
         self.refresh_frame()
     
     def refresh_frame(self):
+        if self.vid == None: self.vid = cv2.VideoCapture( self.source )
+        ret, self.cur_frame = self.vid.read()        
         self.cur_frame2label()
         self.root_after = self.mainui.root.after( \
             int(1000/self.vid_fps) , self.refresh_frame )
@@ -229,7 +239,6 @@ class _MainUI():
         self.showfm.vid_frame_label.configure(image=imgtk)
            
     def cur_frame2label( self ):
-        ret, self.cur_frame = self.vid.read()        
         vid_img = cv2.resize( self.cur_frame , (0,0) , \
             fx = self.fxfy, fy = self.fxfy )
         vid_img = cv2.cvtColor( vid_img, cv2.COLOR_BGR2RGB )
@@ -293,7 +302,7 @@ class _MainUI():
             
     def change_face_show(self, _as):
         if len(self.face_frames) >0:
-            self.curf_index + _as
+            self.curf_index += _as
             self.curf_index = 0 if self.curf_index < 0 else self.face_enter_count-1\
             if self.curf_index >= self.face_enter_count else self.curf_index 
             vid_img = cv2.cvtColor( self.face_frames[ self.curf_index ], \
@@ -302,29 +311,53 @@ class _MainUI():
             imgtk = ImageTk.PhotoImage( image=vid_img )
             self.infofm.curf_label.imgtk = imgtk
             self.infofm.curf_label.configure(image=imgtk)
-        elif len(self.rec_results) >1:
-            _keys = list( self.rec_results.keys() )
-            _len = len( _keys )
-            if settings.debug:
-                print(_keys); print(_len)
+        elif len(self.recfs) > 0:
+            _len = len( self.recfs )
+            self.curf_index+=_as
             self.curf_index = 0 if self.curf_index < 0 else _len - 1\
             if self.curf_index >= _len else self.curf_index 
-            vid_img = Image.fromarray( \
-            self.rec_results[_keys[ self.curf_index ]]  )
+
+            x,y,w,h = self.recfs[ self.curf_index ]
+            roi_gray= self.rec_gray_img[y:y+h,x:x+w]
+            roi_gray= cv2.resize( roi_gray, (92,112),\
+            interpolation=cv2.INTER_LINEAR)
+            result=self.recognizer.predict(roi_gray)
+            _id = self.info_ids[result[0]]
+            frame = self.cur_frame[y:y+h,x:x+w] 
+
+            vid_img = cv2.cvtColor( frame, cv2.COLOR_BGR2RGB )
+            vid_img = Image.fromarray( vid_img  )
             imgtk = ImageTk.PhotoImage( image=vid_img )
             self.infofm.curf_label.imgtk = imgtk
             self.infofm.curf_label.configure(image=imgtk)
-            info_file_path = os.path.join( \
-            settings.info_file_path,  _keys[ self.curf_index  ] )
-            self.infofm.faces_text.insert('1.0', \
-            open( info_file_path, 'r' ) )
 
+            info_file_path = os.path.join( \
+            settings.infos_path,  _id )
+            self.infofm.faces_text.delete(1.0,tk.END)
+            self.infofm.faces_text.insert('1.0', \
+            open( info_file_path, 'r' ).read() )
     
     def recf(self):
-        self.rec_results = {}
         self.face_frames = []
-        gray_img=cv2.cvtColor(self.cur_frame,cv2.COLOR_BGR2GRAY)
-        faces=self.face_casecade.detectMultiScale(gray_img,1.3,5)        
+        self.recfs = []
+        if self.cur_frame is None: return
+        if settings.debug: 
+            print('self.cur_frame not None')
+        self.rec_gray_img=cv2.cvtColor(self.cur_frame,cv2.COLOR_BGR2GRAY)
+        self.recfs=self.face_casecade.detectMultiScale(self.rec_gray_img,1.3,5)
+        if len( self.recfs ) < 1: return
+        self.change_face_show(0)
+        for (x,y,w,h) in self.recfs:
+            self.cur_frame=cv2.rectangle(\
+            self.cur_frame,(x,y),(x+w,y+h),(255,0,0),2)  
+        self.cur_frame2label()
+
+    def show_rec_result(self, _as):
+        _len = len( self.recfs )
+        self.curf_index+=_as
+        self.curf_index = 0 if self.curf_index < 0 else _len - 1\
+        if self.curf_index >= _len else self.curf_index 
+
         for (x,y,w,h) in faces:
             self.cur_frame=cv2.rectangle(self.cur_frame,(x,y),(x+w,y+h),(255,0,0),2) 
             roi_gray= gray_img[y:y+h,x:x+w]
@@ -332,8 +365,8 @@ class _MainUI():
             interpolation=cv2.INTER_LINEAR)
             result=self.recognizer.predict(roi_gray)
             _id = self.info_ids[result[0]]
-            # self.rec_results[_id] 
-            # self.cur_frame[y:y+h,x:x+w]
+            self.result_frames.append( self.cur_frame[y:y+h,x:x+w] )
+            self.result_ids.append( _id )
 
         if settings.debug:
             print( self.rec_results )
