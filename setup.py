@@ -28,6 +28,8 @@ setuptools.setup(
         'opencv-contrib-python',
         'langcodes[data]',
         'pyyaml',
+        'Pillow',
+        'numpy',
     ],
     include_package_data = True,
 )

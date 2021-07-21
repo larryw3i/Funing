@@ -5,5 +5,4 @@ python3 test.py kc
 rm -rf dist/*
 python setup.py sdist bdist_wheel
 pip3 uninstall funing
-pip install dist/*.whl
-
+pip3 install dist/*.whl

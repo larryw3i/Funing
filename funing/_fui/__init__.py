@@ -3,10 +3,6 @@
 import os
 import sys
 import yaml
-import json
-import pickle
-import numpy as np
-import shutil
 import cv2
 from funing import settings
 from funing._fui import error

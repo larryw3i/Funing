@@ -13,9 +13,7 @@ import cv2
 from PIL import Image , ImageTk
 from funing.locale.lang import _
 from datetime import datetime , date
-import json
 from funing import settings
-import pickle
 import yaml
 import uuid
 import time

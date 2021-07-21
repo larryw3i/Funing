@@ -1,3 +1,5 @@
 opencv-contrib-python
 langcodes[data]
 pyyaml
+Pillow
+numpy

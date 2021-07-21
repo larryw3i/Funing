@@ -42,10 +42,5 @@ def lib_check():
     try: import cv2
     except Exception as e:  print(e);   cv2_nf();       _exit = True
     try: import gettext
-    except Exception as e:  print(e);   gettext_nf();   _exit = True
-    try: import dlib
-    except Exception as e:  print(e);   dlib_nf();      _exit = True
-    try: import face_recognition
-    except Exception as e:  print(e);   f_r_nf();       _exit = True
-    
+    except Exception as e:  print(e);   gettext_nf();   _exit = True    
     if _exit: exit()

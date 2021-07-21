@@ -7,6 +7,7 @@ from pathlib import Path
 import getopt
 import sys
 
+version =  "0.2.29"
 args = \
     getopt.getopt( sys.argv[1:], '' )[1]
 test_args = \
@@ -28,8 +29,6 @@ if not os.path.exists( config_path ): config_path = \
     os.path.join( project_path , 'config.example.yml') 
 config_yml = \
     yaml.safe_load( open( config_path, 'r' ))
-version =  \
-    config_yml.get('version','0.2.28')
 data_dir = \
     os.path.join( base_dir, 'data' )
 faces_path = \
