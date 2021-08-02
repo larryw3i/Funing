@@ -136,12 +136,12 @@ dmypy.json
 *.sqlite3
 *.sqlite
 *.db
-tests/tests/*
+tests/tests/
 jupyter_notebok.ipynb
 data/face_encodings.data
 .pypirc
 funing/venv/
-funing/_home/*
+funing/_home/
 *.data
 .idea/
 

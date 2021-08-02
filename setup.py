@@ -25,11 +25,11 @@ setuptools.setup(
     },
     python_requires='>=3.6',
     install_requires=[
-        'opencv-contrib-python',
-        'langcodes[data]',
-        'pyyaml',
-        'Pillow',
-        'numpy',
+        'opencv-contrib-python >= 4.5.3.56',
+        'langcodes[data] >= 3.1.0',
+        'PyYAML >= 5.3.1',
+        'Pillow >= 8.1.2',
+        'numpy >= 1.21.1',
     ],
     include_package_data = True,
 )
