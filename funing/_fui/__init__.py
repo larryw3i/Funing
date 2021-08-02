@@ -5,7 +5,7 @@ import sys
 import yaml
 import cv2
 from funing import settings
-from funing._fui import error
+from funing import error
 
 error.lib_check()
 

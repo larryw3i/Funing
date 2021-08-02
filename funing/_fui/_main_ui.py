@@ -27,7 +27,7 @@ class _MainUI():
         self.mainui = MainUI()
         self.mainui.place()
         self.source = 0
-        self.root_after = -1        
+        self.root_after = -1
         # face num for face_label
         self.lang_code = settings.lang_code
         self.fxfy = None        

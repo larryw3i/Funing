@@ -49,3 +49,4 @@ infos_len = \
     config_yml.get( "infos_len", 5 )
 face_enter_count = \
     config_yml.get( "face_enter_count", 5 )
+source_page = 'https://github.com/larryw3i/Funing'
