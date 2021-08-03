@@ -3,6 +3,7 @@ from tkinter import *
 import os
 from funing import settings
 import webbrowser
+import yaml
 
 class MenubarUI():
     def __init__(self, root ):
@@ -41,9 +42,9 @@ class MenubarUI():
             self.edit_text = Text( self.edit_frame, yscrollcommand = \
             self.edit_sb.set )
             self.edit_text_insert()
-            self.save_btn = Button( self.save_frame, text = _("Save") )
             self.edit_sb.config(command = self.edit_text.yview)  
-            self.save_btn = Button( self.settings_tl, text =_('Save') )
+            self.save_btn = Button( self.settings_tl, text =_('Save'),\
+            command=self.save_config )
             self.edit_text.pack(side=LEFT,fill=Y)
             self.edit_sb.pack(side=RIGHT,fill=Y)
             self.save_btn.pack(side=BOTTOM)
@@ -58,4 +59,10 @@ class MenubarUI():
     def edit_text_insert(self):
         config_txt = open( settings.config_path ).read()
         self.edit_text.insert( "1.0", config_txt)
+        pass
+
+    def save_config(self):
+        config_txt = self.edit_text.get("1.0",'end')
+        open( settings.config_path, 'w' ).write( config_txt )
+        self.save_btn['text'] = _("Saved") 
         pass

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-21 03:34+0800\n"
+"POT-Creation-Date: 2021-08-03 18:47+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,11 +19,15 @@ msgstr ""
 
 #: ../../../_ui/_main_ui.py:26
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:383
+#: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:381
 msgid "Restart Funing Now?"
 msgstr "重启应用?"
 
 #: ../../../ui/main_ui.py:12
 #: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:18
+#: /home/larry/fun/larryw3i/Funing/funing/ui/menubar_ui.py:20
+#: /home/larry/fun/larryw3i/Funing/funing/ui/f_ui.py:18
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:18
 msgid "Funing"
 msgstr "Funing"
 
@@ -33,16 +37,19 @@ msgstr "剪取"
 
 #: ../../../ui/main_ui.py:18
 #: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:74
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:74
 msgid "File"
 msgstr "文件"
 
 #: ../../../ui/main_ui.py:19
 #: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:74
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:74
 msgid "Camera"
 msgstr "摄像头"
 
 #: ../../../ui/main_ui.py:21
 #: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:75
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:75
 msgid "Open"
 msgstr "打开"
 
@@ -64,23 +71,29 @@ msgstr "备注"
 
 #: ../../../_ui/_main_ui.py:119
 #: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:87
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:87
 msgid "Pause"
 msgstr "暂停"
 
 #: ../../../_ui/_main_ui.py:122
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:145
+#: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:143
 msgid "Play"
 msgstr "继续"
 
 #: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:122
+#: /home/larry/fun/larryw3i/Funing/funing/ui/menubar_ui.py:46
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:122
 msgid "Save"
 msgstr "保存"
 
 #: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:116
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:116
 msgid "prev_symb"
 msgstr "<<"
 
 #: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:118
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:118
 msgid "next_symb"
 msgstr ">>"
 
@@ -90,10 +103,12 @@ msgstr ""
 "并安装它。 (^_^)"
 
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:151
+#: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:149
 msgid "Recognize"
 msgstr "识别"
 
 #: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:81
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:81
 msgid "tolerance"
 msgstr "误差（0.1-0.6）"
 
@@ -110,6 +125,7 @@ msgid "Oops.., No face detected!"
 msgstr "尽然没有找到......, 都怪我!"
 
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:204
+#: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:202
 msgid "Image or video"
 msgstr "照片或视频"
 
@@ -132,30 +148,66 @@ msgid "Gender"
 msgstr "性别"
 
 #: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:91
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:91
 msgid "Pick"
 msgstr "录入"
 
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:402
+#: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:400
 msgid "You haven't entered anything yet! "
 msgstr "你还没有录入任何数据, 打开摄像头或文件然后点击'录入'"
 
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:401
+#: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:399
 msgid "Nothing enter"
 msgstr "没有录入任何数据"
 
 #: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:72
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:72
 msgid "GO"
 msgstr ""
 
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:68
+#: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:66
 msgid "No desktop environment is detected! (^_^)"
 msgstr ""
 
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:203
+#: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:201
 msgid "Select a file"
 msgstr ""
 
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:271
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:398
+#: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:269
+#: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:396
 msgid "Unable to open video source"
+msgstr ""
+
+#: /home/larry/fun/larryw3i/Funing/funing/ui/menubar_ui.py:27
+msgid "Licensed under the MIT license"
+msgstr ""
+
+#: /home/larry/fun/larryw3i/Funing/funing/ui/menubar_ui.py:37
+msgid "Edit config.yaml"
+msgstr ""
+
+#: /home/larry/fun/larryw3i/Funing/funing/ui/menubar_ui.py:67
+msgid "Saved"
+msgstr ""
+
+#: /home/larry/fun/larryw3i/Funing/funing/ui/f_ui.py:46
+msgid "About"
+msgstr ""
+
+#: /home/larry/fun/larryw3i/Funing/funing/ui/f_ui.py:47
+msgid "About Funing"
+msgstr ""
+
+#: /home/larry/fun/larryw3i/Funing/funing/ui/f_ui.py:52
+msgid "Preferences"
+msgstr ""
+
+#: /home/larry/fun/larryw3i/Funing/funing/ui/f_ui.py:54
+msgid "Settings"
 msgstr ""

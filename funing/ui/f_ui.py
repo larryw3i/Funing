@@ -10,6 +10,7 @@ import os
 import re
 from datetime import datetime
 from funing.ui.menubar_ui import MenubarUI
+from funing.ui.r_ui import Rui
 import uuid
 import webbrowser
 
@@ -19,8 +20,33 @@ class Fnui():
         self.root = Tk()
         self.root.title( self.title )
         self.set_menubar()
+        self.get_screen_hw()
+        self.root.geometry(\
+        f'{int(self.screenwidth/2)}x{int(self.screenheight/2)}')
         self.menubar_ui = MenubarUI( self.root )
-    
+        self.set_fn_canvas()
+        self.set_r_ui()
+
+    def set_r_ui(self):
+        self.rui= Rui(self.main_frame)
+        self.rui.set_c_ui()
+        pass
+
+    def set_fn_canvas( self ):
+        self.main_canvas=Canvas(self.root) 
+        self.main_frame=Frame(self.main_canvas) 
+        vbar=Scrollbar(self.main_canvas,orient=VERTICAL)
+        vbar.configure(command=self.main_canvas.yview)
+        self.main_canvas.config(yscrollcommand=vbar.set) 
+        self.main_frame.pack(fill=BOTH,expand=True)
+        vbar.pack(side=RIGHT)
+        self.main_canvas.pack(fill=BOTH,expand=True)
+
+    def get_screen_hw(self):
+        try:self.screenwidth = self.root.winfo_screenwidth();\
+            self.screenheight = self.root.winfo_screenheight()
+        except: print(_('No desktop environment is detected! (^_^)')); exit()  
+
     def set_indicator(self):
         pass
     
@@ -56,9 +82,10 @@ class Fnui():
         pass
 
     def edit_config_yaml(self):
-            self.menubar_ui.preferences_menu_ui_mainloop()
+        self.menubar_ui.preferences_menu_ui_mainloop()
+        
     def about_fn(self):
-            self.menubar_ui.about_menu_ui_mainloop()
+        self.menubar_ui.about_menu_ui_mainloop()
 
 def mainloop():
     fnui = Fnui()
