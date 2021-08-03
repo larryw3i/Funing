@@ -129,6 +129,9 @@ class InfoFrame():
         self.ft_sb = tk.Scrollbar(self.info_enter_frame, orient=VERTICAL)
         self.faces_text = Text( self.info_enter_frame,  \
         yscrollcommand = self.ft_sb.set)  
+        self.faces_text_tip_label = Label(self.frame, text = \
+        _('Write it with certain rules so that you can analyze it later'),\
+        font=('', 8) )
         self.save_btn = tk.Button( self.frame, text = _("Save") )
         self.ft_sb.config(command = self.faces_text.yview)      
     def place( self ):
@@ -139,7 +142,8 @@ class InfoFrame():
         self.ft_sb.pack(side=tk.RIGHT,fill=tk.Y)
         self.face_show_frame.grid( column = 0, row = 0, columnspan = 5)
         self.info_enter_frame.grid( column = 0, row = 1, columnspan = 5)
-        self.save_btn.grid( column = 2, row = 2 )
+        self.faces_text_tip_label.grid(column = 0, row = 2,  columnspan = 5)
+        self.save_btn.grid( column = 2, row = 3 )
         self.frame.grid( column = 1, row = 0 )
         pass
 

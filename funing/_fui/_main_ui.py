@@ -97,7 +97,7 @@ class _MainUI():
     def about_fn(self):
         if self.about_tl == None:
             self.about_tl = Toplevel(borderwidth = 10)
-            self.about_tl.title('About Funing')
+            self.about_tl.title(_('About Funing'))
             self.about_tl.resizable(0,0)
             Label( self.about_tl, text =_('Funing'), font=("", 25)).pack()
             Label(  self.about_tl, text = settings.version ).pack()

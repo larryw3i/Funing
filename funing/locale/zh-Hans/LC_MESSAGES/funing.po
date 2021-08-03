@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-03 21:12+0800\n"
+"POT-Creation-Date: 2021-08-04 02:52+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,6 +21,7 @@ msgstr ""
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:383
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:398
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:397
+#: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:399
 msgid "Restart Funing Now?"
 msgstr "重启应用?"
 
@@ -94,6 +95,7 @@ msgstr "继续"
 #: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:132
 #: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:122
 #: /home/larry/fun/larryw3i/Funing/funing/ui/c_ui.py:56
+#: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:135
 msgid "Save"
 msgstr "保存"
 
@@ -176,12 +178,14 @@ msgstr "录入"
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:402
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:417
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:416
+#: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:418
 msgid "You haven't entered anything yet! "
 msgstr "你还没有录入任何数据, 打开摄像头或文件然后点击'录入'"
 
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:401
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:416
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:415
+#: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:417
 msgid "Nothing enter"
 msgstr "没有录入任何数据"
 
@@ -209,6 +213,7 @@ msgstr "选择一个文件"
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:413
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:293
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:412
+#: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:414
 msgid "Unable to open video source"
 msgstr "无法打开视频源"
 
@@ -219,3 +224,7 @@ msgstr "关于Funing"
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:109
 msgid "Licensed under the MIT license"
 msgstr "本项目以MIT开源协议授权"
+
+#: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:133
+msgid "Write it with certain rules so that you can analyze it later"
+msgstr "信息编写要中规中矩, 比如yaml或toml, \n这样你分析它们就变得很易如反掌。"
