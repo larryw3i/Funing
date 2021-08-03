@@ -322,6 +322,10 @@ class _MainUI():
         self.cur_info_id = None
         if settings.debug:print( 'info > ' + info )
         self.recognizer_train()
+    
+    def update_num_label(self):
+        self.infofm.num_label['text'] = \
+        f'{self.curf_index+1}/{len(self.face_frames)+len(self.recfs)-1}'
             
     def change_face_show(self, _as):
         if len(self.face_frames) >0:
@@ -335,6 +339,7 @@ class _MainUI():
             imgtk = ImageTk.PhotoImage( image=vid_img )
             self.infofm.curf_label.imgtk = imgtk
             self.infofm.curf_label.configure(image=imgtk)
+            self.update_num_label()
 
         elif len(self.recfs) > 0:
             # RECOGNIZE
@@ -364,6 +369,7 @@ class _MainUI():
             self.infofm.faces_text.delete(1.0,tk.END)
             self.infofm.faces_text.insert('1.0', \
             open( info_file_path, 'r' ).read() )
+            self.update_num_label()
     
     def recf(self):
         self.face_frames = []
