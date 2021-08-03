@@ -5,7 +5,7 @@ import sys
 from pathlib import Path
 import getopt
 from funing import settings
-from funing.curd import retrieve
+from funing.ui import f_ui
 
 from funing._fui import error
 
@@ -17,7 +17,7 @@ class Enjoy():
             self.initialize()
 
     def start(self):
-        retrieve.retrieve()
+        f_ui.mainloop()
     
     def msgfmt( self ):
         for d in settings.locale_langcodes:
