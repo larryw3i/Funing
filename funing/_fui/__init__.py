@@ -27,14 +27,14 @@ class Enjoy():
         os.system('pip3 install -r requirements.txt ')
         
     def initialize( self ):
-        first_mo_path = os.path.join( settings.locale_path, 'en-US', \
-        'LC_MESSAGES', 'funing.mo')        
-        if not os.path.exists( first_mo_path ):
-            try: self.msgfmt()
-            except Exception as e:
-                print( e );error.gettext_nf();exit()
+
+        try: self.msgfmt()
+        except Exception as e:
+            print( e );error.gettext_nf();exit()
+            
         for d in [ settings.faces_path, settings.infos_path ]:
-            if not os.path.exists( d ): os.makedirs( d, exist_ok=True )  
+            if not os.path.exists( d ): os.makedirs( d, exist_ok=True )
+
         settings.config_yml["initialized"] = True
         config_path = os.path.join( settings.project_path , 'config.yml') 
         yaml.safe_dump( settings.config_yml ,  open( config_path, 'w' ) )

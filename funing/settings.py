@@ -24,7 +24,7 @@ base_dir = \
 locale_path = \
     os.path.join( project_path, 'locale') 
 config_path = \
-    os.path.join( project_path , 'config.yml') 
+    os.path.join( base_dir , 'config.yml') 
 if not os.path.exists( config_path ): config_path = \
     os.path.join( project_path , 'config.example.yml') 
 config_yml = \
@@ -39,8 +39,6 @@ infos_path = \
     os.path.join( data_dir, 'infos' )
 lang_code = \
     config_yml.get('lang_code', 'en-US')
-initialized  = \
-    config_yml.get('initialized', False)
 comparison_tolerance = \
     config_yml.get('comparison_tolerance', 0.6)
 locale_langcodes =  \
@@ -50,3 +48,8 @@ infos_len = \
 face_enter_count = \
     config_yml.get( "face_enter_count", 5 )
 source_page = 'https://github.com/larryw3i/Funing'
+prev_version = config_yml.get('version', version )
+
+initialized  = \
+    config_yml.get('initialized', False) and (version == prev_version)
+    

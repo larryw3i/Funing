@@ -349,7 +349,9 @@ class _MainUI():
             interpolation=cv2.INTER_LINEAR)
             result=self.recognizer.predict(roi_gray)
             _id = self.info_ids[result[0]]
-            frame = self.cur_frame[y:y+h,x:x+w] 
+            _h = h if h>w else w
+            frame = self.cur_frame[y:y+_h,x:x+_h]
+            frame = cv2.resize(frame, (200,200))
 
             vid_img = cv2.cvtColor( frame, cv2.COLOR_BGR2RGB )
             vid_img = Image.fromarray( vid_img  )
