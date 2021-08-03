@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-21 03:34+0800\n"
+"POT-Creation-Date: 2021-08-03 21:12+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,6 +18,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ui/main_ui.py:7 /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:18
+#: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:102
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:18
 msgid "Funing"
 msgstr ""
 
@@ -43,19 +45,30 @@ msgstr ""
 
 #: ../../../_ui/_main_ui.py:119
 #: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:87
+#: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:97
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:87
+#: /home/larry/fun/larryw3i/Funing/funing/ui/c_ui.py:36
 msgid "Pause"
 msgstr ""
 
 #: ../../../_ui/_main_ui.py:122
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:145
+#: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:165
+#: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:164
 msgid "Play"
 msgstr ""
 
 #: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:116
+#: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:126
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:116
+#: /home/larry/fun/larryw3i/Funing/funing/ui/c_ui.py:50
 msgid "prev_symb"
 msgstr "<<"
 
 #: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:118
+#: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:128
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:118
+#: /home/larry/fun/larryw3i/Funing/funing/ui/c_ui.py:52
 msgid "next_symb"
 msgstr ">>"
 
@@ -65,62 +78,109 @@ msgstr ""
 "and install it. (^_^)"
 
 #: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:81
+#: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:91
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:81
+#: /home/larry/fun/larryw3i/Funing/funing/ui/c_ui.py:30
 msgid "tolerance"
 msgstr "tolerance(0.1-0.6)"
 
 #: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:91
+#: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:101
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:91
+#: /home/larry/fun/larryw3i/Funing/funing/ui/c_ui.py:40
 msgid "Pick"
 msgstr "Pick"
 
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:402
+#: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:417
+#: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:416
 msgid "You haven't entered anything yet! "
 msgstr "You haven't entered data yet! Open a source and click 'Pick' to enter"
 
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:401
+#: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:416
+#: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:415
 msgid "Nothing enter"
 msgstr "Nothing enter"
 
 #: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:72
+#: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:82
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:72
+#: /home/larry/fun/larryw3i/Funing/funing/ui/c_ui.py:21
 msgid "GO"
 msgstr ""
 
 #: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:74
+#: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:84
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:74
+#: /home/larry/fun/larryw3i/Funing/funing/ui/c_ui.py:23
 msgid "File"
 msgstr ""
 
 #: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:74
+#: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:84
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:74
+#: /home/larry/fun/larryw3i/Funing/funing/ui/c_ui.py:23
 msgid "Camera"
 msgstr ""
 
 #: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:75
+#: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:85
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:75
+#: /home/larry/fun/larryw3i/Funing/funing/ui/c_ui.py:24
 msgid "Open"
 msgstr ""
 
 #: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:122
+#: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:132
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:122
+#: /home/larry/fun/larryw3i/Funing/funing/ui/c_ui.py:56
 msgid "Save"
 msgstr ""
 
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:68
+#: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:67
 msgid "No desktop environment is detected! (^_^)"
 msgstr ""
 
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:151
+#: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:171
+#: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:97
+#: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:170
 msgid "Recognize"
 msgstr ""
 
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:203
+#: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:223
+#: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:225
 msgid "Select a file"
 msgstr ""
 
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:204
+#: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:224
+#: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:226
 msgid "Image or video"
 msgstr ""
 
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:271
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:398
+#: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:291
+#: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:413
+#: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:293
+#: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:412
 msgid "Unable to open video source"
 msgstr ""
 
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:383
+#: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:398
+#: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:397
 msgid "Restart Funing Now?"
+msgstr ""
+
+#: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:43
+msgid "About Funing"
+msgstr ""
+
+#: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:109
+msgid "Licensed under the MIT license"
 msgstr ""

@@ -15,13 +15,11 @@ ct = settings.comparison_tolerance
 class MainUI():
     def __init__(self):
         self.root = tk.Tk()
-        self.root.title( _('Funing')+'(' + settings.version+ ')' )
+        self.root.title( _('Funing')+' ' + settings.version )
         # frame
         self.showframe = ShowFrame( tk.Frame( self.root ) ) 
         # entry_frame
         self.entryframe = EntryFrame( tk.Frame( self.root ) )
-        # about_label
-        self.aboutfn_label = AboutFnBtn(self.root)
         # lang_combobox
         self.langcombobox = LangCombobox( self.root )        
         # infoframe
@@ -30,19 +28,11 @@ class MainUI():
     def place(self):
         self.showframe.place()
         self.entryframe.place()
-        self.aboutfn_label.place()
         self.langcombobox.place()
         self.infoframe.place()
     
     def mainloop(self):
         self.root.mainloop()
-    
-class AboutFnBtn():
-    def __init__(self, frame):
-        self.frame = frame
-        self.about_fn_btn = Button(self.frame, text=_('About Funing') )
-    def place(self):
-        self.about_fn_btn.grid( column = 3, row = 2, sticky = NE )
 
 class LangCombobox():
     def __init__(self, frame):
@@ -68,7 +58,7 @@ class LangCombobox():
 
     def place(self):
         # place lang_combobox
-        self.lang_combobox.grid( column = 3, row = 3, sticky = NE )
+        self.lang_combobox.grid( column = 3, row = 2, sticky = NE )
     
 class ShowFrame():
     def __init__( self, frame ):
@@ -94,7 +84,7 @@ class ShowFrame():
             textvariable = self.ct_stringvar )
 
         # shoot
-        self.pr_sv = tk.StringVar( frame, _('Recognize'))
+        self.pr_sv = tk.StringVar( frame, _('Pause'))
         self.pp_btn = tk.Button( self.frame, \
             textvariable = self.pr_sv )
 
@@ -111,8 +101,8 @@ class ShowFrame():
         self.showf_entry.grid( column = 0, row = 4, sticky = E)
         self.showf_go_btn.grid( column = 1, row = 4, sticky = W)
         self.showf_optionmenu.grid( column = 2, row = 4 , sticky = W)
-        # self.ct_label.grid( column = 3, row = 4, sticky = E )
-        # self.ct_entry.grid( column = 4, row = 4, sticky = W )
+        self.ct_label.grid( column = 3, row = 4, sticky = E )
+        self.ct_entry.grid( column = 4, row = 4, sticky = W )
         self.pp_btn.grid( column = 5, row = 4)
         self.pick_btn.grid( column = 6, row = 4 )        
         # place frame

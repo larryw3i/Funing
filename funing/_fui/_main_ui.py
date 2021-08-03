@@ -27,7 +27,7 @@ class _MainUI():
         self.mainui = MainUI()
         self.mainui.place()
         self.source = 0
-        self.root_after = -1        
+        self.root_after = -1
         # face num for face_label
         self.lang_code = settings.lang_code
         self.fxfy = None        
@@ -37,6 +37,7 @@ class _MainUI():
         self.showfm = self.mainui.showframe
         self.entryfm = self.mainui.entryframe
         self.infofm = self.mainui.infoframe   
+        self.about_tl = None
         # vid
         self.vid = None
         self.vid_width = 0
@@ -92,6 +93,25 @@ class _MainUI():
         images=np.asarray(images)
         labels=np.asarray(labels)
         return images,labels,ids
+    
+    def about_fn(self):
+        if self.about_tl == None:
+            self.about_tl = Toplevel(borderwidth = 10)
+            self.about_tl.title('About Funing')
+            self.about_tl.resizable(0,0)
+            Label( self.about_tl, text =_('Funing'), font=("", 25)).pack()
+            Label(  self.about_tl, text = settings.version ).pack()
+            self.source_page_label = Label(self.about_tl,text=\
+            settings.source_page,fg="blue", cursor="hand2")
+            self.source_page_label.bind("<Button-1>",lambda e: \
+            webbrowser.open_new(settings.source_page ))
+            self.source_page_label.pack()
+            Label(self.about_tl,text=_('Licensed under the MIT license') ).pack()
+            self.about_tl.mainloop()
+        else:
+            self.about_tl.destroy()
+            self.about_tl = None
+        pass
 
     def recognizer_train( self ):
         images,labels,self.info_ids = self.load_images()
@@ -120,6 +140,7 @@ class _MainUI():
         self.infofm.prevf_btn['command'] = self.prevf
         self.infofm.nextf_btn['command'] = self.nextf
         self.infofm.save_btn['command'] = self.savef
+        self.mainui.aboutfn_label.about_fn_btn['command'] = self.about_fn
         self.mainui.root.protocol("WM_DELETE_WINDOW", self.destroy )
          
     def destroy( self ):
@@ -140,13 +161,13 @@ class _MainUI():
                 return
             if self.cur_frame is None: return
             self.recf()
-            self.showfm.pp_sv.set( _('Play') )
+            self.showfm.pr_sv.set( _('Play') )
             # self.pick()
         else:
             self.pause = True
             if self.cur_frame is None: return
             self.refresh_frame()
-            self.showfm.pp_sv.set( _('Recognize') )
+            self.showfm.pr_sv.set( _('Recognize') )
 
     def pick(self):
         if self.vid is None: return
@@ -166,10 +187,13 @@ class _MainUI():
                 self.face_frames.append( new_frame )
                 count+=1
                 if count > self.face_enter_count: break
+        
+        self.infofm.faces_text.delete(1.0,tk.END)
         self.change_face_show(0)
     
     def show_go( self, *args ):
         self.showf_sv = self.showfm.showf_sv.get()
+        if len( self.showf_sv.strip() ) < 1: return
         self.rec_img = False
         self.root_after_cancel()
         showf_ext = self.showf_sv.split('.')[-1]
@@ -273,13 +297,6 @@ class _MainUI():
 ###############################################################################
 # SHOW_FRAME FUNCTIONS END
 
-# ENTRY_FRAME FUNCTIONS
-###############################################################################
-
-        
-###############################################################################
-# ENTRY_FRAME FUNCTIONS END
-
 # INFO_FRAME FUNCTIONS
 ###############################################################################
 
@@ -308,6 +325,7 @@ class _MainUI():
             
     def change_face_show(self, _as):
         if len(self.face_frames) >0:
+            # NEW
             self.curf_index += _as
             self.curf_index = 0 if self.curf_index < 0 else self.face_enter_count-1\
             if self.curf_index >= self.face_enter_count else self.curf_index 
@@ -317,7 +335,9 @@ class _MainUI():
             imgtk = ImageTk.PhotoImage( image=vid_img )
             self.infofm.curf_label.imgtk = imgtk
             self.infofm.curf_label.configure(image=imgtk)
+
         elif len(self.recfs) > 0:
+            # RECOGNIZE
             _len = len( self.recfs )
             self.curf_index+=_as
             self.curf_index = 0 if self.curf_index < 0 else _len - 1\
@@ -356,10 +376,6 @@ class _MainUI():
             self.cur_frame=cv2.rectangle(\
             self.cur_frame,(x,y),(x+w,y+h),(255,0,0),2)  
         self.cur_frame2label()
-
-
-
-
              
 ###############################################################################
 # INFO_FRAME FUNCTIONS  END
