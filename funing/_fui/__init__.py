@@ -36,15 +36,5 @@ class Enjoy():
             if not os.path.exists( d ): os.makedirs( d, exist_ok=True )
 
         settings.config_yml["initialized"] = True
-        config_path = os.path.join( settings.project_path , 'config.yml') 
-        yaml.safe_dump( settings.config_yml ,  open( config_path, 'w' ) )
+        yaml.safe_dump( settings.config_yml ,  open( settings._config_path, 'w' ) )
     
-    def keep_code( self ):
-        rm_dirs = [os.path.join( settings.project_path, '_home', '.funing' ),
-            os.path.join( os.path.expanduser('~'), '.funing' ),
-            os.path.join(settings.project_path, 'config.yml' )
-        ]
-        for root, dirs, files in os.walk( settings.project_path ):
-            for f in files:
-                if f.endswith( '.mo' ): rm_dirs += [os.path.join(root,f)]
-        os.system('rm -rf '+' '.join( rm_dirs ))

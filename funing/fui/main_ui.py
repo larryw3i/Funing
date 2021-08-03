@@ -19,20 +19,13 @@ class MainUI():
         # frame
         self.showframe = ShowFrame( tk.Frame( self.root ) ) 
         # entry_frame
-        self.entryframe = EntryFrame( tk.Frame( self.root ) )
-        # about_label
-        self.aboutfn_label = AboutFnBtn(self.root)
-        # lang_combobox
-        self.langcombobox = LangCombobox( self.root )        
-        # infoframe
         self.infoframe = InfoFrame( tk.Frame( self.root ) )
-
+        # rbmix_frame
+        self.rbmixframe = RBMixFrame( tk.Frame( self.root ))
     def place(self):
         self.showframe.place()
-        self.entryframe.place()
-        self.aboutfn_label.place()
-        self.langcombobox.place()
         self.infoframe.place()
+        self.rbmixframe.place()
     
     def mainloop(self):
         self.root.mainloop()
@@ -147,11 +140,30 @@ class InfoFrame():
         self.frame.grid( column = 1, row = 0 )
         pass
 
-class EntryFrame():
-    
+class RBMixFrame():
     def __init__(self, frame):
         self.frame = frame
-        pass
+        self.about_fn_btn = Button(self.frame, text=_('About Funing') )        
+        # language_combobox
+        self.lang_combobox_var = tk.StringVar( self.frame )
+        self.lang_code = settings.lang_code
+        self.lang_combobox_var.set(
+            Language.make( self.lang_code ).autonym()
+          )
+        self.lang_combobox = ttk.Combobox( self.frame ,
+            textvariable = self.lang_combobox_var,
+            values = tuple( self.locale_lang_display_names() ),
+            state = "readonly"
+        )
+    def locale_lang_display_names( self ):
+        display_names = []
+        for i in settings.locale_langcodes:
+            display_names.append( Language.make(i).autonym() )
+        return display_names
+
+    def place(self):
+        self.about_fn_btn.grid( column = 0, row = 0, sticky = NE )
+        # place lang_combobox
+        self.lang_combobox.grid( column = 0, row = 1, sticky = NE )
+        self.frame.grid( column = 2, row = 2, )
     
-    def place( self ):
-        pass

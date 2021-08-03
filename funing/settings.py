@@ -25,6 +25,8 @@ locale_path = \
     os.path.join( project_path, 'locale') 
 config_path = \
     os.path.join( base_dir , 'config.yml') 
+_config_path = \
+    config_path
 if not os.path.exists( config_path ): config_path = \
     os.path.join( project_path , 'config.example.yml') 
 config_yml = \

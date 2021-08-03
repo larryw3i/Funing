@@ -227,4 +227,4 @@ msgstr "本项目以MIT开源协议授权"
 
 #: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:133
 msgid "Write it with certain rules so that you can analyze it later"
-msgstr "信息编写要中规中矩, 比如yaml或toml, \n这样你分析它们就变得很易如反掌。"
+msgstr "信息编写要中规中矩, 比如yaml或toml, \n这样你分析它们就变得易如反掌。"

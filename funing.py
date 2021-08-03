@@ -42,6 +42,16 @@ class Funing():
         from funing._fui import Enjoy
         Enjoy().msgfmt()
 
+    def keep_code( self ):
+        rm_dirs = [os.path.join( settings.project_path, '_home', '.funing' ),
+            os.path.join( os.path.expanduser('~'), '.funing' ),
+            os.path.join(settings.project_path, 'config.yml' )
+        ]
+        for root, dirs, files in os.walk( settings.project_path ):
+            for f in files:
+                if f.endswith( '.mo' ): rm_dirs += [os.path.join(root,f)]
+        os.system('rm -rf '+' '.join( rm_dirs ))    
+
 if __name__ == '__main__':
     f = Funing()
     sys_argv = sys.argv[1:]
@@ -51,4 +61,4 @@ if __name__ == '__main__':
         if a in [ 's', 'ts' ,'st', 'start' ]:   f.start()
         if a in [ 'xgettext', 'xg' ]:           f.xgettext()
         if a in [ 'm' , 'msg' , 'msgfmt' ]:     f.msgfmt()
-        
+        if a in [ 'kc', 'keep_code' ]:          f.keep_code()

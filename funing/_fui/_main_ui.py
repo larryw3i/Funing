@@ -35,8 +35,8 @@ class _MainUI():
         self.video_exts = ['mp4','avi','3gp','webm','mkv']
         self.showf_sv = None
         self.showfm = self.mainui.showframe
-        self.entryfm = self.mainui.entryframe
-        self.infofm = self.mainui.infoframe   
+        self.infofm = self.mainui.infoframe
+        self.rbmixfm = self.mainui.rbmixframe        
         self.about_tl = None
         # vid
         self.vid = None
@@ -54,7 +54,6 @@ class _MainUI():
         # info
         self.cur_info_id = None
         self.info_ids = []
-        # self.rec_results = []
         # cv2
         self.hff_xml_path = os.path.join( haarcascades ,\
          "haarcascade_frontalface_default.xml" )
@@ -106,7 +105,8 @@ class _MainUI():
             self.source_page_label.bind("<Button-1>",lambda e: \
             webbrowser.open_new(settings.source_page ))
             self.source_page_label.pack()
-            Label(self.about_tl,text=_('Licensed under the MIT license') ).pack()
+            Label(self.about_tl,text=_('Licensed under the MIT license') )\
+            .pack()
             self.about_tl.mainloop()
         else:
             self.about_tl.destroy()
@@ -130,7 +130,7 @@ class _MainUI():
         self.vid= None  
     
     def set_ui_events( self ):
-        self.mainui.langcombobox.lang_combobox.bind('<<ComboboxSelected>>',
+        self.rbmixfm.lang_combobox.bind('<<ComboboxSelected>>',
             self.change_language )
         self.showfm.ct_entry.bind('<FocusOut>', None )
         self.showfm.pp_btn['command'] = self.pause_play
@@ -140,7 +140,7 @@ class _MainUI():
         self.infofm.prevf_btn['command'] = self.prevf
         self.infofm.nextf_btn['command'] = self.nextf
         self.infofm.save_btn['command'] = self.savef
-        self.mainui.aboutfn_label.about_fn_btn['command'] = self.about_fn
+        self.rbmixfm.about_fn_btn['command'] = self.about_fn
         self.mainui.root.protocol("WM_DELETE_WINDOW", self.destroy )
          
     def destroy( self ):
@@ -387,7 +387,7 @@ class _MainUI():
 
     def change_language(self, lang ):
 
-        lang_display_name = self.mainui.langcombobox.lang_combobox_var.get()
+        lang_display_name = self.rbmixfm.lang_combobox_var.get()
         new_lang_code = Language.find( lang_display_name ).to_tag()
         if settings.debug:
             print( 'new_lang_code: ', new_lang_code, \
@@ -400,7 +400,7 @@ class _MainUI():
         )
         if restartapp:
             settings.config_yml['lang_code'] = new_lang_code
-            yaml.dump( settings.config_yml, open( settings.config_path, 'w') )
+            yaml.dump( settings.config_yml, open( settings._config_path, 'w') )
             sys_executable = sys.executable
             os.execl(sys_executable, sys_executable, * sys.argv)
         pass

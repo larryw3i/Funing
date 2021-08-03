@@ -1,6 +1,5 @@
-pip install -U setuptools
-pip install -U wheel
-pip install -U twine
+pip install -U setuptools wheel twine
+pip install -r requirements.txt
 python3 test.py kc
 rm -rf dist/*
 python setup.py sdist bdist_wheel
