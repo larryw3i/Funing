@@ -37,7 +37,7 @@ class Funing():
                     f_path = os.path.join( root, f )
                     os.system(f'xgettext -f {self.xgettext_path} '+\
                     f'--join-existing -d funing -o {f_path}' )
-        os.remove( self.xgettext_path )
+        # os.remove( self.xgettext_path )
     def msgfmt( self ):
         from funing._fui import Enjoy
         Enjoy().msgfmt()
@@ -52,6 +52,9 @@ class Funing():
                 if f.endswith( '.mo' ): rm_dirs += [os.path.join(root,f)]
         os.system('rm -rf '+' '.join( rm_dirs ))    
 
+    def pip_install_r( self ):
+        os.system('pip3 install -r requirements.txt ')
+        
 if __name__ == '__main__':
     f = Funing()
     sys_argv = sys.argv[1:]
@@ -62,3 +65,4 @@ if __name__ == '__main__':
         if a in [ 'xgettext', 'xg' ]:           f.xgettext()
         if a in [ 'm' , 'msg' , 'msgfmt' ]:     f.msgfmt()
         if a in [ 'kc', 'keep_code' ]:          f.keep_code()
+        if a in [ 'pip' , 'pip_install']:       f.pip_install_r()

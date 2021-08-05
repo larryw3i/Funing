@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-04 02:52+0800\n"
+"POT-Creation-Date: 2021-08-05 19:00+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,6 +22,7 @@ msgstr ""
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:398
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:397
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:399
+#: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:406
 msgid "Restart Funing Now?"
 msgstr "重启应用?"
 
@@ -41,6 +42,7 @@ msgstr "剪取"
 #: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:84
 #: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:74
 #: /home/larry/fun/larryw3i/Funing/funing/ui/c_ui.py:23
+#: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:44
 msgid "File"
 msgstr "文件"
 
@@ -49,6 +51,7 @@ msgstr "文件"
 #: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:84
 #: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:74
 #: /home/larry/fun/larryw3i/Funing/funing/ui/c_ui.py:23
+#: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:44
 msgid "Camera"
 msgstr "摄像头"
 
@@ -57,6 +60,7 @@ msgstr "摄像头"
 #: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:85
 #: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:75
 #: /home/larry/fun/larryw3i/Funing/funing/ui/c_ui.py:24
+#: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:45
 msgid "Open"
 msgstr "打开"
 
@@ -96,6 +100,7 @@ msgstr "继续"
 #: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:122
 #: /home/larry/fun/larryw3i/Funing/funing/ui/c_ui.py:56
 #: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:135
+#: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:97
 msgid "Save"
 msgstr "保存"
 
@@ -103,6 +108,7 @@ msgstr "保存"
 #: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:126
 #: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:116
 #: /home/larry/fun/larryw3i/Funing/funing/ui/c_ui.py:50
+#: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:88
 msgid "prev_symb"
 msgstr "<<"
 
@@ -110,6 +116,7 @@ msgstr "<<"
 #: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:128
 #: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:118
 #: /home/larry/fun/larryw3i/Funing/funing/ui/c_ui.py:52
+#: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:90
 msgid "next_symb"
 msgstr ">>"
 
@@ -122,6 +129,7 @@ msgstr ""
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:171
 #: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:97
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:170
+#: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:57
 msgid "Recognize"
 msgstr "识别"
 
@@ -129,6 +137,7 @@ msgstr "识别"
 #: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:91
 #: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:81
 #: /home/larry/fun/larryw3i/Funing/funing/ui/c_ui.py:30
+#: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:51
 msgid "tolerance"
 msgstr "误差（0.1-0.6）"
 
@@ -147,6 +156,7 @@ msgstr "尽然没有找到......, 都怪我!"
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:204
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:224
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:226
+#: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:227
 msgid "Image or video"
 msgstr "照片或视频"
 
@@ -172,6 +182,7 @@ msgstr "性别"
 #: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:101
 #: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:91
 #: /home/larry/fun/larryw3i/Funing/funing/ui/c_ui.py:40
+#: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:61
 msgid "Pick"
 msgstr "录入"
 
@@ -179,6 +190,7 @@ msgstr "录入"
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:417
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:416
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:418
+#: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:425
 msgid "You haven't entered anything yet! "
 msgstr "你还没有录入任何数据, 打开摄像头或文件然后点击'录入'"
 
@@ -186,6 +198,7 @@ msgstr "你还没有录入任何数据, 打开摄像头或文件然后点击'录
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:416
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:415
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:417
+#: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:424
 msgid "Nothing enter"
 msgstr "没有录入任何数据"
 
@@ -193,6 +206,7 @@ msgstr "没有录入任何数据"
 #: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:82
 #: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:72
 #: /home/larry/fun/larryw3i/Funing/funing/ui/c_ui.py:21
+#: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:42
 msgid "GO"
 msgstr "直达"
 
@@ -204,6 +218,7 @@ msgstr "亲, 好像没有检测到显示器哦!"
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:203
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:223
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:225
+#: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:226
 msgid "Select a file"
 msgstr "选择一个文件"
 
@@ -214,10 +229,14 @@ msgstr "选择一个文件"
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:293
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:412
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:414
+#: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:294
+#: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:421
 msgid "Unable to open video source"
 msgstr "无法打开视频源"
 
 #: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:43
+#: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:117
+#: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:100
 msgid "About Funing"
 msgstr "关于Funing"
 
@@ -226,5 +245,12 @@ msgid "Licensed under the MIT license"
 msgstr "本项目以MIT开源协议授权"
 
 #: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:133
+#: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:95
 msgid "Write it with certain rules so that you can analyze it later"
-msgstr "信息编写要中规中矩, 比如yaml或toml, \n这样你分析它们就变得易如反掌。"
+msgstr ""
+"信息编写要中规中矩, 比如yaml或toml, \n"
+"这样你分析它们就变得易如反掌。"
+
+#: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:89
+msgid "*/*"
+msgstr ""

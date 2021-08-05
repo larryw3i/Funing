@@ -20,12 +20,11 @@ class Enjoy():
     
     def msgfmt( self ):
         for d in settings.locale_langcodes:
-            po_p_p =  f'{settings.locale_path}/{d}/LC_MESSAGES'
-            os.system(f'msgfmt -o {po_p_p}/funing.mo {po_p_p}/funing.po')
+            po_p_p = os.path.join( settings.locale_path, d ,'LC_MESSAGES' )
+            mo_path = os.path.join( po_p_p, 'funing.mo' )
+            po_path = os.path.join( po_p_p, 'funing.po' )
+            os.system(f'msgfmt -o {mo_path} {po_path}')
 
-    def pip_install_r( self ):
-        os.system('pip3 install -r requirements.txt ')
-        
     def initialize( self ):
 
         try: self.msgfmt()
@@ -37,5 +36,6 @@ class Enjoy():
 
         settings.config_yml["version"] = settings.version
         settings.config_yml["initialized"] = True
-        yaml.safe_dump( settings.config_yml ,  open( settings._config_path, 'w' ) )
+        yaml.safe_dump( settings.config_yml ,  \
+        open( settings._config_path, 'w' ) )
     
