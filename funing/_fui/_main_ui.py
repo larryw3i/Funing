@@ -31,13 +31,13 @@ class _MainUI():
         self.root_after = -1
         # face num for face_label
         self.lang_code = settings.lang_code
-        self.fxfy = None        
+        self.fxfy = None
         self.image_exts = ['jpg','png']
         self.video_exts = ['mp4','avi','3gp','webm','mkv']
         self.showf_sv = None
         self.showfm = self.mainui.showframe
         self.infofm = self.mainui.infoframe
-        self.rbmixfm = self.mainui.rbmixframe        
+        self.rbmixfm = self.mainui.rbmixframe
         self.about_tl = None
         # vid
         self.vid = None
@@ -147,9 +147,6 @@ class _MainUI():
     def destroy( self ):
         if self.vid is not None: self.vid.release()
         exit()
-
-# SHOW_FRAME FUNCTIONS 
-###############################################################################
 
     def pause_play( self, *args ):
         if self.pause: 
@@ -294,13 +291,6 @@ class _MainUI():
         unable_open_s = _('Unable to open video source')
         messagebox.showerror( unable_open_s, unable_open_s+': '+self.showf_sv )
 
-
-###############################################################################
-# SHOW_FRAME FUNCTIONS END
-
-# INFO_FRAME FUNCTIONS
-###############################################################################
-
     def prevf( self ):
         self.change_face_show(-1)
         pass
@@ -328,12 +318,13 @@ class _MainUI():
         self.infofm.num_label['text'] = \
         f'{self.curf_index+1}/{len(self.face_frames)+len(self.recfs)-1}'
             
-    def change_face_show(self, _as):
+    def change_face_show(self, _as, rec = True):
         if len(self.face_frames) >0:
             # NEW
             self.curf_index += _as
             self.curf_index = 0 if self.curf_index < 0 else self.face_enter_count-1\
             if self.curf_index >= self.face_enter_count else self.curf_index 
+
             vid_img = cv2.cvtColor( self.face_frames[ self.curf_index ], \
             cv2.COLOR_BGR2RGB )
             vid_img = Image.fromarray( vid_img )
@@ -386,12 +377,6 @@ class _MainUI():
             self.cur_frame,(x,y),(x+w,y+h),(255,0,0),2)  
         self.cur_frame2label()
              
-###############################################################################
-# INFO_FRAME FUNCTIONS  END
-
-# LANGCOMBOBOX FUNCTIONS
-###############################################################################
-
     def change_language(self, lang ):
 
         lang_display_name = self.rbmixfm.lang_combobox_var.get()
@@ -412,11 +397,6 @@ class _MainUI():
             os.execl(sys_executable, sys_executable, * sys.argv)
         pass
 
-###############################################################################
-# LANGCOMBOBOX FUNCTIONS END
-
-# OTHER FUNCTIONS
-###############################################################################
     def show_nsrc_error( self ):
         unable_open_s = _('Unable to open video source')
         messagebox.showerror(  unable_open_s, unable_open_s+': '+self.showf_sv )
@@ -424,7 +404,4 @@ class _MainUI():
         unable_open_s = _('Nothing enter')
         msg  = _("You haven't entered anything yet! ")
         messagebox.showerror(  unable_open_s, msg, )
-
-###############################################################################
-# OTHER FUNCTIONS END
-
+        

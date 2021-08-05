@@ -83,6 +83,9 @@ class InfoFrame():
         self.frame = frame
         self.face_show_frame = tk.Frame( self.frame )
         self.info_enter_frame = tk.Frame( self.frame )
+
+        self.faces_frame = tk.Frame( self.frame )
+
         self.curf_label = tk.Label( self.face_show_frame )
         self.opt_frame =  tk.Frame( self.frame )
         self.prevf_btn = tk.Button( self.opt_frame, text = _('prev_symb'))
@@ -103,11 +106,12 @@ class InfoFrame():
         self.nextf_btn.pack(side = LEFT)
         self.faces_text.pack(side=tk.LEFT,fill=tk.Y)
         self.ft_sb.pack(side=tk.RIGHT,fill=tk.Y)
-        self.face_show_frame.grid( column = 0, row = 0, columnspan = 5)
-        self.opt_frame.grid( column = 0, row = 1, columnspan = 5)
-        self.info_enter_frame.grid( column = 0, row = 2, columnspan = 5)
-        self.faces_text_tip_label.grid(column = 0, row = 3,  columnspan = 5)
-        self.save_btn.grid( column = 2, row = 4 )
+        self.faces_frame.grid( column = 0 , row = 0, columnspan = 5 )
+        self.face_show_frame.grid( column = 0, row = 1, columnspan = 5)
+        self.opt_frame.grid( column = 0, row = 2, columnspan = 5)
+        self.info_enter_frame.grid( column = 0, row = 3, columnspan = 5)
+        self.faces_text_tip_label.grid(column = 0, row = 4,  columnspan = 5)
+        self.save_btn.grid( column = 2, row = 5 )
         self.frame.grid( column = 1, row = 0 )
         pass
 
