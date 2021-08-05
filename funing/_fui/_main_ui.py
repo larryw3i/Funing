@@ -21,6 +21,7 @@ import re
 from funing._fui import error
 import numpy as np
 from cv2 import haarcascades
+import webbrowser
 
 class _MainUI():
     def __init__(self):
@@ -152,22 +153,22 @@ class _MainUI():
 
     def pause_play( self, *args ):
         if self.pause: 
-            self.pause = False
             if self.vid is None: return
-            self.root_after_cancel()
             if settings.data_empty(): 
                 if settings.debug: print('data is empty!')
                 self.show_data_empty_error()
                 return
+            self.root_after_cancel()
             if self.cur_frame is None: return
             self.recf()
             self.showfm.pr_sv.set( _('Play') )
+            self.pause = False
             # self.pick()
         else:
-            self.pause = True
             if self.cur_frame is None: return
             self.refresh_frame()
             self.showfm.pr_sv.set( _('Recognize') )
+            self.pause = True
 
     def pick(self):
         if self.vid is None: return

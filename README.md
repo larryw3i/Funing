@@ -3,7 +3,6 @@
 install_requires=[
     'opencv-python',
     'langcodes[data]',
-    'pony',
     'pyyaml',
 ]
 ```

@@ -93,7 +93,7 @@ class InfoFrame():
         yscrollcommand = self.ft_sb.set)  
         self.faces_text_tip_label = Label(self.frame, text = \
         _('Write it with certain rules so that you can analyze it later'),\
-        font=('', 8) )
+        font=('', 10) )
         self.save_btn = tk.Button( self.frame, text = _("Save") )
         self.ft_sb.config(command = self.faces_text.yview)      
     def place( self ):

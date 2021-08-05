@@ -35,6 +35,7 @@ class Enjoy():
         for d in [ settings.faces_path, settings.infos_path ]:
             if not os.path.exists( d ): os.makedirs( d, exist_ok=True )
 
+        settings.config_yml["version"] = settings.version
         settings.config_yml["initialized"] = True
         yaml.safe_dump( settings.config_yml ,  open( settings._config_path, 'w' ) )
     

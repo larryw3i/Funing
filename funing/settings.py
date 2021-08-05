@@ -7,7 +7,7 @@ from pathlib import Path
 import getopt
 import sys
 
-version =  "0.2.30"
+version =  "0.2.31"
 args = \
     getopt.getopt( sys.argv[1:], '' )[1]
 test_args = \
@@ -49,9 +49,10 @@ infos_len = \
     config_yml.get( "infos_len", 5 )
 face_enter_count = \
     config_yml.get( "face_enter_count", 5 )
-source_page = 'https://github.com/larryw3i/Funing'
-prev_version = config_yml.get('version', version )
-
+source_page = \
+    'https://github.com/larryw3i/Funing'
+prev_version = \
+    config_yml.get('version', version )
 initialized  = \
     config_yml.get('initialized', False) and (version == prev_version)
     
