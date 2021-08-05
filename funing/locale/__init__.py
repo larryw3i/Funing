@@ -1,6 +1,6 @@
 
-from funing import settings
 import os
+from funing import settings
 
 f_mo_path  = os.path.join(settings.locale_path, settings.locale_langcodes[0] ,\
 'LC_MESSAGES', 'funing.mo' )
