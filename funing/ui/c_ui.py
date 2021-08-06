@@ -33,9 +33,9 @@ class Cui():
             textvariable = self.ct_stringvar )
 
         # shoot
-        self.pr_sv = StringVar( self.cui_frame, _('Pause'))
+        self.pp_sv = StringVar( self.cui_frame, _('Pause'))
         self.pp_btn = Button( self.cui_frame, \
-            textvariable = self.pr_sv )
+            textvariable = self.pp_sv )
 
         self.pick_sv = StringVar( self.cui_frame, _('Pick'))
         self.pick_btn = Button( self.cui_frame, \

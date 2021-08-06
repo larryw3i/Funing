@@ -47,8 +47,9 @@ class _MainUI():
 
         self.cur_frame = None
         self.face_rects = []
-        self.face_labels = []
+        self.picked_face_frames = []
         self.show_size = (200,200)
+        self.save_size = (100,100)
         
         self.pause = True
         self.face_frames = []
@@ -140,6 +141,7 @@ class _MainUI():
             self.change_language )
         self.showfm.ct_entry.bind('<FocusOut>', None )
         self.showfm.pp_btn['command'] = self.pause_play
+        self.showfm.rec_btn['command'] = self.recf_v0
         self.showfm.pick_btn['command'] = self.pick_v0
         self.showfm.showf_go_btn['command'] = self.show_go
         self.showfm.showf_optionmenu_sv.trace('w', self.show_from )
@@ -162,14 +164,14 @@ class _MainUI():
                 return
             self.root_after_cancel()
             if self.cur_frame is None: return
-            self.recf()
-            self.showfm.pr_sv.set( _('Play') )
+            self.recf_v0()
+            self.showfm.pp_sv.set( _('Play') )
             self.pause = False
             # self.pick()
         else:
             if self.cur_frame is None: return
             self.refresh_frame()
-            self.showfm.pr_sv.set( _('Recognize') )
+            self.showfm.pp_sv.set( _('Recognize') )
             self.pause = True
 
     def pick(self):
@@ -195,6 +197,7 @@ class _MainUI():
         self.change_face_show(0)
 
     def pick_v0(self):
+
         if self.vid is None: return
         count = 0
         self.cur_info_id = str(uuid.uuid4())
@@ -203,53 +206,42 @@ class _MainUI():
         
         _, self.cur_frame = self.vid.read()
         gray_img=cv2.cvtColor(self.cur_frame,cv2.COLOR_BGR2GRAY)
-        self.face_rects = self.face_casecade.detectMultiScale(gray_img,1.3,5)\
-        .tolist() 
+        self.face_rects = self.face_casecade.detectMultiScale(gray_img,1.3,5)
         
-        for i in range( len( self.face_rects)):
-            self.add_face_label( i )
+        if settings.debug:
+            print( self.face_rects )
+            print( type( self.face_rects ) )
 
-        # while(True):
-        #     ret, self.frame=self.vid.read()
-        #     if ret:
-        #         gray_img=cv2.cvtColor(self.frame,cv2.COLOR_BGR2GRAY)
-        #         faces = self.face_casecade.detectMultiScale(gray_img,1.3,5)
-        #         if len( faces ) < 1:continue
-        #         x,y,w,h = faces[0]
-        #         new_frame=cv2.resize( self.frame[y:y+h,x:x+w], (92,112),\
-        #             interpolation=cv2.INTER_LINEAR)
-        #         self.face_frames.append( new_frame )
-        #         count+=1
-        #         if count > self.face_enter_count: break
-        
-        # self.infofm.faces_text.delete(1.0,tk.END)
-        # self.change_face_show(0)
-    
-    def add_face_label(self, num):
+        for i in range( len( self.face_rects)):
+            self.add_face_label_p( i )
+
+
+    def add_face_label_p(self, num):
         
         x,y,w,h = self.face_rects[ num ]
-        w = max( w, h )
+        _w = max( w, h )
         
         new_fl = Label( self.infofm.faces_frame )
-        frame = self.cur_frame[y:y+w, x:x+w]
+        frame = self.cur_frame[y:y+_w, x:x+_w]
         frame = cv2.resize( frame, self.show_size )
         vid_img = cv2.cvtColor( frame, cv2.COLOR_BGR2RGB )
         vid_img = Image.fromarray( vid_img  )
         imgtk = ImageTk.PhotoImage( image=vid_img )
         new_fl.imgtk = imgtk
         new_fl.configure(image=imgtk)
-
-        self.face_labels.append( new_fl )
         new_fl.bind("<Button-1>",lambda e: self.del_face_label(e , num) )
 
         new_fl.pack(side=LEFT)
 
+        picked_face_frame = cv2.resize(self.cur_frame[y:y+h,x:x+w],self.save_size,\
+        interpolation=cv2.INTER_LINEAR)
+        self.picked_face_frames.append( picked_face_frame )
+
     def del_face_label( self, e, num):
-        self.face_labels.remove(e.widget)
-        del self.face_rects[ num ]
+        del self.picked_face_frames[ num ]
         e.widget.destroy()
         if settings.debug:
-            print( self.face_labels )
+            print( len(self.picked_face_frames) )
 
     def show_go( self, *args ):
         self.showf_sv = self.showfm.showf_sv.get()
@@ -369,7 +361,7 @@ class _MainUI():
         img_path =os.path.join( settings.faces_path , self.cur_info_id )
         os.makedirs(img_path,exist_ok=True )
         count = 0
-        for f in self.face_frames:
+        for f in self.picked_face_frames:
             cv2.imwrite( f'{img_path}/{count}.png' , f)
             count+=1
         self.cur_info_id = None
@@ -431,13 +423,76 @@ class _MainUI():
         if settings.debug: 
             print('self.cur_frame not None')
         self.rec_gray_img=cv2.cvtColor(self.cur_frame,cv2.COLOR_BGR2GRAY)
-        self.recfs=self.face_casecade.detectMultiScale(self.rec_gray_img,1.3,5)
+        self.face_rects=self.face_casecade.detectMultiScale(\
+        self.rec_gray_img,1.3,5)
         if len( self.recfs ) < 1: return
+
+        
+        
         self.change_face_show(0)
+
         for (x,y,w,h) in self.recfs:
             self.cur_frame=cv2.rectangle(\
             self.cur_frame,(x,y),(x+w,y+h),(255,0,0),2)  
+
         self.cur_frame2label()
+
+    def show_info( self, e, _id):
+
+        info_file_path = os.path.join( \
+        settings.infos_path,  _id )
+        self.infofm.faces_text.delete(1.0,tk.END)
+        
+        if not os.path.exists( info_file_path ): 
+            self.infofm.faces_text.insert('1.0', _('No informations found') )
+
+        self.infofm.faces_text.insert('1.0', \
+        open( info_file_path, 'r' ).read() )
+
+
+    def add_face_label_r( self, num ):
+
+        new_fl = Label( self.infofm.faces_frame )
+
+        x,y,w,h = self.face_rects[ num ]
+        roi_gray= self.rec_gray_img[y:y+h,x:x+w]
+        roi_gray= cv2.resize( roi_gray, self.save_size,\
+        interpolation=cv2.INTER_LINEAR)
+    
+        result=self.recognizer.predict(roi_gray)
+
+        _id = self.info_ids[result[0]]
+        _h = max( h, w )
+        frame = self.cur_frame[y:y+_h,x:x+_h]
+        frame = cv2.resize(frame, self.show_size )
+
+        vid_img = cv2.cvtColor( frame, cv2.COLOR_BGR2RGB )
+        vid_img = Image.fromarray( vid_img  )
+        imgtk = ImageTk.PhotoImage( image=vid_img )
+        new_fl.imgtk = imgtk
+        new_fl.configure(image=imgtk)
+
+        new_fl.bind("<Button-1>",lambda e: self.show_info(e , _id) )
+
+        new_fl.pack(side=LEFT)
+
+             
+    def recf_v0(self):
+
+        _, self.cur_frame = self.vid.read()
+
+        self.rec_gray_img=cv2.cvtColor(self.cur_frame,cv2.COLOR_BGR2GRAY)
+        self.face_rects=self.face_casecade.detectMultiScale(\
+        self.rec_gray_img,1.3,5)
+
+        if len( self.face_rects ) < 1: 
+            if settings.debug:
+                print('len( self.face_rects ) < 1 ')
+            return
+
+        for i in range( len(self.face_rects)) :
+            self.add_face_label_r( i)
+            
              
     def change_language(self, lang ):
 

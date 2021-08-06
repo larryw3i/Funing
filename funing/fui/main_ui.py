@@ -54,9 +54,13 @@ class ShowFrame():
             textvariable = self.ct_stringvar )
 
         # shoot
-        self.pr_sv = tk.StringVar( frame, _('Recognize'))
+        self.pp_sv = tk.StringVar( frame, _('Pause'))
         self.pp_btn = tk.Button( self.frame, \
-            textvariable = self.pr_sv )
+            textvariable = self.pp_sv )
+
+        self.rec_sv = tk.StringVar( frame, _('Recognize'))
+        self.rec_btn = tk.Button( self.frame, \
+            textvariable = self.rec_sv )
 
         self.pick_sv = tk.StringVar( frame, _('Pick'))
         self.pick_btn = tk.Button( self.frame, \
@@ -73,8 +77,10 @@ class ShowFrame():
         self.showf_optionmenu.grid( column = 2, row = 4 , sticky = W)
         # self.ct_label.grid( column = 3, row = 4, sticky = E )
         # self.ct_entry.grid( column = 4, row = 4, sticky = W )
-        self.pp_btn.grid( column = 5, row = 4)
-        self.pick_btn.grid( column = 6, row = 4 )        
+        self.pp_btn.grid( column = 3, row = 4)
+        self.rec_btn.grid( column = 4, row = 4)
+        
+        self.pick_btn.grid( column = 5, row = 4 )        
         # place frame
         self.frame.grid( column = 0, row = 0 )             
 

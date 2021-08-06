@@ -84,9 +84,9 @@ class ShowFrame():
             textvariable = self.ct_stringvar )
 
         # shoot
-        self.pr_sv = tk.StringVar( frame, _('Pause'))
+        self.pp_sv = tk.StringVar( frame, _('Pause'))
         self.pp_btn = tk.Button( self.frame, \
-            textvariable = self.pr_sv )
+            textvariable = self.pp_sv )
 
         self.pick_sv = tk.StringVar( frame, _('Pick'))
         self.pick_btn = tk.Button( self.frame, \
