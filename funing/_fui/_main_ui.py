@@ -49,9 +49,11 @@ class _MainUI():
         self.face_rects = []
         self.picked_face_frames = []
         self.show_size = (200,200)
+        self.zoom_in_size = (210,210)
         self.save_size = (100,100)
+        self.zoomed_in_face_label = (0,0)
         
-        self.pause = True
+        self.pause = False
         self.face_frames = []
         self.curf_index = 0
         # rec_result
@@ -157,22 +159,18 @@ class _MainUI():
 
     def pause_play( self, *args ):
         if self.pause: 
-            if self.vid is None: return
-            if settings.data_empty(): 
-                if settings.debug: print('data is empty!')
-                self.show_data_empty_error()
-                return
-            self.root_after_cancel()
-            if self.cur_frame is None: return
-            self.recf_v0()
-            self.showfm.pp_sv.set( _('Play') )
             self.pause = False
-            # self.pick()
-        else:
-            if self.cur_frame is None: return
             self.refresh_frame()
-            self.showfm.pp_sv.set( _('Recognize') )
+            self.showfm.pp_sv.set( _('Pause') )
+            if settings.debug:
+                print( 'Play. . .' )
+            
+        else:
+            self.root_after_cancel()
+            self.showfm.pp_sv.set( _('Play') )
             self.pause = True
+            if settings.debug:
+                print( 'Pause. . .' )
 
     def pick(self):
         if self.vid is None: return
@@ -197,14 +195,14 @@ class _MainUI():
         self.change_face_show(0)
 
     def pick_v0(self):
-
-        if self.vid is None: return
-        count = 0
-        self.cur_info_id = str(uuid.uuid4())
-        self.recfs = []
-        self.face_frames = []
         
-        _, self.cur_frame = self.vid.read()
+        if not self.pause:
+            _, self.cur_frame = self.vid.read()
+            
+        if self.cur_frame is None: return
+
+        self.cur_info_id = str(uuid.uuid4())
+        
         gray_img=cv2.cvtColor(self.cur_frame,cv2.COLOR_BGR2GRAY)
         self.face_rects = self.face_casecade.detectMultiScale(gray_img,1.3,5)
         
@@ -229,7 +227,7 @@ class _MainUI():
         imgtk = ImageTk.PhotoImage( image=vid_img )
         new_fl.imgtk = imgtk
         new_fl.configure(image=imgtk)
-        new_fl.bind("<Button-1>",lambda e: self.del_face_label(e , num) )
+        new_fl.bind("<Button-1>",lambda e: self.del_face_label_p(e , num) )
 
         new_fl.pack(side=LEFT)
 
@@ -237,7 +235,7 @@ class _MainUI():
         interpolation=cv2.INTER_LINEAR)
         self.picked_face_frames.append( picked_face_frame )
 
-    def del_face_label( self, e, num):
+    def del_face_label_p( self, e, num):
         del self.picked_face_frames[ num ]
         e.widget.destroy()
         if settings.debug:
@@ -293,6 +291,9 @@ class _MainUI():
     
     def root_after_cancel( self ):
         if self.root_after != -1:
+            
+            _, self.cur_frame = self.vid.read()
+
             self.mainui.root.after_cancel( self.root_after )
             self.close_vid_cap()
             self.vid = None
@@ -306,10 +307,20 @@ class _MainUI():
     def refresh_frame(self):
         if self.vid == None: self.vid = cv2.VideoCapture( self.source )
         if not self.vid.isOpened(): self.show_nsrc_error(); return
-        ret, self.cur_frame = self.vid.read()        
-        self.cur_frame2label()
-        self.root_after = self.mainui.root.after( \
-            int(1000/self.vid_fps) , self.refresh_frame )
+
+        _, frame = self.vid.read()      
+
+        vid_img = cv2.resize( frame , (0,0) , \
+            fx = self.fxfy, fy = self.fxfy )
+        vid_img = cv2.cvtColor( vid_img, cv2.COLOR_BGR2RGB )
+        vid_img = Image.fromarray( vid_img )
+        imgtk = ImageTk.PhotoImage( image=vid_img )
+        self.showfm.vid_frame_label.imgtk = imgtk
+        self.showfm.vid_frame_label.configure(image=imgtk)
+
+        if not self.pause:
+            self.root_after = self.mainui.root.after( \
+                int(1000/self.vid_fps) , self.refresh_frame )
 
     def view_image( self ):
         self.cur_frame  = cv2.imread( self.face_src_path )
@@ -425,9 +436,7 @@ class _MainUI():
         self.rec_gray_img=cv2.cvtColor(self.cur_frame,cv2.COLOR_BGR2GRAY)
         self.face_rects=self.face_casecade.detectMultiScale(\
         self.rec_gray_img,1.3,5)
-        if len( self.recfs ) < 1: return
-
-        
+        if len( self.recfs ) < 1: return        
         
         self.change_face_show(0)
 
@@ -436,8 +445,40 @@ class _MainUI():
             self.cur_frame,(x,y),(x+w,y+h),(255,0,0),2)  
 
         self.cur_frame2label()
+    
+    def restore_face_label_size( self ):
+        label, num = self.zoomed_in_face_label
+        x,y,w,h = self.face_rects[ num ]
+        _h = max( h, w )
+        frame = self.cur_frame[y:y+_h,x:x+_h]
+        frame = cv2.resize(frame, self.show_size )
 
-    def show_info( self, e, _id):
+        vid_img = cv2.cvtColor( frame, cv2.COLOR_BGR2RGB )
+        vid_img = Image.fromarray( vid_img  )
+        imgtk = ImageTk.PhotoImage( image=vid_img )
+        label.imgtk = imgtk
+        label.configure(image=imgtk)
+
+
+    def show_info( self, e, _id, num):
+
+        if (self.zoomed_in_face_label[0]!=0) and \
+        (self.zoomed_in_face_label[0] != e.widget) :
+            self.restore_face_label_size()
+
+        x,y,w,h = self.face_rects[ num ]
+
+        _h = max( h, w )
+        frame = self.cur_frame[y:y+_h,x:x+_h]
+        frame = cv2.resize(frame, self.zoom_in_size )
+
+        vid_img = cv2.cvtColor( frame, cv2.COLOR_BGR2RGB )
+        vid_img = Image.fromarray( vid_img  )
+        imgtk = ImageTk.PhotoImage( image=vid_img )
+        e.widget.imgtk = imgtk
+        e.widget.configure(image=imgtk)
+
+        self.zoomed_in_face_label = (e.widget, num)
 
         info_file_path = os.path.join( \
         settings.infos_path,  _id )
@@ -472,14 +513,24 @@ class _MainUI():
         new_fl.imgtk = imgtk
         new_fl.configure(image=imgtk)
 
-        new_fl.bind("<Button-1>",lambda e: self.show_info(e , _id) )
+        new_fl.bind("<Double-Button-1>",lambda e: self.del_face_label_r(e,_id))
+
+        new_fl.bind("<Button-1>",lambda e: self.show_info(e , _id, num) )
 
         new_fl.pack(side=LEFT)
 
              
+    def del_face_label_r( self, e, num):
+        if self.zoomed_in_face_label[0] == e.widget:
+            self.zoomed_in_face_label= (0,0)
+        e.widget.destroy()
+
     def recf_v0(self):
 
-        _, self.cur_frame = self.vid.read()
+        if not self.pause:
+            _, self.cur_frame = self.vid.read()
+        
+        if self.cur_frame is None: return
 
         self.rec_gray_img=cv2.cvtColor(self.cur_frame,cv2.COLOR_BGR2GRAY)
         self.face_rects=self.face_casecade.detectMultiScale(\
