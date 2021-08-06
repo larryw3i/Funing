@@ -24,7 +24,7 @@ bdist(){
     pip3 install dist/*.whl
 }
 
-tup(){ twine_upload; }
+tu(){ twine_upload; }
 bd(){ bdist; }
 ug(){ update_gitignore; }
 

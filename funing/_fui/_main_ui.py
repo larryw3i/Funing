@@ -27,7 +27,7 @@ class _MainUI():
     def __init__(self):
         self.mainui = MainUI()
         self.mainui.place()
-        self.source = 0
+        self.source = -1
         self.root_after = -1
         # face num for face_label
         self.lang_code = settings.lang_code
@@ -44,6 +44,8 @@ class _MainUI():
         self.vid_width = 0
         self.vid_height = 0
         self.vid_fps = 0
+
+        self.source_type = -1 # 0-> img , 1-> video
 
         self.cur_frame = None
         self.face_rects = []
@@ -161,6 +163,7 @@ class _MainUI():
         exit()
 
     def pause_play( self, *args ):
+        if self.source_type != 1 : return
         if self.pause: 
             self.pause = False
             self.refresh_frame()
@@ -203,7 +206,7 @@ class _MainUI():
             self.clear_faces_frame()
             self.doing ='p'
 
-        if not self.pause:
+        if (not self.pause) and self.vid :
             _, self.cur_frame = self.vid.read()
             
         if self.cur_frame is None: return
@@ -307,6 +310,7 @@ class _MainUI():
         
     def play_video( self ):
         self.pause = False
+        self.source_type = 1
         self.close_vid_cap()
         self.open_vid_cap()
         self.get_resize_fxfy()
@@ -316,11 +320,10 @@ class _MainUI():
         if self.vid == None: self.vid = cv2.VideoCapture( self.source )
         if not self.vid.isOpened(): self.show_nsrc_error(); return
 
-        _, frame = self.vid.read()      
+        _, frame = self.vid.read()
 
         gray_img=cv2.cvtColor( frame,cv2.COLOR_BGR2GRAY)
         rects = self.face_casecade.detectMultiScale(gray_img,1.3,5)
-
 
         for (x,y,w,h) in rects:
             frame=cv2.rectangle( frame,(x,y),(x+w,y+h),(255,0,0),2)  
@@ -339,13 +342,13 @@ class _MainUI():
                 int(1000/self.vid_fps) , self.refresh_frame )
 
     def view_image( self ):
+        self.source_type = 0
         self.cur_frame  = cv2.imread( self.face_src_path )
         frame = cv2.cvtColor( self.cur_frame, cv2.COLOR_BGR2RGB)
         img = Image.fromarray( frame )
         imgtk = ImageTk.PhotoImage( image= img )
         self.showfm.vid_frame_label.imgtk = imgtk
         self.showfm.vid_frame_label.configure(image=imgtk)
-        self.pause = True
            
     def cur_frame2label( self ):
         vid_img = cv2.resize( self.cur_frame , (0,0) , \
@@ -553,14 +556,19 @@ class _MainUI():
 
 
     def recf_v0(self):
+
+        if self.source_type == -1:return
+        if (not self.pause) and self.vid:
+            _, self.cur_frame = self.vid.read()
+        
+        if settings.data_empty():
+            self.show_data_empty()
+            return
         
         if self.doing == 'p':
             self.clear_faces_frame()
             self.doing ='r'
 
-        if not self.pause:
-            _, self.cur_frame = self.vid.read()
-        
         if self.cur_frame is None: return
 
         self.rec_gray_img=cv2.cvtColor(self.cur_frame,cv2.COLOR_BGR2GRAY)
@@ -599,7 +607,7 @@ class _MainUI():
     def show_nsrc_error( self ):
         unable_open_s = _('Unable to open video source')
         messagebox.showerror(  unable_open_s, unable_open_s+': '+self.showf_sv )
-    def show_data_empty_error( self ):
+    def show_data_empty( self ):
         unable_open_s = _('Nothing enter')
         msg  = _("You haven't entered anything yet! ")
         messagebox.showerror(  unable_open_s, msg, )
