@@ -7,7 +7,7 @@ from pathlib import Path
 import getopt
 import sys
 
-version =  "0.2.31"
+version =  "0.2.32"
 args = \
     getopt.getopt( sys.argv[1:], '' )[1]
 test_args = \

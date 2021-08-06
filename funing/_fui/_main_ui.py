@@ -318,6 +318,14 @@ class _MainUI():
 
         _, frame = self.vid.read()      
 
+        gray_img=cv2.cvtColor( frame,cv2.COLOR_BGR2GRAY)
+        rects = self.face_casecade.detectMultiScale(gray_img,1.3,5)
+
+
+        for (x,y,w,h) in rects:
+            frame=cv2.rectangle( frame,(x,y),(x+w,y+h),(255,0,0),2)  
+        rects = None
+
         vid_img = cv2.resize( frame , (0,0) , \
             fx = self.fxfy, fy = self.fxfy )
         vid_img = cv2.cvtColor( vid_img, cv2.COLOR_BGR2RGB )
@@ -456,7 +464,7 @@ class _MainUI():
         self.cur_frame2label()
     
     def restore_face_label_size( self, index ):
-        label, num = self.zoomed_in_face_label
+        label, index = self.zoomed_in_face_label
         if not label.winfo_exists(): return
         
         frame =  self.showed_face_frames[ index ]
@@ -523,7 +531,8 @@ class _MainUI():
         new_fl.imgtk = imgtk
         new_fl.configure(image=imgtk)
 
-        new_fl.bind("<Double-Button-1>",lambda e: self.del_face_label_r(e))
+        new_fl.bind("<Double-Button-1>",lambda e: \
+        self.del_face_label_r(e, index))
 
         new_fl.bind("<Button-1>",lambda e: self.show_info(new_fl , _id, index) )
 
@@ -532,10 +541,11 @@ class _MainUI():
         self.show_info(new_fl , _id, index)
 
              
-    def del_face_label_r( self, e):
+    def del_face_label_r( self, e, index):
         if self.zoomed_in_face_label[0] == e.widget:
             self.zoomed_in_face_label= (0,0)
         e.widget.destroy()
+        self.showed_face_frames[index] = None
     
     def clear_faces_frame( self ):
         for child in self.infofm.faces_frame.winfo_children():
