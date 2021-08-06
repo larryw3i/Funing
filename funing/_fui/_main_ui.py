@@ -32,7 +32,7 @@ class _MainUI():
         # face num for face_label
         self.lang_code = settings.lang_code
         self.fxfy = None
-        self.image_exts = ['jpg','png']
+        self.image_exts = ['jpg','png', 'jpeg', 'webp']
         self.video_exts = ['mp4','avi','3gp','webm','mkv']
         self.showf_sv = None
         self.showfm = self.mainui.showframe
@@ -48,11 +48,14 @@ class _MainUI():
         self.cur_frame = None
         self.face_rects = []
         self.picked_face_frames = []
+        self.showed_face_frames = []
         self.show_size = (200,200)
         self.zoom_in_size = (210,210)
         self.save_size = (100,100)
         self.zoomed_in_face_label = (0,0)
         
+        self.doing = 'p'  # 'p'->'pick', r->'rec'
+
         self.pause = False
         self.face_frames = []
         self.curf_index = 0
@@ -147,8 +150,8 @@ class _MainUI():
         self.showfm.pick_btn['command'] = self.pick_v0
         self.showfm.showf_go_btn['command'] = self.show_go
         self.showfm.showf_optionmenu_sv.trace('w', self.show_from )
-        self.infofm.prevf_btn['command'] = self.prevf
-        self.infofm.nextf_btn['command'] = self.nextf
+        # self.infofm.prevf_btn['command'] = self.prevf
+        # self.infofm.nextf_btn['command'] = self.nextf
         self.infofm.save_btn['command'] = self.savef
         self.rbmixfm.about_fn_btn['command'] = self.about_fn
         self.mainui.root.protocol("WM_DELETE_WINDOW", self.destroy )
@@ -196,6 +199,10 @@ class _MainUI():
 
     def pick_v0(self):
         
+        if self.doing == 'r':
+            self.clear_faces_frame()
+            self.doing ='p'
+
         if not self.pause:
             _, self.cur_frame = self.vid.read()
             
@@ -299,6 +306,7 @@ class _MainUI():
             self.vid = None
         
     def play_video( self ):
+        self.pause = False
         self.close_vid_cap()
         self.open_vid_cap()
         self.get_resize_fxfy()
@@ -329,6 +337,7 @@ class _MainUI():
         imgtk = ImageTk.PhotoImage( image= img )
         self.showfm.vid_frame_label.imgtk = imgtk
         self.showfm.vid_frame_label.configure(image=imgtk)
+        self.pause = True
            
     def cur_frame2label( self ):
         vid_img = cv2.resize( self.cur_frame , (0,0) , \
@@ -446,11 +455,11 @@ class _MainUI():
 
         self.cur_frame2label()
     
-    def restore_face_label_size( self ):
+    def restore_face_label_size( self, index ):
         label, num = self.zoomed_in_face_label
-        x,y,w,h = self.face_rects[ num ]
-        _h = max( h, w )
-        frame = self.cur_frame[y:y+_h,x:x+_h]
+        if not label.winfo_exists(): return
+        
+        frame =  self.showed_face_frames[ index ]
         frame = cv2.resize(frame, self.show_size )
 
         vid_img = cv2.cvtColor( frame, cv2.COLOR_BGR2RGB )
@@ -460,25 +469,22 @@ class _MainUI():
         label.configure(image=imgtk)
 
 
-    def show_info( self, e, _id, num):
+    def show_info( self, label, _id, index):
 
         if (self.zoomed_in_face_label[0]!=0) and \
-        (self.zoomed_in_face_label[0] != e.widget) :
-            self.restore_face_label_size()
+        (self.zoomed_in_face_label[0] != label) :
+            self.restore_face_label_size( index )
 
-        x,y,w,h = self.face_rects[ num ]
-
-        _h = max( h, w )
-        frame = self.cur_frame[y:y+_h,x:x+_h]
+        frame =  self.showed_face_frames[ index ]
         frame = cv2.resize(frame, self.zoom_in_size )
 
         vid_img = cv2.cvtColor( frame, cv2.COLOR_BGR2RGB )
         vid_img = Image.fromarray( vid_img  )
         imgtk = ImageTk.PhotoImage( image=vid_img )
-        e.widget.imgtk = imgtk
-        e.widget.configure(image=imgtk)
+        label.imgtk = imgtk
+        label.configure(image=imgtk)
 
-        self.zoomed_in_face_label = (e.widget, num)
+        self.zoomed_in_face_label = (label, index)
 
         info_file_path = os.path.join( \
         settings.infos_path,  _id )
@@ -492,6 +498,8 @@ class _MainUI():
 
 
     def add_face_label_r( self, num ):
+
+        index = len( self.showed_face_frames )
 
         new_fl = Label( self.infofm.faces_frame )
 
@@ -507,25 +515,38 @@ class _MainUI():
         frame = self.cur_frame[y:y+_h,x:x+_h]
         frame = cv2.resize(frame, self.show_size )
 
+        self.showed_face_frames.append( frame )
+
         vid_img = cv2.cvtColor( frame, cv2.COLOR_BGR2RGB )
         vid_img = Image.fromarray( vid_img  )
         imgtk = ImageTk.PhotoImage( image=vid_img )
         new_fl.imgtk = imgtk
         new_fl.configure(image=imgtk)
 
-        new_fl.bind("<Double-Button-1>",lambda e: self.del_face_label_r(e,_id))
+        new_fl.bind("<Double-Button-1>",lambda e: self.del_face_label_r(e))
 
-        new_fl.bind("<Button-1>",lambda e: self.show_info(e , _id, num) )
+        new_fl.bind("<Button-1>",lambda e: self.show_info(new_fl , _id, index) )
 
         new_fl.pack(side=LEFT)
 
+        self.show_info(new_fl , _id, index)
+
              
-    def del_face_label_r( self, e, num):
+    def del_face_label_r( self, e):
         if self.zoomed_in_face_label[0] == e.widget:
             self.zoomed_in_face_label= (0,0)
         e.widget.destroy()
+    
+    def clear_faces_frame( self ):
+        for child in self.infofm.faces_frame.winfo_children():
+            child.destroy()
+
 
     def recf_v0(self):
+        
+        if self.doing == 'p':
+            self.clear_faces_frame()
+            self.doing ='r'
 
         if not self.pause:
             _, self.cur_frame = self.vid.read()
@@ -542,7 +563,7 @@ class _MainUI():
             return
 
         for i in range( len(self.face_rects)) :
-            self.add_face_label_r( i)
+            self.add_face_label_r(i)
             
              
     def change_language(self, lang ):

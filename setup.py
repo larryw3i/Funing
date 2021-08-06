@@ -30,7 +30,6 @@ setuptools.setup(
         'PyYAML >= 5.3.1',
         'Pillow >= 8.1.2',
         'numpy >= 1.21.1',
-        'ScrollableFrame',
     ],
     include_package_data = True,
 )

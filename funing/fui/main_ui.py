@@ -92,11 +92,11 @@ class InfoFrame():
 
         self.faces_frame = tk.Frame( self.frame )
 
-        self.curf_label = tk.Label( self.face_show_frame )
-        self.opt_frame =  tk.Frame( self.frame )
-        self.prevf_btn = tk.Button( self.opt_frame, text = _('prev_symb'))
-        self.num_label = tk.Label( self.opt_frame, text = _('*/*') )
-        self.nextf_btn = tk.Button( self.opt_frame, text = _('next_symb'))
+        # self.curf_label = tk.Label( self.face_show_frame )
+        # self.opt_frame =  tk.Frame( self.frame )
+        # self.prevf_btn = tk.Button( self.opt_frame, text = _('prev_symb'))
+        # self.num_label = tk.Label( self.opt_frame, text = _('*/*') )
+        # self.nextf_btn = tk.Button( self.opt_frame, text = _('next_symb'))
         self.ft_sb = tk.Scrollbar(self.info_enter_frame, orient=VERTICAL)
         self.faces_text = Text( self.info_enter_frame,  \
         yscrollcommand = self.ft_sb.set)  
@@ -106,10 +106,10 @@ class InfoFrame():
         self.save_btn = tk.Button( self.frame, text = _("Save") )
         self.ft_sb.config(command = self.faces_text.yview)      
     def place( self ):
-        self.curf_label.pack(side = LEFT)
-        self.prevf_btn.pack(side = LEFT)
-        self.num_label.pack(side=LEFT)
-        self.nextf_btn.pack(side = LEFT)
+        # self.curf_label.pack(side = LEFT)
+        # self.prevf_btn.pack(side = LEFT)
+        # self.num_label.pack(side=LEFT)
+        # self.nextf_btn.pack(side = LEFT)
         self.faces_text.pack(side=tk.LEFT,fill=tk.Y)
         self.ft_sb.pack(side=tk.RIGHT,fill=tk.Y)
         self.faces_frame.grid( column = 0 , row = 0, columnspan = 5 )
