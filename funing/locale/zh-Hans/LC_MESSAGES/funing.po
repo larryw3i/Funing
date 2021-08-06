@@ -184,7 +184,7 @@ msgstr "性别"
 #: /home/larry/fun/larryw3i/Funing/funing/ui/c_ui.py:40
 #: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:61
 msgid "Pick"
-msgstr "录入"
+msgstr "获取"
 
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:402
 #: /home/larry/fun/larryw3i/Funing/funing/_fui/_main_ui.py:417

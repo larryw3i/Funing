@@ -44,7 +44,12 @@ class _MainUI():
         self.vid_width = 0
         self.vid_height = 0
         self.vid_fps = 0
+
         self.cur_frame = None
+        self.face_rects = []
+        self.face_labels = []
+        self.show_size = (200,200)
+        
         self.pause = True
         self.face_frames = []
         self.curf_index = 0
@@ -135,7 +140,7 @@ class _MainUI():
             self.change_language )
         self.showfm.ct_entry.bind('<FocusOut>', None )
         self.showfm.pp_btn['command'] = self.pause_play
-        self.showfm.pick_btn['command'] = self.pick
+        self.showfm.pick_btn['command'] = self.pick_v0
         self.showfm.showf_go_btn['command'] = self.show_go
         self.showfm.showf_optionmenu_sv.trace('w', self.show_from )
         self.infofm.prevf_btn['command'] = self.prevf
@@ -188,7 +193,64 @@ class _MainUI():
         
         self.infofm.faces_text.delete(1.0,tk.END)
         self.change_face_show(0)
+
+    def pick_v0(self):
+        if self.vid is None: return
+        count = 0
+        self.cur_info_id = str(uuid.uuid4())
+        self.recfs = []
+        self.face_frames = []
+        
+        _, self.cur_frame = self.vid.read()
+        gray_img=cv2.cvtColor(self.cur_frame,cv2.COLOR_BGR2GRAY)
+        self.face_rects = self.face_casecade.detectMultiScale(gray_img,1.3,5)\
+        .tolist() 
+        
+        for i in range( len( self.face_rects)):
+            self.add_face_label( i )
+
+        # while(True):
+        #     ret, self.frame=self.vid.read()
+        #     if ret:
+        #         gray_img=cv2.cvtColor(self.frame,cv2.COLOR_BGR2GRAY)
+        #         faces = self.face_casecade.detectMultiScale(gray_img,1.3,5)
+        #         if len( faces ) < 1:continue
+        #         x,y,w,h = faces[0]
+        #         new_frame=cv2.resize( self.frame[y:y+h,x:x+w], (92,112),\
+        #             interpolation=cv2.INTER_LINEAR)
+        #         self.face_frames.append( new_frame )
+        #         count+=1
+        #         if count > self.face_enter_count: break
+        
+        # self.infofm.faces_text.delete(1.0,tk.END)
+        # self.change_face_show(0)
     
+    def add_face_label(self, num):
+        
+        x,y,w,h = self.face_rects[ num ]
+        w = max( w, h )
+        
+        new_fl = Label( self.infofm.faces_frame )
+        frame = self.cur_frame[y:y+w, x:x+w]
+        frame = cv2.resize( frame, self.show_size )
+        vid_img = cv2.cvtColor( frame, cv2.COLOR_BGR2RGB )
+        vid_img = Image.fromarray( vid_img  )
+        imgtk = ImageTk.PhotoImage( image=vid_img )
+        new_fl.imgtk = imgtk
+        new_fl.configure(image=imgtk)
+
+        self.face_labels.append( new_fl )
+        new_fl.bind("<Button-1>",lambda e: self.del_face_label(e , num) )
+
+        new_fl.pack(side=LEFT)
+
+    def del_face_label( self, e, num):
+        self.face_labels.remove(e.widget)
+        del self.face_rects[ num ]
+        e.widget.destroy()
+        if settings.debug:
+            print( self.face_labels )
+
     def show_go( self, *args ):
         self.showf_sv = self.showfm.showf_sv.get()
         if len( self.showf_sv.strip() ) < 1: return
