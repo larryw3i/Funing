@@ -141,7 +141,7 @@ jupyter_notebok.ipynb
 data/face_encodings.data
 .pypirc
 funing/venv/
-funing/_home/
+funing/.home/
 *.data
 .idea/
 

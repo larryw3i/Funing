@@ -43,9 +43,9 @@ class Funing():
         Enjoy().msgfmt()
 
     def keep_code( self ):
-        rm_dirs = [os.path.join( settings.project_path, '_home', '.funing' ),
-            os.path.join( os.path.expanduser('~'), '.funing' ),
-            os.path.join(settings.project_path, 'config.yml' )
+        rm_dirs = [
+            settings._config_path,
+            settings.base_dir
         ]
         for root, dirs, files in os.walk( settings.project_path ):
             for f in files:

@@ -16,17 +16,19 @@ debug =  \
     len( set(args)&set(test_args) ) > 0
 project_path = \
     os.path.abspath( os.path.dirname(  __file__  ) )
-usr_home = \
-    os.path.join( project_path, '_home' ) if debug \
-    else os.path.expanduser('~')
+_usr_home =  \
+    os.path.expanduser('~')
+_test_user_home =\
+    os.path.join( project_path, '.home' ) 
+usr_home = _test_user_home if debug else _usr_home
 base_dir = \
     os.path.join( usr_home , '.funing')
 locale_path = \
     os.path.join( project_path, 'locale') 
-config_path = \
-    os.path.join( base_dir , 'config.yml') 
 _config_path = \
-    config_path
+    os.path.join( base_dir , 'config.yml') 
+config_path = \
+    _config_path
 if not os.path.exists( config_path ): config_path = \
     os.path.join( project_path , 'config.example.yml') 
 config_yml = \
