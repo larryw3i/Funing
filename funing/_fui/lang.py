@@ -7,8 +7,6 @@ import locale
 from funing import settings
 import yaml
 
-
-
 import os
 from funing import settings
 

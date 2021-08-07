@@ -12,7 +12,7 @@ import os
 import tkinter.filedialog as tkf
 import cv2
 from PIL import Image , ImageTk
-from funing.lang import _
+from funing._fui.lang import _
 from datetime import datetime , date
 from funing import settings
 import yaml

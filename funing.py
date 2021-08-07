@@ -16,6 +16,8 @@ class Funing():
         self.dir = os.path.abspath( os.path.dirname(  __file__  ) )
         self.data_dir = os.path.join( self.dir, 'data' )
         self.xgettext_path = os.path.join( self.data_dir, 'xgettext_f.txt' )
+        if not os.path.exists( self.data_dir ):
+            os.makedirs( self.data_dir,exist_ok=True )
         pass
 
     def start( self ):

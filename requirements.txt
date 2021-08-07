@@ -3,3 +3,4 @@ langcodes[data]
 PyYAML
 Pillow
 numpy
+Babel

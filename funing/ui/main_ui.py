@@ -2,7 +2,7 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import *
-from funing.lang import _
+from funing._fui.lang import _
 from langcodes import Language
 from funing import settings
 import os
