@@ -98,25 +98,25 @@ class InfoFrame():
         # self.num_label = tk.Label( self.opt_frame, text = _('*/*') )
         # self.nextf_btn = tk.Button( self.opt_frame, text = _('next_symb'))
         self.ft_sb = tk.Scrollbar(self.info_enter_frame, orient=VERTICAL)
-        self.faces_text = Text( self.info_enter_frame,  \
+        self.face_text = Text( self.info_enter_frame,  \
         yscrollcommand = self.ft_sb.set)  
-        self.faces_text_tip_label = Label(self.frame, text = \
+        self.face_text_tip_label = Label(self.frame, text = \
         _('Write it with certain rules so that you can analyze it later'),\
         font=('', 10) )
         self.save_btn = tk.Button( self.frame, text = _("Save") )
-        self.ft_sb.config(command = self.faces_text.yview)      
+        self.ft_sb.config(command = self.face_text.yview)      
     def place( self ):
         # self.curf_label.pack(side = LEFT)
         # self.prevf_btn.pack(side = LEFT)
         # self.num_label.pack(side=LEFT)
         # self.nextf_btn.pack(side = LEFT)
-        self.faces_text.pack(side=tk.LEFT,fill=tk.Y)
+        self.face_text.pack(side=tk.LEFT,fill=tk.Y)
         self.ft_sb.pack(side=tk.RIGHT,fill=tk.Y)
         self.faces_frame.grid( column = 0 , row = 0, columnspan = 5 )
         # self.face_show_frame.grid( column = 0, row = 1, columnspan = 5)
         # self.opt_frame.grid( column = 0, row = 2, columnspan = 5)
         self.info_enter_frame.grid( column = 0, row = 3, columnspan = 5)
-        self.faces_text_tip_label.grid(column = 0, row = 4,  columnspan = 5)
+        self.face_text_tip_label.grid(column = 0, row = 4,  columnspan = 5)
         self.save_btn.grid( column = 2, row = 5 )
         self.frame.grid( column = 1, row = 0 )
         pass

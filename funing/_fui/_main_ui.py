@@ -3,6 +3,7 @@
 from tkinter import messagebox
 import tkinter as tk
 from tkinter import *
+from tkinter.ttk import *
 from funing.fui.main_ui import MainUI
 from langcodes import Language
 import gettext
@@ -114,8 +115,8 @@ class _MainUI():
             self.about_tl.resizable(0,0)
             Label( self.about_tl, text =_('Funing'), font=("", 25)).pack()
             Label(  self.about_tl, text = settings.version ).pack()
-            self.source_page_label = Label(self.about_tl,text=\
-            settings.source_page,fg="blue", cursor="hand2")
+            self.source_page_label = Label(self.about_tl, text=\
+            settings.source_page, foreground="blue", cursor="hand2")
             self.source_page_label.bind("<Button-1>",lambda e: \
             webbrowser.open_new(settings.source_page ))
             self.source_page_label.pack()
@@ -197,7 +198,7 @@ class _MainUI():
                 count+=1
                 if count > self.face_enter_count: break
         
-        self.infofm.faces_text.delete(1.0,tk.END)
+        self.infofm.face_text.delete(1.0,END)
         self.change_face_show(0)
 
     def pick_v0(self):
@@ -211,6 +212,8 @@ class _MainUI():
             
         if self.cur_frame is None: return
 
+        self.clear_face_text()
+
         self.cur_info_id = str(uuid.uuid4())
         
         gray_img=cv2.cvtColor(self.cur_frame,cv2.COLOR_BGR2GRAY)
@@ -223,6 +226,8 @@ class _MainUI():
         for i in range( len( self.face_rects)):
             self.add_face_label_p( i )
 
+    def clear_face_text( self ):
+        self.infofm.face_text.delete(1.0,END)
 
     def add_face_label_p(self, num):
         
@@ -302,7 +307,8 @@ class _MainUI():
     def root_after_cancel( self ):
         if self.root_after != -1:
             
-            _, self.cur_frame = self.vid.read()
+            if self.vid is not None and self.vid.isOpened():
+                _, self.cur_frame = self.vid.read()
 
             self.mainui.root.after_cancel( self.root_after )
             self.close_vid_cap()
@@ -313,10 +319,11 @@ class _MainUI():
         self.source_type = 1
         self.close_vid_cap()
         self.open_vid_cap()
-        self.get_resize_fxfy()
+        self.get_vid_resize_fxfy()
         self.refresh_frame()
     
     def refresh_frame(self):
+        if self.source_type == 0:return
         if self.vid == None: self.vid = cv2.VideoCapture( self.source )
         if not self.vid.isOpened(): self.show_nsrc_error(); return
 
@@ -331,6 +338,7 @@ class _MainUI():
 
         vid_img = cv2.resize( frame , (0,0) , \
             fx = self.fxfy, fy = self.fxfy )
+
         vid_img = cv2.cvtColor( vid_img, cv2.COLOR_BGR2RGB )
         vid_img = Image.fromarray( vid_img )
         imgtk = ImageTk.PhotoImage( image=vid_img )
@@ -341,9 +349,45 @@ class _MainUI():
             self.root_after = self.mainui.root.after( \
                 int(1000/self.vid_fps) , self.refresh_frame )
 
+
+    def get_img_resize_fxfy( self ):
+        w = self.screenwidth/2
+        h = self.screenheight/2
+        r = w/h 
+        
+        self.vid_width, self.vid_height, _ = self.cur_frame.shape
+
+        r0 = self.vid_width/self.vid_height
+        r1= r0/r 
+        self.fxfy = h/self.vid_height if r1<r else w/self.vid_width
+        if settings.debug:
+            print('self.fxfy: ', self.fxfy)
+        
+
     def view_image( self ):
         self.source_type = 0
+        self.root_after_cancel()
+
         self.cur_frame  = cv2.imread( self.face_src_path )
+
+        if settings.debug:
+            print( self.cur_frame.shape,self.cur_frame.size )
+            
+        self.get_img_resize_fxfy()
+        
+        self.cur_frame = cv2.resize( self.cur_frame , (0,0) , \
+            fx = self.fxfy, fy = self.fxfy )
+
+        self.rec_gray_img=cv2.cvtColor(self.cur_frame,cv2.COLOR_BGR2GRAY)
+        self.face_rects=self.face_casecade.detectMultiScale(\
+        self.rec_gray_img,1.3,5)
+
+        if len( self.face_rects ) < 1: return        
+        
+        for (x,y,w,h) in self.recfs:
+            self.cur_frame=cv2.rectangle(\
+            self.cur_frame,(x,y),(x+w,y+h),(255,0,0),2)  
+
         frame = cv2.cvtColor( self.cur_frame, cv2.COLOR_BGR2RGB)
         img = Image.fromarray( frame )
         imgtk = ImageTk.PhotoImage( image= img )
@@ -359,7 +403,7 @@ class _MainUI():
         self.showfm.vid_frame_label.imgtk = imgtk
         self.showfm.vid_frame_label.configure(image=imgtk)
 
-    def get_resize_fxfy( self ):
+    def get_vid_resize_fxfy( self ):
         if self.vid_width == self.vid_height == 0: 
             if debug: print('self.iru is None')
             return
@@ -386,7 +430,7 @@ class _MainUI():
     
     def savef( self ):
         if self.cur_info_id == None: return
-        info =self.infofm.faces_text.get("1.0", "end-1c")
+        info =self.infofm.face_text.get("1.0", "end-1c")
         info_file_path = os.path.join( settings.infos_path, self.cur_info_id )
         open( info_file_path, 'w+' ).write( info )
         img_path =os.path.join( settings.faces_path , self.cur_info_id )
@@ -443,8 +487,8 @@ class _MainUI():
 
             info_file_path = os.path.join( \
             settings.infos_path,  _id )
-            self.infofm.faces_text.delete(1.0,tk.END)
-            self.infofm.faces_text.insert('1.0', \
+            self.infofm.face_text.delete(1.0,END)
+            self.infofm.face_text.insert('1.0', \
             open( info_file_path, 'r' ).read() )
             self.update_num_label()
     
@@ -499,12 +543,12 @@ class _MainUI():
 
         info_file_path = os.path.join( \
         settings.infos_path,  _id )
-        self.infofm.faces_text.delete(1.0,tk.END)
+        self.infofm.face_text.delete(1.0,END)
         
         if not os.path.exists( info_file_path ): 
-            self.infofm.faces_text.insert('1.0', _('No informations found') )
+            self.infofm.face_text.insert('1.0', _('No informations found') )
 
-        self.infofm.faces_text.insert('1.0', \
+        self.infofm.face_text.insert('1.0', \
         open( info_file_path, 'r' ).read() )
 
 
@@ -570,6 +614,8 @@ class _MainUI():
             self.doing ='r'
 
         if self.cur_frame is None: return
+        
+        self.clear_face_text()
 
         self.rec_gray_img=cv2.cvtColor(self.cur_frame,cv2.COLOR_BGR2GRAY)
         self.face_rects=self.face_casecade.detectMultiScale(\

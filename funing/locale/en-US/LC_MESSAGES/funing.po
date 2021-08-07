@@ -212,7 +212,7 @@ msgstr ""
 #: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:133
 #: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:95
 msgid "Write it with certain rules so that you can analyze it later"
-msgstr ""
+msgstr "Write it in toml or yaml format, so it's a lot easier for you to analyze it."
 
 #: /home/larry/fun/larryw3i/Funing/funing/fui/main_ui.py:89
 msgid "*/*"

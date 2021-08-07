@@ -117,15 +117,15 @@ class InfoFrame():
         self.curf_label = tk.Label( self.face_show_frame )
         self.nextf_btn = tk.Button( self.face_show_frame, text = _('next_symb') )
         self.ft_sb = tk.Scrollbar(self.info_enter_frame, orient=VERTICAL)
-        self.faces_text = Text( self.info_enter_frame,  \
+        self.face_text = Text( self.info_enter_frame,  \
         yscrollcommand = self.ft_sb.set)  
         self.save_btn = tk.Button( self.frame, text = _("Save") )
-        self.ft_sb.config(command = self.faces_text.yview)      
+        self.ft_sb.config(command = self.face_text.yview)      
     def place( self ):
         self.prevf_btn.pack(side = LEFT)
         self.curf_label.pack(side = LEFT)
         self.nextf_btn.pack(side = LEFT)
-        self.faces_text.pack(side=tk.LEFT,fill=tk.Y)
+        self.face_text.pack(side=tk.LEFT,fill=tk.Y)
         self.ft_sb.pack(side=tk.RIGHT,fill=tk.Y)
         self.face_show_frame.grid( column = 0, row = 0, columnspan = 5)
         self.info_enter_frame.grid( column = 0, row = 1, columnspan = 5)

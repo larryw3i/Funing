@@ -51,10 +51,10 @@ class Cui():
         self.curf_label = Label( self.face_show_frame )
         self.nextf_btn = Button( self.face_show_frame, text = _('next_symb') )
         self.ft_sb = Scrollbar(self.info_enter_frame, orient=VERTICAL)
-        self.faces_text = Text( self.info_enter_frame,  \
+        self.face_text = Text( self.info_enter_frame,  \
         yscrollcommand = self.ft_sb.set)  
         self.save_btn = Button( self.cui_frame, text = _("Save") )
-        self.ft_sb.config(command = self.faces_text.yview)          
+        self.ft_sb.config(command = self.face_text.yview)          
 
         self.showf_entry.grid( column = 0, row = 4, sticky = E)
         self.showf_go_btn.grid( column = 1, row = 4, sticky = W)
@@ -70,7 +70,7 @@ class Cui():
         self.prevf_btn.pack(side = LEFT)
         self.curf_label.pack(side = LEFT)
         self.nextf_btn.pack(side = LEFT)
-        self.faces_text.pack(side=LEFT,fill=Y)
+        self.face_text.pack(side=LEFT,fill=Y)
         self.ft_sb.pack(side=RIGHT,fill=Y)
         self.face_show_frame.grid( column = 0, row = 0, columnspan = 5)
         self.info_enter_frame.grid( column = 0, row = 1, columnspan = 5)
