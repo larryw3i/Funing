@@ -7,7 +7,7 @@ from pathlib import Path
 import getopt
 import sys
 
-version =  "0.2.33"
+version =  "0.2.34"
 args = \
     getopt.getopt( sys.argv[1:], '' )[1]
 test_args = \
@@ -57,4 +57,5 @@ prev_version = \
     config_yml.get('version', version )
 initialized  = \
     config_yml.get('initialized', False) and (version == prev_version)
-    
+backup_dir_path = \
+    os.path.join( base_dir, '.cp' )

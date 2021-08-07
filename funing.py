@@ -7,6 +7,8 @@ from pathlib import Path
 import getopt
 from funing import settings
 import re
+import shutil
+import uuid
 
 # DON't IMPORT ANYTHING FROM THIS FILE
 class Funing():
@@ -43,14 +45,8 @@ class Funing():
         Enjoy().msgfmt()
 
     def keep_code( self ):
-        rm_dirs = [
-            settings._config_path,
-            settings.base_dir
-        ]
-        for root, dirs, files in os.walk( settings.project_path ):
-            for f in files:
-                if f.endswith( '.mo' ): rm_dirs += [os.path.join(root,f)]
-        os.system('rm -rf '+' '.join( rm_dirs ))    
+        from funing._fui import Enjoy
+        Enjoy().keep_code()
 
     def pip_install_r( self ):
         os.system('pip3 install -r requirements.txt ')

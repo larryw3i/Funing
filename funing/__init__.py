@@ -16,3 +16,4 @@ def run():
         if a in [ 's', 'ts' ,'st', 'start' ]:   f.start()
         if a in [ 'm' , 'msg' , 'msgfmt' ]:     f.msgfmt()
         if a in [ 'init', 'initial' ]:          f.initialize()
+        if a in [ 'kc', 'keep_code' ]:          f.keep_code()

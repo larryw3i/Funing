@@ -4,6 +4,8 @@ import os
 import sys
 import yaml
 import cv2
+import uuid
+import shutil
 from funing import settings
 from funing._fui import error
 
@@ -39,3 +41,20 @@ class Enjoy():
         yaml.safe_dump( settings.config_yml ,  \
         open( settings._config_path, 'w' ) )
     
+    def keep_code( self ):
+        rm_dirs = [
+            settings._config_path,
+            settings.data_dir
+        ]
+        for root, dirs, files in os.walk( settings.project_path ):
+            for f in files:
+                if f.endswith( '.mo' ): rm_dirs += [os.path.join(root,f)]
+        
+        uuid_cp_path = os.path.join( settings.backup_dir_path, \
+        str(uuid.uuid4()) )
+
+        if not os.path.exists( uuid_cp_path ):
+            os.makedirs(  uuid_cp_path , exist_ok=True )
+        for _cp in rm_dirs:
+            shutil.move( _cp, uuid_cp_path )
+        # os.system('rm -rf '+' '.join( rm_dirs ))    

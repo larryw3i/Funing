@@ -28,7 +28,7 @@ setuptools.setup(
         'opencv-contrib-python >= 4.5.3.56',
         'langcodes[data] >= 3.1.0',
         'PyYAML >= 5.3.1',
-        'Pillow >= 8.1.2',
+        'Pillow >= 8.3.0',
         'numpy >= 1.21.1',
     ],
     include_package_data = True,
