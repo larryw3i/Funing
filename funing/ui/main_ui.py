@@ -129,7 +129,7 @@ class RBMixFrame():
         self.lang_combobox_var = tk.StringVar( self.frame )
         self.lang_code = settings.lang_code
         self.lang_combobox_var.set(
-            Language.make( self.lang_code ).autonym()
+            Language.make( self.lang_code.replace('_','-') ).autonym()
           )
         self.lang_combobox = ttk.Combobox( self.frame ,
             textvariable = self.lang_combobox_var,

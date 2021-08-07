@@ -1,213 +1,134 @@
-#
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:81
+msgid "No desktop environment is detected! "
+msgstr ""
+
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:114
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:127
+msgid "About Funing"
+msgstr ""
+
 # larry <larryw3i@163.com>, 2021.
-#
-
-
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
 # msgid ""
 # msgstr ""
-#: ui/main_ui.py:7 /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:18
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:102
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:116
 #: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:18
 msgid "Funing"
 msgstr ""
 
-#: ui/main_ui.py:12
-msgid "Shoot"
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:123
+msgid "Licensed under the MIT license"
 msgstr ""
 
-#: ui/main_ui.py:20
-msgid "Name"
-msgstr ""
-
-#: ui/main_ui.py:23
-msgid "DOB"
-msgstr ""
-
-#: ui/main_ui.py:26
-msgid "Address"
-msgstr ""
-
-#: ui/main_ui.py:29
-msgid "Note"
-msgstr ""
-
-#: ../../../_ui/_main_ui.py:119
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:87
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:97
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:87
-#: /home/larry/fun/larryw3i/Funing/funing/ui/c_ui.py:36
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:171
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:57
 msgid "Pause"
 msgstr ""
 
-#: ../../../_ui/_main_ui.py:122
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:145
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:165
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:164
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:177
 msgid "Play"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:116
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:126
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:116
-#: /home/larry/fun/larryw3i/Funing/funing/ui/c_ui.py:50
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:88
-msgid "prev_symb"
-msgstr "<<"
-
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:118
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:128
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:118
-#: /home/larry/fun/larryw3i/Funing/funing/ui/c_ui.py:52
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:90
-msgid "next_symb"
-msgstr ">>"
-
-msgid "gettext_exception_message"
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:290
+msgid "Select a file"
 msgstr ""
-"Make sure gettext is installed, read https://www.gnu.org/software/gettext/ "
-"and install it. (^_^)"
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:81
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:91
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:81
-#: /home/larry/fun/larryw3i/Funing/funing/ui/c_ui.py:30
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:51
-msgid "tolerance"
-msgstr "tolerance(0.1-0.6)"
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:291
+msgid "Image or video"
+msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:91
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:101
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:91
-#: /home/larry/fun/larryw3i/Funing/funing/ui/c_ui.py:40
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:61
-msgid "Pick"
-msgstr "Pick"
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:420
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:655
+msgid "Unable to open video source"
+msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:402
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:417
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:416
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:418
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:425
-msgid "You haven't entered anything yet! "
-msgstr "You haven't entered data yet! Open a source and click 'Pick' to enter"
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:549
+msgid "No informations found"
+msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:401
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:416
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:415
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:417
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:424
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:645
+msgid "Restart Funing Now?"
+msgstr ""
+
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:658
 msgid "Nothing enter"
 msgstr "Nothing enter"
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:72
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:82
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:72
-#: /home/larry/fun/larryw3i/Funing/funing/ui/c_ui.py:21
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:659
+msgid "You haven't entered anything yet! "
+msgstr "You haven't entered data yet! Open a source and click 'Pick' to enter"
+
 #: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:42
 msgid "GO"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:74
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:84
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:74
-#: /home/larry/fun/larryw3i/Funing/funing/ui/c_ui.py:23
 #: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:44
 msgid "File"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:74
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:84
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:74
-#: /home/larry/fun/larryw3i/Funing/funing/ui/c_ui.py:23
 #: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:44
 msgid "Camera"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:75
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:85
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:75
-#: /home/larry/fun/larryw3i/Funing/funing/ui/c_ui.py:24
 #: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:45
 msgid "Open"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:122
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:132
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:122
-#: /home/larry/fun/larryw3i/Funing/funing/ui/c_ui.py:56
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:135
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:97
-msgid "Save"
-msgstr ""
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:51
+msgid "tolerance"
+msgstr "tolerance(0.1-0.6)"
 
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:68
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:67
-msgid "No desktop environment is detected! (^_^)"
-msgstr ""
-
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:151
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:171
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:97
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:170
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:57
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:61
 msgid "Recognize"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:203
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:223
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:225
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:226
-msgid "Select a file"
-msgstr ""
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:65
+msgid "Pick"
+msgstr "Pick"
 
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:204
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:224
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:226
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:227
-msgid "Image or video"
-msgstr ""
-
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:271
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:398
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:291
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:413
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:293
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:412
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:414
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:294
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:421
-msgid "Unable to open video source"
-msgstr ""
-
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:383
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:398
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:397
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:399
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:406
-msgid "Restart Funing Now?"
-msgstr ""
-
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:43
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:117
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:100
-msgid "About Funing"
-msgstr ""
-
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:109
-msgid "Licensed under the MIT license"
-msgstr ""
-
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:133
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:95
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:104
 msgid "Write it with certain rules so that you can analyze it later"
 msgstr ""
-"Write it in toml or yaml format, so it's a lot easier for you to analyze it"
+"Write it in toml or yaml format, so it's a lot easier for you to analyze "
+"it"
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:89
-msgid "*/*"
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:106
+msgid "Save"
 msgstr ""
+
+#~ msgid "Shoot"
+#~ msgstr ""
+
+#~ msgid "Name"
+#~ msgstr ""
+
+#~ msgid "DOB"
+#~ msgstr ""
+
+#~ msgid "Address"
+#~ msgstr ""
+
+#~ msgid "Note"
+#~ msgstr ""
+
+#~ msgid "prev_symb"
+#~ msgstr "<<"
+
+#~ msgid "next_symb"
+#~ msgstr ">>"
+
+#~ msgid "gettext_exception_message"
+#~ msgstr ""
+#~ "Make sure gettext is installed, read "
+#~ "https://www.gnu.org/software/gettext/ and install "
+#~ "it. (^_^)"
+
+#~ msgid "No desktop environment is detected! (^_^)"
+#~ msgstr ""
+
+#~ msgid "*/*"
+#~ msgstr ""
+

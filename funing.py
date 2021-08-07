@@ -42,6 +42,16 @@ class Funing():
                     os.system(f'xgettext -f {self.xgettext_path} '+\
                     f'--join-existing -d funing -o {f_path}' )
         # os.remove( self.xgettext_path )
+
+    def pybabel_extract( self ):
+        os.system(f'pybabel extract -o {settings._locale_path}/funing.pot'+
+        f'  --omit-header {settings.project_path}/*')
+    
+    def pybabel_update( self ):
+        for l in settings.locale_langcodes:
+            os.system( f'pybabel  update -D funing  -i {settings._locale_path}'+
+            f'/funing.pot   -d {settings.locale_path}  --omit-header -l {l}')
+
     def msgfmt( self ):
         from funing._ui import Enjoy
         Enjoy().msgfmt()
@@ -64,3 +74,5 @@ if __name__ == '__main__':
         if a in [ 'm' , 'msg' , 'msgfmt' ]:     f.msgfmt()
         if a in [ 'kc', 'keep_code' ]:          f.keep_code()
         if a in [ 'pip' , 'pip_install']:       f.pip_install_r()
+        if a in [ 'be' , 'pbe']:                f.pybabel_extract()
+        if a in [ 'bu' , 'pbu']:                f.pybabel_update()
