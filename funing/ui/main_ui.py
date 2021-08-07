@@ -47,11 +47,11 @@ class ShowFrame():
             self.showf_optionmenu_sv , *self.showf_t_dict.values() )
 
         # comparison_tolerance entry
-        self.ct_label = tk.Label( \
-            self.frame, text = _('tolerance') + ':' )
-        self.ct_stringvar = tk.StringVar( frame, ct )
-        self.ct_entry = tk.Entry( self.frame, width = 8,\
-            textvariable = self.ct_stringvar )
+        # self.ct_label = tk.Label( \
+        #     self.frame, text = _('tolerance') + ':' )
+        # self.ct_stringvar = tk.StringVar( frame, ct )
+        # self.ct_entry = tk.Entry( self.frame, width = 8,\
+        #     textvariable = self.ct_stringvar )
 
         # shoot
         self.pp_sv = tk.StringVar( frame, _('Pause'))
@@ -139,7 +139,6 @@ class RBMixFrame():
     def locale_lang_display_names( self ):
         display_names = []
         for i in settings.locale_langcodes:
-            print( i )
             display_names.append( Language.make( i.replace('_','-')).autonym() )
         return display_names
 

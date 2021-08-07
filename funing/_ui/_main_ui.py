@@ -147,7 +147,7 @@ class _MainUI():
     def set_ui_events( self ):
         self.rbmixfm.lang_combobox.bind('<<ComboboxSelected>>',
             self.change_language )
-        self.showfm.ct_entry.bind('<FocusOut>', None )
+        # self.showfm.ct_entry.bind('<FocusOut>', None )
         self.showfm.pp_btn['command'] = self.pause_play
         self.showfm.rec_btn['command'] = self.recf_v0
         self.showfm.pick_btn['command'] = self.pick_v0

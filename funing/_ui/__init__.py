@@ -21,7 +21,6 @@ class Enjoy():
         _MainUI()
     
     def msgfmt( self ):
-
         os.system(f'pybabel compile -d {settings.locale_path}  -D funing -f')
 
 
@@ -32,7 +31,8 @@ class Enjoy():
             print( e );error.gettext_nf();exit()
             
         for d in [ settings.faces_path, settings.infos_path ]:
-            if not os.path.exists( d ): os.makedirs( d, exist_ok=True )
+            if not os.path.exists( d ): 
+                os.makedirs( d, exist_ok=True )
 
         settings.config_yml["version"] = settings.version
         settings.config_yml["initialized"] = True
@@ -44,15 +44,19 @@ class Enjoy():
             settings._config_path,
             settings.data_dir
         ]
-        for root, dirs, files in os.walk( settings.project_path ):
-            for f in files:
-                if f.endswith( '.mo' ): rm_dirs += [os.path.join(root,f)]
-        
+
         uuid_cp_path = os.path.join( settings.backup_dir_path, \
         str(uuid.uuid4()) )
 
+        for root, dirs, files in os.walk( settings.project_path ):
+            for f in files:
+                if f.endswith( '.mo' ):
+                    os.system(f'mv {os.path.join(root,f)} '\
+                    +f'{os.path.join(uuid_cp_path, str(uuid.uuid4()) ,f)}')
+        
         if not os.path.exists( uuid_cp_path ):
             os.makedirs(  uuid_cp_path , exist_ok=True )
+            
         for _cp in rm_dirs:
             shutil.move( _cp, uuid_cp_path )
         # os.system('rm -rf '+' '.join( rm_dirs ))    

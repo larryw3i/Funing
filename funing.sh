@@ -18,7 +18,7 @@ bdist(){
     pip install -U setuptools wheel twine  launchpadlib
     pip install -r requirements.txt
     python3 test.py kc
-    rm -rf dist/*
+    rm -rf dist/ build/ funing.egg-info/
     python3 setup.py sdist bdist_wheel
     pip3 uninstall funing
     pip3 install dist/*.whl

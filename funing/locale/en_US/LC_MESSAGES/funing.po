@@ -7,13 +7,6 @@ msgstr ""
 msgid "About Funing"
 msgstr ""
 
-# larry <larryw3i@163.com>, 2021.
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# msgid ""
-# msgstr ""
 #: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:116
 #: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:18
 msgid "Funing"

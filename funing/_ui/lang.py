@@ -32,5 +32,7 @@ lang = gettext.translation(
     'funing',
     localedir = settings.locale_path,
     languages = [ settings.lang_code.replace('-','_') ])
+
 lang.install()
+
 _ = lang.gettext
