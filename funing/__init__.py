@@ -5,7 +5,7 @@ import sys
 from pathlib import Path
 import getopt
 from funing import settings
-from funing._fui import Enjoy
+from funing._ui import Enjoy
 
 def run():
     sys_argv = sys.argv[1:]

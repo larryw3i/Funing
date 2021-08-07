@@ -7,7 +7,7 @@ import cv2
 import uuid
 import shutil
 from funing import settings
-from funing._fui import error
+from funing._ui import error
 
 error.lib_check()
 

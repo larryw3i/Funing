@@ -4,7 +4,7 @@ from tkinter import messagebox
 import tkinter as tk
 from tkinter import *
 from tkinter.ttk import *
-from funing.fui.main_ui import MainUI
+from funing.ui.main_ui import MainUI
 from langcodes import Language
 import gettext
 import sys
@@ -12,14 +12,14 @@ import os
 import tkinter.filedialog as tkf
 import cv2
 from PIL import Image , ImageTk
-from funing._fui.lang import _
+from funing._ui.lang import _
 from datetime import datetime , date
 from funing import settings
 import yaml
 import uuid
 import time
 import re
-from funing._fui import error
+from funing._ui import error
 import numpy as np
 from cv2 import haarcascades
 import webbrowser

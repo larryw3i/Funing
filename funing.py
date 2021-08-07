@@ -43,11 +43,11 @@ class Funing():
                     f'--join-existing -d funing -o {f_path}' )
         # os.remove( self.xgettext_path )
     def msgfmt( self ):
-        from funing._fui import Enjoy
+        from funing._ui import Enjoy
         Enjoy().msgfmt()
 
     def keep_code( self ):
-        from funing._fui import Enjoy
+        from funing._ui import Enjoy
         Enjoy().keep_code()
 
     def pip_install_r( self ):
