@@ -48,14 +48,15 @@ class Enjoy():
         uuid_cp_path = os.path.join( settings.backup_dir_path, \
         str(uuid.uuid4()) )
 
+        if not os.path.exists( uuid_cp_path ):
+            os.makedirs(  uuid_cp_path , exist_ok=True )
+
         for root, dirs, files in os.walk( settings.project_path ):
             for f in files:
                 if f.endswith( '.mo' ):
-                    os.system(f'mv {os.path.join(root,f)} '\
-                    +f'{os.path.join(uuid_cp_path, str(uuid.uuid4()) ,f)}')
+                    os.rename( os.path.join(root,f), \
+                    os.path.join( uuid_cp_path, f'{str(uuid.uuid4())}--{f}' ) )
         
-        if not os.path.exists( uuid_cp_path ):
-            os.makedirs(  uuid_cp_path , exist_ok=True )
             
         for _cp in rm_dirs:
             shutil.move( _cp, uuid_cp_path )

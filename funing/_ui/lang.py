@@ -29,8 +29,7 @@ if settings.debug:
     print( settings.lang_code, settings.locale_path)
 
 lang = gettext.translation(
-    'funing',
-    localedir = settings.locale_path,
+    'funing', localedir = settings.locale_path,
     languages = [ settings.lang_code.replace('-','_') ])
 
 lang.install()
