@@ -2,7 +2,7 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import *
-from funing.locale.lang import _
+from funing.lang import _
 from langcodes import Language
 from funing import settings
 import os
@@ -139,7 +139,8 @@ class RBMixFrame():
     def locale_lang_display_names( self ):
         display_names = []
         for i in settings.locale_langcodes:
-            display_names.append( Language.make(i).autonym() )
+            print( i )
+            display_names.append( Language.make( i.replace('_','-')).autonym() )
         return display_names
 
     def place(self):

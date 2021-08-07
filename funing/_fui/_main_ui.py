@@ -12,7 +12,7 @@ import os
 import tkinter.filedialog as tkf
 import cv2
 from PIL import Image , ImageTk
-from funing.locale.lang import _
+from funing.lang import _
 from datetime import datetime , date
 from funing import settings
 import yaml
@@ -78,7 +78,7 @@ class _MainUI():
         #screen
         try:self.screenwidth = self.mainui.root.winfo_screenwidth();\
             self.screenheight = self.mainui.root.winfo_screenheight()
-        except: print(_('No desktop environment is detected! (^_^)')); exit()  
+        except: print(_('No desktop environment is detected! ')); exit()  
         if not settings.data_empty():
             self.recognizer_train()           
         self.set_ui_events()
@@ -634,6 +634,7 @@ class _MainUI():
 
         lang_display_name = self.rbmixfm.lang_combobox_var.get()
         new_lang_code = Language.find( lang_display_name ).to_tag()
+        new_lang_code.replace('-','_')
         if settings.debug:
             print( 'new_lang_code: ', new_lang_code, \
             'lang_code: ', settings.lang_code )

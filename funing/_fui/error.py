@@ -35,7 +35,7 @@ def f_r_nf():
 
 def db_no_col( db_path='' ):
     if len(db_path)>0: db_path = f'({db_path})'
-    fp( f'Add specific column to database{db_path} (^_^)')
+    fp( f'Add specific column to database{db_path} ')
 
 def lib_check():
     _exit = False
