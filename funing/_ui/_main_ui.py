@@ -1,52 +1,61 @@
 
-
-from tkinter import messagebox
-import tkinter as tk
-from tkinter import *
-from tkinter.ttk import *
-from funing.ui.main_ui import MainUI
 # from langcodes import Language
 import gettext
-import sys
 import os
-import tkinter.filedialog as tkf
-import cv2
-from PIL import Image , ImageTk
-from funing._ui.lang import _
-from datetime import datetime , date
-from funing import settings
-import yaml
-import uuid
-import time
 import re
-from funing._ui import error
-import numpy as np
-from cv2 import haarcascades
+import sys
+import time
+import tkinter as tk
+import tkinter.filedialog as tkf
+import uuid
 import webbrowser
+from datetime import date, datetime
+from enum import Enum
+from tkinter import *
+from tkinter import messagebox
+from tkinter.ttk import *
+
+import cv2
+import numpy as np
+import yaml
+from cv2 import haarcascades
+from funing import settings
+from funing._ui import error
+from funing._ui.lang import _
+from funing.ui.main_ui import MainUI
+from PIL import Image, ImageTk
+
+
+class SourceType(Enum):
+    NULL    = 0
+    IMG     = 1
+    VID     = 2
+
+class FDoing( Enum ):
+    REC     = 1
+    PICK    = 2
+
 
 class _MainUI():
     def __init__(self):
         self.mainui = MainUI()
         self.mainui.place()
         self.source = -1
-        self.root_after = -1
         # face num for face_label
         # self.lang_code = settings.lang_code
-        self.fxfy = None
+        self.fxfy = 0
         self.image_exts = ['jpg','png', 'jpeg', 'webp']
         self.video_exts = ['mp4','avi','3gp','webm','mkv']
-        self.showf_sv = None
+        self.showf_sv = ''
         self.showfm = self.mainui.showframe
         self.infofm = self.mainui.infoframe
         self.rbmixfm = self.mainui.rbmixframe
+        # ABOUT_TOP_LEVEL
         self.about_tl = None
         # vid
         self.vid = None
-        self.vid_width = 0
-        self.vid_height = 0
         self.vid_fps = 0
-
-        self.source_type = -1 # 0-> img , 1-> video
+        self.source_type = SourceType.NULL
 
         self.cur_frame = None
         self.face_rects = []
@@ -57,15 +66,11 @@ class _MainUI():
         self.save_size = (100,100)
         self.zoomed_in_face_label = (0,0)
         
-        self.doing = 'p'  # 'p'->'pick', r->'rec'
+        self.fdoing = FDoing.PICK  # 'p'->'pick', r->'rec'
 
         self.pause = False
-        self.face_frames = []
-        self.curf_index = 0
         # rec_result
         self.rec_gray_img = None
-        # rec_faces
-        self.recfs = []
         # info
         self.cur_info_id = None
         self.info_ids = []
@@ -135,28 +140,19 @@ class _MainUI():
     def open_vid_cap( self ):
         self.vid = cv2.VideoCapture( self.source )
         if not self.vid.isOpened(): self.show_nsrc_error(); return
-        self.vid_width = self.vid.get(cv2.CAP_PROP_FRAME_WIDTH)
-        self.vid_height = self.vid.get(cv2.CAP_PROP_FRAME_HEIGHT)
         self.vid_fps = self.vid.get(cv2.CAP_PROP_FPS)
     
-    def close_vid_cap( self ):
-        if self.vid is None: return
-        self.vid.release()  
-        self.vid= None  
-    
     def set_ui_events( self ):
-        # self.rbmixfm.lang_combobox.bind('<<ComboboxSelected>>',
-        #     self.change_language )
-        # self.showfm.ct_entry.bind('<FocusOut>', None )
         self.showfm.pp_btn['command'] = self.pause_play
         self.showfm.rec_btn['command'] = self.recf_v0
         self.showfm.pick_btn['command'] = self.pick_v0
         self.showfm.showf_go_btn['command'] = self.show_go
         self.showfm.showf_optionmenu_sv.trace('w', self.show_from )
-        # self.infofm.prevf_btn['command'] = self.prevf
-        # self.infofm.nextf_btn['command'] = self.nextf
+
         self.infofm.save_btn['command'] = self.savef
+
         self.rbmixfm.about_fn_btn['command'] = self.about_fn
+
         self.mainui.root.protocol("WM_DELETE_WINDOW", self.destroy )
          
     def destroy( self ):
@@ -164,48 +160,30 @@ class _MainUI():
         exit()
 
     def pause_play( self, *args ):
-        if self.source_type != 1 : return
-        if self.pause: 
-            self.pause = False
-            self.refresh_frame()
-            self.showfm.pp_sv.set( _('Pause') )
-            if settings.debug:
-                print( 'Play. . .' )
-            
-        else:
-            self.root_after_cancel()
-            self.showfm.pp_sv.set( _('Play') )
-            self.pause = True
-            if settings.debug:
-                print( 'Pause. . .' )
-
-    def pick(self):
-        if self.vid is None: return
-        count = 0
-        self.cur_info_id = str(uuid.uuid4())
-        self.recfs = []
-        self.face_frames = []
-        while(True):
-            ret, self.frame=self.vid.read()
-            if ret:
-                gray_img=cv2.cvtColor(self.frame,cv2.COLOR_BGR2GRAY)
-                faces = self.face_casecade.detectMultiScale(gray_img,1.3,5)
-                if len( faces ) < 1:continue
-                x,y,w,h = faces[0]
-                new_frame=cv2.resize( self.frame[y:y+h,x:x+w], (92,112),\
-                    interpolation=cv2.INTER_LINEAR)
-                self.face_frames.append( new_frame )
-                count+=1
-                if count > self.face_enter_count: break
+        if self.source_type != SourceType.VID : return
         
-        self.infofm.face_text.delete(1.0,END)
-        self.change_face_show(0)
+        if self.pause:  self.play()            
+        else:           self.pause()
+
+    def play(self):
+        self.pause = False
+        self.refresh_frame()
+        self.showfm.pp_sv.set( _('Pause') )
+        if settings.debug:
+            print( 'Play. . .' )
+
+    def pause(self):
+        self.pause = True
+        self.showfm.pp_sv.set( _('Play') )
+        self.pause = True
+        if settings.debug:
+            print( 'Pause. . .' )
 
     def pick_v0(self):
         
-        if self.doing == 'r':
+        if self.fdoing == FDoing.REC:
             self.clear_faces_frame()
-            self.doing ='p'
+            self.fdoing = FDoing.PICK
 
         if (not self.pause) and self.vid :
             _, self.cur_frame = self.vid.read()
@@ -246,8 +224,9 @@ class _MainUI():
 
         new_fl.pack(side=LEFT)
 
-        picked_face_frame = cv2.resize(self.cur_frame[y:y+h,x:x+w],self.save_size,\
-        interpolation=cv2.INTER_LINEAR)
+        picked_face_frame = cv2.resize(self.cur_frame[y:y+h,x:x+w],\
+        self.save_size, interpolation=cv2.INTER_LINEAR)
+
         self.picked_face_frames.append( picked_face_frame )
 
     def del_face_label_p( self, e, num):
@@ -259,21 +238,24 @@ class _MainUI():
     def show_go( self, *args ):
         self.showf_sv = self.showfm.showf_sv.get()
         if len( self.showf_sv.strip() ) < 1: return
-        self.rec_img = False
-        self.root_after_cancel()
+        
         showf_ext = self.showf_sv.split('.')[-1]
+
         if showf_ext in self.video_exts:
             self.source = self.showf_sv
             self.play_video()
             return
+
         if re.match(r'\d+', self.showf_sv):
             self.source = int(self.showf_sv)
             self.play_video()
             return
+
         if showf_ext in self.image_exts:
             self.view_image()
             return 
-        self.showfm.showf_sv.set('')
+
+        self.showfm.showf_sv.set('')        
         self.show_nsrc_error()
     
     def get_dict_key_by_value( self , _dict, value ):
@@ -283,15 +265,19 @@ class _MainUI():
             
     def show_from( self, *args  ):
         show_f = self.get_dict_key_by_value( 
+
             self.showfm.showf_t_dict, 
             self.showfm.showf_optionmenu_sv.get() )
+
         if show_f == 'file':
             self.face_src_path = tkf.askopenfilename(\
             title = _('Select a file'),\
             filetypes = [ ( _('Image or video'), \
             '*.'+(' *.'.join( self.image_exts + self.video_exts))) ],\
             initialdir = '~')
+
             if len( self.face_src_path ) < 1: return 
+            
             ext = os.path.splitext( self.face_src_path )[1][1:]
             self.showfm.showf_sv.set( self.face_src_path )
             if ext in self.image_exts: 
@@ -299,37 +285,30 @@ class _MainUI():
             elif ext in self.video_exts: 
                 self.source = self.face_src_path
                 self.play_video()
+
         elif show_f == 'camera':
             self.source = 0
-            self.showfm.showf_sv.set( self.source )
             self.play_video()
     
-    def root_after_cancel( self ):
-        if self.root_after != -1:
-            
-            if self.vid is not None and self.vid.isOpened():
-                _, self.cur_frame = self.vid.read()
-
-            self.mainui.root.after_cancel( self.root_after )
-            self.close_vid_cap()
-            self.vid = None
         
     def play_video( self ):
+
         self.pause = False
-        self.source_type = 1
-        self.close_vid_cap()
-        self.open_vid_cap()
-        self.get_vid_resize_fxfy()
+        self.source_type = SourceType.VID
+        self.showfm.showf_sv.set( self.source )
+        
+        if self.vid is None:
+            self.open_vid_cap()
+            self.get_vid_resize_fxfy()
+
         self.refresh_frame()
     
     def refresh_frame(self):
-        if self.source_type == 0:return
-        if self.vid == None: self.vid = cv2.VideoCapture( self.source )
-        if not self.vid.isOpened(): self.show_nsrc_error(); return
+        if self.source_type != SourceType.VID: return
 
         _, frame = self.vid.read()
 
-        gray_img=cv2.cvtColor( frame,cv2.COLOR_BGR2GRAY)
+        gray_img=cv2.cvtColor( frame, cv2.COLOR_BGR2GRAY)
         rects = self.face_casecade.detectMultiScale(gray_img,1.3,5)
 
         for (x,y,w,h) in rects:
@@ -345,9 +324,14 @@ class _MainUI():
         self.showfm.vid_frame_label.imgtk = imgtk
         self.showfm.vid_frame_label.configure(image=imgtk)
 
-        if not self.pause:
-            self.root_after = self.mainui.root.after( \
-                int(1000/self.vid_fps) , self.refresh_frame )
+        if self.pause:
+            _, self.cur_frame = self.vid.read()
+            self.vid.destroy()
+            self.vid = None
+            return 
+
+        self.root_after = self.mainui.root.after( \
+            int(1000/self.vid_fps) , self.refresh_frame )
 
 
     def get_img_resize_fxfy( self ):
@@ -355,18 +339,19 @@ class _MainUI():
         h = self.screenheight/2
         r = w/h 
         
-        self.vid_width, self.vid_height, _ = self.cur_frame.shape
+        f_width, f_height, _ = self.cur_frame.shape
 
-        r0 = self.vid_width/self.vid_height
+        r0 = f_width/f_height
         r1= r0/r 
-        self.fxfy = h/self.vid_height if r1<r else w/self.vid_width
+        self.fxfy = h/f_height if r1<r else w/f_width
         if settings.debug:
             print('self.fxfy: ', self.fxfy)
         
 
     def view_image( self ):
         self.source_type = 0
-        self.root_after_cancel()
+        
+        self.pause = True
 
         self.cur_frame  = cv2.imread( self.face_src_path )
 
@@ -384,15 +369,16 @@ class _MainUI():
 
         if len( self.face_rects ) < 1: return        
         
-        for (x,y,w,h) in self.recfs:
-            self.cur_frame=cv2.rectangle(\
-            self.cur_frame,(x,y),(x+w,y+h),(255,0,0),2)  
+        frame = self.cur_frame.copy()
+        for (x,y,w,h) in self.face_rects:
+            frame=cv2.rectangle( frame,(x,y),(x+w,y+h),(255,0,0),2)  
 
-        frame = cv2.cvtColor( self.cur_frame, cv2.COLOR_BGR2RGB)
+        frame = cv2.cvtColor( frame, cv2.COLOR_BGR2RGB)
         img = Image.fromarray( frame )
         imgtk = ImageTk.PhotoImage( image= img )
         self.showfm.vid_frame_label.imgtk = imgtk
         self.showfm.vid_frame_label.configure(image=imgtk)
+        frame = None
            
     def cur_frame2label( self ):
         vid_img = cv2.resize( self.cur_frame , (0,0) , \
@@ -404,15 +390,16 @@ class _MainUI():
         self.showfm.vid_frame_label.configure(image=imgtk)
 
     def get_vid_resize_fxfy( self ):
-        if self.vid_width == self.vid_height == 0: 
-            if debug: print('self.iru is None')
-            return
+        _,f = self.vid.read()
+        f_width, f_height, _ = f.shape
+        f = None
+
         w = self.screenwidth/2
         h = self.screenheight/2
         r = w/h 
-        r0 = self.vid_width/self.vid_height
+        r0 = f_width/f_height
         r1= r0/r 
-        self.fxfy = h/self.vid_height if r1<r else w/self.vid_width
+        self.fxfy = h/f_height if r1<r else w/f_width
         if settings.debug:
             print('self.fxfy: ', self.fxfy)
 
@@ -442,74 +429,7 @@ class _MainUI():
         self.cur_info_id = None
         if settings.debug:print( 'info > ' + info )
         self.recognizer_train()
-    
-    def update_num_label(self):
-        self.infofm.num_label['text'] = \
-        f'{self.curf_index+1}/{len(self.face_frames)+len(self.recfs)-1}'
-            
-    def change_face_show(self, _as, rec = True):
-        if len(self.face_frames) >0:
-            # NEW
-            self.curf_index += _as
-            self.curf_index = 0 if self.curf_index < 0 else self.face_enter_count-1\
-            if self.curf_index >= self.face_enter_count else self.curf_index 
-
-            vid_img = cv2.cvtColor( self.face_frames[ self.curf_index ], \
-            cv2.COLOR_BGR2RGB )
-            vid_img = Image.fromarray( vid_img )
-            imgtk = ImageTk.PhotoImage( image=vid_img )
-            self.infofm.curf_label.imgtk = imgtk
-            self.infofm.curf_label.configure(image=imgtk)
-            self.update_num_label()
-
-        elif len(self.recfs) > 0:
-            # RECOGNIZE
-            _len = len( self.recfs )
-            self.curf_index+=_as
-            self.curf_index = 0 if self.curf_index < 0 else _len - 1\
-            if self.curf_index >= _len else self.curf_index 
-
-            x,y,w,h = self.recfs[ self.curf_index ]
-            roi_gray= self.rec_gray_img[y:y+h,x:x+w]
-            roi_gray= cv2.resize( roi_gray, (92,112),\
-            interpolation=cv2.INTER_LINEAR)
-            result=self.recognizer.predict(roi_gray)
-            _id = self.info_ids[result[0]]
-            _h = h if h>w else w
-            frame = self.cur_frame[y:y+_h,x:x+_h]
-            frame = cv2.resize(frame, (200,200))
-
-            vid_img = cv2.cvtColor( frame, cv2.COLOR_BGR2RGB )
-            vid_img = Image.fromarray( vid_img  )
-            imgtk = ImageTk.PhotoImage( image=vid_img )
-            self.infofm.curf_label.imgtk = imgtk
-            self.infofm.curf_label.configure(image=imgtk)
-
-            info_file_path = os.path.join( \
-            settings.infos_path,  _id )
-            self.infofm.face_text.delete(1.0,END)
-            self.infofm.face_text.insert('1.0', \
-            open( info_file_path, 'r' ).read() )
-            self.update_num_label()
-    
-    def recf(self):
-        self.face_frames = []
-        self.recfs = []
-        if settings.debug: 
-            print('self.cur_frame not None')
-        self.rec_gray_img=cv2.cvtColor(self.cur_frame,cv2.COLOR_BGR2GRAY)
-        self.face_rects=self.face_casecade.detectMultiScale(\
-        self.rec_gray_img,1.3,5)
-        if len( self.recfs ) < 1: return        
         
-        self.change_face_show(0)
-
-        for (x,y,w,h) in self.recfs:
-            self.cur_frame=cv2.rectangle(\
-            self.cur_frame,(x,y),(x+w,y+h),(255,0,0),2)  
-
-        self.cur_frame2label()
-    
     def restore_face_label_size( self, index ):
         label, index = self.zoomed_in_face_label
         if not label.winfo_exists(): return
@@ -524,7 +444,7 @@ class _MainUI():
         label.configure(image=imgtk)
 
 
-    def show_info( self, label, _id, index):
+    def show_info( self, label,  index):
 
         if (self.zoomed_in_face_label[0]!=0) and \
         (self.zoomed_in_face_label[0] != label) :
@@ -542,7 +462,7 @@ class _MainUI():
         self.zoomed_in_face_label = (label, index)
 
         info_file_path = os.path.join( \
-        settings.infos_path,  _id )
+        settings.infos_path,  self.cur_info_id )
         self.infofm.face_text.delete(1.0,END)
         
         if not os.path.exists( info_file_path ): 
@@ -565,7 +485,7 @@ class _MainUI():
     
         result=self.recognizer.predict(roi_gray)
 
-        _id = self.info_ids[result[0]]
+        self.cur_info_id = self.info_ids[result[0]]
         _h = max( h, w )
         frame = self.cur_frame[y:y+_h,x:x+_h]
         frame = cv2.resize(frame, self.show_size )
@@ -581,11 +501,11 @@ class _MainUI():
         new_fl.bind("<Double-Button-1>",lambda e: \
         self.del_face_label_r(e, index))
 
-        new_fl.bind("<Button-1>",lambda e: self.show_info(new_fl , _id, index) )
+        new_fl.bind("<Button-1>",lambda e: self.show_info(new_fl ,  index) )
 
         new_fl.pack(side=LEFT)
 
-        self.show_info(new_fl , _id, index)
+        self.show_info(new_fl ,  index)
 
              
     def del_face_label_r( self, e, index):
@@ -593,6 +513,9 @@ class _MainUI():
             self.zoomed_in_face_label= (0,0)
         e.widget.destroy()
         self.showed_face_frames[index] = None
+
+        if self.fdoing == FDoing.REC:
+            self.clear_face_text()
     
     def clear_faces_frame( self ):
         for child in self.infofm.faces_frame.winfo_children():
@@ -609,9 +532,9 @@ class _MainUI():
             self.show_data_empty()
             return
         
-        if self.doing == 'p':
+        if self.fdoing == FDoing.PICK:
             self.clear_faces_frame()
-            self.doing ='r'
+            self.fdoing = FDoing.REC
 
         if self.cur_frame is None: return
         
