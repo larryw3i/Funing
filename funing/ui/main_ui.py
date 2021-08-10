@@ -3,7 +3,7 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import *
 from funing._ui.lang import _
-from langcodes import Language
+# from langcodes import Language
 from funing import settings
 import os
 import re
@@ -126,25 +126,25 @@ class RBMixFrame():
         self.frame = frame
         self.about_fn_btn = Button(self.frame, text=_('About Funing') )        
         # language_combobox
-        self.lang_combobox_var = tk.StringVar( self.frame )
-        self.lang_code = settings.lang_code
-        self.lang_combobox_var.set(
-            Language.make( self.lang_code.replace('_','-') ).autonym()
-          )
-        self.lang_combobox = ttk.Combobox( self.frame ,
-            textvariable = self.lang_combobox_var,
-            values = tuple( self.locale_lang_display_names() ),
-            state = "readonly"
-        )
-    def locale_lang_display_names( self ):
-        display_names = []
-        for i in settings.locale_langcodes:
-            display_names.append( Language.make( i.replace('_','-')).autonym() )
-        return display_names
+        # self.lang_combobox_var = tk.StringVar( self.frame )
+        # self.lang_code = settings.lang_code
+        # self.lang_combobox_var.set(
+        #     Language.make( self.lang_code.replace('_','-') ).autonym()
+        #   )
+        # self.lang_combobox = ttk.Combobox( self.frame ,
+        #     textvariable = self.lang_combobox_var,
+        #     values = tuple( self.locale_lang_display_names() ),
+        #     state = "readonly"
+        # )
+    # def locale_lang_display_names( self ):
+    #     display_names = []
+    #     for i in settings.locale_langcodes:
+    #         display_names.append( Language.make( i.replace('_','-')).autonym() )
+    #     return display_names
 
     def place(self):
         self.about_fn_btn.grid( column = 0, row = 0, sticky = NE )
-        # place lang_combobox
-        self.lang_combobox.grid( column = 0, row = 1, sticky = NE )
+        # # place lang_combobox
+        # self.lang_combobox.grid( column = 0, row = 1, sticky = NE )
         self.frame.grid( column = 2, row = 2, )
     

@@ -41,8 +41,8 @@ data_empty = lambda:\
     (not os.path.exists( faces_path )) or len( os.listdir( faces_path ) ) < 1
 infos_path = \
     os.path.join( data_dir, 'infos' )
-lang_code = \
-    config_yml.get('lang_code', 'en_US')
+# lang_code = \
+#     config_yml.get('lang_code', 'en_US')
 comparison_tolerance = \
     config_yml.get('comparison_tolerance', 0.6)
 locale_langcodes =  \

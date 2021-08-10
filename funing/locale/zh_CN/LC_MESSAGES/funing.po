@@ -1,0 +1,151 @@
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:81
+msgid "No desktop environment is detected! "
+msgstr "亲, 好像没有检测到显示器哦!"
+
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:114
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:127
+msgid "About Funing"
+msgstr "关于Funing"
+
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:116
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:18
+msgid "Funing"
+msgstr "Funing"
+
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:123
+msgid "Licensed under the MIT license"
+msgstr "本项目以MIT开源协议授权"
+
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:171
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:57
+msgid "Pause"
+msgstr "暂停"
+
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:177
+msgid "Play"
+msgstr "继续"
+
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:290
+msgid "Select a file"
+msgstr "选择一个文件"
+
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:291
+msgid "Image or video"
+msgstr "照片或视频"
+
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:420
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:655
+msgid "Unable to open video source"
+msgstr "无法打开视频源"
+
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:549
+#, fuzzy
+msgid "No informations found"
+msgstr "添加信息"
+
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:645
+msgid "Restart Funing Now?"
+msgstr "重启应用?"
+
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:658
+msgid "Nothing enter"
+msgstr "没有录入任何数据"
+
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:659
+msgid "You haven't entered anything yet! "
+msgstr "你还没有录入任何数据, 打开摄像头或文件然后点击'录入'"
+
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:42
+msgid "GO"
+msgstr "直达"
+
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:44
+msgid "File"
+msgstr "文件"
+
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:44
+msgid "Camera"
+msgstr "摄像头"
+
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:45
+msgid "Open"
+msgstr "打开"
+
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:51
+msgid "tolerance"
+msgstr "误差（0.1-0.6）"
+
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:61
+msgid "Recognize"
+msgstr "识别"
+
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:65
+msgid "Pick"
+msgstr "获取"
+
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:104
+msgid "Write it with certain rules so that you can analyze it later"
+msgstr ""
+"信息编写要中规中矩, 比如yaml或toml, \n"
+"这样你分析它们就变得易如反掌。"
+
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:106
+msgid "Save"
+msgstr "保存"
+
+#~ msgid "Shoot"
+#~ msgstr "剪取"
+
+#~ msgid "Name"
+#~ msgstr "名字"
+
+#~ msgid "DOB"
+#~ msgstr "出生年月"
+
+#~ msgid "Address"
+#~ msgstr "地址"
+
+#~ msgid "Comment"
+#~ msgstr "备注"
+
+#~ msgid "prev_symb"
+#~ msgstr "<<"
+
+#~ msgid "next_symb"
+#~ msgstr ">>"
+
+#~ msgid "gettext_exception_message"
+#~ msgstr ""
+#~ "确认一下 gettext安装了没, 没有的话阅读 "
+#~ "https://www.gnu.org/software/gettext/ 并安装它。 (^_^)"
+
+#~ msgid "Check the DOB entry please!"
+#~ msgstr "请检查出生日期输入框!"
+
+#~ msgid "No face detected"
+#~ msgstr "空空如也"
+
+#~ msgid "Error"
+#~ msgstr "出错了"
+
+#~ msgid "Oops.., No face detected!"
+#~ msgstr "尽然没有找到......, 都怪我!"
+
+#~ msgid "Label"
+#~ msgstr "标签"
+
+#~ msgid "Data type"
+#~ msgstr "数据类型"
+
+#~ msgid "Value"
+#~ msgstr "值"
+
+#~ msgid "Delete"
+#~ msgstr "删除"
+
+#~ msgid "Gender"
+#~ msgstr "性别"
+
+#~ msgid "*/*"
+#~ msgstr ""
+

@@ -5,7 +5,7 @@ import tkinter as tk
 from tkinter import *
 from tkinter.ttk import *
 from funing.ui.main_ui import MainUI
-from langcodes import Language
+# from langcodes import Language
 import gettext
 import sys
 import os
@@ -31,7 +31,7 @@ class _MainUI():
         self.source = -1
         self.root_after = -1
         # face num for face_label
-        self.lang_code = settings.lang_code
+        # self.lang_code = settings.lang_code
         self.fxfy = None
         self.image_exts = ['jpg','png', 'jpeg', 'webp']
         self.video_exts = ['mp4','avi','3gp','webm','mkv']
@@ -145,8 +145,8 @@ class _MainUI():
         self.vid= None  
     
     def set_ui_events( self ):
-        self.rbmixfm.lang_combobox.bind('<<ComboboxSelected>>',
-            self.change_language )
+        # self.rbmixfm.lang_combobox.bind('<<ComboboxSelected>>',
+        #     self.change_language )
         # self.showfm.ct_entry.bind('<FocusOut>', None )
         self.showfm.pp_btn['command'] = self.pause_play
         self.showfm.rec_btn['command'] = self.recf_v0
@@ -630,30 +630,31 @@ class _MainUI():
             self.add_face_label_r(i)
             
              
-    def change_language(self, lang ):
+    # def change_language(self, lang ):
 
-        lang_display_name = self.rbmixfm.lang_combobox_var.get()
-        new_lang_code = Language.find( lang_display_name ).to_tag()
-        new_lang_code.replace('-','_')
-        if settings.debug:
-            print( 'new_lang_code: ', new_lang_code, \
-            'lang_code: ', settings.lang_code )
+    #     lang_display_name = self.rbmixfm.lang_combobox_var.get()
+    #     new_lang_code = Language.find( lang_display_name ).to_tag()
+    #     new_lang_code.replace('-','_')
+    #     if settings.debug:
+    #         print( 'new_lang_code: ', new_lang_code, \
+    #         'lang_code: ', settings.lang_code )
 
-        if new_lang_code == settings.lang_code: return
+    #     if new_lang_code == settings.lang_code: return
 
-        restartapp = messagebox.askyesno(
-            title = _('Restart Funing Now?')
-        )
-        if restartapp:
-            settings.config_yml['lang_code'] = new_lang_code
-            yaml.dump( settings.config_yml, open( settings._config_path, 'w') )
-            sys_executable = sys.executable
-            os.execl(sys_executable, sys_executable, * sys.argv)
-        pass
+    #     restartapp = messagebox.askyesno(
+    #         title = _('Restart Funing Now?')
+    #     )
+    #     if restartapp:
+    #         settings.config_yml['lang_code'] = new_lang_code
+    #         yaml.dump( settings.config_yml, open( settings._config_path, 'w') )
+    #         sys_executable = sys.executable
+    #         os.execl(sys_executable, sys_executable, * sys.argv)
+    #     pass
 
     def show_nsrc_error( self ):
         unable_open_s = _('Unable to open video source')
         messagebox.showerror(  unable_open_s, unable_open_s+': '+self.showf_sv )
+
     def show_data_empty( self ):
         unable_open_s = _('Nothing enter')
         msg  = _("You haven't entered anything yet! ")
