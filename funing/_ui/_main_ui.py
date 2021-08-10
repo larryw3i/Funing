@@ -32,61 +32,81 @@ class SourceType(Enum):
     VID     = 2
 
 class FDoing( Enum ):
-    REC     = 1
-    PICK    = 2
+    REC     = 0
+    PICK    = 1
 
 
 class _MainUI():
     def __init__(self):
+        
+        # Main UI
         self.mainui = MainUI()
-        self.mainui.place()
+        # Source, the camera is a number, the video or image is a path string
         self.source = -1
-        # face num for face_label
-        # self.lang_code = settings.lang_code
+        # The fx and fy of cv2.resize, prevent frame from being too large or
+        # too small
         self.fxfy = 0
+        # The extensions of video and photo
         self.image_exts = ['jpg','png', 'jpeg', 'webp']
         self.video_exts = ['mp4','avi','3gp','webm','mkv']
+        # The stringvar of direct source 'Entry'
         self.showf_sv = ''
+        # frames
         self.showfm = self.mainui.showframe
         self.infofm = self.mainui.infoframe
         self.rbmixfm = self.mainui.rbmixframe
-        # ABOUT_TOP_LEVEL
+        # About_top_level
         self.about_tl = None
         # vid
         self.vid = None
         self.vid_fps = 0
+        # Source type
         self.source_type = SourceType.NULL
-
+        # Current frame
         self.cur_frame = None
+        # Face rectangle locations
         self.face_rects = []
+        # Picked face frames
         self.picked_face_frames = []
+        # Showed face frames
         self.showed_face_frames = []
+        # Size
         self.show_size = (200,200)
         self.zoom_in_size = (210,210)
         self.save_size = (100,100)
+        # Zoomed-in face label
+        # self.zoomed_in_face_label = (label, index)
+        # The index is :
+        # index = len( self.showed_face_frames )
         self.zoomed_in_face_label = (0,0)
-        
-        self.fdoing = FDoing.PICK  # 'p'->'pick', r->'rec'
-
-        self.pause = False
-        # rec_result
+        # What's Funing doing? PICK or REC
+        self.fdoing = FDoing.PICK
+        # Signal of Video paused
+        self.paused = False
+        # rec gray image
         self.rec_gray_img = None
-        # info
+        # Current ID of information, it's the directory name of faces and the
+        # name of information file
         self.cur_info_id = None
+        # Saved information IDs
         self.info_ids = []
-        # cv2
+        # haarcascade_frontalface_default path
         self.hff_xml_path = os.path.join( haarcascades ,\
-         "haarcascade_frontalface_default.xml" )
+        "haarcascade_frontalface_default.xml" )
+        # recognizer
         self.recognizer=cv2.face.EigenFaceRecognizer_create()
-        self.face_casecade=cv2.CascadeClassifier( self.hff_xml_path )   
-        self.face_enter_count = settings.face_enter_count
+        self.face_casecade=cv2.CascadeClassifier( self.hff_xml_path )
+
         #screen
         try:self.screenwidth = self.mainui.root.winfo_screenwidth();\
             self.screenheight = self.mainui.root.winfo_screenheight()
-        except: print(_('No desktop environment is detected! ')); exit()  
+        except: print(_('No desktop environment is detected! ')); exit()
+        # recognizer training
         if not settings.data_empty():
-            self.recognizer_train()           
+            self.recognizer_train()
+        # Set UI events
         self.set_ui_events()
+        self.mainui.place()
         self.mainui.mainloop()    
 
     def load_images( self ):
@@ -134,8 +154,12 @@ class _MainUI():
         pass
 
     def recognizer_train( self ):
+        self.infofm.show_or_hide_training_tip_label()
+
         images,labels,self.info_ids = self.load_images()
         self.recognizer.train( images, labels)
+        
+        self.infofm.show_or_hide_training_tip_label()
 
     def open_vid_cap( self ):
         self.vid = cv2.VideoCapture( self.source )
@@ -162,20 +186,21 @@ class _MainUI():
     def pause_play( self, *args ):
         if self.source_type != SourceType.VID : return
         
-        if self.pause:  self.play()            
+        if self.paused: self.play()            
         else:           self.pause()
 
     def play(self):
-        self.pause = False
+        # self.paused is a signal, place it in front of self.refresh_frame()
+        self.paused = False
         self.refresh_frame()
         self.showfm.pp_sv.set( _('Pause') )
         if settings.debug:
             print( 'Play. . .' )
 
     def pause(self):
-        self.pause = True
+        self.paused = True
         self.showfm.pp_sv.set( _('Play') )
-        self.pause = True
+        self.paused = True
         if settings.debug:
             print( 'Pause. . .' )
 
@@ -185,7 +210,7 @@ class _MainUI():
             self.clear_faces_frame()
             self.fdoing = FDoing.PICK
 
-        if (not self.pause) and self.vid :
+        if (not self.paused) and self.vid :
             _, self.cur_frame = self.vid.read()
             
         if self.cur_frame is None: return
@@ -265,7 +290,6 @@ class _MainUI():
             
     def show_from( self, *args  ):
         show_f = self.get_dict_key_by_value( 
-
             self.showfm.showf_t_dict, 
             self.showfm.showf_optionmenu_sv.get() )
 
@@ -293,45 +317,45 @@ class _MainUI():
         
     def play_video( self ):
 
-        self.pause = False
+        self.paused = False
         self.source_type = SourceType.VID
         self.showfm.showf_sv.set( self.source )
         
-        if self.vid is None:
-            self.open_vid_cap()
-            self.get_vid_resize_fxfy()
-
         self.refresh_frame()
     
     def refresh_frame(self):
         if self.source_type != SourceType.VID: return
 
-        _, frame = self.vid.read()
+        if self.vid is None:
+            self.open_vid_cap()
+            self.get_vid_resize_fxfy()
 
-        gray_img=cv2.cvtColor( frame, cv2.COLOR_BGR2GRAY)
-        rects = self.face_casecade.detectMultiScale(gray_img,1.3,5)
+        frame = None
+        while not self.paused:
+            _, frame = self.vid.read()
 
-        for (x,y,w,h) in rects:
-            frame=cv2.rectangle( frame,(x,y),(x+w,y+h),(255,0,0),2)  
-        rects = None
+            gray_img=cv2.cvtColor( frame, cv2.COLOR_BGR2GRAY)
 
-        vid_img = cv2.resize( frame , (0,0) , \
-            fx = self.fxfy, fy = self.fxfy )
+            rects = self.face_casecade.detectMultiScale(gray_img,1.3,5)
+            for (x,y,w,h) in rects:
+                frame=cv2.rectangle( frame,(x,y),(x+w,y+h),(255,0,0),2)  
 
-        vid_img = cv2.cvtColor( vid_img, cv2.COLOR_BGR2RGB )
-        vid_img = Image.fromarray( vid_img )
-        imgtk = ImageTk.PhotoImage( image=vid_img )
-        self.showfm.vid_frame_label.imgtk = imgtk
-        self.showfm.vid_frame_label.configure(image=imgtk)
+            frame = cv2.resize( frame , (0,0) , \
+                fx = self.fxfy, fy = self.fxfy )
 
-        if self.pause:
-            _, self.cur_frame = self.vid.read()
-            self.vid.destroy()
-            self.vid = None
-            return 
+            frame = cv2.cvtColor( frame, cv2.COLOR_BGR2RGB )
+            frame = Image.fromarray( frame )
+            frame = ImageTk.PhotoImage( image=frame )
+            self.showfm.vid_frame_label.imgtk = frame
+            self.showfm.vid_frame_label.configure(image=frame)
 
-        self.root_after = self.mainui.root.after( \
-            int(1000/self.vid_fps) , self.refresh_frame )
+        self.cur_frame = frame
+        self.root_after.cancel()
+        self.vid.destroy()
+        self.vid = None
+
+        # self.root_after = self.mainui.root.after( \
+        #     int(1000/self.vid_fps) , self.refresh_frame )
 
 
     def get_img_resize_fxfy( self ):
@@ -351,7 +375,7 @@ class _MainUI():
     def view_image( self ):
         self.source_type = 0
         
-        self.pause = True
+        self.paused = True
 
         self.cur_frame  = cv2.imread( self.face_src_path )
 
@@ -366,15 +390,15 @@ class _MainUI():
         self.rec_gray_img=cv2.cvtColor(self.cur_frame,cv2.COLOR_BGR2GRAY)
         self.face_rects=self.face_casecade.detectMultiScale(\
         self.rec_gray_img,1.3,5)
+        self.rec_gray_img = None
 
         if len( self.face_rects ) < 1: return        
         
-        frame = self.cur_frame.copy()
         for (x,y,w,h) in self.face_rects:
-            frame=cv2.rectangle( frame,(x,y),(x+w,y+h),(255,0,0),2)  
+            frame=cv2.rectangle( self.cur_frame,(x,y),(x+w,y+h),(255,0,0),2)  
 
-        frame = cv2.cvtColor( frame, cv2.COLOR_BGR2RGB)
-        img = Image.fromarray( frame )
+        self.cur_frame = cv2.cvtColor( self.cur_frame, cv2.COLOR_BGR2RGB)
+        img = Image.fromarray( self.cur_frame )
         imgtk = ImageTk.PhotoImage( image= img )
         self.showfm.vid_frame_label.imgtk = imgtk
         self.showfm.vid_frame_label.configure(image=imgtk)
@@ -483,9 +507,9 @@ class _MainUI():
         roi_gray= cv2.resize( roi_gray, self.save_size,\
         interpolation=cv2.INTER_LINEAR)
     
-        result=self.recognizer.predict(roi_gray)
+        label,confidence=self.recognizer.predict(roi_gray)
 
-        self.cur_info_id = self.info_ids[result[0]]
+        self.cur_info_id = self.info_ids[label]
         _h = max( h, w )
         frame = self.cur_frame[y:y+_h,x:x+_h]
         frame = cv2.resize(frame, self.show_size )
@@ -525,7 +549,7 @@ class _MainUI():
     def recf_v0(self):
 
         if self.source_type == -1:return
-        if (not self.pause) and self.vid:
+        if (not self.paused) and self.vid:
             _, self.cur_frame = self.vid.read()
         
         if settings.data_empty():
