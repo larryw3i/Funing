@@ -50,11 +50,11 @@ class _MainUI():
         self.about_tl = None
         # vid
         self.vid = None
-        self.vid_width = 0
-        self.vid_height = 0
+        self.frame_width = 0
+        self.frame_height = 0
         self.vid_fps = 0
 
-        self.source_type = SourceType.NULL # -1 # 0-> img , 1-> video
+        self.source_type = SourceType.NULL 
 
         self.cur_frame = None
         self.face_rects = []
@@ -65,11 +65,10 @@ class _MainUI():
         self.save_size = (100,100)
         self.zoomed_in_face_label = (0,0)
         
-        self.fdoing = FDoing.PICK  # 'p'  # 'p'->'pick', r->'rec'
+        self.fdoing = FDoing.PICK 
 
         self.paused = False
         self.face_frames = []
-        self.curf_index = 0
         # rec_result
         self.rec_gray_img = None
         # rec_faces
@@ -81,16 +80,15 @@ class _MainUI():
         self.hff_xml_path = os.path.join( haarcascades ,\
          "haarcascade_frontalface_default.xml" )
         self.recognizer=cv2.face.EigenFaceRecognizer_create()
-        self.face_casecade=cv2.CascadeClassifier( self.hff_xml_path )   
-        self.face_enter_count = settings.face_enter_count
+        self.face_casecade=cv2.CascadeClassifier( self.hff_xml_path )
         #screen
         try:self.screenwidth = self.mainui.root.winfo_screenwidth();\
             self.screenheight = self.mainui.root.winfo_screenheight()
         except: print(_('No desktop environment is detected! ')); exit()  
         if not settings.data_empty():
-            self.recognizer_train()           
+            self.recognizer_train()
         self.set_ui_events()
-        self.mainui.mainloop()    
+        self.mainui.mainloop()
 
     def load_images( self ):
         '''
@@ -143,8 +141,8 @@ class _MainUI():
     def open_vid_cap( self ):
         self.vid = cv2.VideoCapture( self.source )
         if not self.vid.isOpened(): self.show_nsrc_error(); return
-        self.vid_width = self.vid.get(cv2.CAP_PROP_FRAME_WIDTH)
-        self.vid_height = self.vid.get(cv2.CAP_PROP_FRAME_HEIGHT)
+        self.frame_width = self.vid.get(cv2.CAP_PROP_FRAME_WIDTH)
+        self.frame_height = self.vid.get(cv2.CAP_PROP_FRAME_HEIGHT)
         self.vid_fps = self.vid.get(cv2.CAP_PROP_FPS)
     
     def close_vid_cap( self ):
@@ -285,9 +283,7 @@ class _MainUI():
             self.play_video()
     
     def cancel_root_after( self ):
-        if self.root_after != -1:            
-            if self.vid is not None and self.vid.isOpened():
-                _, self.cur_frame = self.vid.read()
+        if self.root_after != -1:
             self.mainui.root.after_cancel( self.root_after )
             self.close_vid_cap()
             self.vid = None
@@ -324,7 +320,9 @@ class _MainUI():
         self.showfm.vid_frame_label.imgtk = imgtk
         self.showfm.vid_frame_label.configure(image=imgtk)
 
-        if not self.paused:
+        if self.paused:
+            self.cur_frame = frame
+        else:
             self.root_after = self.mainui.root.after( \
                 int(1000/self.vid_fps) , self.refresh_frame )
 
@@ -361,11 +359,9 @@ class _MainUI():
         h = self.screenheight/2
         r = w/h 
         
-        self.vid_width, self.vid_height, _ = self.cur_frame.shape
-
-        r0 = self.vid_width/self.vid_height
+        r0 = self.frame_width/self.frame_height
         r1= r0/r 
-        self.fxfy = h/self.vid_height if r1<r else w/self.vid_width
+        self.fxfy = h/self.frame_height if r1<r else w/self.frame_width
         if settings.debug():
             print('self.fxfy: ', self.fxfy)
         
@@ -376,8 +372,7 @@ class _MainUI():
 
         self.cur_frame  = cv2.imread( self.face_src_path )
 
-        if settings.debug():
-            print( self.cur_frame.shape,self.cur_frame.size )
+        self.frame_width, self.frame_height, _ = self.cur_frame.shape
             
         self.get_img_resize_fxfy()
         
@@ -410,15 +405,15 @@ class _MainUI():
         self.showfm.vid_frame_label.configure(image=imgtk)
 
     def get_vid_resize_fxfy( self ):
-        if self.vid_width == self.vid_height == 0: 
+        if self.frame_width == self.frame_height == 0: 
             if debug: print('self.iru is None')
             return
         w = self.screenwidth/2
         h = self.screenheight/2
         r = w/h 
-        r0 = self.vid_width/self.vid_height
+        r0 = self.frame_width/self.frame_height
         r1= r0/r 
-        self.fxfy = h/self.vid_height if r1<r else w/self.vid_width
+        self.fxfy = h/self.frame_height if r1<r else w/self.frame_width
         if settings.debug():
             print('self.fxfy: ', self.fxfy)
 
@@ -532,6 +527,7 @@ class _MainUI():
     def recf_v0(self):
 
         if self.source_type == SourceType.NULL: return
+
         if (not self.paused) and self.vid:
             _, self.cur_frame = self.vid.read()
         

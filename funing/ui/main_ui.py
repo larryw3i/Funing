@@ -46,13 +46,6 @@ class ShowFrame():
         self.showf_optionmenu = tk.OptionMenu( self.frame, \
             self.showf_optionmenu_sv , *self.showf_t_dict.values() )
 
-        # comparison_tolerance entry
-        # self.ct_label = tk.Label( \
-        #     self.frame, text = _('tolerance') + ':' )
-        # self.ct_stringvar = tk.StringVar( frame, ct )
-        # self.ct_entry = tk.Entry( self.frame, width = 8,\
-        #     textvariable = self.ct_stringvar )
-
         # shoot
         self.pp_sv = tk.StringVar( frame, _('Pause'))
         self.pp_btn = tk.Button( self.frame, \

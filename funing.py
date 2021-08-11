@@ -22,6 +22,7 @@ class Funing():
 
     def test( self ):
         os.environ['FUNING_TEST'] = '1'
+        self.start()
 
     def start( self ):
         sys.argv[0] = re.sub(r'(-script\.pyw|\.exe)?$', '', sys.argv[0])
