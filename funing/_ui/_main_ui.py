@@ -426,13 +426,15 @@ class _MainUI():
         info =self.infofm.face_text.get("1.0", "end-1c")
         info_file_path = os.path.join( settings.infos_path, self.cur_info_id )
         open( info_file_path, 'w+' ).write( info )
-        img_path =os.path.join( settings.faces_path , self.cur_info_id )
-        os.makedirs(img_path,exist_ok=True )
-        count = 0
-        for f in self.picked_face_frames:
-            cv2.imwrite( f'{img_path}/{count}.png' , f)
-            count+=1
-        self.cur_info_id = None
+        if self.fdoing == FDoing.PICK:
+            img_path =os.path.join( settings.faces_path , self.cur_info_id )
+            os.makedirs(img_path,exist_ok=True )
+            count = 0
+            for f in self.picked_face_frames:
+                cv2.imwrite( f'{img_path}/{count}.png' , f)
+                count+=1
+            self.cur_info_id = None
+        
         if settings.debug():print( 'info > ' + info )
         self.recognizer_train()
                 
@@ -450,7 +452,7 @@ class _MainUI():
         label.configure(image=imgtk)
 
 
-    def show_info( self, label, _id, index):
+    def show_info( self, label,  index):
 
         if (self.zoomed_in_face_label[0]!=0) and \
         (self.zoomed_in_face_label[0] != label) :
@@ -468,7 +470,7 @@ class _MainUI():
         self.zoomed_in_face_label = (label, index)
 
         info_file_path = os.path.join( \
-        settings.infos_path,  _id )
+        settings.infos_path,  self.cur_info_id )
         self.infofm.face_text.delete(1.0,END)
         
         if not os.path.exists( info_file_path ): 
@@ -488,9 +490,9 @@ class _MainUI():
         roi_gray= cv2.resize( roi_gray, self.save_size,\
         interpolation=cv2.INTER_LINEAR)
     
-        result=self.recognizer.predict(roi_gray)
+        label, confidence=self.recognizer.predict(roi_gray)
 
-        _id = self.info_ids[result[0]]
+        self.cur_info_id = self.info_ids[ label ]
         _h = max( h, w )
         frame = self.cur_frame[y:y+_h,x:x+_h]
         frame = cv2.resize(frame, self.show_size )
@@ -506,11 +508,11 @@ class _MainUI():
         new_fl.bind("<Double-Button-1>",lambda e: \
         self.del_face_label_r(e, index))
 
-        new_fl.bind("<Button-1>",lambda e: self.show_info(new_fl , _id, index) )
+        new_fl.bind("<Button-1>",lambda e: self.show_info(new_fl ,  index) )
 
         new_fl.pack(side=LEFT)
 
-        self.show_info(new_fl , _id, index)
+        self.show_info(new_fl ,  index)
 
              
     def del_face_label_r( self, e, index):
