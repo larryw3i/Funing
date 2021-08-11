@@ -30,8 +30,6 @@ class _MainUI():
         self.mainui.place()
         self.source = -1
         self.root_after = -1
-        # face num for face_label
-        # self.lang_code = settings.lang_code
         self.fxfy = None
         self.image_exts = ['jpg','png', 'jpeg', 'webp']
         self.video_exts = ['mp4','avi','3gp','webm','mkv']
@@ -145,16 +143,11 @@ class _MainUI():
         self.vid= None  
     
     def set_ui_events( self ):
-        # self.rbmixfm.lang_combobox.bind('<<ComboboxSelected>>',
-        #     self.change_language )
-        # self.showfm.ct_entry.bind('<FocusOut>', None )
         self.showfm.pp_btn['command'] = self.pause_play
         self.showfm.rec_btn['command'] = self.recf_v0
         self.showfm.pick_btn['command'] = self.pick_v0
         self.showfm.showf_go_btn['command'] = self.show_go
         self.showfm.showf_optionmenu_sv.trace('w', self.show_from )
-        # self.infofm.prevf_btn['command'] = self.prevf
-        # self.infofm.nextf_btn['command'] = self.nextf
         self.infofm.save_btn['command'] = self.savef
         self.rbmixfm.about_fn_btn['command'] = self.about_fn
         self.mainui.root.protocol("WM_DELETE_WINDOW", self.destroy )
@@ -178,28 +171,6 @@ class _MainUI():
             self.pause = True
             if settings.debug:
                 print( 'Pause. . .' )
-
-    def pick(self):
-        if self.vid is None: return
-        count = 0
-        self.cur_info_id = str(uuid.uuid4())
-        self.recfs = []
-        self.face_frames = []
-        while(True):
-            ret, self.frame=self.vid.read()
-            if ret:
-                gray_img=cv2.cvtColor(self.frame,cv2.COLOR_BGR2GRAY)
-                faces = self.face_casecade.detectMultiScale(gray_img,1.3,5)
-                if len( faces ) < 1:continue
-                x,y,w,h = faces[0]
-                new_frame=cv2.resize( self.frame[y:y+h,x:x+w], (92,112),\
-                    interpolation=cv2.INTER_LINEAR)
-                self.face_frames.append( new_frame )
-                count+=1
-                if count > self.face_enter_count: break
-        
-        self.infofm.face_text.delete(1.0,END)
-        self.change_face_show(0)
 
     def pick_v0(self):
         
@@ -229,8 +200,7 @@ class _MainUI():
     def clear_face_text( self ):
         self.infofm.face_text.delete(1.0,END)
 
-    def add_face_label_p(self, num):
-        
+    def add_face_label_p(self, num):        
         x,y,w,h = self.face_rects[ num ]
         _w = max( w, h )
         
@@ -305,11 +275,9 @@ class _MainUI():
             self.play_video()
     
     def root_after_cancel( self ):
-        if self.root_after != -1:
-            
+        if self.root_after != -1:            
             if self.vid is not None and self.vid.isOpened():
                 _, self.cur_frame = self.vid.read()
-
             self.mainui.root.after_cancel( self.root_after )
             self.close_vid_cap()
             self.vid = None
@@ -419,14 +387,6 @@ class _MainUI():
     def show_nsrc_error( self ):
         unable_open_s = _('Unable to open video source')
         messagebox.showerror( unable_open_s, unable_open_s+': '+self.showf_sv )
-
-    def prevf( self ):
-        self.change_face_show(-1)
-        pass
-
-    def nextf( self ):
-        self.change_face_show(+1)
-        pass
     
     def savef( self ):
         if self.cur_info_id == None: return
@@ -442,74 +402,7 @@ class _MainUI():
         self.cur_info_id = None
         if settings.debug:print( 'info > ' + info )
         self.recognizer_train()
-    
-    def update_num_label(self):
-        self.infofm.num_label['text'] = \
-        f'{self.curf_index+1}/{len(self.face_frames)+len(self.recfs)-1}'
-            
-    def change_face_show(self, _as, rec = True):
-        if len(self.face_frames) >0:
-            # NEW
-            self.curf_index += _as
-            self.curf_index = 0 if self.curf_index < 0 else self.face_enter_count-1\
-            if self.curf_index >= self.face_enter_count else self.curf_index 
-
-            vid_img = cv2.cvtColor( self.face_frames[ self.curf_index ], \
-            cv2.COLOR_BGR2RGB )
-            vid_img = Image.fromarray( vid_img )
-            imgtk = ImageTk.PhotoImage( image=vid_img )
-            self.infofm.curf_label.imgtk = imgtk
-            self.infofm.curf_label.configure(image=imgtk)
-            self.update_num_label()
-
-        elif len(self.recfs) > 0:
-            # RECOGNIZE
-            _len = len( self.recfs )
-            self.curf_index+=_as
-            self.curf_index = 0 if self.curf_index < 0 else _len - 1\
-            if self.curf_index >= _len else self.curf_index 
-
-            x,y,w,h = self.recfs[ self.curf_index ]
-            roi_gray= self.rec_gray_img[y:y+h,x:x+w]
-            roi_gray= cv2.resize( roi_gray, (92,112),\
-            interpolation=cv2.INTER_LINEAR)
-            result=self.recognizer.predict(roi_gray)
-            _id = self.info_ids[result[0]]
-            _h = h if h>w else w
-            frame = self.cur_frame[y:y+_h,x:x+_h]
-            frame = cv2.resize(frame, (200,200))
-
-            vid_img = cv2.cvtColor( frame, cv2.COLOR_BGR2RGB )
-            vid_img = Image.fromarray( vid_img  )
-            imgtk = ImageTk.PhotoImage( image=vid_img )
-            self.infofm.curf_label.imgtk = imgtk
-            self.infofm.curf_label.configure(image=imgtk)
-
-            info_file_path = os.path.join( \
-            settings.infos_path,  _id )
-            self.infofm.face_text.delete(1.0,END)
-            self.infofm.face_text.insert('1.0', \
-            open( info_file_path, 'r' ).read() )
-            self.update_num_label()
-    
-    def recf(self):
-        self.face_frames = []
-        self.recfs = []
-        if settings.debug: 
-            print('self.cur_frame not None')
-        self.rec_gray_img=cv2.cvtColor(self.cur_frame,cv2.COLOR_BGR2GRAY)
-        self.face_rects=self.face_casecade.detectMultiScale(\
-        self.rec_gray_img,1.3,5)
-        if len( self.recfs ) < 1: return        
-        
-        self.change_face_show(0)
-
-        for (x,y,w,h) in self.recfs:
-            self.cur_frame=cv2.rectangle(\
-            self.cur_frame,(x,y),(x+w,y+h),(255,0,0),2)  
-
-        self.cur_frame2label()
-    
+                
     def restore_face_label_size( self, index ):
         label, index = self.zoomed_in_face_label
         if not label.winfo_exists(): return
@@ -553,7 +446,6 @@ class _MainUI():
 
 
     def add_face_label_r( self, num ):
-
         index = len( self.showed_face_frames )
 
         new_fl = Label( self.infofm.faces_frame )
@@ -628,29 +520,7 @@ class _MainUI():
 
         for i in range( len(self.face_rects)) :
             self.add_face_label_r(i)
-            
-             
-    # def change_language(self, lang ):
-
-    #     lang_display_name = self.rbmixfm.lang_combobox_var.get()
-    #     new_lang_code = Language.find( lang_display_name ).to_tag()
-    #     new_lang_code.replace('-','_')
-    #     if settings.debug:
-    #         print( 'new_lang_code: ', new_lang_code, \
-    #         'lang_code: ', settings.lang_code )
-
-    #     if new_lang_code == settings.lang_code: return
-
-    #     restartapp = messagebox.askyesno(
-    #         title = _('Restart Funing Now?')
-    #     )
-    #     if restartapp:
-    #         settings.config_yml['lang_code'] = new_lang_code
-    #         yaml.dump( settings.config_yml, open( settings._config_path, 'w') )
-    #         sys_executable = sys.executable
-    #         os.execl(sys_executable, sys_executable, * sys.argv)
-    #     pass
-
+                         
     def show_nsrc_error( self ):
         unable_open_s = _('Unable to open video source')
         messagebox.showerror(  unable_open_s, unable_open_s+': '+self.showf_sv )
