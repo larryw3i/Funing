@@ -1,7 +1,6 @@
 
 import os
 import sys
-from langcodes import Language
 import gettext
 import locale
 from funing import settings
