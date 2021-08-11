@@ -23,6 +23,16 @@ from funing._ui import error
 import numpy as np
 from cv2 import haarcascades
 import webbrowser
+from enum import Enum
+
+class SourceType( Enum ):
+    NULL    =   0
+    IMG     =   1
+    VID     =   2
+
+class FDoing( Enum ):
+    REC     =   0
+    PICK    =   1
 
 class _MainUI():
     def __init__(self):
@@ -44,7 +54,7 @@ class _MainUI():
         self.vid_height = 0
         self.vid_fps = 0
 
-        self.source_type = -1 # 0-> img , 1-> video
+        self.source_type = SourceType.NULL # -1 # 0-> img , 1-> video
 
         self.cur_frame = None
         self.face_rects = []
@@ -55,9 +65,9 @@ class _MainUI():
         self.save_size = (100,100)
         self.zoomed_in_face_label = (0,0)
         
-        self.doing = 'p'  # 'p'->'pick', r->'rec'
+        self.fdoing = FDoing.PICK  # 'p'  # 'p'->'pick', r->'rec'
 
-        self.pause = False
+        self.paused = False
         self.face_frames = []
         self.curf_index = 0
         # rec_result
@@ -157,28 +167,28 @@ class _MainUI():
         exit()
 
     def pause_play( self, *args ):
-        if self.source_type != 1 : return
-        if self.pause: 
-            self.pause = False
+        if self.source_type != SourceType.VID : return
+        if self.paused: 
+            self.paused = False
             self.refresh_frame()
             self.showfm.pp_sv.set( _('Pause') )
             if settings.debug:
                 print( 'Play. . .' )
             
         else:
-            self.root_after_cancel()
+            self.cancel_root_after()
             self.showfm.pp_sv.set( _('Play') )
-            self.pause = True
+            self.paused = True
             if settings.debug:
                 print( 'Pause. . .' )
 
     def pick_v0(self):
         
-        if self.doing == 'r':
+        if self.fdoing == FDoing.REC:
             self.clear_faces_frame()
-            self.doing ='p'
+            self.fdoing = FDoing.PICK # 'p'
 
-        if (not self.pause) and self.vid :
+        if (not self.paused) and self.vid :
             _, self.cur_frame = self.vid.read()
             
         if self.cur_frame is None: return
@@ -230,7 +240,7 @@ class _MainUI():
         self.showf_sv = self.showfm.showf_sv.get()
         if len( self.showf_sv.strip() ) < 1: return
         self.rec_img = False
-        self.root_after_cancel()
+        self.cancel_root_after()
         showf_ext = self.showf_sv.split('.')[-1]
         if showf_ext in self.video_exts:
             self.source = self.showf_sv
@@ -274,7 +284,7 @@ class _MainUI():
             self.showfm.showf_sv.set( self.source )
             self.play_video()
     
-    def root_after_cancel( self ):
+    def cancel_root_after( self ):
         if self.root_after != -1:            
             if self.vid is not None and self.vid.isOpened():
                 _, self.cur_frame = self.vid.read()
@@ -283,15 +293,16 @@ class _MainUI():
             self.vid = None
         
     def play_video( self ):
-        self.pause = False
-        self.source_type = 1
+        self.paused = False
+        self.source_type = SourceType.VID
         self.close_vid_cap()
         self.open_vid_cap()
         self.get_vid_resize_fxfy()
         self.refresh_frame()
     
     def refresh_frame(self):
-        if self.source_type == 0:return
+        if self.source_type != SourceType.VID: return
+        
         if self.vid == None: self.vid = cv2.VideoCapture( self.source )
         if not self.vid.isOpened(): self.show_nsrc_error(); return
 
@@ -313,7 +324,34 @@ class _MainUI():
         self.showfm.vid_frame_label.imgtk = imgtk
         self.showfm.vid_frame_label.configure(image=imgtk)
 
-        if not self.pause:
+        if not self.paused:
+            self.root_after = self.mainui.root.after( \
+                int(1000/self.vid_fps) , self.refresh_frame )
+
+    def refresh_frame_v0(self):
+        if self.source_type != SourceType.VID :return
+        if self.vid == None: self.vid = cv2.VideoCapture( self.source )
+        if not self.vid.isOpened(): self.show_nsrc_error(); return
+
+        _, frame = self.vid.read()
+
+        gray_img=cv2.cvtColor( frame,cv2.COLOR_BGR2GRAY)
+        rects = self.face_casecade.detectMultiScale(gray_img,1.3,5)
+
+        for (x,y,w,h) in rects:
+            frame=cv2.rectangle( frame,(x,y),(x+w,y+h),(255,0,0),2)  
+        rects = None
+
+        vid_img = cv2.resize( frame , (0,0) , \
+            fx = self.fxfy, fy = self.fxfy )
+
+        vid_img = cv2.cvtColor( vid_img, cv2.COLOR_BGR2RGB )
+        vid_img = Image.fromarray( vid_img )
+        imgtk = ImageTk.PhotoImage( image=vid_img )
+        self.showfm.vid_frame_label.imgtk = imgtk
+        self.showfm.vid_frame_label.configure(image=imgtk)
+
+        if not self.paused:
             self.root_after = self.mainui.root.after( \
                 int(1000/self.vid_fps) , self.refresh_frame )
 
@@ -333,8 +371,8 @@ class _MainUI():
         
 
     def view_image( self ):
-        self.source_type = 0
-        self.root_after_cancel()
+        self.source_type = SourceType.IMG
+        self.cancel_root_after()
 
         self.cur_frame  = cv2.imread( self.face_src_path )
 
@@ -485,6 +523,7 @@ class _MainUI():
             self.zoomed_in_face_label= (0,0)
         e.widget.destroy()
         self.showed_face_frames[index] = None
+        self.infofm.face_text.delete(1.0,END)
     
     def clear_faces_frame( self ):
         for child in self.infofm.faces_frame.winfo_children():
@@ -493,17 +532,17 @@ class _MainUI():
 
     def recf_v0(self):
 
-        if self.source_type == -1:return
-        if (not self.pause) and self.vid:
+        if self.source_type == SourceType.NULL: return
+        if (not self.paused) and self.vid:
             _, self.cur_frame = self.vid.read()
         
         if settings.data_empty():
             self.show_data_empty()
             return
         
-        if self.doing == 'p':
+        if self.fdoing == FDoing.PICK:
             self.clear_faces_frame()
-            self.doing ='r'
+            self.fdoing = FDoing.REC
 
         if self.cur_frame is None: return
         
