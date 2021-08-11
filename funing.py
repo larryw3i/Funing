@@ -22,29 +22,11 @@ class Funing():
 
     def test( self ):
         os.environ['FUNING_TEST'] = '1'
-        self.start()
 
     def start( self ):
         sys.argv[0] = re.sub(r'(-script\.pyw|\.exe)?$', '', sys.argv[0])
         from funing import run
         sys.exit(run())
-
-    def xgettext( self ):
-        from funing import settings
-        mo_files = []
-        xgettext_files = []
-        for root, dirs, files in os.walk( settings.project_path ):
-            for f in files:
-                if  f.endswith('.py'): 
-                    xgettext_files.append( os.path.join( root, f ) )
-        xgettext_files = '\n'.join( xgettext_files )
-        open( self.xgettext_path , 'w+').write( xgettext_files )        
-        for root, dirs, files in os.walk( settings.locale_path ):
-            for f in files:
-                if  f.endswith('.po'): 
-                    f_path = os.path.join( root, f )
-                    os.system(f'xgettext -f {self.xgettext_path} '+\
-                    f'--join-existing -d funing -o {f_path}' )
 
     def pybabel_extract( self ):
         os.system(f'pybabel extract -o {settings.locale_path}/funing.pot'+

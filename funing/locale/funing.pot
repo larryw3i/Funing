@@ -34,7 +34,7 @@ msgid "Image or video"
 msgstr ""
 
 #: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:426
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:564
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:563
 msgid "Unable to open video source"
 msgstr ""
 
@@ -42,11 +42,11 @@ msgstr ""
 msgid "No informations found"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:568
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:567
 msgid "Nothing enter"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:569
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:568
 msgid "You haven't entered anything yet! "
 msgstr ""
 

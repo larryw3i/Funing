@@ -1,26 +1,23 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
+# larryw3i <larryw3i@163.com>, 2021.
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-12 05:27+0800\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
+"Project-Id-Version: unnamed project\n"
+"Last-Translator: larryw3i <larryw3i@163.com>\n"
+"Language-Team: Chinese - China <larryw3i@163.com>\n"
+"Language: zh_CN\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"PO-Revision-Date: 2021-08-12 05:43+0800\n"
+"X-Generator: Gtranslator 3.38.0\n"
 
 #: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:81
 #: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:89
 msgid "No desktop environment is detected! "
-msgstr "亲, 好像没有检测到显示器哦!"
+msgstr "亲, 好像没有检测到显示器哦! "
 
 #: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:114
 #: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:127
