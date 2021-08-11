@@ -1,0 +1,84 @@
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:89
+msgid "No desktop environment is detected! "
+msgstr ""
+
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:122
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:127
+msgid "About Funing"
+msgstr ""
+
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:124
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:18
+msgid "Funing"
+msgstr ""
+
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:131
+msgid "Licensed under the MIT license"
+msgstr ""
+
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:174
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:57
+msgid "Pause"
+msgstr ""
+
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:180
+msgid "Play"
+msgstr ""
+
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:270
+msgid "Select a file"
+msgstr ""
+
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:271
+msgid "Image or video"
+msgstr ""
+
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:426
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:564
+msgid "Unable to open video source"
+msgstr ""
+
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:480
+msgid "No informations found"
+msgstr ""
+
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:568
+msgid "Nothing enter"
+msgstr ""
+
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:569
+msgid "You haven't entered anything yet! "
+msgstr ""
+
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:42
+msgid "GO"
+msgstr ""
+
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:44
+msgid "File"
+msgstr ""
+
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:44
+msgid "Camera"
+msgstr ""
+
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:45
+msgid "Open"
+msgstr ""
+
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:61
+msgid "Recognize"
+msgstr ""
+
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:65
+msgid "Pick"
+msgstr ""
+
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:104
+msgid "Write it with certain rules so that you can analyze it later"
+msgstr ""
+
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:106
+msgid "Save"
+msgstr ""
+

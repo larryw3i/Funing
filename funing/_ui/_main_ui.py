@@ -172,14 +172,14 @@ class _MainUI():
             self.paused = False
             self.refresh_frame()
             self.showfm.pp_sv.set( _('Pause') )
-            if settings.debug:
+            if settings.debug():
                 print( 'Play. . .' )
             
         else:
             self.cancel_root_after()
             self.showfm.pp_sv.set( _('Play') )
             self.paused = True
-            if settings.debug:
+            if settings.debug():
                 print( 'Pause. . .' )
 
     def pick_v0(self):
@@ -200,7 +200,7 @@ class _MainUI():
         gray_img=cv2.cvtColor(self.cur_frame,cv2.COLOR_BGR2GRAY)
         self.face_rects = self.face_casecade.detectMultiScale(gray_img,1.3,5)
         
-        if settings.debug:
+        if settings.debug():
             print( self.face_rects )
             print( type( self.face_rects ) )
 
@@ -233,7 +233,7 @@ class _MainUI():
     def del_face_label_p( self, e, num):
         del self.picked_face_frames[ num ]
         e.widget.destroy()
-        if settings.debug:
+        if settings.debug():
             print( len(self.picked_face_frames) )
 
     def show_go( self, *args ):
@@ -366,7 +366,7 @@ class _MainUI():
         r0 = self.vid_width/self.vid_height
         r1= r0/r 
         self.fxfy = h/self.vid_height if r1<r else w/self.vid_width
-        if settings.debug:
+        if settings.debug():
             print('self.fxfy: ', self.fxfy)
         
 
@@ -376,7 +376,7 @@ class _MainUI():
 
         self.cur_frame  = cv2.imread( self.face_src_path )
 
-        if settings.debug:
+        if settings.debug():
             print( self.cur_frame.shape,self.cur_frame.size )
             
         self.get_img_resize_fxfy()
@@ -419,7 +419,7 @@ class _MainUI():
         r0 = self.vid_width/self.vid_height
         r1= r0/r 
         self.fxfy = h/self.vid_height if r1<r else w/self.vid_width
-        if settings.debug:
+        if settings.debug():
             print('self.fxfy: ', self.fxfy)
 
     def show_nsrc_error( self ):
@@ -438,7 +438,7 @@ class _MainUI():
             cv2.imwrite( f'{img_path}/{count}.png' , f)
             count+=1
         self.cur_info_id = None
-        if settings.debug:print( 'info > ' + info )
+        if settings.debug():print( 'info > ' + info )
         self.recognizer_train()
                 
     def restore_face_label_size( self, index ):
@@ -529,7 +529,6 @@ class _MainUI():
         for child in self.infofm.faces_frame.winfo_children():
             child.destroy()
 
-
     def recf_v0(self):
 
         if self.source_type == SourceType.NULL: return
@@ -553,7 +552,7 @@ class _MainUI():
         self.rec_gray_img,1.3,5)
 
         if len( self.face_rects ) < 1: 
-            if settings.debug:
+            if settings.debug():
                 print('len( self.face_rects ) < 1 ')
             return
 

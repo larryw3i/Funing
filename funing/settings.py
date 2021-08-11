@@ -8,12 +8,9 @@ import getopt
 import sys
 
 version =  "0.2.38"
-args = \
-    getopt.getopt( sys.argv[1:], '' )[1]
-test_args = \
-    ['ts','st','test']
-debug =  \
-    len( set(args)&set(test_args) ) > 0
+
+debug = lambda : os.environ.get('FUNING_TEST') == '1'
+
 project_path = \
     os.path.abspath( os.path.dirname(  __file__  ) )
 _usr_home =  \
@@ -59,6 +56,3 @@ initialized  = \
     config_yml.get('initialized', False) and (version == prev_version)
 backup_dir_path = \
     os.path.join( base_dir, '.cp' )
-
-_locale_path = \
-    os.path.join( project_path, '_locale') 

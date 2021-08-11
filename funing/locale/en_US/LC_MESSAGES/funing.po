@@ -1,44 +1,74 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-12 05:27+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
 #: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:81
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:89
 msgid "No desktop environment is detected! "
 msgstr ""
 
 #: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:114
 #: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:127
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:122
 msgid "About Funing"
 msgstr ""
 
 #: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:116
 #: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:18
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:124
 msgid "Funing"
 msgstr ""
 
 #: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:123
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:131
 msgid "Licensed under the MIT license"
 msgstr ""
 
 #: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:171
 #: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:57
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:174
 msgid "Pause"
 msgstr ""
 
 #: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:177
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:180
 msgid "Play"
-msgstr ""
+msgstr "Play"
 
 #: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:290
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:270
 msgid "Select a file"
 msgstr ""
 
 #: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:291
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:271
 msgid "Image or video"
 msgstr ""
 
 #: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:420
 #: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:655
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:426
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:563
 msgid "Unable to open video source"
 msgstr ""
 
 #: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:549
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:480
 msgid "No informations found"
 msgstr ""
 
@@ -47,10 +77,12 @@ msgid "Restart Funing Now?"
 msgstr ""
 
 #: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:658
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:567
 msgid "Nothing enter"
 msgstr "Nothing enter"
 
 #: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:659
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:568
 msgid "You haven't entered anything yet! "
 msgstr "You haven't entered data yet! Open a source and click 'Pick' to enter"
 
@@ -85,43 +117,8 @@ msgstr "Pick"
 #: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:104
 msgid "Write it with certain rules so that you can analyze it later"
 msgstr ""
-"Write it in toml or yaml format, so it's a lot easier for you to analyze "
-"it"
+"Write it in toml or yaml format, so it's a lot easier for you to analyze it"
 
 #: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:106
 msgid "Save"
 msgstr ""
-
-#~ msgid "Shoot"
-#~ msgstr ""
-
-#~ msgid "Name"
-#~ msgstr ""
-
-#~ msgid "DOB"
-#~ msgstr ""
-
-#~ msgid "Address"
-#~ msgstr ""
-
-#~ msgid "Note"
-#~ msgstr ""
-
-#~ msgid "prev_symb"
-#~ msgstr "<<"
-
-#~ msgid "next_symb"
-#~ msgstr ">>"
-
-#~ msgid "gettext_exception_message"
-#~ msgstr ""
-#~ "Make sure gettext is installed, read "
-#~ "https://www.gnu.org/software/gettext/ and install "
-#~ "it. (^_^)"
-
-#~ msgid "No desktop environment is detected! (^_^)"
-#~ msgstr ""
-
-#~ msgid "*/*"
-#~ msgstr ""
-
