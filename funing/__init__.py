@@ -12,7 +12,6 @@ def run():
     f = Enjoy()
     optlist , args  = getopt.getopt( sys_argv, '' )    
     if len(args) < 1: f.start()
-    
     for a in args:
         if a in [ 's', 'ts' ,'st', 'start' ]:   f.start()
         if a in [ 'm' , 'msg' , 'msgfmt' ]:     f.msgfmt()
