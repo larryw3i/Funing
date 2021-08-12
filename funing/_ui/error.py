@@ -1,5 +1,7 @@
-import webbrowser
+
 import platform
+import webbrowser
+
 system = platform.system()
 
 

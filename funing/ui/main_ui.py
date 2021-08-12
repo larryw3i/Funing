@@ -1,14 +1,15 @@
 
-import tkinter as tk
-from tkinter import ttk
-from tkinter import *
-from funing._ui.lang import _
-# from langcodes import Language
-from funing import settings
 import os
 import re
-from datetime import datetime
+import tkinter as tk
 import uuid
+from datetime import datetime
+from tkinter import *
+from tkinter import ttk
+
+# from langcodes import Language
+from funing import settings
+from funing._ui.lang import _
 
 ct = settings.comparison_tolerance
 

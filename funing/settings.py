@@ -1,11 +1,12 @@
 
-import os
-import shutil
-import yaml
-import re
-from pathlib import Path
 import getopt
+import os
+import re
+import shutil
 import sys
+from pathlib import Path
+
+import yaml
 
 version = "0.2.39"
 

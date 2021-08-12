@@ -1,11 +1,13 @@
 
 
 import os
-import sys
-import yaml
-import cv2
-import uuid
 import shutil
+import sys
+import uuid
+
+import cv2
+import yaml
+
 from funing import settings
 from funing._ui import error
 

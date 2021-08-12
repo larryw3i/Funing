@@ -1,12 +1,11 @@
 
-import os
-import sys
 import gettext
 import locale
-from funing import settings
+import os
+import sys
+
 import yaml
 
-import os
 from funing import settings
 
 f_mo_path = os.path.join(settings.locale_path, 'en_US',

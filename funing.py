@@ -59,8 +59,9 @@ class Funing():
         for root , _dir , _files in os.walk( settings.project_path ):
             for f in _files:
                 if f.endswith('.py'):
-                    os.system('autopep8 --in-place -a -a '\
-                    +os.path.join( root , f))
+                    cmd = 'autopep8 --in-place -a -a ' + os.path.join( root , f)
+                    os.system( cmd )
+                    print(cmd+'. . .')
    
     def help( self ):
         print(

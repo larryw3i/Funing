@@ -1,29 +1,30 @@
 
 
-from tkinter import messagebox
-import tkinter as tk
-from tkinter import *
-from tkinter.ttk import *
-from funing.ui.main_ui import MainUI
-# from langcodes import Language
 import gettext
-import sys
 import os
-import tkinter.filedialog as tkf
-import cv2
-from PIL import Image, ImageTk
-from funing._ui.lang import _
-from datetime import datetime, date
-from funing import settings
-import yaml
-import uuid
-import time
 import re
-from funing._ui import error
-import numpy as np
-from cv2 import haarcascades
+import sys
+import time
+import tkinter as tk
+import tkinter.filedialog as tkf
+import uuid
 import webbrowser
+from datetime import date, datetime
 from enum import Enum
+from tkinter import *
+from tkinter import messagebox
+from tkinter.ttk import *
+
+import cv2
+import numpy as np
+import yaml
+from cv2 import haarcascades
+from PIL import Image, ImageTk
+
+from funing import settings
+from funing._ui import error
+from funing._ui.lang import _
+from funing.ui.main_ui import MainUI
 
 
 class SourceType(Enum):

@@ -1,9 +1,10 @@
 #!/usr/bin/python3
 
+import getopt
 import os
 import sys
 from pathlib import Path
-import getopt
+
 from funing import settings
 from funing._ui import Enjoy
 
