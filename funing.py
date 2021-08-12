@@ -54,7 +54,14 @@ class Funing():
 
     def pip_install_r( self ):
         os.system('pip3 install -r requirements.txt ')
-
+    
+    def autopep8(self):
+        for root , _dir , _files in os.walk( settings.project_path ):
+            for f in _files:
+                if f.endswith('.py'):
+                    os.system('autopep8 --in-place -a -a '\
+                    +os.path.join( root , f))
+   
     def help( self ):
         print(
             '''
@@ -94,9 +101,11 @@ if __name__ == '__main__':
     pybabel_extract_args = ['be' , 'pbe']
     help_args = ['h','help', ]
     pybabel_update_args = [ 'bu' , 'pbu']
+    autopep8_args = [ 'p8', 'ap8' ]
 
     all_args = test_args + xgettext_args + msgfmt_args + keep_code_args + \
-    pip_install_r_args + pybabel_extract_args + pybabel_update_args + start_args
+    pip_install_r_args + pybabel_extract_args + pybabel_update_args \
+    + start_args+ autopep8_args
     
     f = Funing()
     sys_argv = sys.argv[1:]
@@ -115,4 +124,5 @@ if __name__ == '__main__':
         if a in pip_install_r_args:     f.pip_install_r()
         if a in pybabel_extract_args:   f.pybabel_extract()
         if a in pybabel_update_args:    f.pybabel_update()
+        if a in autopep8_args:          f.autopep8()
         

@@ -3,3 +3,6 @@ PyYAML
 Pillow
 numpy
 Babel
+# dev
+pep8
+autopep8
