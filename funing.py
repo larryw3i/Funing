@@ -54,15 +54,7 @@ class Funing():
 
     def pip_install_r( self ):
         os.system('pip3 install -r requirements.txt ')
-    
-    def autopep8(self):
-        for root , _dir , _files in os.walk( settings.project_path ):
-            for f in _files:
-                if f.endswith('.py'):
-                    cmd = 'autopep8 --in-place -a -a ' + os.path.join( root , f)
-                    os.system( cmd )
-                    print(cmd+'. . .')
-   
+       
     def help( self ):
         print(
             '''

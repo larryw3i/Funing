@@ -26,7 +26,7 @@ bdist(){
 
 git_add(){
     isort ./funing/
-    python3 funing.py p8
+    autopep8 -i -a -a -r  ./funing/
     git add .
 }
 
