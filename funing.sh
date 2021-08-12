@@ -24,8 +24,14 @@ bdist(){
     pip3 install dist/*.whl
 }
 
-tu(){ twine_upload; }
-bd(){ bdist; }
-ug(){ update_gitignore; }
+git_add(){
+    python3 funing.py p8
+    git add .
+}
+
+tu(){   twine_upload; }
+bd(){   bdist; }
+ug(){   update_gitignore; }
+gita(){ git_add;}
 
 $1
