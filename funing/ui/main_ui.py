@@ -11,8 +11,6 @@ from tkinter import ttk
 from funing import settings
 from funing._ui.lang import _
 
-ct = settings.comparison_tolerance
-
 
 class MainUI():
     def __init__(self):

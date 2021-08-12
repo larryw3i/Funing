@@ -46,12 +46,9 @@ def data_empty(): return \
 
 infos_path = \
     os.path.join(data_dir, 'infos')
-# lang_code = \
-#     config_yml.get('lang_code', 'en_US')
-comparison_tolerance = \
-    config_yml.get('comparison_tolerance', 0.6)
 locale_langcodes =  \
-    [d for d in os.listdir(locale_path)]
+    [d for d in os.listdir(locale_path) if os.path.isdir(
+        os.path.join(locale_path, d))]
 infos_len = \
     config_yml.get("infos_len", 5)
 face_enter_count = \
