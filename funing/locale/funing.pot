@@ -1,84 +1,84 @@
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:89
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:93
 msgid "No desktop environment is detected! "
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:122
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:127
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:127
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:125
 msgid "About Funing"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:124
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:129
 #: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:18
 msgid "Funing"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:131
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:141
 msgid "Licensed under the MIT license"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:174
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:57
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:189
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:52
 msgid "Pause"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:180
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:195
 msgid "Play"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:270
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:288
 msgid "Select a file"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:271
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:289
 msgid "Image or video"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:426
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:563
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:453
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:597
 msgid "Unable to open video source"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:480
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:513
 msgid "No informations found"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:567
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:603
 msgid "Nothing enter"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:568
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:604
 msgid "You haven't entered anything yet! "
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:42
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:44
 msgid "GO"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:44
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:46
 msgid "File"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:44
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:46
 msgid "Camera"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:45
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:47
 msgid "Open"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:61
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:56
 msgid "Recognize"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:65
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:60
 msgid "Pick"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:104
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:99
 msgid "Write it with certain rules so that you can analyze it later"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:106
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:102
 msgid "Save"
 msgstr ""
 

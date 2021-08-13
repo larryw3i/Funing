@@ -23,13 +23,14 @@ class Enjoy():
         from ._main_ui import _MainUI
         _MainUI()
 
-    def msgfmt(self):
+    # pybabel compile
+    def pbc(self):
         os.system(f'pybabel compile -d {settings.locale_path}  -D funing -f')
 
     def initialize(self):
 
         try:
-            self.msgfmt()
+            self.pbc()
         except Exception as e:
             print(e)
             error.gettext_nf()
