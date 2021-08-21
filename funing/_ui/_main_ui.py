@@ -27,12 +27,8 @@ from funing._ui.lang import _
 from funing.ui.about_ui import about_toplevel
 from funing.ui.main_ui import MainUI
 
-image_exts = [
-    'jpg', 'png', 'jpeg', 'webp'
-]
-video_exts = [
-    'mp4', 'avi', '3gp', 'webm', 'mkv'
-]
+# from funing._ui.lang import _
+# self.frame_width, self.frame_height, __ = self.cur_frame.shape
 
 
 class SourceType(Enum):
@@ -56,7 +52,8 @@ class _MainUI():
         self.showf_sv = None
         self.showfm = self.mainui.showframe
         self.infofm = self.mainui.infoframe
-        self.rbmixfm = self.mainui.rbmixframe
+        self.bottomframe = self.mainui.bottomframe
+        self.status_label_sv = self.bottomframe.status_label_sv
         self.about_tl = None
         # vid
         self.vid = None
@@ -91,6 +88,16 @@ class _MainUI():
                                          "haarcascade_frontalface_default.xml")
         self.recognizer = cv2.face.EigenFaceRecognizer_create()
         self.face_casecade = cv2.CascadeClassifier(self.hff_xml_path)
+
+        self.image_exts = [
+            'jpg', 'png', 'jpeg', 'webp'
+        ]
+        self.video_exts = [
+            'mp4', 'avi', '3gp', 'webm', 'mkv'
+        ]
+        self.filetype_exts = '*.' + \
+            ' *.'.join(self.image_exts + self.video_exts)
+
         # screen
         try:
             self.screenwidth = self.mainui.root.winfo_screenwidth()
@@ -98,7 +105,9 @@ class _MainUI():
         except BaseException:
             print(_('No desktop environment is detected! '))
             exit()
-        if not settings.data_empty():
+        if settings.data_empty():
+            self.show_status_msg(_("You haven't entered anything yet!"))
+        else:
             self.recognizer_train()
         self.set_ui_events()
         self.mainui.mainloop()
@@ -141,9 +150,14 @@ class _MainUI():
             self.about_tl = None
         pass
 
+    def show_status_msg(self, msg):
+        self.status_label_sv.set(msg)
+
     def recognizer_train(self):
+        self.show_status_msg(_('Recognizer training. . .'))
         images, labels, self.info_ids = self.load_images()
         self.recognizer.train(images, labels)
+        self.show_status_msg(_('Recognizer finish training.'))
 
     def open_vid_cap(self):
         self.vid = cv2.VideoCapture(self.source)
@@ -167,7 +181,7 @@ class _MainUI():
         self.showfm.showf_go_btn['command'] = self.show_go
         self.showfm.showf_optionmenu_sv.trace('w', self.show_from)
         self.infofm.save_btn['command'] = self.savef
-        self.rbmixfm.about_fn_btn['command'] = self.about_fn
+        self.bottomframe.about_fn_btn['command'] = self.about_fn
         self.mainui.root.protocol("WM_DELETE_WINDOW", self.destroy)
 
     def destroy(self):
@@ -255,7 +269,7 @@ class _MainUI():
         self.rec_img = False
         self.cancel_root_after()
         showf_ext = self.showf_sv.split('.')[-1]
-        if showf_ext in video_exts:
+        if showf_ext in self.video_exts:
             self.source = self.showf_sv
             self.play_video()
             return
@@ -263,7 +277,7 @@ class _MainUI():
             self.source = int(self.showf_sv)
             self.play_video()
             return
-        if showf_ext in image_exts:
+        if showf_ext in self.image_exts:
             self.view_image()
             return
         self.showfm.showf_sv.set('')
@@ -281,17 +295,15 @@ class _MainUI():
         if show_f == 'file':
             self.face_src_path = tkf.askopenfilename(
                 title=_('Select a file'),
-                filetypes=[(_('Image or video'),
-                            '*.' + (' *.'.join(
-                                image_exts + video_exts)))],
+                filetypes=[(_('Image or video'), self.filetype_exts)],
                 initialdir='~')
             if len(self.face_src_path) < 1:
                 return
             ext = os.path.splitext(self.face_src_path)[1][1:]
             self.showfm.showf_sv.set(self.face_src_path)
-            if ext in image_exts:
+            if ext in self.image_exts:
                 self.view_image()
-            elif ext in video_exts:
+            elif ext in self.video_exts:
                 self.source = self.face_src_path
                 self.play_video()
         elif show_f == 'camera':
@@ -323,7 +335,7 @@ class _MainUI():
             self.show_nsrc_error()
             return
 
-        _, frame = self.vid.read()
+        __, frame = self.vid.read()
 
         gray_img = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         rects = self.face_casecade.detectMultiScale(gray_img, 1.3, 5)
@@ -357,7 +369,7 @@ class _MainUI():
             self.show_nsrc_error()
             return
 
-        _, frame = self.vid.read()
+        __, frame = self.vid.read()
 
         gray_img = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         rects = self.face_casecade.detectMultiScale(gray_img, 1.3, 5)
@@ -397,7 +409,7 @@ class _MainUI():
 
         self.cur_frame = cv2.imread(self.face_src_path)
 
-        self.frame_width, self.frame_height, _ = self.cur_frame.shape
+        self.frame_width, self.frame_height, __ = self.cur_frame.shape
 
         self.get_img_resize_fxfy()
 
@@ -409,7 +421,10 @@ class _MainUI():
             self.rec_gray_img, 1.3, 5)
 
         if len(self.face_rects) < 1:
+            self.show_status_msg(_('No face was detected.'))
             return
+
+        self.show_status_msg(_('Face was detected.'))
 
         for (x, y, w, h) in self.recfs:
             self.cur_frame = cv2.rectangle(
@@ -596,5 +611,5 @@ class _MainUI():
 
     def show_data_empty(self):
         unable_open_s = _('Nothing enter')
-        msg = _("You haven't entered anything yet! ")
+        msg = _("You haven't entered anything yet!")
         messagebox.showerror(unable_open_s, msg, )

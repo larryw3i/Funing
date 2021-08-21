@@ -33,9 +33,20 @@ git_add(){
     git add .
 }
 
+locale_cn(){
+    python3 funing.py bc
+    cp -r funing/locale/zh_Hans/* funing/locale/zh_CN/
+}
+
+be_bu_bc(){
+    python3 funing.py be bu bc
+}
+
+euc(){  be_bu_bc;}
 tu(){   twine_upload; }
 bd(){   bdist; }
 ug(){   update_gitignore; }
 gita(){ git_add;}
+lc(){   locale_cn;}
 
 $1

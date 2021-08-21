@@ -21,12 +21,12 @@ class MainUI():
         # entry_frame
         self.infoframe = InfoFrame(tk.Frame(self.root))
         # rbmix_frame
-        self.rbmixframe = RBMixFrame(tk.Frame(self.root))
+        self.bottomframe = BottomFrame(self.root)
 
     def place(self):
         self.showframe.place()
         self.infoframe.place()
-        self.rbmixframe.place()
+        self.bottomframe.place()
 
     def mainloop(self):
         self.root.mainloop()
@@ -88,11 +88,6 @@ class InfoFrame():
 
         self.faces_frame = tk.Frame(self.frame)
 
-        # self.curf_label = tk.Label( self.face_show_frame )
-        # self.opt_frame =  tk.Frame( self.frame )
-        # self.prevf_btn = tk.Button( self.opt_frame, text = _('prev_symb'))
-        # self.num_label = tk.Label( self.opt_frame, text = _('*/*') )
-        # self.nextf_btn = tk.Button( self.opt_frame, text = _('next_symb'))
         self.ft_sb = tk.Scrollbar(self.info_enter_frame, orient=VERTICAL)
         self.face_text = Text(self.info_enter_frame,
                               yscrollcommand=self.ft_sb.set)
@@ -103,15 +98,9 @@ class InfoFrame():
         self.ft_sb.config(command=self.face_text.yview)
 
     def place(self):
-        # self.curf_label.pack(side = LEFT)
-        # self.prevf_btn.pack(side = LEFT)
-        # self.num_label.pack(side=LEFT)
-        # self.nextf_btn.pack(side = LEFT)
         self.face_text.pack(side=tk.LEFT, fill=tk.Y)
         self.ft_sb.pack(side=tk.RIGHT, fill=tk.Y)
         self.faces_frame.grid(column=0, row=0, columnspan=5)
-        # self.face_show_frame.grid( column = 0, row = 1, columnspan = 5)
-        # self.opt_frame.grid( column = 0, row = 2, columnspan = 5)
         self.info_enter_frame.grid(column=0, row=3, columnspan=5)
         self.face_text_tip_label.grid(column=0, row=4, columnspan=5)
         self.save_btn.grid(column=2, row=5)
@@ -119,30 +108,15 @@ class InfoFrame():
         pass
 
 
-class RBMixFrame():
+class BottomFrame():
     def __init__(self, frame):
         self.frame = frame
+        self.status_label_sv = StringVar(
+            self.frame, value=_('Welcome to Funing.'))
+        self.status_label = Label(
+            self.frame, textvariable=self.status_label_sv)
         self.about_fn_btn = Button(self.frame, text=_('About Funing'))
-        # language_combobox
-        # self.lang_combobox_var = tk.StringVar( self.frame )
-        # self.lang_code = settings.lang_code
-        # self.lang_combobox_var.set(
-        #     Language.make( self.lang_code.replace('_','-') ).autonym()
-        #   )
-        # self.lang_combobox = ttk.Combobox( self.frame ,
-        #     textvariable = self.lang_combobox_var,
-        #     values = tuple( self.locale_lang_display_names() ),
-        #     state = "readonly"
-        # )
-    # def locale_lang_display_names( self ):
-    #     display_names = []
-    #     for i in settings.locale_langcodes:
-    #         display_names.append( Language.make( i.replace('_','-'))\
-    # .autonym() )
-    #     return display_names
 
     def place(self):
-        self.about_fn_btn.grid(column=0, row=0, sticky=NE)
-        # # place lang_combobox
-        # self.lang_combobox.grid( column = 0, row = 1, sticky = NE )
-        self.frame.grid(column=2, row=2, )
+        self.status_label.grid(column=0, row=1, sticky=W)
+        self.about_fn_btn.grid(column=4, row=1)
