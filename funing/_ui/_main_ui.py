@@ -25,6 +25,7 @@ from funing import settings
 from funing._ui import error
 from funing._ui.lang import _
 from funing.ui.main_ui import MainUI
+from funing.ui.about_ui import about_toplevel
 
 
 class SourceType(Enum):
@@ -121,33 +122,14 @@ class _MainUI():
         labels = np.asarray(labels)
         return images, labels, ids
     
-    def about_tl_eq_none(self): 
+    def about_tl_destroy(self): 
         self.about_tl.destroy()
         self.about_tl=None
     
     def about_fn(self):
         if self.about_tl is None:
-            self.about_tl = Toplevel(borderwidth=10)
-            self.about_tl.title(_('About Funing'))
-            self.about_tl.resizable(0, 0)
-            Label(self.about_tl, text=_('Funing'), font=("", 25)).pack()
-            Label(self.about_tl, text=settings.version).pack()
-            self.source_page_label = Label(
-                self.about_tl,
-                text=settings.source_page,
-                foreground="blue",
-                cursor="hand2")
-            self.source_page_label.bind(
-                "<Button-1>",
-                lambda e: webbrowser.open_new(
-                    settings.source_page))
-            self.source_page_label.pack()
-            Label(self.about_tl, text=_('Licensed under the MIT license'))\
-                .pack()
-
-            # Weird, lambda doesn't work.
-            self.about_tl.protocol("WM_DELETE_WINDOW", self.about_tl_eq_none )
-
+            self.about_tl = about_toplevel()
+            self.about_tl.protocol("WM_DELETE_WINDOW", self.about_tl_destroy )
             self.about_tl.mainloop()
         else:
             self.about_tl.destroy()
