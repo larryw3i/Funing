@@ -45,15 +45,8 @@ class Funing():
 
     # pybabel compile
     def pbc(self):
-        from funing._ui import Enjoy
-
-        f_mo_path = os.path.join(settings.locale_path, 'en_US',
-                                 'LC_MESSAGES', 'funing.mo')
-        if not os.path.exists(f_mo_path):
-            Enjoy()
-        else:
-            Enjoy().pbc()
-
+        os.system(f'pybabel compile -d {settings.locale_path}  -D funing -f')
+        
     def keep_code(self):
         from funing._ui import Enjoy
         Enjoy().keep_code()

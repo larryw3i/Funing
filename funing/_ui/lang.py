@@ -8,13 +8,6 @@ import yaml
 
 from funing import settings
 
-f_mo_path = os.path.join(settings.locale_path, 'en_US',
-                         'LC_MESSAGES', 'funing.mo')
-
-if not os.path.exists(f_mo_path):
-    from funing._ui import Enjoy
-    Enjoy().pbc()
-
 sys_lang_code = locale.getdefaultlocale()[0]
 
 if sys_lang_code not in settings.locale_langcodes:

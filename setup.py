@@ -29,7 +29,6 @@ setuptools.setup(
         'PyYAML >= 5.3.1',
         'Pillow >= 8.3.0',
         'numpy >= 1.21.1',
-        'Babel >= 2.9.1'
     ],
     include_package_data = True,
 )

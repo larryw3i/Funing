@@ -23,18 +23,7 @@ class Enjoy():
         from ._main_ui import _MainUI
         _MainUI()
 
-    # pybabel compile
-    def pbc(self):
-        os.system(f'pybabel compile -d {settings.locale_path}  -D funing -f')
-
     def initialize(self):
-
-        try:
-            self.pbc()
-        except Exception as e:
-            print(e)
-            error.gettext_nf()
-            exit()
 
         for d in [settings.faces_path, settings.infos_path]:
             if not os.path.exists(d):

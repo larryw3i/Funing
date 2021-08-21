@@ -120,7 +120,9 @@ class _MainUI():
         images = np.asarray(images)
         labels = np.asarray(labels)
         return images, labels, ids
-
+    
+    def about_tl_eq_none(self): self.about_tl=None
+    
     def about_fn(self):
         if self.about_tl is None:
             self.about_tl = Toplevel(borderwidth=10)
@@ -140,6 +142,10 @@ class _MainUI():
             self.source_page_label.pack()
             Label(self.about_tl, text=_('Licensed under the MIT license'))\
                 .pack()
+
+            # Weird, lambda doesn't work.
+            self.about_tl.protocol("WM_DELETE_WINDOW", self.about_tl_eq_none )
+
             self.about_tl.mainloop()
         else:
             self.about_tl.destroy()

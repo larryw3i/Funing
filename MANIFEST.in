@@ -1,16 +1,17 @@
 
-include LICENSE
-include README.md
-include setup.py
-include requirements.txt
-include setup.cfg
+global-include * *.mo
 
 recursive-include funing config.example.yml
-recursive-include docs *.rst conf.py Makefile make.bat *.jpg *.png *.gif
-recursive-include * *.po
+recursive-include docs *
 
-recursive-exclude * __pycache__
-recursive-exclude * *.py[co]
-recursive-exclude venv *
-recursive-exclude funing/_home *
-recursive-exclude funing/.home *
+exclude funing.py
+exclude funing.sh
+exclude requirements.txt
+
+prune funing/.home/
+prune venv/
+prune tests/
+
+global-exclude *.po
+global-exclude *.pot
+global-exclude *.pyc
