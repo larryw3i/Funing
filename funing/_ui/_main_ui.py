@@ -121,7 +121,9 @@ class _MainUI():
         labels = np.asarray(labels)
         return images, labels, ids
     
-    def about_tl_eq_none(self): self.about_tl=None
+    def about_tl_eq_none(self): 
+        self.about_tl.destroy()
+        self.about_tl=None
     
     def about_fn(self):
         if self.about_tl is None:
