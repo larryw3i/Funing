@@ -56,4 +56,3 @@ class Enjoy():
 
         for _cp in rm_dirs:
             shutil.move(_cp, uuid_cp_path)
-        # os.system('rm -rf '+' '.join( rm_dirs ))

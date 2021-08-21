@@ -27,6 +27,13 @@ from funing._ui.lang import _
 from funing.ui.about_ui import about_toplevel
 from funing.ui.main_ui import MainUI
 
+image_exts = [
+    'jpg', 'png', 'jpeg', 'webp'
+]
+video_exts = [
+    'mp4', 'avi', '3gp', 'webm', 'mkv'
+]
+
 
 class SourceType(Enum):
     NULL = 0
@@ -46,8 +53,6 @@ class _MainUI():
         self.source = -1
         self.root_after = -1
         self.fxfy = None
-        self.image_exts = ['jpg', 'png', 'jpeg', 'webp']
-        self.video_exts = ['mp4', 'avi', '3gp', 'webm', 'mkv']
         self.showf_sv = None
         self.showfm = self.mainui.showframe
         self.infofm = self.mainui.infoframe
@@ -250,7 +255,7 @@ class _MainUI():
         self.rec_img = False
         self.cancel_root_after()
         showf_ext = self.showf_sv.split('.')[-1]
-        if showf_ext in self.video_exts:
+        if showf_ext in video_exts:
             self.source = self.showf_sv
             self.play_video()
             return
@@ -258,7 +263,7 @@ class _MainUI():
             self.source = int(self.showf_sv)
             self.play_video()
             return
-        if showf_ext in self.image_exts:
+        if showf_ext in image_exts:
             self.view_image()
             return
         self.showfm.showf_sv.set('')
@@ -278,15 +283,15 @@ class _MainUI():
                 title=_('Select a file'),
                 filetypes=[(_('Image or video'),
                             '*.' + (' *.'.join(
-                                self.image_exts + self.video_exts)))],
+                                image_exts + video_exts)))],
                 initialdir='~')
             if len(self.face_src_path) < 1:
                 return
             ext = os.path.splitext(self.face_src_path)[1][1:]
             self.showfm.showf_sv.set(self.face_src_path)
-            if ext in self.image_exts:
+            if ext in image_exts:
                 self.view_image()
-            elif ext in self.video_exts:
+            elif ext in video_exts:
                 self.source = self.face_src_path
                 self.play_video()
         elif show_f == 'camera':
