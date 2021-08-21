@@ -75,7 +75,6 @@ class _MainUI():
         self.fdoing = FDoing.PICK
 
         self.paused = False
-        self.face_frames = []
         # rec_result
         self.rec_gray_img = None
         # rec_faces
@@ -196,6 +195,7 @@ class _MainUI():
             self.paused = False
             self.refresh_frame()
             self.showfm.pp_sv.set(_('Pause'))
+            self.show_status_msg('')
             if settings.debug():
                 print('Play. . .')
 
@@ -203,34 +203,12 @@ class _MainUI():
             self.cancel_root_after()
             self.showfm.pp_sv.set(_('Play'))
             self.paused = True
+            if len(self.face_rects) > 0:
+                self.show_face_was_detected_status_msg()
+            else:
+                self.show_no_face_was_detected_status_msg()
             if settings.debug():
                 print('Pause. . .')
-
-    def pick_v0(self):
-
-        if self.fdoing == FDoing.REC:
-            self.clear_faces_frame()
-            self.fdoing = FDoing.PICK  # 'p'
-
-        if (not self.paused) and self.vid:
-            _, self.cur_frame = self.vid.read()
-
-        if self.cur_frame is None:
-            return
-
-        self.clear_face_text()
-
-        self.cur_info_id = str(uuid.uuid4())
-
-        gray_img = cv2.cvtColor(self.cur_frame, cv2.COLOR_BGR2GRAY)
-        self.face_rects = self.face_casecade.detectMultiScale(gray_img, 1.3, 5)
-
-        if settings.debug():
-            print(self.face_rects)
-            print(type(self.face_rects))
-
-        for i in range(len(self.face_rects)):
-            self.add_face_label_p(i)
 
     def clear_face_text(self):
         self.infofm.face_text.delete(1.0, END)
@@ -335,51 +313,17 @@ class _MainUI():
             self.show_nsrc_error()
             return
 
-        __, frame = self.vid.read()
+        __, self.cur_frame = self.vid.read()
 
-        gray_img = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        rects = self.face_casecade.detectMultiScale(gray_img, 1.3, 5)
+        self.rec_gray_img = cv2.cvtColor(self.cur_frame, cv2.COLOR_BGR2GRAY)
+        self.face_rects = self.face_casecade.detectMultiScale(
+            self.rec_gray_img, 1.3, 5)
 
-        for (x, y, w, h) in rects:
-            frame = cv2.rectangle(
-                frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
-        rects = None
+        for (x, y, w, h) in self.face_rects:
+            self.cur_frame = cv2.rectangle(
+                self.cur_frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
 
-        vid_img = cv2.resize(frame, (0, 0),
-                             fx=self.fxfy, fy=self.fxfy)
-
-        vid_img = cv2.cvtColor(vid_img, cv2.COLOR_BGR2RGB)
-        vid_img = Image.fromarray(vid_img)
-        imgtk = ImageTk.PhotoImage(image=vid_img)
-        self.showfm.vid_frame_label.imgtk = imgtk
-        self.showfm.vid_frame_label.configure(image=imgtk)
-
-        if self.paused:
-            self.cur_frame = frame
-        else:
-            self.root_after = self.mainui.root.after(
-                int(1000 / self.vid_fps), self.refresh_frame)
-
-    def refresh_frame_v0(self):
-        if self.source_type != SourceType.VID:
-            return
-        if self.vid is None:
-            self.vid = cv2.VideoCapture(self.source)
-        if not self.vid.isOpened():
-            self.show_nsrc_error()
-            return
-
-        __, frame = self.vid.read()
-
-        gray_img = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        rects = self.face_casecade.detectMultiScale(gray_img, 1.3, 5)
-
-        for (x, y, w, h) in rects:
-            frame = cv2.rectangle(
-                frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
-        rects = None
-
-        vid_img = cv2.resize(frame, (0, 0),
+        vid_img = cv2.resize(self.cur_frame, (0, 0),
                              fx=self.fxfy, fy=self.fxfy)
 
         vid_img = cv2.cvtColor(vid_img, cv2.COLOR_BGR2RGB)
@@ -520,7 +464,9 @@ class _MainUI():
         self.infofm.face_text.delete(1.0, END)
 
         if not os.path.exists(info_file_path):
-            self.infofm.face_text.insert('1.0', _('No informations found'))
+            _nif = _('No informations found')
+            self.infofm.face_text.insert('1.0', _nif)
+            self.show_status_msg(_nif)
 
         self.infofm.face_text.insert('1.0',
                                      open(info_file_path, 'r').read())
@@ -570,13 +516,47 @@ class _MainUI():
         for child in self.infofm.faces_frame.winfo_children():
             child.destroy()
 
-    def recf_v0(self):
+    def pick_v0(self):
 
         if self.source_type == SourceType.NULL:
             return
 
+        if self.fdoing == FDoing.REC:
+            self.clear_faces_frame()
+            self.fdoing = FDoing.PICK  # 'p'
+
+        if self.paused and self.cur_frame is None:
+            return
+
+        self.clear_face_text()
+
+        self.cur_info_id = str(uuid.uuid4())
+
         if (not self.paused) and self.vid:
-            _, self.cur_frame = self.vid.read()
+            __, self.cur_frame = self.vid.read()
+            gray_img = cv2.cvtColor(self.cur_frame, cv2.COLOR_BGR2GRAY)
+            self.face_rects = self.face_casecade.detectMultiScale(
+                gray_img, 1.3, 5)
+
+        if len(self.face_rects) < 1:
+            self.show_no_face_was_detected_status_msg()
+            if settings.debug():
+                print('len( self.face_rects ) < 1 ')
+            return
+
+        self.show_face_was_detected_status_msg()
+
+        if settings.debug():
+            print(self.face_rects)
+            print(type(self.face_rects))
+
+        for i in range(len(self.face_rects)):
+            self.add_face_label_p(i)
+
+    def recf_v0(self):
+
+        if self.source_type == SourceType.NULL:
+            return
 
         if settings.data_empty():
             self.show_data_empty()
@@ -586,19 +566,25 @@ class _MainUI():
             self.clear_faces_frame()
             self.fdoing = FDoing.REC
 
-        if self.cur_frame is None:
+        if self.paused and self.cur_frame is None:
             return
 
         self.clear_face_text()
 
-        self.rec_gray_img = cv2.cvtColor(self.cur_frame, cv2.COLOR_BGR2GRAY)
-        self.face_rects = self.face_casecade.detectMultiScale(
-            self.rec_gray_img, 1.3, 5)
+        if (not self.paused) and self.vid:
+            __, self.cur_frame = self.vid.read()
+            self.rec_gray_img = cv2.cvtColor(
+                self.cur_frame, cv2.COLOR_BGR2GRAY)
+            self.face_rects = self.face_casecade.detectMultiScale(
+                self.rec_gray_img, 1.3, 5)
 
         if len(self.face_rects) < 1:
+            self.show_no_face_was_detected_status_msg()
             if settings.debug():
                 print('len( self.face_rects ) < 1 ')
             return
+
+        self.show_face_was_detected_status_msg()
 
         for i in range(len(self.face_rects)):
             self.add_face_label_r(i)
@@ -612,4 +598,11 @@ class _MainUI():
     def show_data_empty(self):
         unable_open_s = _('Nothing enter')
         msg = _("You haven't entered anything yet!")
+        self.show_status_msg(msg)
         messagebox.showerror(unable_open_s, msg, )
+
+    def show_no_face_was_detected_status_msg(self):
+        self.show_status_msg(_('No face was detected.'))
+
+    def show_face_was_detected_status_msg(self):
+        self.show_status_msg(_('Face was detected.'))
