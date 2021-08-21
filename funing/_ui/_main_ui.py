@@ -525,18 +525,12 @@ class _MainUI():
             self.clear_faces_frame()
             self.fdoing = FDoing.PICK  # 'p'
 
-        if self.paused and self.cur_frame is None:
+        if self.cur_frame is None:
             return
 
         self.clear_face_text()
 
         self.cur_info_id = str(uuid.uuid4())
-
-        if (not self.paused) and self.vid:
-            __, self.cur_frame = self.vid.read()
-            gray_img = cv2.cvtColor(self.cur_frame, cv2.COLOR_BGR2GRAY)
-            self.face_rects = self.face_casecade.detectMultiScale(
-                gray_img, 1.3, 5)
 
         if len(self.face_rects) < 1:
             self.show_no_face_was_detected_status_msg()
@@ -566,17 +560,10 @@ class _MainUI():
             self.clear_faces_frame()
             self.fdoing = FDoing.REC
 
-        if self.paused and self.cur_frame is None:
+        if self.cur_frame is None:
             return
 
         self.clear_face_text()
-
-        if (not self.paused) and self.vid:
-            __, self.cur_frame = self.vid.read()
-            self.rec_gray_img = cv2.cvtColor(
-                self.cur_frame, cv2.COLOR_BGR2GRAY)
-            self.face_rects = self.face_casecade.detectMultiScale(
-                self.rec_gray_img, 1.3, 5)
 
         if len(self.face_rects) < 1:
             self.show_no_face_was_detected_status_msg()
