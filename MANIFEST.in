@@ -11,6 +11,7 @@ exclude requirements.txt
 prune funing/.home/
 prune venv/
 prune tests/
+prune .git/
 
 global-exclude *.po
 global-exclude *.pot
