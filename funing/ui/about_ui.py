@@ -1,9 +1,11 @@
 
+import webbrowser
 from tkinter import *
 from tkinter.ttk import *
-from funing._ui.lang import _
+
 from funing import settings
-import webbrowser
+from funing._ui.lang import _
+
 
 class AboutToplevel():
     def __init__(self):
@@ -24,6 +26,7 @@ class AboutToplevel():
         self.source_page_label.pack()
         Label(self.about_tl, text=_('Licensed under the MIT license'))\
             .pack()
+
 
 def about_toplevel():
     return AboutToplevel().about_tl

@@ -24,8 +24,8 @@ from PIL import Image, ImageTk
 from funing import settings
 from funing._ui import error
 from funing._ui.lang import _
-from funing.ui.main_ui import MainUI
 from funing.ui.about_ui import about_toplevel
+from funing.ui.main_ui import MainUI
 
 
 class SourceType(Enum):
@@ -121,15 +121,15 @@ class _MainUI():
         images = np.asarray(images)
         labels = np.asarray(labels)
         return images, labels, ids
-    
-    def about_tl_destroy(self): 
+
+    def about_tl_destroy(self):
         self.about_tl.destroy()
-        self.about_tl=None
-    
+        self.about_tl = None
+
     def about_fn(self):
         if self.about_tl is None:
             self.about_tl = about_toplevel()
-            self.about_tl.protocol("WM_DELETE_WINDOW", self.about_tl_destroy )
+            self.about_tl.protocol("WM_DELETE_WINDOW", self.about_tl_destroy)
             self.about_tl.mainloop()
         else:
             self.about_tl.destroy()

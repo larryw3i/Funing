@@ -46,7 +46,7 @@ class Funing():
     # pybabel compile
     def pbc(self):
         os.system(f'pybabel compile -d {settings.locale_path}  -D funing -f')
-        
+
     def keep_code(self):
         from funing._ui import Enjoy
         Enjoy().keep_code()
