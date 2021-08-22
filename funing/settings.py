@@ -8,7 +8,7 @@ from pathlib import Path
 
 import yaml
 
-version = "0.2.39"
+version = "0.2.40"
 
 
 def debug(): return os.environ.get('FUNING_TEST') == '1'

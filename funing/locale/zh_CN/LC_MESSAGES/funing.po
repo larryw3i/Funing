@@ -90,7 +90,7 @@ msgstr "识别"
 
 #: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:60
 msgid "Pick"
-msgstr "获取"
+msgstr "录入"
 
 #: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:94
 msgid "Write it with certain rules so that you can analyze it later"
