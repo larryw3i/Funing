@@ -15,8 +15,8 @@ twine_upload(){
 }
 
 bdist(){
-    pip install -U setuptools wheel twine  launchpadlib
-    pip install -r requirements.txt
+    # pip install -U setuptools wheel twine  launchpadlib
+    # pip install -r requirements.txt
     python3 test.py kc
     python3 funing.py pbc
     rm -rf dist/ build/ funing.egg-info/
@@ -42,11 +42,16 @@ be_bu_bc(){
     python3 funing.py be bu bc
 }
 
+_pip3(){
+    pip3 install -U -r requirements.txt
+}
+
 euc(){  be_bu_bc;}
 tu(){   twine_upload; }
 bd(){   bdist; }
 ug(){   update_gitignore; }
 gita(){ git_add;}
 lc(){   locale_cn;}
+p3(){   _pip3;}
 
 $1
