@@ -28,8 +28,8 @@ locale_path = \
     os.path.join(project_path, 'locale')
 _config_path = \
     os.path.join(base_dir, 'config.yml')
-config_path = _config_path if os.path.exists(_config_path) else \
-    os.path.join(project_path, 'config.example.yml')
+config_path = _config_path if os.path.exists(_config_path) \
+    else os.path.join(project_path, 'config.example.yml')
 config_yml = \
     yaml.safe_load(open(config_path, 'r'))
 data_dir = \
@@ -39,8 +39,8 @@ faces_path = \
 infos_path = \
     os.path.join(data_dir, 'infos')
 locale_langcodes =  \
-    [d for d in os.listdir(locale_path) if os.path.isdir(
-        os.path.join(locale_path, d))]
+    [d for d in os.listdir(locale_path)
+     if os.path.isdir(os.path.join(locale_path, d))]
 infos_len = \
     config_yml.get("infos_len", 5)
 face_enter_count = \
