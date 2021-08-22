@@ -20,30 +20,22 @@ _usr_home =  \
     os.path.expanduser('~')
 _test_user_home =\
     os.path.join(project_path, '.home')
-usr_home = _test_user_home if debug else _usr_home
+usr_home = \
+    _test_user_home if debug else _usr_home
 base_dir = \
     os.path.join(usr_home, '.funing')
 locale_path = \
     os.path.join(project_path, 'locale')
 _config_path = \
     os.path.join(base_dir, 'config.yml')
-config_path = \
-    _config_path
-if not os.path.exists(config_path):
-    config_path = \
-        os.path.join(project_path, 'config.example.yml')
+config_path = _config_path if os.path.exists(_config_path) else \
+    os.path.join(project_path, 'config.example.yml')
 config_yml = \
     yaml.safe_load(open(config_path, 'r'))
 data_dir = \
     os.path.join(base_dir, 'data')
 faces_path = \
     os.path.join(data_dir, 'faces')
-
-
-def data_empty(): return \
-    (not os.path.exists(faces_path)) or len(os.listdir(faces_path)) < 1
-
-
 infos_path = \
     os.path.join(data_dir, 'infos')
 locale_langcodes =  \
@@ -61,3 +53,7 @@ initialized = \
     config_yml.get('initialized', False) and (version == prev_version)
 backup_dir_path = \
     os.path.join(base_dir, '.cp')
+
+
+def data_empty(): return \
+    (not os.path.exists(faces_path)) or len(os.listdir(faces_path)) < 1
