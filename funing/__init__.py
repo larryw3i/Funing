@@ -27,14 +27,14 @@ def run():
     sys_argv = sys.argv[1:]
     optlist, args = getopt.getopt(sys_argv, '')
 
-    f = Enjoy()
+    e = Enjoy()
 
     if len(args) < 1:
-        f.start()
+        e.start()
     for a in args:
         if a in start_args + test_args:
-            f.start()
+            e.start()
         if a in ['init', 'initial']:
-            f.initialize()
+            e.initialize()
         if a in keep_code_args:
-            f.keep_code()
+            e.keep_code()

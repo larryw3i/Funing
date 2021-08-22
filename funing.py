@@ -29,8 +29,8 @@ class Funing():
 
     def start(self):
         sys.argv[0] = re.sub(r'(-script\.pyw|\.exe)?$', '', sys.argv[0])
-        from funing import run
-        sys.exit(run())
+        from funing._ui import Enjoy
+        Enjoy().start()
 
     def pybabel_extract(self):
         extract_from_path = os.path.join(settings.project_path, '*')

@@ -365,14 +365,12 @@ class _MainUI():
             self.rec_gray_img, 1.3, 5)
 
         if len(self.face_rects) < 1:
-            self.show_status_msg(_('No face was detected.'))
-            return
-
-        self.show_status_msg(_('Face was detected.'))
-
-        for (x, y, w, h) in self.recfs:
-            self.cur_frame = cv2.rectangle(
-                self.cur_frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
+            self.show_no_face_was_detected_status_msg()
+        else:
+            self.show_face_was_detected_status_msg()
+            for (x, y, w, h) in self.face_rects:
+                self.cur_frame = cv2.rectangle(
+                    self.cur_frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
 
         frame = cv2.cvtColor(self.cur_frame, cv2.COLOR_BGR2RGB)
         img = Image.fromarray(frame)
