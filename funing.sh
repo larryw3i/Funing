@@ -48,7 +48,7 @@ _pip3(){
 
 euc(){  be_bu_bc;}
 tu(){   twine_upload; }
-bd(){   bdist; }
+bd(){   lc; bdist; }
 ug(){   update_gitignore; }
 gita(){ git_add;}
 lc(){   locale_cn;}
