@@ -31,6 +31,30 @@ from funing.ui.main_ui import MainUI
 # self.frame_width, self.frame_height, __ = self.cur_frame.shape
 
 
+class FUV():
+    '''
+    Frequently used variable.
+    '''
+
+    def __init__(self):
+        self.face_was_detected_str = _('Face was detected.')
+        self.no_face_was_detected_str = _('No face was detected.')
+        self.nothing_was_entered_str = _("You haven't entered anything yet!")
+        self.unable_to_open_vid_source_str = _('Unable to open video source.')
+        self.click_to_remove_p = _('Click the picked face image to remove.')
+        self.double_click_to_remove_r = \
+            _('Double click the face image to remove.')
+
+        self.image_exts = [
+            'jpg', 'png', 'jpeg', 'webp'
+        ]
+        self.video_exts = [
+            'mp4', 'avi', '3gp', 'webm', 'mkv'
+        ]
+        self.filetype_exts = '*.' + \
+            ' *.'.join(self.image_exts + self.video_exts)
+
+
 class SourceType(Enum):
     NULL = 0
     IMG = 1
@@ -46,6 +70,9 @@ class _MainUI():
     def __init__(self):
         self.mainui = MainUI()
         self.mainui.place()
+
+        self.fuv = FUV()
+
         self.source = -1
         self.root_after = -1
         self.fxfy = None
@@ -88,15 +115,6 @@ class _MainUI():
         self.recognizer = cv2.face.EigenFaceRecognizer_create()
         self.face_casecade = cv2.CascadeClassifier(self.hff_xml_path)
 
-        self.image_exts = [
-            'jpg', 'png', 'jpeg', 'webp'
-        ]
-        self.video_exts = [
-            'mp4', 'avi', '3gp', 'webm', 'mkv'
-        ]
-        self.filetype_exts = '*.' + \
-            ' *.'.join(self.image_exts + self.video_exts)
-
         # screen
         try:
             self.screenwidth = self.mainui.root.winfo_screenwidth()
@@ -105,7 +123,7 @@ class _MainUI():
             print(_('No desktop environment is detected! '))
             exit()
         if settings.data_empty():
-            self.show_status_msg(_("You haven't entered anything yet!"))
+            self.show_status_msg(self.fuv.nothing_was_entered_str)
         else:
             self.recognizer_train()
         self.set_ui_events()
@@ -237,6 +255,8 @@ class _MainUI():
     def del_face_label_p(self, e, num):
         del self.picked_face_frames[num]
         e.widget.destroy()
+        if len(self.picked_face_frames) < 1:
+            self.clear_status_msg()
         if settings.debug():
             print(len(self.picked_face_frames))
 
@@ -247,7 +267,7 @@ class _MainUI():
         self.rec_img = False
         self.cancel_root_after()
         showf_ext = self.showf_sv.split('.')[-1]
-        if showf_ext in self.video_exts:
+        if showf_ext in self.fuv.video_exts:
             self.source = self.showf_sv
             self.play_video()
             return
@@ -255,7 +275,7 @@ class _MainUI():
             self.source = int(self.showf_sv)
             self.play_video()
             return
-        if showf_ext in self.image_exts:
+        if showf_ext in self.fuv.image_exts:
             self.view_image()
             return
         self.showfm.showf_sv.set('')
@@ -273,15 +293,15 @@ class _MainUI():
         if show_f == 'file':
             self.face_src_path = tkf.askopenfilename(
                 title=_('Select a file'),
-                filetypes=[(_('Image or video'), self.filetype_exts)],
+                filetypes=[(_('Image or video'), self.fuv.filetype_exts)],
                 initialdir='~')
             if len(self.face_src_path) < 1:
                 return
             ext = os.path.splitext(self.face_src_path)[1][1:]
             self.showfm.showf_sv.set(self.face_src_path)
-            if ext in self.image_exts:
+            if ext in self.fuv.image_exts:
                 self.view_image()
-            elif ext in self.video_exts:
+            elif ext in self.fuv.video_exts:
                 self.source = self.face_src_path
                 self.play_video()
         elif show_f == 'camera':
@@ -402,10 +422,9 @@ class _MainUI():
             print('self.fxfy: ', self.fxfy)
 
     def show_nsrc_error(self):
-        unable_open_s = _('Unable to open video source')
         messagebox.showerror(
-            unable_open_s,
-            unable_open_s + ': ' + self.showf_sv)
+            self.fuv.unable_to_open_vid_source_str,
+            self.fuv.unable_to_open_vid_source_str + ': ' + self.showf_sv)
 
     def savef(self):
         if self.cur_info_id is None:
@@ -509,6 +528,8 @@ class _MainUI():
         e.widget.destroy()
         self.showed_face_frames[index] = None
         self.infofm.face_text.delete(1.0, END)
+        if np.all(np.array(self.showed_face_frames, dtype=object) is None):
+            self.clear_status_msg()
 
     def clear_faces_frame(self):
         for child in self.infofm.faces_frame.winfo_children():
@@ -536,7 +557,10 @@ class _MainUI():
                 print('len( self.face_rects ) < 1 ')
             return
 
-        self.show_face_was_detected_status_msg()
+        self.status_label_sv.set(
+            self.fuv.face_was_detected_str +
+            f'({self.fuv.click_to_remove_p})'
+        )
 
         if settings.debug():
             print(self.face_rects)
@@ -569,25 +593,29 @@ class _MainUI():
                 print('len( self.face_rects ) < 1 ')
             return
 
-        self.show_face_was_detected_status_msg()
+        self.status_label_sv.set(
+            self.fuv.face_was_detected_str +
+            f'({self.fuv.double_click_to_remove_r})'
+        )
 
         for i in range(len(self.face_rects)):
             self.add_face_label_r(i)
 
     def show_nsrc_error(self):
-        unable_open_s = _('Unable to open video source')
         messagebox.showerror(
-            unable_open_s,
-            unable_open_s + ': ' + self.showf_sv)
+            self.fuv.unable_to_open_vid_source_str,
+            self.fuv.unable_to_open_vid_source_str + ': ' + self.showf_sv)
 
     def show_data_empty(self):
         unable_open_s = _('Nothing enter')
-        msg = _("You haven't entered anything yet!")
-        self.show_status_msg(msg)
-        messagebox.showerror(unable_open_s, msg, )
+        self.show_status_msg(self.fuv.nothing_was_entered_str)
+        messagebox.showerror(unable_open_s, self.fuv.nothing_was_entered_str)
 
     def show_no_face_was_detected_status_msg(self):
-        self.show_status_msg(_('No face was detected.'))
+        self.show_status_msg(self.fuv.no_face_was_detected_str)
 
     def show_face_was_detected_status_msg(self):
-        self.show_status_msg(_('Face was detected.'))
+        self.show_status_msg(self.fuv.face_was_detected_str)
+
+    def clear_status_msg(self):
+        self.status_label_sv.set('')
