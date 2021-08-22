@@ -2,9 +2,9 @@ opencv-contrib-python
 PyYAML
 Pillow
 numpy
-Babel
 
 # dev
+Babel
 pep8
 autopep8
 isort

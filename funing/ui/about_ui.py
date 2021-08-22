@@ -28,5 +28,4 @@ class AboutToplevel():
             .pack()
 
 
-def about_toplevel():
-    return AboutToplevel().about_tl
+def about_toplevel(): return AboutToplevel().about_tl
