@@ -117,4 +117,4 @@ class BottomFrame():
 
     def place(self):
         self.status_label.grid(column=0, row=1, sticky=W)
-        self.about_fn_btn.grid(column=4, row=1)
+        self.about_fn_btn.grid(column=1, row=1, sticky=E)
