@@ -96,7 +96,7 @@ msgstr "Pick"
 msgid "Write it with certain rules so that you can analyze it later"
 msgstr ""
 "Write it in toml or yaml format, so it's a lot easier for you to analyze "
-"it"
+"it."
 
 #: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:97
 msgid "Save"

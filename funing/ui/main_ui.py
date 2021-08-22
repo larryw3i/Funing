@@ -20,7 +20,7 @@ class MainUI():
         self.showframe = ShowFrame(tk.Frame(self.root))
         # entry_frame
         self.infoframe = InfoFrame(tk.Frame(self.root))
-        # rbmix_frame
+        # bottomframe
         self.bottomframe = BottomFrame(self.root)
 
     def place(self):
