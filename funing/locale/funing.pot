@@ -1,55 +1,61 @@
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:106
-msgid "No desktop environment is detected! "
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:40
+msgid "Face was detected."
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:109
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:614
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:41
+msgid "No face was detected."
+msgstr ""
+
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:42
 msgid "You haven't entered anything yet!"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:157
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:43
+msgid "Unable to open video source."
+msgstr ""
+
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:44
+msgid "Click the picked face image to remove."
+msgstr ""
+
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:46
+msgid "Double click the face image to remove."
+msgstr ""
+
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:123
+msgid "No desktop environment is detected! "
+msgstr ""
+
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:174
 msgid "Recognizer training. . ."
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:160
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:177
 msgid "Recognizer finish training."
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:198
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:215
 #: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:52
 msgid "Pause"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:204
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:222
 msgid "Play"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:297
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:295
 msgid "Select a file"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:298
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:296
 msgid "Image or video"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:424
-msgid "No face was detected."
-msgstr ""
-
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:427
-msgid "Face was detected."
-msgstr ""
-
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:463
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:607
-msgid "Unable to open video source"
-msgstr ""
-
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:523
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:484
 msgid "No informations found"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:613
+#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:610
 msgid "Nothing enter"
 msgstr ""
 
@@ -91,15 +97,15 @@ msgstr ""
 msgid "Pick"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:94
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:92
 msgid "Write it with certain rules so that you can analyze it later"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:97
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:95
 msgid "Save"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:114
+#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:113
 msgid "Welcome to Funing."
 msgstr ""
 
