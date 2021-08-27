@@ -8,13 +8,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-27 22:42+0800\n"
+"POT-Creation-Date: 2021-08-27 23:07+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:40
@@ -165,6 +165,10 @@ msgid ""
 msgstr ""
 "信息编写要中规中矩, 比如yaml或toml, \n"
 "这样你分析它们就变得易如反掌。"
+
+#: funing/ui/about_ui.py:26
+msgid "From larryw3i & contributors"
+msgstr "来自larryw3i和贡献者们"
 
 #~ msgid "Restart Funing Now?"
 #~ msgstr "重启应用?"

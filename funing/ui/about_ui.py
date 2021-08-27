@@ -21,11 +21,10 @@ class AboutToplevel():
             cursor="hand2")
         self.source_page_label.bind(
             "<Button-1>",
-            lambda e: webbrowser.open_new(
-                source_page))
+            lambda e: webbrowser.open_new(source_page))
         self.source_page_label.pack()
-        Label(self.about_tl, text=_('Licensed under the MIT license'))\
-            .pack()
+        Label(self.about_tl, text=_('Licensed under the MIT license')).pack()
+        Label(self.about_tl, text=_('From larryw3i & contributors')).pack()
 
 
 def about_toplevel(): return AboutToplevel().about_tl

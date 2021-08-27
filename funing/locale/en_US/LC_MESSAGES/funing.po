@@ -8,13 +8,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-27 22:42+0800\n"
+"POT-Creation-Date: 2021-08-27 23:07+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:40
@@ -164,6 +164,10 @@ msgid ""
 "that you can analyze it later"
 msgstr ""
 "Write it in toml or yaml format, so it's a lot easier for you to analyze it."
+
+#: funing/ui/about_ui.py:26
+msgid "From larryw3i & contributors"
+msgstr ""
 
 #~ msgid "tolerance"
 #~ msgstr "tolerance(0.1-0.6)"

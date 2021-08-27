@@ -1,6 +1,6 @@
 import setuptools
 import re
-from funing import __version__. __appauthor__
+from funing import __version__, __appauthor__
 
 long_description = open("README.md", "r", encoding="utf-8").read()
 

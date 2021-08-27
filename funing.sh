@@ -58,6 +58,7 @@ _test(){
     bdist
     pip3 uninstall funing -y
     pip3 install dist/*.whl
+    funing
 }
 
 
