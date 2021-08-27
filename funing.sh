@@ -45,7 +45,7 @@ _pip3(){
 }
 
 twine_upload(){
-    twine upload dist/*
+    twine upload --verbose dist/*
 }
 
 bdist(){
@@ -75,5 +75,6 @@ msgf(){     _msgfmt;            }
 xget(){     _xgettext;          }
 
 ts(){       _test;              }
+bdup(){     bd; tu;   }
 
 ${_args[0]}
