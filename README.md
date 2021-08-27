@@ -5,6 +5,7 @@ install_requires=[
     'PyYAML >= 5.3.1',
     'Pillow >= 8.3.0',
     'numpy >= 1.21.1',
+    'appdirs >= 1.4.3'
 ]
 ```
 a **simple** face recognition GUI, try it just do:  
