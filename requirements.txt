@@ -2,6 +2,7 @@ opencv-contrib-python
 PyYAML
 Pillow
 numpy
+appdirs
 
 # dev
 pip

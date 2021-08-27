@@ -21,7 +21,7 @@ import yaml
 from cv2 import haarcascades
 from PIL import Image, ImageTk
 
-from funing import settings
+from funing import *
 from funing._ui import error
 from funing._ui.lang import _
 from funing.ui.about_ui import about_toplevel
@@ -122,7 +122,7 @@ class _MainUI():
         except BaseException:
             print(_('No desktop environment is detected! '))
             exit()
-        if settings.data_empty():
+        if data_empty():
             self.show_status_msg(self.fuv.nothing_was_entered_str)
         else:
             self.recognizer_train()
@@ -137,9 +137,9 @@ class _MainUI():
         ids = []
         labels = []
         label = 0
-        subdirs = os.listdir(settings.faces_path)
+        subdirs = os.listdir(faces_path)
         for subdir in subdirs:
-            subpath = os.path.join(settings.faces_path, subdir)
+            subpath = os.path.join(faces_path, subdir)
             if os.path.isdir(subpath):
                 ids.append(subdir)
                 for filename in os.listdir(subpath):
@@ -214,7 +214,7 @@ class _MainUI():
             self.refresh_frame()
             self.showfm.pp_sv.set(_('Pause'))
             self.show_status_msg('')
-            if settings.debug():
+            if debug:
                 print('Play. . .')
 
         else:
@@ -225,7 +225,7 @@ class _MainUI():
                 self.show_face_was_detected_status_msg()
             else:
                 self.show_no_face_was_detected_status_msg()
-            if settings.debug():
+            if debug:
                 print('Pause. . .')
 
     def clear_face_text(self):
@@ -257,7 +257,7 @@ class _MainUI():
         e.widget.destroy()
         if len(self.picked_face_frames) < 1:
             self.clear_status_msg()
-        if settings.debug():
+        if debug:
             print(len(self.picked_face_frames))
 
     def show_go(self, *args):
@@ -364,7 +364,7 @@ class _MainUI():
         r0 = self.frame_width / self.frame_height
         r1 = r0 / r
         self.fxfy = h / self.frame_height if r1 < r else w / self.frame_width
-        if settings.debug():
+        if debug:
             print('self.fxfy: ', self.fxfy)
 
     def view_image(self):
@@ -418,7 +418,7 @@ class _MainUI():
         r0 = self.frame_width / self.frame_height
         r1 = r0 / r
         self.fxfy = h / self.frame_height if r1 < r else w / self.frame_width
-        if settings.debug():
+        if debug:
             print('self.fxfy: ', self.fxfy)
 
     def show_nsrc_error(self):
@@ -430,10 +430,10 @@ class _MainUI():
         if self.cur_info_id is None:
             return
         info = self.infofm.face_text.get("1.0", "end-1c")
-        info_file_path = os.path.join(settings.infos_path, self.cur_info_id)
+        info_file_path = os.path.join(infos_path, self.cur_info_id)
         open(info_file_path, 'w+').write(info)
         if self.fdoing == FDoing.PICK:
-            img_path = os.path.join(settings.faces_path, self.cur_info_id)
+            img_path = os.path.join(faces_path, self.cur_info_id)
             os.makedirs(img_path, exist_ok=True)
             count = 0
             for f in self.picked_face_frames:
@@ -441,7 +441,7 @@ class _MainUI():
                 count += 1
             self.cur_info_id = None
 
-        if settings.debug():
+        if debug:
             print('info > ' + info)
         self.recognizer_train()
 
@@ -477,7 +477,7 @@ class _MainUI():
         self.zoomed_in_face_label = (label, index)
 
         info_file_path = os.path.join(
-            settings.infos_path, self.cur_info_id)
+            infos_path, self.cur_info_id)
         self.infofm.face_text.delete(1.0, END)
 
         if not os.path.exists(info_file_path):
@@ -553,7 +553,7 @@ class _MainUI():
 
         if len(self.face_rects) < 1:
             self.show_no_face_was_detected_status_msg()
-            if settings.debug():
+            if debug:
                 print('len( self.face_rects ) < 1 ')
             return
 
@@ -562,7 +562,7 @@ class _MainUI():
             f'({self.fuv.click_to_remove_p})'
         )
 
-        if settings.debug():
+        if debug:
             print(self.face_rects)
             print(type(self.face_rects))
 
@@ -574,7 +574,7 @@ class _MainUI():
         if self.source_type == SourceType.NULL:
             return
 
-        if settings.data_empty():
+        if data_empty():
             self.show_data_empty()
             return
 
@@ -589,7 +589,7 @@ class _MainUI():
 
         if len(self.face_rects) < 1:
             self.show_no_face_was_detected_status_msg()
-            if settings.debug():
+            if debug:
                 print('len( self.face_rects ) < 1 ')
             return
 

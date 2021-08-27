@@ -1,5 +1,7 @@
 #!/usr/bin/bash
 
+_args=("$@") # All parameters from terminal.
+
 update_gitignore(){
     git rm -r --cached .
     git add .
@@ -10,48 +12,67 @@ update_gitignore(){
     echo "gitignore updated!"
 }
 
-twine_upload(){
-    twine upload dist/*
+_xgettext(){
+    xgettext -v -j -L Python --output=funing/locale/funing.pot \
+    `find ./funing/ -name "*.py"`
+
+    for _po in $(find ./funing/locale/ -name "*.po"); do
+        msgmerge -U -v $_po ./funing/locale/funing.pot
+    done
 }
 
-bdist(){
-    # pip install -U setuptools wheel twine  launchpadlib
-    # pip install -r requirements.txt
-    python3 test.py kc
-    python3 funing.py pbc
-    rm -rf dist/ build/ funing.egg-info/
-    python3 setup.py sdist bdist_wheel
-    pip3 uninstall funing
-    pip3 install dist/*.whl
+_msgfmt(){
+    for _po in $(find ./funing/locale -name "*.po"); do
+        echo $_po ${_po/.po/.mo}
+        msgfmt -v -o ${_po/.po/.mo}  $_po
+    done
 }
 
 git_add(){
     isort ./funing/
-    autopep8 -i -a -a -r  ./funing/
+    autopep8 -i -a -a -r -v ./funing/
     isort ./funing.py
-    autopep8 -i -a -a -r  ./funing.py
+    autopep8 -i -a -a -r -v ./funing.py
     git add .
 }
 
 cp_locale_cn(){
-    python3 funing.py bc
     cp -r funing/locale/zh_Hans/* funing/locale/zh_CN/
-}
-
-be_bu_bc(){
-    python3 funing.py be bu bc
 }
 
 _pip3(){
     pip3 install -U -r requirements.txt
 }
 
-euc(){  be_bu_bc;}
-tu(){   twine_upload; }
-ug(){   update_gitignore; }
-clc(){  cp_locale_cn;}
-gita(){ clc; git_add;}
-bd(){   clc; bdist; }
-p3(){   _pip3;}
+twine_upload(){
+    twine upload dist/*
+}
 
-$1
+bdist(){
+    _msgfmt
+    rm -rf dist/ build/ funing.egg-info/
+    python3 setup.py sdist bdist_wheel
+}
+
+_test(){
+    bdist
+    pip3 uninstall funing -y
+    pip3 install dist/*.whl
+}
+
+
+euc(){      be_bu_bc;           }
+tu(){       twine_upload;       }
+ug(){       update_gitignore;   }
+
+clc(){      cp_locale_cn;       }
+gita(){     clc; git_add;       }
+bd(){       clc; bdist;         }
+
+p3(){       _pip3;              }
+msgf(){     _msgfmt;            }
+xget(){     _xgettext;          }
+
+ts(){       _test;              }
+
+${_args[0]}

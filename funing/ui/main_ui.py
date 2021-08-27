@@ -7,15 +7,14 @@ from datetime import datetime
 from tkinter import *
 from tkinter import ttk
 
-# from langcodes import Language
-from funing import settings
+from funing import *
 from funing._ui.lang import _
 
 
 class MainUI():
     def __init__(self):
         self.root = tk.Tk()
-        self.root.title(_('Funing') + '(' + settings.version + ')')
+        self.root.title(_('Funing') + '(' + version + ')')
         # frame
         self.showframe = ShowFrame(tk.Frame(self.root))
         # entry_frame

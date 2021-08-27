@@ -1,12 +1,13 @@
 import setuptools
 import re
-from funing.settings import version
+from funing import __version__. __appauthor__
 
 long_description = open("README.md", "r", encoding="utf-8").read()
+
 setuptools.setup(
     name="funing",
-    version=version,
-    author="larryw3i",
+    version=__version__,
+    author=__appauthor__,
     author_email="",
     description="A face recognition gui",
     long_description=long_description,
@@ -29,6 +30,7 @@ setuptools.setup(
         'PyYAML >= 5.3.1',
         'Pillow >= 8.3.0',
         'numpy >= 1.21.1',
+        'appdirs >= 1.4.3'
     ],
     include_package_data = True,
 )

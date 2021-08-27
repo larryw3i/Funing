@@ -56,7 +56,7 @@ coverage.xml
 
 # Django stuff:
 *.log
-local_settings.py
+local_py
 db.sqlite3
 db.sqlite3-journal
 
@@ -155,3 +155,6 @@ output/
 
 # funing/locale/funing.po
 funing/locale/funing.po
+
+# ~
+*~
