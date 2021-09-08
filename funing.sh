@@ -28,11 +28,15 @@ _msgfmt(){
     done
 }
 
-git_add(){
+p8(){
     isort ./funing/
     autopep8 -i -a -a -r -v ./funing/
     isort ./funing.py
     autopep8 -i -a -a -r -v ./funing.py
+}
+
+git_add(){
+    p8
     git add .
 }
 
@@ -75,6 +79,6 @@ msgf(){     _msgfmt;            }
 xget(){     _xgettext;          }
 
 ts(){       _test;              }
-bdup(){     bd; tu;   }
+bdup(){     bd; tu;             }
 
 ${_args[0]}

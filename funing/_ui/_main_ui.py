@@ -431,7 +431,8 @@ class _MainUI():
             return
         info = self.infofm.face_text.get("1.0", "end-1c")
         info_file_path = os.path.join(infos_path, self.cur_info_id)
-        with open(info_file_path, 'w+') as f: f.write(info)
+        with open(info_file_path, 'w+') as f:
+            f.write(info)
         if self.fdoing == FDoing.PICK:
             img_path = os.path.join(faces_path, self.cur_info_id)
             os.makedirs(img_path, exist_ok=True)

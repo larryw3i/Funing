@@ -58,7 +58,8 @@ if not os.path.exists(_config_path):
     shutil.copyfile(config_path, _config_path)
 elif prev_version != __version__:
     config_yml.update({'version': __version__})
-    with open(_config_path, 'w') as f: yaml.safe_dump(config_yml, f )
+    with open(_config_path, 'w') as f:
+        yaml.safe_dump(config_yml, f)
 else:
     pass
 
