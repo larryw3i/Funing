@@ -72,7 +72,7 @@ search(){
 
 euc(){      be_bu_bc;           }
 tu(){       twine_upload;       }
-ug(){       update_gitignore;   }
+ugi(){      update_gitignore;   }
 
 clc(){      cp_locale_cn;       }
 gita(){     clc; git_add;       }
