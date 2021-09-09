@@ -65,6 +65,10 @@ _test(){
     funing
 }
 
+search(){
+    find ./funing -name '*.py' -exec grep -i "${_args[1]}" {} +
+    find ./setup.py -exec grep -i "${_args[1]}" {} +
+}
 
 euc(){      be_bu_bc;           }
 tu(){       twine_upload;       }
