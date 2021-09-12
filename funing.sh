@@ -40,10 +40,6 @@ git_add(){
     git add .
 }
 
-cp_locale_cn(){
-    cp -r funing/locale/zh_Hans/* funing/locale/zh_CN/
-}
-
 _pip3(){
     pip3 install -U -r requirements.txt
 }
@@ -65,16 +61,10 @@ _test(){
     funing
 }
 
-search(){
-    find ./funing -name '*.py' -exec grep -i "${_args[1]}" {} +
-    find ./setup.py -exec grep -i "${_args[1]}" {} +
-}
 
-euc(){      be_bu_bc;           }
 tu(){       twine_upload;       }
 ugi(){      update_gitignore;   }
 
-clc(){      cp_locale_cn;       }
 gita(){     clc; git_add;       }
 bd(){       clc; bdist;         }
 
