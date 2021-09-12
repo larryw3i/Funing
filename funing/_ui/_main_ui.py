@@ -76,6 +76,16 @@ class _MainUI():
         self.source = -1
         self.root_after = -1
         self.fxfy = None
+        
+        # UI
+        self.main_ui_file= os.path.join( ui_path, "about.ui")
+        self.builder = builder = pygubu.Builder(_)
+        builder.add_resource_path(project_path)
+        builder.add_from_file(self.main_ui_file)
+        # self.mainwindow = builder.get_object('about_toplevel', master)
+
+        builder.connect_callbacks(self)
+
         self.showf_sv = None
         self.showfm = self.mainui.showframe
         self.infofm = self.mainui.infoframe

@@ -49,6 +49,8 @@ prev_version = \
     config_yml.get('version', '')
 backup_path = \
     os.path.join(user_data_path, '.cp')
+ui_path = \
+    os.path.join( project_path, 'ui' )
 
 for p in [faces_path, infos_path, backup_path]:
     if not os.path.exists(p):
