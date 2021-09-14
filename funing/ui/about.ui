@@ -8,7 +8,7 @@
     <property name="width">200</property>
     <child>
       <object class="ttk.Label" id="name_label">
-        <property name="font">{ ;} 20 {bold}</property>
+        <property name="font">{None} 20 {bold}</property>
         <property name="padding">10</property>
         <property name="text" translatable="yes">Funing</property>
         <layout manager="pack">
@@ -37,7 +37,7 @@
       <object class="ttk.Label" id="license_label">
         <property name="justify">center</property>
         <property name="text" translatable="yes">Licensed under the MIT license
-From larryw3i &amp; contributors</property>
+--From larryw3i &amp; contributors--</property>
         <layout manager="pack">
           <property name="propagate">True</property>
           <property name="side">top</property>
