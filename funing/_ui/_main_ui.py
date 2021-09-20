@@ -68,28 +68,32 @@ class FDoing(Enum):
 
 class _MainUI():
     def __init__(self):
+
+        # enum
+        self.fuv = FUV()
+        self.fdoing = FDoing.PICK
+
+        # ui
         self.mainui = MainUI()
         self.mainui.place()
-
-        self.fuv = FUV()
-
-        self.source = -1
-        self.root_after = -1
-        self.fxfy = None
-        self.showf_sv = None
         self.showfm = self.mainui.showframe
         self.infofm = self.mainui.infoframe
         self.bottomframe = self.mainui.bottomframe
         self.status_label_sv = self.bottomframe.status_label_sv
         self.about_tl = None
+        self.showf_sv = None
+
         # vid
         self.vid = None
         self.frame_width = 0
         self.frame_height = 0
         self.vid_fps = 0
-
+        self.fxfy = None
+        self.source = -1
         self.source_type = SourceType.NULL
+        self.paused = False
 
+        # vid frame
         self.cur_frame = None
         self.face_rects = []
         self.picked_face_frames = []
@@ -98,17 +102,13 @@ class _MainUI():
         self.zoom_in_size = (210, 210)
         self.save_size = (100, 100)
         self.zoomed_in_face_label = (0, 0)
-
-        self.fdoing = FDoing.PICK
-
-        self.paused = False
-        # rec_result
         self.rec_gray_img = None
-        # rec_faces
-        self.recfs = []
+        self.root_after = -1
+
         # info
         self.cur_info_id = None
         self.info_ids = []
+
         # cv2
         self.hff_xml_path = os.path.join(haarcascades,
                                          "haarcascade_frontalface_default.xml")
@@ -122,11 +122,17 @@ class _MainUI():
         except BaseException:
             print(_('No desktop environment is detected! '))
             exit()
+
+        # train recognizer
         if data_empty():
             self.show_status_msg(self.fuv.nothing_was_entered_str)
         else:
             self.recognizer_train()
+
+        # events
         self.set_ui_events()
+
+        # mainloop
         self.mainui.mainloop()
 
     def load_images(self):
@@ -153,14 +159,9 @@ class _MainUI():
         labels = np.asarray(labels)
         return images, labels, ids
 
-    def about_tl_destroy(self):
-        self.about_tl.destroy()
-        self.about_tl = None
-
     def about_fn(self):
         if self.about_tl is None:
             self.about_tl = about_toplevel()
-            self.about_tl.protocol("WM_DELETE_WINDOW", self.about_tl_destroy)
             self.about_tl.mainloop()
         else:
             self.about_tl.destroy()
