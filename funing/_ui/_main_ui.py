@@ -23,11 +23,11 @@ from PIL import Image, ImageTk
 
 from funing import *
 from funing._ui import error
-from funing._ui.lang import _
+from funing._ui.i18n import _
 from funing.ui.about_ui import about_toplevel
 from funing.ui.main_ui import MainUI
 
-# from funing._ui.lang import _
+# from funing._ui.i18n import _
 # self.frame_width, self.frame_height, __ = self.cur_frame.shape
 
 
@@ -78,8 +78,8 @@ class _MainUI():
         self.mainui.place()
         self.showfm = self.mainui.showframe
         self.infofm = self.mainui.infoframe
-        self.bottomframe = self.mainui.bottomframe
-        self.status_label_sv = self.bottomframe.status_label_sv
+        self.bottomfm = self.mainui.bottomframe
+        self.status_label_sv = self.bottomfm.status_label_sv
         self.about_tl = None
         self.showf_sv = None
 
@@ -157,6 +157,12 @@ class _MainUI():
         labels = np.asarray(labels)
         return images, labels, ids
 
+    def recognizer_train(self):
+        self.show_status_msg(_('Recognizer training. . .'))
+        images, labels, self.info_ids = self.load_images()
+        self.recognizer.train(images, labels)
+        self.show_status_msg(_('Recognizer finish training.'))
+
     def about_fn(self):
         if self.about_tl is None:
             self.about_tl = about_toplevel()
@@ -168,12 +174,6 @@ class _MainUI():
 
     def show_status_msg(self, msg):
         self.status_label_sv.set(msg)
-
-    def recognizer_train(self):
-        self.show_status_msg(_('Recognizer training. . .'))
-        images, labels, self.info_ids = self.load_images()
-        self.recognizer.train(images, labels)
-        self.show_status_msg(_('Recognizer finish training.'))
 
     def open_vid_cap(self):
         self.vid = cv2.VideoCapture(self.source)
@@ -197,7 +197,7 @@ class _MainUI():
         self.showfm.showf_go_btn['command'] = self.show_go
         self.showfm.showf_optionmenu_sv.trace('w', self.show_from)
         self.infofm.save_btn['command'] = self.savef
-        self.bottomframe.about_fn_btn['command'] = self.about_fn
+        self.bottomfm.about_fn_btn['command'] = self.about_fn
         self.mainui.root.protocol("WM_DELETE_WINDOW", self.destroy)
 
     def destroy(self):

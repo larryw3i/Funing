@@ -8,7 +8,7 @@ from tkinter import *
 from tkinter import ttk
 
 from funing import *
-from funing._ui.lang import _
+from funing._ui.i18n import _
 
 
 class MainUI():
