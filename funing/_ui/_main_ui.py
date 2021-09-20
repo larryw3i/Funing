@@ -85,8 +85,7 @@ class _MainUI():
 
         # vid
         self.vid = None
-        self.frame_width = 0
-        self.frame_height = 0
+        self.frame_width = self.frame_height = 0
         self.vid_fps = 0
         self.fxfy = None
         self.source = -1
@@ -96,8 +95,7 @@ class _MainUI():
         # vid frame
         self.cur_frame = None
         self.face_rects = []
-        self.picked_face_frames = []
-        self.showed_face_frames = []
+        self.picked_face_frames = self.showed_face_frames = []
         self.show_size = (200, 200)
         self.zoom_in_size = (210, 210)
         self.save_size = (100, 100)
