@@ -15,11 +15,11 @@ class MainUI():
     def __init__(self):
         self.root = tk.Tk()
         self.root.title(_('Funing') + '(' + version + ')')
-        # frame
-        self.showframe = ShowFrame(tk.Frame(self.root))
+        # show_frame
+        self.showframe = ShowFrame(self.root)
         # entry_frame
-        self.infoframe = InfoFrame(tk.Frame(self.root))
-        # bottomframe
+        self.infoframe = InfoFrame(self.root)
+        # bottom_frame
         self.bottomframe = BottomFrame(self.root)
 
     def place(self):
@@ -32,8 +32,8 @@ class MainUI():
 
 
 class ShowFrame():
-    def __init__(self, frame):
-        self.frame = frame
+    def __init__(self, root):
+        self.frame = tk.Frame(root)
         # video label
         self.vid_frame_label = tk.Label(self.frame)
 
@@ -48,15 +48,15 @@ class ShowFrame():
             self.frame, self.showf_optionmenu_sv, *self.showf_t_dict.values())
 
         # shoot
-        self.pp_sv = tk.StringVar(frame, _('Pause'))
+        self.pp_sv = tk.StringVar(self.frame, _('Pause'))
         self.pp_btn = tk.Button(self.frame,
                                 textvariable=self.pp_sv)
 
-        self.rec_sv = tk.StringVar(frame, _('Recognize'))
+        self.rec_sv = tk.StringVar(self.frame, _('Recognize'))
         self.rec_btn = tk.Button(self.frame,
                                  textvariable=self.rec_sv)
 
-        self.pick_sv = tk.StringVar(frame, _('Pick'))
+        self.pick_sv = tk.StringVar(self.frame, _('Pick'))
         self.pick_btn = tk.Button(self.frame,
                                   textvariable=self.pick_sv)
 
@@ -71,18 +71,17 @@ class ShowFrame():
         self.showf_optionmenu.grid(column=2, row=4, sticky=W)
         self.pp_btn.grid(column=3, row=4)
         self.rec_btn.grid(column=4, row=4)
-
         self.pick_btn.grid(column=5, row=4)
+
         # place frame
-        self.frame.grid(column=0, row=0)
+        self.frame.grid(row=0, column=0)
 
 
 class InfoFrame():
-    def __init__(self, frame):
-        self.frame = frame
+    def __init__(self, root):
+        self.frame = tk.Frame(root)
         self.face_show_frame = tk.Frame(self.frame)
         self.info_enter_frame = tk.Frame(self.frame)
-
         self.faces_frame = tk.Frame(self.frame)
 
         self.ft_sb = tk.Scrollbar(self.info_enter_frame, orient=VERTICAL)
@@ -101,13 +100,13 @@ class InfoFrame():
         self.info_enter_frame.grid(column=0, row=3, columnspan=5)
         self.face_text_tip_label.grid(column=0, row=4, columnspan=5)
         self.save_btn.grid(column=2, row=5)
-        self.frame.grid(column=1, row=0)
+        self.frame.grid(row=0, column=1)
         pass
 
 
 class BottomFrame():
-    def __init__(self, frame):
-        self.frame = frame
+    def __init__(self, root):
+        self.frame = tk.Frame(root)
         self.status_label_sv = StringVar(
             self.frame, value=_('Welcome to Funing.'))
         self.status_label = Label(
@@ -115,5 +114,6 @@ class BottomFrame():
         self.about_fn_btn = Button(self.frame, text=_('About Funing'))
 
     def place(self):
-        self.status_label.grid(column=0, row=1, sticky=W)
-        self.about_fn_btn.grid(column=1, row=1, sticky=E)
+        self.status_label.pack(side=LEFT)
+        self.about_fn_btn.pack(side=RIGHT)
+        self.frame.grid(row=1, column=0, columnspan=2, sticky=W + E)
