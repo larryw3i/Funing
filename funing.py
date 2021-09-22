@@ -19,4 +19,4 @@ if __name__ == '__main__':
         if a in test_args:
             os.environ['FUNING_TEST'] = '1'
         sys.argv[0] = re.sub(r'(-script\.pyw|\.exe)?$', '', sys.argv[0])
-        run()
+        simple()
