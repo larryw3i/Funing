@@ -3,6 +3,7 @@
 import gettext
 import os
 import re
+import subprocess
 import sys
 import time
 import tkinter as tk
@@ -159,11 +160,8 @@ class _MainUI():
         self.show_status_msg(_('Recognizer finish training.'))
 
     def ipynb_fn(self):
-        try:
-            import netbook
-        except except ImportError as e:
-
-        pass
+        subprocess.Popen(f'cd {user_ipynb_dir_path} && jupyter-notebook',
+                         shell=True)
 
     def about_fn(self):
         if self.about_tl is None:
