@@ -65,8 +65,8 @@ _test(){
 tu(){       twine_upload;       }
 ugi(){      update_gitignore;   }
 
-gita(){     clc; git_add;       }
-bd(){       clc; bdist;         }
+gita(){     git_add;       }
+bd(){       bdist;         }
 
 p3(){       _pip3;              }
 msgf(){     _msgfmt;            }
