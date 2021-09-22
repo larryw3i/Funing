@@ -21,7 +21,7 @@ setuptools.setup(
     ],
     entry_points={
         'console_scripts': [
-            'funing=funing:run',
+            'funing=funing:simple',
         ]
     },
     python_requires='>=3.6',
