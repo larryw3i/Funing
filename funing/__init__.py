@@ -38,6 +38,16 @@ faces_path = \
     os.path.join(user_data_path, 'faces')
 infos_path = \
     os.path.join(user_data_path, 'infos')
+
+user_ipynb_dir_path = \
+    os.path.join(user_data_path, 'ipynb')
+user_ipynb_path = \
+    os.path.join(user_ipynb_dir_path, 'simple.your.ipynb')
+example_ipynb_path = \
+    os.path.join(user_ipynb_dir_path, 'simple.example.ipynb')
+project_ipynb_path = \
+    os.path.join(project_path, 'simple.ipynb')
+
 locale_langcodes =  \
     [d for d in os.listdir(locale_path)
      if os.path.isdir(os.path.join(locale_path, d))]
@@ -50,18 +60,21 @@ prev_version = \
 backup_path = \
     os.path.join(user_data_path, '.cp')
 
-for p in [faces_path, infos_path, backup_path]:
+user_dirs = [faces_path, infos_path, backup_path, user_ipynb_dir_path]
+for p in user_dirs:
     if not os.path.exists(p):
         os.makedirs(p)
 
+if not os.path.exists(user_ipynb_path):
+    shutil.copyfile(project_ipynb_path, user_ipynb_path)
+if not os.path.exists(example_ipynb_path):
+    shutil.copyfile(project_ipynb_path, example_ipynb_path)
 if not os.path.exists(_config_path):
     shutil.copyfile(config_path, _config_path)
 elif prev_version != __version__:
     config_yml.update({'version': __version__})
     with open(_config_path, 'w') as f:
         yaml.safe_dump(config_yml, f)
-else:
-    pass
 
 
 def data_empty(): return len(os.listdir(faces_path)) < 1

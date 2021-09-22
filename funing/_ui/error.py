@@ -11,6 +11,10 @@ def fp(content):
     print('::::::::::::::::::::::::::::::::::::::::::::')
 
 
+def notebook_nf():
+    fp_r_i('notebook', 'https://jupyter.org/install')
+
+
 def read_install(notfound, url):
     try:
         webbrowser.open(url)

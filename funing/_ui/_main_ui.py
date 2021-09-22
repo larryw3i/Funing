@@ -44,15 +44,10 @@ class FUV():
         self.click_to_remove_p = _('Click the picked face image to remove.')
         self.double_click_to_remove_r = \
             _('Double click the face image to remove.')
-
-        self.image_exts = [
-            'jpg', 'png', 'jpeg', 'webp'
-        ]
-        self.video_exts = [
-            'mp4', 'avi', '3gp', 'webm', 'mkv'
-        ]
-        self.filetype_exts = '*.' + \
-            ' *.'.join(self.image_exts + self.video_exts)
+        self.image_exts = ['jpg', 'png', 'jpeg', 'webp']
+        self.video_exts = ['mp4', 'avi', '3gp', 'webm', 'mkv']
+        self.filetype_exts = '*.' + ' *.'.join(
+            self.image_exts + self.video_exts)
 
 
 class SourceType(Enum):
@@ -163,6 +158,13 @@ class _MainUI():
         self.recognizer.train(images, labels)
         self.show_status_msg(_('Recognizer finish training.'))
 
+    def ipynb_fn(self):
+        try:
+            import netbook
+        except except ImportError as e:
+
+        pass
+
     def about_fn(self):
         if self.about_tl is None:
             self.about_tl = about_toplevel()
@@ -198,6 +200,7 @@ class _MainUI():
         self.showfm.showf_optionmenu_sv.trace('w', self.show_from)
         self.infofm.save_btn['command'] = self.savef
         self.bottomfm.about_fn_btn['command'] = self.about_fn
+        self.bottomfm.ipynb_fn_btn['command'] = self.ipynb_fn
         self.mainui.root.protocol("WM_DELETE_WINDOW", self.destroy)
 
     def destroy(self):
@@ -294,15 +297,19 @@ class _MainUI():
                 title=_('Select a file'),
                 filetypes=[(_('Image or video'), self.fuv.filetype_exts)],
                 initialdir='~')
+
             if len(self.face_src_path) < 1:
                 return
+
             ext = os.path.splitext(self.face_src_path)[1][1:]
             self.showfm.showf_sv.set(self.face_src_path)
+
             if ext in self.fuv.image_exts:
                 self.view_image()
             elif ext in self.fuv.video_exts:
                 self.source = self.face_src_path
                 self.play_video()
+
         elif show_f == 'camera':
             self.source = 0
             self.showfm.showf_sv.set(self.source)
