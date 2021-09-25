@@ -65,7 +65,7 @@ generate_po(){
     locale_path="${PWD}/funing/locale"
     new_po_dir_path="${locale_path}/${_args[1]}/LC_MESSAGES"
     new_po_path="${new_po_dir_path}/funing.po"
-    [ -f ${new_po_path} ] && echo "${new_po_path} exists." && exit 0
+    [ -f ${new_po_path} ] && echo "${new_po_path} exists." && return
     mkdir -p ${new_po_dir_path}
     cp ${locale_path}/funing.pot ${new_po_path}
 }
