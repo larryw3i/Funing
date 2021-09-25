@@ -16,3 +16,4 @@ prune .git/
 global-exclude *.po
 global-exclude *.pot
 global-exclude *.pyc
+global-exclude *~

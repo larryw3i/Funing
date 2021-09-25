@@ -30,8 +30,8 @@ locale_path = \
     os.path.join(project_path, 'locale')
 _config_path = \
     os.path.join(user_data_path, 'config.yml')
-config_path = _config_path if os.path.exists(_config_path) \
-    else os.path.join(project_path, 'config.example.yml')
+config_path = os.path.exists(_config_path) and _config_path or \
+    os.path.join(project_path, 'config.example.yml')
 config_yml = \
     yaml.safe_load(open(config_path, 'r'))
 faces_path = \
@@ -62,13 +62,13 @@ backup_path = \
 
 user_dirs = [faces_path, infos_path, backup_path, user_ipynb_dir_path]
 for p in user_dirs:
-    if not os.path.exists(p):
-        os.makedirs(p)
+    os.path.exists(p) or os.makedirs(p)
 
-if not os.path.exists(user_ipynb_path):
+os.path.exists(user_ipynb_path) or \
     shutil.copyfile(project_ipynb_path, user_ipynb_path)
-if not os.path.exists(example_ipynb_path):
+os.path.exists(example_ipynb_path) or \
     shutil.copyfile(project_ipynb_path, example_ipynb_path)
+
 if not os.path.exists(_config_path):
     shutil.copyfile(config_path, _config_path)
 elif prev_version != __version__:

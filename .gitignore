@@ -162,3 +162,5 @@ funing/locale/funing.po
 # .save
 *.save*
 
+# funing.build
+funing.build/
