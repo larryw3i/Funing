@@ -61,12 +61,21 @@ _test(){
     funing
 }
 
+generate_po(){
+    locale_path="${PWD}/funing/locale"
+    new_po_dir_path="${locale_path}/${_args[1]}/LC_MESSAGES"
+    new_po_path="${new_po_dir_path}/funing.po"
+    [ -f ${new_po_path} ] && echo "${new_po_path} exists." && exit 0
+    mkdir -p ${new_po_dir_path}
+    cp ${locale_path}/funing.pot ${new_po_path}
+}
 
 tu(){       twine_upload;       }
 ugi(){      update_gitignore;   }
+gpo(){      generate_po;        }
 
-gita(){     git_add;       }
-bd(){       bdist;         }
+gita(){     git_add;            }
+bd(){       bdist;              }
 
 p3(){       _pip3;              }
 msgf(){     _msgfmt;            }
