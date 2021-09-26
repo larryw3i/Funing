@@ -24,11 +24,11 @@ from PIL import Image, ImageTk
 
 from funing import *
 from funing._ui import error
-from funing._ui.i18n import _
+from funing.locale import _
 from funing.ui.about_ui import about_toplevel
 from funing.ui.main_ui import MainUI
 
-# from funing._ui.i18n import _
+# from funing.locale import _
 # self.frame_width, self.frame_height, __ = self.cur_frame.shape
 
 

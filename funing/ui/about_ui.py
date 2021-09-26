@@ -4,7 +4,7 @@ from tkinter import *
 from tkinter.ttk import *
 
 from funing import *
-from funing._ui.i18n import _
+from funing.locale import _
 
 
 class AboutToplevel():
