@@ -6,9 +6,7 @@ update_gitignore(){
     git rm -r --cached .
     git add .
     read -p "commit now?(y/N)" commit_now
-    if [ "$commit_now" = 'y' ] || [ "$commit_now" = 'Y' ]; then
-        git commit -m 'update .gitignore'
-    fi
+    [[ "Yy" == *"${commit_now}"* ]] && git commit -m 'update .gitignore'
     echo "gitignore updated!"
 }
 
@@ -65,7 +63,7 @@ generate_po(){
     locale_path="${PWD}/funing/locale"
     new_po_dir_path="${locale_path}/${_args[1]}/LC_MESSAGES"
     new_po_path="${new_po_dir_path}/funing.po"
-    [ -f ${new_po_path} ] && echo "${new_po_path} exists." && return
+    [[ -f ${new_po_path} ]] && echo "${new_po_path} exists." && return
     mkdir -p ${new_po_dir_path}
     cp ${locale_path}/funing.pot ${new_po_path}
 }
@@ -74,7 +72,7 @@ keep_code(){
     _uuid=$(uuid)
     cp_dir_path="${PWD}/.cp"
     uuid_dir_path="${cp_dir_path}/${_uuid//-/_}"
-    [ -d "${uuid_dir_path}" ] || mkdir -p ${uuid_dir_path}
+    [[ -d "${uuid_dir_path}" ]] || mkdir -p ${uuid_dir_path}
     mv build/ dist/ funing.build/ funing.egg-info/ ${uuid_dir_path}
 }
 
