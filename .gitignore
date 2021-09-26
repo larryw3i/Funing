@@ -164,3 +164,6 @@ funing/locale/funing.po
 
 # funing.build
 funing.build/
+
+# .cp
+.cp/

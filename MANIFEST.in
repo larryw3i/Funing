@@ -12,7 +12,8 @@ prune funing/.home/
 prune venv/
 prune tests/
 prune .git/
-prune funing.build
+prune funing.build/
+prune .cp/
 
 global-exclude *.po
 global-exclude *.pot

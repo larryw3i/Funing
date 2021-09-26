@@ -70,12 +70,21 @@ generate_po(){
     cp ${locale_path}/funing.pot ${new_po_path}
 }
 
+keep_code(){
+    _uuid=$(uuid)
+    cp_dir_path="${PWD}/.cp"
+    uuid_dir_path="${cp_dir_path}/${_uuid//-/_}"
+    [ -d "${uuid_dir_path}" ] || mkdir -p ${uuid_dir_path}
+    mv build/ dist/ funing.build/ funing.egg-info/ ${uuid_dir_path}
+}
+
 tu(){       twine_upload;       }
 ugi(){      update_gitignore;   }
 gpo(){      generate_po;        }
 
 gita(){     git_add;            }
 bd(){       bdist;              }
+kc(){       keep_code;          }
 
 p3(){       _pip3;              }
 msgf(){     _msgfmt;            }
