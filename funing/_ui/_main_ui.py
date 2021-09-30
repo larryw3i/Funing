@@ -309,7 +309,7 @@ class _MainUI():
                 self.play_video()
 
         elif show_f == 'camera':
-            self.source = 0
+            self.source = self.showf_sv = 0
             self.showfm.showf_sv.set(self.source)
             self.play_video()
 
