@@ -10,7 +10,7 @@ install_requires=[
     'appdirs >= 1.4.3'
 ]
 ```
-a **simple** face recognition GUI, try it just do:  
+a **simple** face recognition GUI, try it just type:  
 ```bash
 pip3 install funing; funing
 ```
