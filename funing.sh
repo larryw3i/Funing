@@ -3,8 +3,7 @@
 _args=("$@") # All parameters from terminal.
 
 update_gitignore(){
-    git rm -r --cached .
-    git add .
+    git rm -r --cached . && git add .
     read -p "commit now?(y/N)" commit_now
     [[ "Yy" == *"${commit_now}"* ]] && git commit -m 'update .gitignore'
     echo "gitignore updated!"
@@ -21,7 +20,7 @@ _xgettext(){
 
 _msgfmt(){
     for _po in $(find ./funing/locale -name "*.po"); do
-        echo $_po ${_po/.po/.mo}
+        echo -e "$_po ${_po/.po/.mo}"
         msgfmt -v -o ${_po/.po/.mo}  $_po
     done
 }
@@ -52,7 +51,7 @@ bdist(){
     python3 setup.py sdist bdist_wheel
 }
 
-_test(){
+_i_test(){
     bdist
     pip3 uninstall funing -y
     pip3 install dist/*.whl
@@ -60,7 +59,7 @@ _test(){
 }
 
 generate_po(){
-    locale_path="${PWD}/funing/locale"
+    locale_path="./funing/locale"
     new_po_dir_path="${locale_path}/${_args[1]}/LC_MESSAGES"
     new_po_path="${new_po_dir_path}/funing.po"
     [[ -f ${new_po_path} ]] && echo "${new_po_path} exists." && return
@@ -70,10 +69,15 @@ generate_po(){
 
 keep_code(){
     _uuid=$(uuid)
-    cp_dir_path="${PWD}/.cp"
+    cp_dir_path="./.cp"
     uuid_dir_path="${cp_dir_path}/${_uuid//-/_}"
     [[ -d "${uuid_dir_path}" ]] || mkdir -p ${uuid_dir_path}
     mv build/ dist/ funing.build/ funing.egg-info/ ${uuid_dir_path}
+}
+
+_start(){
+    [[ -f "./funing/locale/en_US/LC_MESSAGES/funing.mo" ]] || _msgfmt
+    python3 funing.py t
 }
 
 tu(){       twine_upload;       }
@@ -88,7 +92,8 @@ p3(){       _pip3;              }
 msgf(){     _msgfmt;            }
 xget(){     _xgettext;          }
 
-ts(){       _test;              }
+its(){       _i_test;           }
 bdup(){     bd; tu;             }
+_s(){       _start;             }
 
 ${_args[0]}

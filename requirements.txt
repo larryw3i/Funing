@@ -3,6 +3,7 @@ PyYAML
 Pillow
 numpy
 appdirs
+jupyterlab
 
 # dev
 pip

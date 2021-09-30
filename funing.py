@@ -3,12 +3,7 @@
 
 import getopt
 import os
-import re
-import shutil
 import sys
-import uuid
-from pathlib import Path
-
 from funing import *
 
 if __name__ == '__main__':
