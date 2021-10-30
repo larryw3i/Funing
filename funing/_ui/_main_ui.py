@@ -28,6 +28,22 @@ else:
     print('haarcascades could not be imported, funing exit.')
     exit()
 
+try:
+    from cv2.face import EigenFaceRecognizer_create as recognizer
+except BaseException:
+    print(
+        "\nIt seems that you have both 'opencv-python' and " +
+        "'opencv-contrib-python' installed, do you want to uninstall them " +
+        "and reinstall 'opencv-contrib-python'([y]/n)?", end=' ')
+    if input() in "Yy":
+        os.system('pip3 uninstall opencv-contrib-python opencv-python -v -y')
+        os.system('pip3 install opencv-contrib-python -v')
+        os.execv(sys.executable, ['python'] + sys.argv)
+    else:
+        print(
+            '"EigenFaceRecognizer_create" could not be imported, funing exit.')
+        exit()
+
 
 from PIL import Image, ImageTk
 
@@ -115,7 +131,7 @@ class _MainUI():
         # cv2
         self.hff_xml_path = os.path.join(haarcascades,
                                          "haarcascade_frontalface_default.xml")
-        self.recognizer = cv2.face.EigenFaceRecognizer_create()
+        self.recognizer = recognizer()
         self.face_casecade = cv2.CascadeClassifier(self.hff_xml_path)
 
         # screen

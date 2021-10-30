@@ -16,7 +16,7 @@ from pathlib import Path
 import yaml
 from appdirs import user_data_dir
 
-__version__ = version = "0.2.43"
+__version__ = version = "0.2.44"
 __appname__ = appname = 'Funing'
 __appauthor__ = appauthor = 'Larry & Contributors'
 
