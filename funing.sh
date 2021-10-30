@@ -35,8 +35,7 @@ p8(){
 }
 
 git_add(){
-    p8
-    git add .
+    p8; git add .
 }
 
 _pip3(){
@@ -44,7 +43,7 @@ _pip3(){
 }
 
 twine_upload(){
-    twine upload --verbose dist/*
+    twine upload dist/*
 }
 
 bdist(){
