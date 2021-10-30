@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-31 00:27+0800\n"
+"POT-Creation-Date: 2021-10-31 00:34+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -187,7 +187,7 @@ msgstr ""
 msgid "haarcascades could not be imported, funing exit."
 msgstr ""
 
-#: funing/_ui/_main_ui.py:42 funing/_ui/_main_ui.py:42
+#: funing/_ui/_main_ui.py:42
 msgid ""
 "\n"
 "It seems that you have both 'opencv-python' and 'opencv-contrib-python' "
@@ -201,4 +201,11 @@ msgstr ""
 
 #: funing/ui/main_ui.py:116 funing/ui/main_ui.py:116
 msgid "Open simple.ipynb file"
+msgstr ""
+
+#: funing/_ui/_main_ui.py:42
+msgid ""
+"It seems that you have both 'opencv-python' and 'opencv-contrib-python' "
+"installed, do you want to uninstall them and reinstall 'opencv-contrib-"
+"python'([y]/n)?"
 msgstr ""

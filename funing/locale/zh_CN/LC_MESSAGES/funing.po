@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funing 0.2.44\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-31 00:20+0800\n"
+"POT-Creation-Date: 2021-10-31 00:34+0800\n"
 "PO-Revision-Date: 2021-10-31 00:30+0800\n"
 "Last-Translator: larry <larryw3i@163.com>\n"
 "Language-Team: Chinese (Simplified) <larryw3i@163.com>\n"
@@ -194,6 +194,17 @@ msgstr "EigenFaceRecognizer_create 导入失败，程序退出。"
 #: funing/ui/main_ui.py:116
 msgid "Open simple.ipynb file"
 msgstr "打开 simple.ipynb"
+
+#: funing/_ui/_main_ui.py:42
+#, fuzzy
+msgid ""
+"It seems that you have both 'opencv-python' and 'opencv-contrib-python' "
+"installed, do you want to uninstall them and reinstall 'opencv-contrib-"
+"python'([y]/n)?"
+msgstr ""
+"\n"
+"好像你同时安装了 opencv-python 和 opencv-contrib-python，要把它们都卸载然后重"
+"装 opencv-contrib-python 吗 ([y]/n)？"
 
 #~ msgid "Restart Funing Now?"
 #~ msgstr "重启应用?"
