@@ -3,10 +3,13 @@ global-include * *.mo
 
 recursive-include funing config.example.yml
 recursive-include docs *
+recursive-include requirements product.txt
 
 exclude funing.py
 exclude funing.sh
 exclude requirements.txt
+
+recursive-exclude requirements development.txt
 
 prune funing/.home/
 prune venv/

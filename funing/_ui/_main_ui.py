@@ -19,7 +19,16 @@ from tkinter.ttk import *
 import cv2
 import numpy as np
 import yaml
-from cv2 import haarcascades
+
+try:
+    from cv2 import haarcascades
+except BaseException:
+    from cv2.data import haarcascades
+else:
+    print('haarcascades could not be imported, funing exit.')
+    exit()
+
+
 from PIL import Image, ImageTk
 
 from funing import *

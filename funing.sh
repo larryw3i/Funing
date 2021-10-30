@@ -30,6 +30,8 @@ p8(){
     autopep8 -i -a -a -r -v ./funing/
     isort ./funing.py
     autopep8 -i -a -a -r -v ./funing.py
+    isort ./setup.py
+    autopep8 -i -a -a -r -v ./setup.py
 }
 
 git_add(){
@@ -38,7 +40,7 @@ git_add(){
 }
 
 _pip3(){
-    pip3 install -U -r requirements.txt
+    pip3 install -U $(cat requirements/*)
 }
 
 twine_upload(){
@@ -80,6 +82,13 @@ _start(){
     python3 funing.py t
 }
 
+active_venv(){
+    [[ -f "./venv/bin/activate" ]] || \
+    [[ -f $(which virtualenv) ]] && virtualenv venv || \
+    echo "virtualenv is not installed"
+    source venv/bin/activate
+}
+
 tu(){       twine_upload;       }
 ugi(){      update_gitignore;   }
 gpo(){      generate_po;        }
@@ -88,12 +97,14 @@ gita(){     git_add;            }
 bd(){       bdist;              }
 kc(){       keep_code;          }
 
-p3(){       _pip3;              }
+p3(){       active_venv;_pip3;  }
 msgf(){     _msgfmt;            }
 xget(){     _xgettext;          }
 
 its(){       _i_test;           }
 bdup(){     bd; tu;             }
 _s(){       _start;             }
+
+venv(){     active_venv;        }
 
 ${_args[0]}

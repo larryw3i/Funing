@@ -1,8 +1,16 @@
-import setuptools
 import re
-from funing import __version__, __appauthor__
+
+import setuptools
+
+from funing import __appauthor__, __version__
 
 long_description = open("README.md", "r", encoding="utf-8").read()
+
+
+def get_requirements():
+    return [i.strip('\n') for i in
+            open("./requirements/product.txt").readlines()]
+
 
 setuptools.setup(
     name="funing",
@@ -25,13 +33,6 @@ setuptools.setup(
         ]
     },
     python_requires='>=3.6',
-    install_requires=[
-        'opencv-contrib-python >= 4.5.3.56',
-        'jupyterlab >= 3.1.12',
-        'PyYAML >= 5.3.1',
-        'Pillow >= 8.3.0',
-        'numpy >= 1.20.3',
-        'appdirs >= 1.4.3'
-    ],
-    include_package_data = True,
+    install_requires=get_requirements(),
+    include_package_data=True,
 )
