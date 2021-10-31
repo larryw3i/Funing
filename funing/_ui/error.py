@@ -30,9 +30,10 @@ def fp_r_i(notfound, url):
 
 
 def cv2_nf():
-    fp_r_i('cv2', 'https://docs.opencv.org/4.5.1/da/df6/' +
-           'tutorial_py_table_of_contents_setup.html'
-           )
+    fp_r_i(
+        'cv2', 'https://docs.opencv.org/4.5.1/da/df6/' +
+        'tutorial_py_table_of_contents_setup.html'
+    )
 
 
 def gettext_nf():
@@ -44,8 +45,9 @@ def dlib_nf():
 
 
 def f_r_nf():
-    fp_r_i('face_recognition',
-           'https://github.com/ageitgey/face_recognition#installation')
+    fp_r_i(
+        'face_recognition',
+        'https://github.com/ageitgey/face_recognition#installation')
 
 
 def db_no_col(db_path=''):

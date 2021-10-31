@@ -27,33 +27,39 @@ from funing.locale import _
 from funing.ui.about_ui import about_toplevel
 from funing.ui.main_ui import MainUI
 
-try:
-    from cv2 import haarcascades
-except BaseException:
-    from cv2.data import haarcascades
-else:
-    print(_('haarcascades could not be imported, funing exit.'))
-    exit()
+'''
+# __  --> assign a variable that is not used.
+# _   --> used for gettext.
+
+from funing.locale import _
+self.frame_width, self.frame_height, __ = self.cur_frame.shape
+'''
 
 try:
+    '''
+    importing 'haarcascades' and 'EigenFaceRecognizer_create' fails when A and B
+    are installed at the same time.
+    '''
+    from cv2 import haarcascades
     from cv2.face import EigenFaceRecognizer_create as recognizer
 except BaseException:
-    print("\n" + _(
+
+    print('', _(
         "It seems that you have both 'opencv-python' and " +
         "'opencv-contrib-python' installed, do you want to uninstall them " +
-        "and reinstall 'opencv-contrib-python'([y]/n)?"), end=' ')
+        "and reinstall 'opencv-contrib-python'([y]/n)?"
+    ), end=' ')
+
     if input() in "Yy":
         os.system('pip3 uninstall opencv-contrib-python opencv-python -v -y')
         os.system('pip3 install opencv-contrib-python -v')
         os.execv(sys.executable, ['python'] + sys.argv)
     else:
         print(_(
-            '"EigenFaceRecognizer_create" could not be imported, funing exit.'))
+            '"EigenFaceRecognizer_create" and "haarcascades" could not be ' +
+            'imported, funing exit.'
+        ))
         exit()
-
-
-# from funing.locale import _
-# self.frame_width, self.frame_height, __ = self.cur_frame.shape
 
 
 class FUV():
@@ -66,30 +72,36 @@ class FUV():
         self.no_face_was_detected_str = _('No face was detected.')
         self.nothing_was_entered_str = _("You haven't entered anything yet!")
         self.unable_to_open_vid_source_str = _('Unable to open video source.')
-        self.click_to_remove_p = _('Click the picked face image to remove.')
-        self.double_click_to_remove_r = \
-            _('Double click the face image to remove.')
+
         self.image_exts = ['jpg', 'png', 'jpeg', 'webp']
         self.video_exts = ['mp4', 'avi', '3gp', 'webm', 'mkv']
         self.filetype_exts = '*.' + ' *.'.join(
             self.image_exts + self.video_exts)
 
+        # for picking image
+        self.click_to_remove_p = _('Click the picked face image to remove.')
+        # for recognition
+        self.double_click_to_remove_r = \
+            _('Double click the face image to remove.')
+
 
 class SourceType(Enum):
     NULL = 0
-    IMG = 1
-    VID = 2
+    IMG = 1     # IMAGE
+    VID = 2     # VIDEO
 
 
 class FDoing(Enum):
-    REC = 0
-    PICK = 1
+    '''
+    What app is doing.
+    '''
+    REC = 0     # recognize
+    PICK = 1    # pick image
 
 
 class _MainUI():
     def __init__(self):
 
-        # enum
         self.fuv = FUV()
         self.fdoing = FDoing.PICK
 
@@ -100,8 +112,8 @@ class _MainUI():
         self.infofm = self.mainui.infoframe
         self.bottomfm = self.mainui.bottomframe
         self.status_label_sv = self.bottomfm.status_label_sv
-        self.about_tl = None
-        self.showf_sv = None
+        self.about_tl = None    # about_top_level
+        self.showf_sv = None    # show_from StringVar
 
         # vid
         self.vid = None
@@ -121,7 +133,7 @@ class _MainUI():
         self.save_size = (100, 100)
         self.zoomed_in_face_label = (0, 0)
         self.rec_gray_img = None
-        self.root_after = -1
+        self.root_after = -1    # for vid frame refreshing.
 
         # info
         self.cur_info_id = None
@@ -267,7 +279,8 @@ class _MainUI():
         imgtk = ImageTk.PhotoImage(image=vid_img)
         new_fl.imgtk = imgtk
         new_fl.configure(image=imgtk)
-        new_fl.bind("<Button-1>", lambda e: self.del_face_label_p(e, num))
+        new_fl.bind("<Button-1>",
+                    lambda e: self.del_face_label_p(e, num))
 
         new_fl.pack(side=LEFT)
 
@@ -285,6 +298,9 @@ class _MainUI():
             print(len(self.picked_face_frames))
 
     def show_go(self, *args):
+        '''
+        Entry source and open it.
+        '''
         self.showf_sv = self.showfm.showf_sv.get()
         if len(self.showf_sv.strip()) < 1:
             return
@@ -311,6 +327,9 @@ class _MainUI():
         return list(keys)[list(values).index(value)]
 
     def show_from(self, *args):
+        '''
+        Show file dialog or turn on the camera.
+        '''
         show_f = self.get_dict_key_by_value(
             self.showfm.showf_t_dict,
             self.showfm.showf_optionmenu_sv.get())
@@ -338,6 +357,9 @@ class _MainUI():
             self.play_video()
 
     def cancel_root_after(self):
+        '''
+        Finish refreshing.
+        '''
         if self.root_after != -1:
             self.mainui.root.after_cancel(self.root_after)
             self.close_vid_cap()

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-31 22:37+0800\n"
+"POT-Creation-Date: 2021-10-31 23:20+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,93 +19,93 @@ msgstr ""
 
 #: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:40
 #: funing/_ui/_main_ui.py:40 funing/_ui/_main_ui.py:65
-#: funing/_ui/_main_ui.py:65
+#: funing/_ui/_main_ui.py:71
 msgid "Face was detected."
 msgstr ""
 
 #: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:41
 #: funing/_ui/_main_ui.py:41 funing/_ui/_main_ui.py:66
-#: funing/_ui/_main_ui.py:66
+#: funing/_ui/_main_ui.py:72
 msgid "No face was detected."
 msgstr ""
 
 #: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:42
 #: funing/_ui/_main_ui.py:42 funing/_ui/_main_ui.py:67
-#: funing/_ui/_main_ui.py:67
+#: funing/_ui/_main_ui.py:73
 msgid "You haven't entered anything yet!"
 msgstr ""
 
 #: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:43
 #: funing/_ui/_main_ui.py:43 funing/_ui/_main_ui.py:68
-#: funing/_ui/_main_ui.py:68
+#: funing/_ui/_main_ui.py:74
 msgid "Unable to open video source."
 msgstr ""
 
 #: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:44
 #: funing/_ui/_main_ui.py:44 funing/_ui/_main_ui.py:69
-#: funing/_ui/_main_ui.py:69
+#: funing/_ui/_main_ui.py:82
 msgid "Click the picked face image to remove."
 msgstr ""
 
 #: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:46
 #: funing/_ui/_main_ui.py:46 funing/_ui/_main_ui.py:71
-#: funing/_ui/_main_ui.py:71
+#: funing/_ui/_main_ui.py:85
 msgid "Double click the face image to remove."
 msgstr ""
 
 #: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:123
 #: funing/_ui/_main_ui.py:123 funing/_ui/_main_ui.py:141
-#: funing/_ui/_main_ui.py:141
+#: funing/_ui/_main_ui.py:153
 msgid "No desktop environment is detected! "
 msgstr ""
 
 #: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:174
 #: funing/_ui/_main_ui.py:174 funing/_ui/_main_ui.py:181
-#: funing/_ui/_main_ui.py:181
+#: funing/_ui/_main_ui.py:193
 msgid "Recognizer training. . ."
 msgstr ""
 
 #: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:177
 #: funing/_ui/_main_ui.py:177 funing/_ui/_main_ui.py:184
-#: funing/_ui/_main_ui.py:184
+#: funing/_ui/_main_ui.py:196
 msgid "Recognizer finish training."
 msgstr ""
 
 #: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:215
 #: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:52
 #: funing/_ui/_main_ui.py:215 funing/ui/main_ui.py:51
-#: funing/_ui/_main_ui.py:239 funing/_ui/_main_ui.py:239
+#: funing/_ui/_main_ui.py:239 funing/_ui/_main_ui.py:251
 #: funing/ui/main_ui.py:51
 msgid "Pause"
 msgstr ""
 
 #: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:222
 #: funing/_ui/_main_ui.py:222 funing/_ui/_main_ui.py:246
-#: funing/_ui/_main_ui.py:246
+#: funing/_ui/_main_ui.py:258
 msgid "Play"
 msgstr ""
 
 #: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:295
 #: funing/_ui/_main_ui.py:295 funing/_ui/_main_ui.py:319
-#: funing/_ui/_main_ui.py:319
+#: funing/_ui/_main_ui.py:338
 msgid "Select a file"
 msgstr ""
 
 #: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:296
 #: funing/_ui/_main_ui.py:296 funing/_ui/_main_ui.py:320
-#: funing/_ui/_main_ui.py:320
+#: funing/_ui/_main_ui.py:339
 msgid "Image or video"
 msgstr ""
 
 #: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:484
 #: funing/_ui/_main_ui.py:484 funing/_ui/_main_ui.py:513
-#: funing/_ui/_main_ui.py:513
+#: funing/_ui/_main_ui.py:535
 msgid "No informations found"
 msgstr ""
 
 #: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:610
 #: funing/_ui/_main_ui.py:610 funing/_ui/_main_ui.py:639
-#: funing/_ui/_main_ui.py:639
+#: funing/_ui/_main_ui.py:661
 msgid "Nothing enter"
 msgstr ""
 
@@ -183,7 +183,7 @@ msgstr ""
 msgid "From larryw3i & contributors"
 msgstr ""
 
-#: funing/_ui/_main_ui.py:35 funing/_ui/_main_ui.py:35
+#: funing/_ui/_main_ui.py:35
 msgid "haarcascades could not be imported, funing exit."
 msgstr ""
 
@@ -195,7 +195,7 @@ msgid ""
 "python'([y]/n)?"
 msgstr ""
 
-#: funing/_ui/_main_ui.py:51 funing/_ui/_main_ui.py:51
+#: funing/_ui/_main_ui.py:51
 msgid "\"EigenFaceRecognizer_create\" could not be imported, funing exit."
 msgstr ""
 
@@ -203,9 +203,15 @@ msgstr ""
 msgid "Open simple.ipynb file"
 msgstr ""
 
-#: funing/_ui/_main_ui.py:42 funing/_ui/_main_ui.py:42
+#: funing/_ui/_main_ui.py:42 funing/_ui/_main_ui.py:48
 msgid ""
 "It seems that you have both 'opencv-python' and 'opencv-contrib-python' "
 "installed, do you want to uninstall them and reinstall 'opencv-contrib-"
 "python'([y]/n)?"
+msgstr ""
+
+#: funing/_ui/_main_ui.py:59
+msgid ""
+"\"EigenFaceRecognizer_create\" and \"haarcascades\" could not be imported, "
+"funing exit."
 msgstr ""
