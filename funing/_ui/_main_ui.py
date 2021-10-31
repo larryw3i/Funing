@@ -38,10 +38,10 @@ else:
 try:
     from cv2.face import EigenFaceRecognizer_create as recognizer
 except BaseException:
-    print("\n" +
-          _("It seems that you have both 'opencv-python' and " +
-            "'opencv-contrib-python' installed, do you want to uninstall them " +
-            "and reinstall 'opencv-contrib-python'([y]/n)?"), end=' ')
+    print("\n" + _(
+        "It seems that you have both 'opencv-python' and " +
+        "'opencv-contrib-python' installed, do you want to uninstall them " +
+        "and reinstall 'opencv-contrib-python'([y]/n)?"), end=' ')
     if input() in "Yy":
         os.system('pip3 uninstall opencv-contrib-python opencv-python -v -y')
         os.system('pip3 install opencv-contrib-python -v')
