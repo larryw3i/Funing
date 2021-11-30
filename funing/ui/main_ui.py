@@ -119,6 +119,6 @@ class BottomFrame():
         self.status_label.pack(side=LEFT)
 
         self.about_fn_btn.pack(side=RIGHT)
-        self.ipynb_fn_btn.pack(side=RIGHT)
+        # self.ipynb_fn_btn.pack(side=RIGHT)
 
         self.frame.grid(row=1, column=0, columnspan=2, sticky=W + E)

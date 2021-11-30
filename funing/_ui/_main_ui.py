@@ -474,7 +474,7 @@ class _MainUI():
     def show_nsrc_error(self):
         messagebox.showerror(
             self.fuv.unable_to_open_vid_source_str,
-            self.fuv.unable_to_open_vid_source_str + ': ' + str(self.showf_sv ))
+            self.fuv.unable_to_open_vid_source_str + ': ' + str(self.showf_sv))
 
     def savef(self):
         if self.cur_info_id is None:
