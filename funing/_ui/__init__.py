@@ -8,6 +8,6 @@ import uuid
 import cv2
 import yaml
 
-from funing.ui_ import error
+from funing._ui import error
 
 error.lib_check()

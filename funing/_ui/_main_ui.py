@@ -22,10 +22,10 @@ import yaml
 from PIL import Image, ImageTk
 
 from funing import *
-from funing.ui_ import error
+from funing._ui import error
 from funing.locale import _
-from funing.ui.aboutui_ import about_toplevel
-from funing.ui.mainui_ import MainUI
+from funing.ui.about_ui import about_toplevel
+from funing.ui.main_ui import MainUI
 
 '''
 # __  --> assign a variable that is not used.
@@ -40,7 +40,7 @@ try:
     importing 'haarcascades' and 'EigenFaceRecognizer_create' fails when A and B
     are installed at the same time.
     '''
-    from cv2 import haarcascades
+    from cv2.data import haarcascades
     from cv2.face import EigenFaceRecognizer_create as recognizer
 except BaseException:
 
@@ -474,7 +474,7 @@ class _MainUI():
     def show_nsrc_error(self):
         messagebox.showerror(
             self.fuv.unable_to_open_vid_source_str,
-            self.fuv.unable_to_open_vid_source_str + ': ' + self.showf_sv)
+            self.fuv.unable_to_open_vid_source_str + ': ' + str(self.showf_sv ))
 
     def savef(self):
         if self.cur_info_id is None:
@@ -651,11 +651,6 @@ class _MainUI():
 
         for i in range(len(self.face_rects)):
             self.add_face_label_r(i)
-
-    def show_nsrc_error(self):
-        messagebox.showerror(
-            self.fuv.unable_to_open_vid_source_str,
-            self.fuv.unable_to_open_vid_source_str + ': ' + self.showf_sv)
 
     def show_data_empty(self):
         unable_open_s = _('Nothing enter')
