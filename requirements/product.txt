@@ -3,4 +3,3 @@ PyYAML
 Pillow
 numpy
 appdirs
-jupyterlab

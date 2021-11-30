@@ -84,7 +84,7 @@ _start(){
 active_venv(){
     [[ -f "./venv/bin/activate" ]] || \
     [[ -f $(which virtualenv) ]] && virtualenv venv || \
-    echo "virtualenv is not installed"
+    echo "Installing virtualenv..." && pip3 install -U virtualenv
     source venv/bin/activate
 }
 

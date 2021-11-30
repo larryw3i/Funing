@@ -17,162 +17,162 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:40
-#: funing/_ui/_main_ui.py:40 funing/_ui/_main_ui.py:65
-#: funing/_ui/_main_ui.py:71
+#: /home/larry/fun/larryw3i/Funing/funing/ui_/_mainui_.py:40
+#: funing/ui_/_mainui_.py:40 funing/ui_/_mainui_.py:65
+#: funing/ui_/_mainui_.py:71
 msgid "Face was detected."
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:41
-#: funing/_ui/_main_ui.py:41 funing/_ui/_main_ui.py:66
-#: funing/_ui/_main_ui.py:72
+#: /home/larry/fun/larryw3i/Funing/funing/ui_/_mainui_.py:41
+#: funing/ui_/_mainui_.py:41 funing/ui_/_mainui_.py:66
+#: funing/ui_/_mainui_.py:72
 msgid "No face was detected."
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:42
-#: funing/_ui/_main_ui.py:42 funing/_ui/_main_ui.py:67
-#: funing/_ui/_main_ui.py:73
+#: /home/larry/fun/larryw3i/Funing/funing/ui_/_mainui_.py:42
+#: funing/ui_/_mainui_.py:42 funing/ui_/_mainui_.py:67
+#: funing/ui_/_mainui_.py:73
 #, fuzzy
 msgid "You haven't entered anything yet!"
 msgstr "You haven't entered data yet! Open a source and click 'Pick' to enter"
 
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:43
-#: funing/_ui/_main_ui.py:43 funing/_ui/_main_ui.py:68
-#: funing/_ui/_main_ui.py:74
+#: /home/larry/fun/larryw3i/Funing/funing/ui_/_mainui_.py:43
+#: funing/ui_/_mainui_.py:43 funing/ui_/_mainui_.py:68
+#: funing/ui_/_mainui_.py:74
 msgid "Unable to open video source."
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:44
-#: funing/_ui/_main_ui.py:44 funing/_ui/_main_ui.py:69
-#: funing/_ui/_main_ui.py:82
+#: /home/larry/fun/larryw3i/Funing/funing/ui_/_mainui_.py:44
+#: funing/ui_/_mainui_.py:44 funing/ui_/_mainui_.py:69
+#: funing/ui_/_mainui_.py:82
 msgid "Click the picked face image to remove."
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:46
-#: funing/_ui/_main_ui.py:46 funing/_ui/_main_ui.py:71
-#: funing/_ui/_main_ui.py:85
+#: /home/larry/fun/larryw3i/Funing/funing/ui_/_mainui_.py:46
+#: funing/ui_/_mainui_.py:46 funing/ui_/_mainui_.py:71
+#: funing/ui_/_mainui_.py:85
 msgid "Double click the face image to remove."
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:123
-#: funing/_ui/_main_ui.py:123 funing/_ui/_main_ui.py:141
-#: funing/_ui/_main_ui.py:153
+#: /home/larry/fun/larryw3i/Funing/funing/ui_/_mainui_.py:123
+#: funing/ui_/_mainui_.py:123 funing/ui_/_mainui_.py:141
+#: funing/ui_/_mainui_.py:153
 msgid "No desktop environment is detected! "
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:174
-#: funing/_ui/_main_ui.py:174 funing/_ui/_main_ui.py:181
-#: funing/_ui/_main_ui.py:193
+#: /home/larry/fun/larryw3i/Funing/funing/ui_/_mainui_.py:174
+#: funing/ui_/_mainui_.py:174 funing/ui_/_mainui_.py:181
+#: funing/ui_/_mainui_.py:193
 msgid "Recognizer training. . ."
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:177
-#: funing/_ui/_main_ui.py:177 funing/_ui/_main_ui.py:184
-#: funing/_ui/_main_ui.py:196
+#: /home/larry/fun/larryw3i/Funing/funing/ui_/_mainui_.py:177
+#: funing/ui_/_mainui_.py:177 funing/ui_/_mainui_.py:184
+#: funing/ui_/_mainui_.py:196
 msgid "Recognizer finish training."
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:215
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:52
-#: funing/_ui/_main_ui.py:215 funing/ui/main_ui.py:51
-#: funing/_ui/_main_ui.py:239 funing/_ui/_main_ui.py:251
+#: /home/larry/fun/larryw3i/Funing/funing/ui_/_mainui_.py:215
+#: /home/larry/fun/larryw3i/Funing/funing/ui/mainui_.py:52
+#: funing/ui_/_mainui_.py:215 funing/ui/mainui_.py:51
+#: funing/ui_/_mainui_.py:239 funing/ui_/_mainui_.py:251
 msgid "Pause"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:222
-#: funing/_ui/_main_ui.py:222 funing/_ui/_main_ui.py:246
-#: funing/_ui/_main_ui.py:258
+#: /home/larry/fun/larryw3i/Funing/funing/ui_/_mainui_.py:222
+#: funing/ui_/_mainui_.py:222 funing/ui_/_mainui_.py:246
+#: funing/ui_/_mainui_.py:258
 msgid "Play"
 msgstr "Play"
 
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:295
-#: funing/_ui/_main_ui.py:295 funing/_ui/_main_ui.py:319
-#: funing/_ui/_main_ui.py:338
+#: /home/larry/fun/larryw3i/Funing/funing/ui_/_mainui_.py:295
+#: funing/ui_/_mainui_.py:295 funing/ui_/_mainui_.py:319
+#: funing/ui_/_mainui_.py:338
 msgid "Select a file"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:296
-#: funing/_ui/_main_ui.py:296 funing/_ui/_main_ui.py:320
-#: funing/_ui/_main_ui.py:339
+#: /home/larry/fun/larryw3i/Funing/funing/ui_/_mainui_.py:296
+#: funing/ui_/_mainui_.py:296 funing/ui_/_mainui_.py:320
+#: funing/ui_/_mainui_.py:339
 msgid "Image or video"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:484
-#: funing/_ui/_main_ui.py:484 funing/_ui/_main_ui.py:513
-#: funing/_ui/_main_ui.py:535
+#: /home/larry/fun/larryw3i/Funing/funing/ui_/_mainui_.py:484
+#: funing/ui_/_mainui_.py:484 funing/ui_/_mainui_.py:513
+#: funing/ui_/_mainui_.py:535
 msgid "No informations found"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/_ui/_main_ui.py:610
-#: funing/_ui/_main_ui.py:610 funing/_ui/_main_ui.py:639
-#: funing/_ui/_main_ui.py:661
+#: /home/larry/fun/larryw3i/Funing/funing/ui_/_mainui_.py:610
+#: funing/ui_/_mainui_.py:610 funing/ui_/_mainui_.py:639
+#: funing/ui_/_mainui_.py:661
 msgid "Nothing enter"
 msgstr "Nothing enter"
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui/about_ui.py:13
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:116
-#: funing/ui/main_ui.py:115 funing/ui/about_ui.py:13 funing/ui/main_ui.py:114
+#: /home/larry/fun/larryw3i/Funing/funing/ui/aboutui_.py:13
+#: /home/larry/fun/larryw3i/Funing/funing/ui/mainui_.py:116
+#: funing/ui/mainui_.py:115 funing/ui/aboutui_.py:13 funing/ui/mainui_.py:114
 msgid "About Funing"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui/about_ui.py:15
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:18
-#: funing/ui/main_ui.py:17 funing/ui/about_ui.py:15
+#: /home/larry/fun/larryw3i/Funing/funing/ui/aboutui_.py:15
+#: /home/larry/fun/larryw3i/Funing/funing/ui/mainui_.py:18
+#: funing/ui/mainui_.py:17 funing/ui/aboutui_.py:15
 msgid "Funing"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui/about_ui.py:27
-#: funing/ui/about_ui.py:27
+#: /home/larry/fun/larryw3i/Funing/funing/ui/aboutui_.py:27
+#: funing/ui/aboutui_.py:27
 msgid "Licensed under the MIT license"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:44
-#: funing/ui/main_ui.py:43
+#: /home/larry/fun/larryw3i/Funing/funing/ui/mainui_.py:44
+#: funing/ui/mainui_.py:43
 msgid "GO"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:46
-#: funing/ui/main_ui.py:45
+#: /home/larry/fun/larryw3i/Funing/funing/ui/mainui_.py:46
+#: funing/ui/mainui_.py:45
 msgid "File"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:46
-#: funing/ui/main_ui.py:45
+#: /home/larry/fun/larryw3i/Funing/funing/ui/mainui_.py:46
+#: funing/ui/mainui_.py:45
 msgid "Camera"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:47
-#: funing/ui/main_ui.py:46
+#: /home/larry/fun/larryw3i/Funing/funing/ui/mainui_.py:47
+#: funing/ui/mainui_.py:46
 msgid "Open"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:56
-#: funing/ui/main_ui.py:55
+#: /home/larry/fun/larryw3i/Funing/funing/ui/mainui_.py:56
+#: funing/ui/mainui_.py:55
 msgid "Recognize"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:60
-#: funing/ui/main_ui.py:59
+#: /home/larry/fun/larryw3i/Funing/funing/ui/mainui_.py:60
+#: funing/ui/mainui_.py:59
 msgid "Pick"
 msgstr "Pick"
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:92
-#: funing/ui/main_ui.py:92 funing/ui/main_ui.py:91
+#: /home/larry/fun/larryw3i/Funing/funing/ui/mainui_.py:92
+#: funing/ui/mainui_.py:92 funing/ui/mainui_.py:91
 msgid "Write it with certain rules so that you can analyze it later"
 msgstr ""
 "Write it in toml or yaml format, so it's a lot easier for you to analyze it."
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:95
-#: funing/ui/main_ui.py:94 funing/ui/main_ui.py:93
+#: /home/larry/fun/larryw3i/Funing/funing/ui/mainui_.py:95
+#: funing/ui/mainui_.py:94 funing/ui/mainui_.py:93
 msgid "Save"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui/main_ui.py:113
-#: funing/ui/main_ui.py:112 funing/ui/main_ui.py:111
+#: /home/larry/fun/larryw3i/Funing/funing/ui/mainui_.py:113
+#: funing/ui/mainui_.py:112 funing/ui/mainui_.py:111
 msgid "Welcome to Funing."
 msgstr ""
 
-#: funing/ui/main_ui.py:92
+#: funing/ui/mainui_.py:92
 #, fuzzy
 msgid ""
 "Write it with certain rules sddddddddddddddddddddddddddddddddddddddddddo "
@@ -180,15 +180,15 @@ msgid ""
 msgstr ""
 "Write it in toml or yaml format, so it's a lot easier for you to analyze it."
 
-#: funing/ui/about_ui.py:26 funing/ui/about_ui.py:28
+#: funing/ui/aboutui_.py:26 funing/ui/aboutui_.py:28
 msgid "From larryw3i & contributors"
 msgstr ""
 
-#: funing/_ui/_main_ui.py:35
+#: funing/ui_/_mainui_.py:35
 msgid "haarcascades could not be imported, funing exit."
 msgstr ""
 
-#: funing/_ui/_main_ui.py:42
+#: funing/ui_/_mainui_.py:42
 msgid ""
 "\n"
 "It seems that you have both 'opencv-python' and 'opencv-contrib-python' "
@@ -196,22 +196,22 @@ msgid ""
 "python'([y]/n)?"
 msgstr ""
 
-#: funing/_ui/_main_ui.py:51
+#: funing/ui_/_mainui_.py:51
 msgid "\"EigenFaceRecognizer_create\" could not be imported, funing exit."
 msgstr ""
 
-#: funing/ui/main_ui.py:116
+#: funing/ui/mainui_.py:116
 msgid "Open simple.ipynb file"
 msgstr ""
 
-#: funing/_ui/_main_ui.py:42 funing/_ui/_main_ui.py:48
+#: funing/ui_/_mainui_.py:42 funing/ui_/_mainui_.py:48
 msgid ""
 "It seems that you have both 'opencv-python' and 'opencv-contrib-python' "
 "installed, do you want to uninstall them and reinstall 'opencv-contrib-"
 "python'([y]/n)?"
 msgstr ""
 
-#: funing/_ui/_main_ui.py:59
+#: funing/ui_/_mainui_.py:59
 msgid ""
 "\"EigenFaceRecognizer_create\" and \"haarcascades\" could not be imported, "
 "funing exit."

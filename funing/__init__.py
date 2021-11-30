@@ -2,8 +2,8 @@
 
 '''
 Usually, the UI scripts are placed in directory ui and the related function \
-scripts are placed in directory _ui.
-Neither directory ui nor directory _ui is mandatory, take the easiest way.
+scripts are placed in directory ui_.
+Neither directory ui nor directory ui_ is mandatory, take the easiest way.
 '''
 
 import getopt
@@ -85,5 +85,5 @@ test_args = ['ts', 't', 'test']
 
 
 def simple():
-    from funing._ui import _main_ui
-    _main_ui._MainUI()
+    from funing.ui_ import _mainui_
+    _mainui_._MainUI()

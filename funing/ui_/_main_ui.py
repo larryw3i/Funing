@@ -22,10 +22,10 @@ import yaml
 from PIL import Image, ImageTk
 
 from funing import *
-from funing._ui import error
+from funing.ui_ import error
 from funing.locale import _
-from funing.ui.about_ui import about_toplevel
-from funing.ui.main_ui import MainUI
+from funing.ui.aboutui_ import about_toplevel
+from funing.ui.mainui_ import MainUI
 
 '''
 # __  --> assign a variable that is not used.
@@ -160,7 +160,7 @@ class _MainUI():
             self.recognizer_train()
 
         # events
-        self.set_ui_events()
+        self.setui__events()
 
         # mainloop
         self.mainui.mainloop()
@@ -226,7 +226,7 @@ class _MainUI():
         self.vid.release()
         self.vid = None
 
-    def set_ui_events(self):
+    def setui__events(self):
         self.showfm.pp_btn['command'] = self.pause_play
         self.showfm.rec_btn['command'] = self.recf_v0
         self.showfm.pick_btn['command'] = self.pick_v0
