@@ -25,6 +25,7 @@ from funing import *
 from funing._ui import error
 from funing.locale import _
 from funing.ui.about_ui import about_toplevel
+from funing.ui.db_ui import db_toplevel
 from funing.ui.main_ui import MainUI
 
 '''
@@ -195,10 +196,6 @@ class _MainUI():
         self.recognizer.train(images, labels)
         self.show_status_msg(_('Recognizer finish training.'))
 
-    def ipynb_fn(self):
-        subprocess.Popen(f'cd {user_ipynb_dir_path} && jupyter-notebook',
-                         shell=True)
-
     def about_fn(self):
         if self.about_tl is None:
             self.about_tl = about_toplevel()
@@ -206,6 +203,9 @@ class _MainUI():
         else:
             self.about_tl.destroy()
             self.about_tl = None
+        pass
+
+    def db_fn(self):
         pass
 
     def show_status_msg(self, msg):
@@ -234,7 +234,7 @@ class _MainUI():
         self.showfm.showf_optionmenu_sv.trace('w', self.show_from)
         self.infofm.save_btn['command'] = self.savef
         self.bottomfm.about_fn_btn['command'] = self.about_fn
-        self.bottomfm.ipynb_fn_btn['command'] = self.ipynb_fn
+        self.bottomfm.db_btn['command'] = self.db_fn
         self.mainui.root.protocol("WM_DELETE_WINDOW", self.destroy)
 
     def destroy(self):

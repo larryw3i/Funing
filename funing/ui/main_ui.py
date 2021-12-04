@@ -112,13 +112,13 @@ class BottomFrame():
         self.status_label = Label(
             self.frame, textvariable=self.status_label_sv)
         self.about_fn_btn = Button(self.frame, text=_('About Funing'))
-        self.ipynb_fn_btn = Button(self.frame,
-                                   text=_('Open simple.ipynb file'))
+        self.db_btn = Button(self.frame,
+                                   text=_('Data'))
 
     def place(self):
         self.status_label.pack(side=LEFT)
 
         self.about_fn_btn.pack(side=RIGHT)
-        # self.ipynb_fn_btn.pack(side=RIGHT)
+        self.db_btn.pack(side=RIGHT)
 
         self.frame.grid(row=1, column=0, columnspan=2, sticky=W + E)
