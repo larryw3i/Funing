@@ -113,7 +113,7 @@ class BottomFrame():
             self.frame, textvariable=self.status_label_sv)
         self.about_fn_btn = Button(self.frame, text=_('About Funing'))
         self.db_btn = Button(self.frame,
-                                   text=_('Data'))
+                             text=_('Data'))
 
     def place(self):
         self.status_label.pack(side=LEFT)

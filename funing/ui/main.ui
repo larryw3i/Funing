@@ -1,0 +1,269 @@
+<?xml version='1.0' encoding='utf-8'?>
+<interface version="1.1">
+  <object class="ttk.Frame" id="main_frame">
+    <property name="height">200</property>
+    <property name="width">200</property>
+    <layout manager="pack">
+      <property name="propagate">True</property>
+      <property name="side">top</property>
+    </layout>
+    <child>
+      <object class="ttk.Frame" id="show_frame">
+        <property name="height">200</property>
+        <property name="width">200</property>
+        <layout manager="grid">
+          <property name="column">0</property>
+          <property name="propagate">True</property>
+          <property name="row">0</property>
+          <property name="sticky">w</property>
+        </layout>
+        <child>
+          <object class="ttk.Label" id="vidframe_label">
+            <property name="text" translatable="yes">video frame</property>
+            <layout manager="pack">
+              <property name="propagate">True</property>
+              <property name="side">top</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Frame" id="frame1">
+            <property name="height">200</property>
+            <property name="width">200</property>
+            <layout manager="pack">
+              <property name="propagate">True</property>
+              <property name="side">top</property>
+            </layout>
+            <child>
+              <object class="ttk.Entry" id="entry1">
+                <property name="width">6</property>
+                <layout manager="pack">
+                  <property name="expand">false</property>
+                  <property name="propagate">True</property>
+                  <property name="side">left</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="go_btn">
+                <property name="command" type="command" cbtype="simple">on_go_btn_clicked</property>
+                <property name="text" translatable="yes">GO</property>
+                <layout manager="pack">
+                  <property name="propagate">True</property>
+                  <property name="side">left</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="tk.OptionMenu" id="show_from_optionmenu">
+                <property name="variable">string:show_from_opt_stringvar</property>
+                <layout manager="pack">
+                  <property name="propagate">True</property>
+                  <property name="side">left</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="pause_play_btn">
+                <property name="command" type="command" cbtype="simple">on_pause_play_btn_clicked</property>
+                <property name="text" translatable="yes">Pause</property>
+                <property name="textvariable">string:pause_play_btn_stringvar</property>
+                <layout manager="pack">
+                  <property name="propagate">True</property>
+                  <property name="side">left</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="recognize_btn">
+                <property name="command" type="command" cbtype="simple">on_recognize_btn_clicked</property>
+                <property name="text" translatable="yes">Recognize</property>
+                <layout manager="pack">
+                  <property name="propagate">True</property>
+                  <property name="side">left</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="pick_btn">
+                <property name="command" type="command" cbtype="simple">on_pick_btn_clicked</property>
+                <property name="text" translatable="yes">Pick</property>
+                <layout manager="pack">
+                  <property name="propagate">True</property>
+                  <property name="side">left</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Frame" id="info_frame">
+        <property name="height">200</property>
+        <property name="width">200</property>
+        <layout manager="grid">
+          <property name="column">1</property>
+          <property name="propagate">True</property>
+          <property name="row">0</property>
+          <property name="sticky">e</property>
+        </layout>
+        <child>
+          <object class="ttk.Frame" id="face_frame">
+            <property name="height">200</property>
+            <property name="width">200</property>
+            <layout manager="pack">
+              <property name="propagate">True</property>
+              <property name="side">top</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="tk.Text" id="info_text">
+            <property name="height">10</property>
+            <property name="width">50</property>
+            <layout manager="pack">
+              <property name="propagate">True</property>
+              <property name="side">top</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Button" id="save_info_btn">
+            <property name="command" type="command" cbtype="simple">on_save_info_btn_clicked</property>
+            <property name="text" translatable="yes">Save</property>
+            <layout manager="pack">
+              <property name="pady">9</property>
+              <property name="propagate">True</property>
+              <property name="side">top</property>
+            </layout>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Frame" id="bottom_frame">
+        <property name="height">200</property>
+        <property name="width">200</property>
+        <layout manager="grid">
+          <property name="column">0</property>
+          <property name="columnspan">2</property>
+          <property name="propagate">True</property>
+          <property name="row">1</property>
+          <property name="sticky">sew</property>
+        </layout>
+        <child>
+          <object class="ttk.Button" id="about_btn">
+            <property name="command" type="command" cbtype="simple">on_about_btn_clicked</property>
+            <property name="text" translatable="yes">About Funing</property>
+            <layout manager="pack">
+              <property name="propagate">True</property>
+              <property name="side">right</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Button" id="data_btn">
+            <property name="command" type="command" cbtype="simple">on_data_btn_clicked</property>
+            <property name="text" translatable="yes">Data</property>
+            <layout manager="pack">
+              <property name="padx">2</property>
+              <property name="propagate">True</property>
+              <property name="side">right</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="status_label">
+            <property name="text" translatable="yes">Welcome to Funing.</property>
+            <property name="textvariable">string:status_label_stringvar</property>
+            <layout manager="pack">
+              <property name="propagate">True</property>
+              <property name="side">left</property>
+            </layout>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="pygubu.builder.widgets.dialog" id="about_dialog">
+    <child>
+      <object class="ttk.Frame" id="about_frame">
+        <property name="borderwidth">10</property>
+        <property name="height">200</property>
+        <property name="width">200</property>
+        <layout manager="pack">
+          <property name="propagate">True</property>
+          <property name="side">top</property>
+        </layout>
+        <child>
+          <object class="ttk.Label" id="app_name_label">
+            <property name="font">{NONE} 29 {}</property>
+            <property name="text" translatable="yes">Funing</property>
+            <layout manager="pack">
+              <property name="propagate">True</property>
+              <property name="side">top</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="version_label">
+            <property name="text" translatable="yes">%version%</property>
+            <layout manager="pack">
+              <property name="propagate">True</property>
+              <property name="side">top</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="license_label">
+            <property name="text" translatable="yes">Licensed under the MIT license.</property>
+            <layout manager="pack">
+              <property name="propagate">True</property>
+              <property name="side">top</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="warranty_label">
+            <property name="text" translatable="yes">This program comes with ABSOLUTELY NO WARRANTY.</property>
+            <layout manager="pack">
+              <property name="propagate">True</property>
+              <property name="side">top</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="author_label">
+            <property name="font">{NONE} 12 {}</property>
+            <property name="text" translatable="yes">From larryw3i &amp; contributors.</property>
+            <layout manager="pack">
+              <property name="propagate">True</property>
+              <property name="side">top</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Button" id="about_ok_btn">
+            <property name="command" type="command" cbtype="simple">on_about_ok_btn_clicked</property>
+            <property name="text" translatable="yes">OK</property>
+            <layout manager="pack">
+              <property name="propagate">True</property>
+              <property name="side">bottom</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="source_label">
+            <property name="foreground">#0000d9</property>
+            <property name="text" translatable="yes">source code</property>
+            <layout manager="pack">
+              <property name="propagate">True</property>
+              <property name="side">right</property>
+            </layout>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

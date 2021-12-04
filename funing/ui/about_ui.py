@@ -33,5 +33,3 @@ class AboutToplevel():
 
     def mainloop(self):
         self.about_tl.mainloop()
-
-

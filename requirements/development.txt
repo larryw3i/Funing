@@ -5,3 +5,4 @@ autopep8
 isort
 twine
 pygubu-designer
+pip

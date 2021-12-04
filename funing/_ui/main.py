@@ -18,14 +18,13 @@ from tkinter.ttk import *
 
 import cv2
 import numpy as np
+import pygubu
 import yaml
 from PIL import Image, ImageTk
 
 from funing import *
 from funing._ui import error
 from funing.locale import _
-from funing._ui._about_ui import about_toplevel
-from funing._ui._data_ui import data_toplevel
 from funing.ui.main_ui import MainUI
 
 '''
@@ -35,6 +34,8 @@ from funing.ui.main_ui import MainUI
 from funing.locale import _
 self.frame_width, self.frame_height, __ = self.cur_frame.shape
 '''
+
+translator = _
 
 try:
     '''
@@ -78,12 +79,9 @@ class FUV():
         self.video_exts = ['mp4', 'avi', '3gp', 'webm', 'mkv']
         self.filetype_exts = '*.' + ' *.'.join(
             self.image_exts + self.video_exts)
-
-        # for picking image
         self.click_to_remove_p = _('Click the picked face image to remove.')
-        # for recognition
-        self.double_click_to_remove_r = \
-            _('Double click the face image to remove.')
+        self.double_click_to_remove_r = _(
+            'Double click the face image to remove.')
 
 
 class SourceType(Enum):
@@ -100,22 +98,53 @@ class FDoing(Enum):
     PICK = 1    # pick image
 
 
-class _MainUI():
-    def __init__(self):
+class MainApplication(pygubu.TkApplication):
 
-        self.fuv = FUV()
+    def _create_ui(self):
+
         self.fdoing = FDoing.PICK
 
-        # ui
-        self.mainui = MainUI()
-        self.mainui.place()
-        self.showfm = self.mainui.showframe
-        self.infofm = self.mainui.infoframe
-        self.bottomfm = self.mainui.bottomframe
-        self.status_label_sv = self.bottomfm.status_label_sv
-        self.about_tl = None    # about_top_level
-        self.data_tl = None       # data_toplevel
-        self.showf_sv = None    # show_from StringVar
+        # pygubu builder
+        self.builder = builder = pygubu.Builder(translator)
+
+        # ui files
+        main_ui_path = os.path.join(
+            os.path.join(project_path, 'ui'), 'main.ui')
+
+        # add ui files
+        self.builder.add_from_file(main_ui_path)
+
+        # some variables
+        self.show_from_dict = {'file': _('File'), 'camera': _('Camera')}
+        self.show_from_opt_stringvar = tk.StringVar(self.master)
+        self.show_from_opt_stringvar.trace(
+            'w', self.show_from_opt_stringvar_trace)
+        self.status_label_stringvar = tk.StringVar(self.master)
+        self.pause_play_btn_stringvar = tk.StringVar(self.master)
+        self.face_was_detected_str = _('Face was detected.')
+        self.no_face_was_detected_str = _('No face was detected.')
+        self.nothing_was_entered_str = _("You haven't entered anything yet!")
+        self.unable_to_open_vid_source_str = _('Unable to open video source.')
+        self.image_exts = ['jpg', 'png', 'jpeg', 'webp']
+        self.video_exts = ['mp4', 'avi', '3gp', 'webm', 'mkv']
+        self.filetype_exts = '*.' + ' *.'.join(
+            self.image_exts + self.video_exts)
+        self.click_to_remove_p = _('Click the picked face image to remove.')
+        self.double_click_to_remove_r = _(
+            'Double click the face image to remove.')
+
+
+        # widgets
+        self.main_window = builder.get_object('main_frame', self.master)
+        self.vidframe_label = builder.get_object('vidframe_label', self.master)
+        self.info_text = builder.get_object('info_text', self.master)
+        self.face_frame = builder.get_object(
+            'face_frame', self.master)  # not vid frame, it shows picture.
+        self.is_about_dialog_showing = False
+        self.about_dialog = self.builder.get_object(\
+        'about_dialog', self.master)
+        self.builder.get_object('version_label')['text'] = version
+        self.data_toplevel = None
 
         # vid
         self.vid = None
@@ -149,23 +178,21 @@ class _MainUI():
 
         # screen
         try:
-            self.screenwidth = self.mainui.root.winfo_screenwidth()
-            self.screenheight = self.mainui.root.winfo_screenheight()
+            self.screenwidth = self.master.winfo_screenwidth()
+            self.screenheight = self.master.winfo_screenheight()
         except BaseException:
             print(_('No desktop environment is detected! '))
             exit()
 
         # train recognizer
         if data_empty():
-            self.show_status_msg(self.fuv.nothing_was_entered_str)
+            self.set_status_msg(self.nothing_was_entered_str)
         else:
             self.recognizer_train()
 
-        # events
-        self.setui__events()
+        # connect callbacks
+        self.builder.connect_callbacks(self)
 
-        # mainloop
-        self.mainui.mainloop()
 
     def load_images(self):
         '''
@@ -192,21 +219,25 @@ class _MainUI():
         return images, labels, ids
 
     def recognizer_train(self):
-        self.show_status_msg(_('Recognizer training. . .'))
+        self.set_status_msg(_('Recognizer training. . .'))
         images, labels, self.info_ids = self.load_images()
         self.recognizer.train(images, labels)
-        self.show_status_msg(_('Recognizer finish training.'))
+        self.set_status_msg(_('Recognizer finish training.'))
+    
+    def on_about_ok_btn_clicked(self):
+        if self.is_about_dialog_showing :
+            self.about_dialog.close()
+            self.is_about_dialog_showing=False
 
-    def about_fn(self):
-        if self.about_tl is None:
-            self.about_tl = about_toplevel()
-            self.about_tl.mainloop()
+    def on_about_btn_clicked(self):        
+        if not self.is_about_dialog_showing:
+            self.about_dialog.show()
+            self.is_about_dialog_showing=True
         else:
-            self.about_tl.destroy()
-            self.about_tl = None
-        pass
+            self.on_about_ok_btn_clicked()
 
-    def db_fn(self):
+
+    def on_data_btn_clicked(self):
         if self.data_tl is None:
             self.data_tl = data_toplevel()
         else:
@@ -214,8 +245,8 @@ class _MainUI():
             self.data_tl = None
         pass
 
-    def show_status_msg(self, msg):
-        self.status_label_sv.set(msg)
+    def set_status_msg(self, msg):
+        self.status_label_stringvar.set(msg)
 
     def open_vid_cap(self):
         self.vid = cv2.VideoCapture(self.source)
@@ -232,36 +263,20 @@ class _MainUI():
         self.vid.release()
         self.vid = None
 
-    def setui__events(self):
-        self.showfm.pp_btn['command'] = self.pause_play
-        self.showfm.rec_btn['command'] = self.recf_v0
-        self.showfm.pick_btn['command'] = self.pick_v0
-        self.showfm.showf_go_btn['command'] = self.show_go
-        self.showfm.showf_optionmenu_sv.trace('w', self.show_from)
-        self.infofm.save_btn['command'] = self.savef
-        self.bottomfm.about_fn_btn['command'] = self.about_fn
-        self.bottomfm.db_btn['command'] = self.db_fn
-        self.mainui.root.protocol("WM_DELETE_WINDOW", self.destroy)
-
-    def destroy(self):
-        if self.vid is not None:
-            self.vid.release()
-        exit()
-
-    def pause_play(self, *args):
+    def on_pause_play_btn_clicked(self, *args):
         if self.source_type != SourceType.VID:
             return
         if self.paused:
             self.paused = False
             self.refresh_frame()
-            self.showfm.pp_sv.set(_('Pause'))
-            self.show_status_msg('')
+            self.pause_play_btn_stringvar.set(_('Pause'))
+            self.set_status_msg('')
             if debug:
                 print('Play. . .')
 
         else:
             self.cancel_root_after()
-            self.showfm.pp_sv.set(_('Play'))
+            self.pause_play_btn_stringvar.set(_('Play'))
             self.paused = True
             if len(self.face_rects) > 0:
                 self.show_face_was_detected_status_msg()
@@ -271,24 +286,24 @@ class _MainUI():
                 print('Pause. . .')
 
     def clear_face_text(self):
-        self.infofm.face_text.delete(1.0, END)
+        self.info_text.delete(1.0, END)
 
     def add_face_label_p(self, num):
         x, y, w, h = self.face_rects[num]
         _w = max(w, h)
 
-        new_fl = Label(self.infofm.faces_frame)
+        new_face_label = Label(self.face_frame)
         frame = self.cur_frame[y:y + _w, x:x + _w]
         frame = cv2.resize(frame, self.show_size)
         vid_img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         vid_img = Image.fromarray(vid_img)
         imgtk = ImageTk.PhotoImage(image=vid_img)
-        new_fl.imgtk = imgtk
-        new_fl.configure(image=imgtk)
-        new_fl.bind("<Button-1>",
-                    lambda e: self.del_face_label_p(e, num))
+        new_face_label.imgtk = imgtk
+        new_face_label.configure(image=imgtk)
+        new_face_label.bind("<Button-1>",
+                            lambda e: self.del_face_label_p(e, num))
 
-        new_fl.pack(side=LEFT)
+        new_face_label.pack(side=LEFT)
 
         picked_face_frame = cv2.resize(self.cur_frame[y:y + h, x:x + w],
                                        self.save_size,
@@ -303,28 +318,28 @@ class _MainUI():
         if debug:
             print(len(self.picked_face_frames))
 
-    def show_go(self, *args):
+    def on_go_btn_clicked(self, *args):
         '''
         Entry source and open it.
         '''
-        self.showf_sv = self.showfm.showf_sv.get()
-        if len(self.showf_sv.strip()) < 1:
+        show_from_opt_stringvar = self.show_from_opt_stringvar.get()
+        if len(show_from_opt_stringvar.strip()) < 1:
             return
         self.rec_img = False
         self.cancel_root_after()
-        showf_ext = self.showf_sv.split('.')[-1]
-        if showf_ext in self.fuv.video_exts:
-            self.source = self.showf_sv
+        showf_ext = show_from_opt_stringvar.split('.')[-1]
+        if showf_ext in self.video_exts:
+            self.source = show_from_opt_stringvar
             self.play_video()
             return
-        if re.match(r'\d+', self.showf_sv):
-            self.source = int(self.showf_sv)
+        if re.match(r'\d+', show_from_opt_stringvar):
+            self.source = int(show_from_opt_stringvar)
             self.play_video()
             return
-        if showf_ext in self.fuv.image_exts:
+        if showf_ext in self.image_exts:
             self.view_image()
             return
-        self.showfm.showf_sv.set('')
+        self.show_from_opt_stringvar.set('')
         self.show_nsrc_error()
 
     def get_dict_key_by_value(self, _dict, value):
@@ -332,34 +347,34 @@ class _MainUI():
         values = _dict.values()
         return list(keys)[list(values).index(value)]
 
-    def show_from(self, *args):
+    def show_from_opt_stringvar_trace(self, *args):
         '''
         Show file dialog or turn on the camera.
         '''
-        show_f = self.get_dict_key_by_value(
-            self.showfm.showf_t_dict,
-            self.showfm.showf_optionmenu_sv.get())
-        if show_f == 'file':
+        show_from = self.get_dict_key_by_value(
+            self.show_from_dict,
+            self.show_from_opt_stringvar.get())
+        if show_from == 'file':
             self.face_src_path = tkf.askopenfilename(
                 title=_('Select a file'),
-                filetypes=[(_('Image or video'), self.fuv.filetype_exts)],
+                filetypes=[(_('Image or video'), self.filetype_exts)],
                 initialdir='~')
 
             if len(self.face_src_path) < 1:
                 return
 
             ext = os.path.splitext(self.face_src_path)[1][1:]
-            self.showfm.showf_sv.set(self.face_src_path)
+            self.show_from_opt_stringvar.set(self.face_src_path)
 
-            if ext in self.fuv.image_exts:
+            if ext in self.image_exts:
                 self.view_image()
-            elif ext in self.fuv.video_exts:
+            elif ext in self.video_exts:
                 self.source = self.face_src_path
                 self.play_video()
 
-        elif show_f == 'camera':
-            self.source = self.showf_sv = 0
-            self.showfm.showf_sv.set(self.source)
+        elif show_from == 'camera':
+            self.source = 0
+            self.show_from_opt_stringvar.set(self.source)
             self.play_video()
 
     def cancel_root_after(self):
@@ -405,8 +420,8 @@ class _MainUI():
         vid_img = cv2.cvtColor(vid_img, cv2.COLOR_BGR2RGB)
         vid_img = Image.fromarray(vid_img)
         imgtk = ImageTk.PhotoImage(image=vid_img)
-        self.showfm.vid_frame_label.imgtk = imgtk
-        self.showfm.vid_frame_label.configure(image=imgtk)
+        self.vidframe_label.imgtk = imgtk
+        self.vidframe_label.configure(image=imgtk)
 
         if not self.paused:
             self.root_after = self.mainui.root.after(
@@ -451,8 +466,8 @@ class _MainUI():
         frame = cv2.cvtColor(self.cur_frame, cv2.COLOR_BGR2RGB)
         img = Image.fromarray(frame)
         imgtk = ImageTk.PhotoImage(image=img)
-        self.showfm.vid_frame_label.imgtk = imgtk
-        self.showfm.vid_frame_label.configure(image=imgtk)
+        self.vidframe_label.imgtk = imgtk
+        self.vidframe_label.configure(image=imgtk)
 
     def cur_frame2label(self):
         vid_img = cv2.resize(self.cur_frame, (0, 0),
@@ -460,8 +475,8 @@ class _MainUI():
         vid_img = cv2.cvtColor(vid_img, cv2.COLOR_BGR2RGB)
         vid_img = Image.fromarray(vid_img)
         imgtk = ImageTk.PhotoImage(image=vid_img)
-        self.showfm.vid_frame_label.imgtk = imgtk
-        self.showfm.vid_frame_label.configure(image=imgtk)
+        self.vidframe_label.imgtk = imgtk
+        self.vidframe_label.configure(image=imgtk)
 
     def get_vid_resize_fxfy(self):
         if self.frame_width == self.frame_height == 0:
@@ -479,13 +494,14 @@ class _MainUI():
 
     def show_nsrc_error(self):
         messagebox.showerror(
-            self.fuv.unable_to_open_vid_source_str,
-            self.fuv.unable_to_open_vid_source_str + ': ' + str(self.showf_sv))
+            self.unable_to_open_vid_source_str,
+            self.unable_to_open_vid_source_str + ': ' +
+            str(self.show_from_opt_stringvar.get()))
 
-    def savef(self):
+    def on_save_info_btn_clicked(self):
         if self.cur_info_id is None:
             return
-        info = self.infofm.face_text.get("1.0", "end-1c")
+        info = self.info_text.get("1.0", "end-1c")
         info_file_path = os.path.join(infos_path, self.cur_info_id)
         with open(info_file_path, 'w+') as f:
             f.write(info)
@@ -535,20 +551,20 @@ class _MainUI():
 
         info_file_path = os.path.join(
             infos_path, self.cur_info_id)
-        self.infofm.face_text.delete(1.0, END)
+        self.info_text.delete(1.0, END)
 
         if not os.path.exists(info_file_path):
             _nif = _('No informations found')
-            self.infofm.face_text.insert('1.0', _nif)
-            self.show_status_msg(_nif)
+            self.info_text.insert('1.0', _nif)
+            self.set_status_msg(_nif)
 
-        self.infofm.face_text.insert('1.0',
-                                     open(info_file_path, 'r').read())
+        self.info_text.insert('1.0',
+                              open(info_file_path, 'r').read())
 
     def add_face_label_r(self, num):
         index = len(self.showed_face_frames)
 
-        new_fl = Label(self.infofm.faces_frame)
+        new_face_label = Label(self.face_frame)
 
         x, y, w, h = self.face_rects[num]
         roi_gray = self.rec_gray_img[y:y + h, x:x + w]
@@ -567,32 +583,36 @@ class _MainUI():
         vid_img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         vid_img = Image.fromarray(vid_img)
         imgtk = ImageTk.PhotoImage(image=vid_img)
-        new_fl.imgtk = imgtk
-        new_fl.configure(image=imgtk)
+        new_face_label.imgtk = imgtk
+        new_face_label.configure(image=imgtk)
 
-        new_fl.bind("<Double-Button-1>", lambda e:
-                    self.del_face_label_r(e, index))
+        new_face_label.bind("<Double-Button-1>", lambda e:
+                            self.del_face_label_r(e, index))
 
-        new_fl.bind("<Button-1>", lambda e: self.show_info(new_fl, index))
+        new_face_label.bind(
+            "<Button-1>",
+            lambda e: self.show_info(
+                new_face_label,
+                index))
 
-        new_fl.pack(side=LEFT)
+        new_face_label.pack(side=LEFT)
 
-        self.show_info(new_fl, index)
+        self.show_info(new_face_label, index)
 
     def del_face_label_r(self, e, index):
         if self.zoomed_in_face_label[0] == e.widget:
             self.zoomed_in_face_label = (0, 0)
         e.widget.destroy()
         self.showed_face_frames[index] = None
-        self.infofm.face_text.delete(1.0, END)
+        self.info_text.delete(1.0, END)
         if np.all(np.array(self.showed_face_frames, dtype=object) is None):
             self.clear_status_msg()
 
     def clear_faces_frame(self):
-        for child in self.infofm.faces_frame.winfo_children():
+        for child in self.face_frame.winfo_children():
             child.destroy()
 
-    def pick_v0(self):
+    def on_pick_btn_clicked(self):
 
         if self.source_type == SourceType.NULL:
             return
@@ -614,9 +634,9 @@ class _MainUI():
                 print('len( self.face_rects ) < 1 ')
             return
 
-        self.status_label_sv.set(
-            self.fuv.face_was_detected_str +
-            f'({self.fuv.click_to_remove_p})'
+        self.status_label_stringvar.set(
+            self.face_was_detected_str +
+            f'({self.click_to_remove_p})'
         )
 
         if debug:
@@ -626,7 +646,7 @@ class _MainUI():
         for i in range(len(self.face_rects)):
             self.add_face_label_p(i)
 
-    def recf_v0(self):
+    def on_recognize_btn_clicked(self):
 
         if self.source_type == SourceType.NULL:
             return
@@ -650,9 +670,9 @@ class _MainUI():
                 print('len( self.face_rects ) < 1 ')
             return
 
-        self.status_label_sv.set(
-            self.fuv.face_was_detected_str +
-            f'({self.fuv.double_click_to_remove_r})'
+        self.status_label_stringvar.set(
+            self.face_was_detected_str +
+            f'({self.double_click_to_remove_r})'
         )
 
         for i in range(len(self.face_rects)):
@@ -660,14 +680,20 @@ class _MainUI():
 
     def show_data_empty(self):
         unable_open_s = _('Nothing enter')
-        self.show_status_msg(self.fuv.nothing_was_entered_str)
-        messagebox.showerror(unable_open_s, self.fuv.nothing_was_entered_str)
+        self.set_status_msg(self.nothing_was_entered_str)
+        messagebox.showerror(unable_open_s, self.nothing_was_entered_str)
 
     def show_no_face_was_detected_status_msg(self):
-        self.show_status_msg(self.fuv.no_face_was_detected_str)
+        self.set_status_msg(self.no_face_was_detected_str)
 
     def show_face_was_detected_status_msg(self):
-        self.show_status_msg(self.fuv.face_was_detected_str)
+        self.set_status_msg(self.face_was_detected_str)
 
     def clear_status_msg(self):
-        self.status_label_sv.set('')
+        self.status_label_stringvar.set('')
+
+
+def start():
+    root = tk.Tk()
+    app = MainApplication(root)
+    app.run()

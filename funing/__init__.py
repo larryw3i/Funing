@@ -85,5 +85,5 @@ test_args = ['ts', 't', 'test']
 
 
 def simple():
-    from funing._ui import _main_ui
-    _main_ui._MainUI()
+    from funing._ui import main
+    main.start()
