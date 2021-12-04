@@ -24,8 +24,8 @@ from PIL import Image, ImageTk
 from funing import *
 from funing._ui import error
 from funing.locale import _
-from funing.ui.about_ui import about_toplevel
-from funing.ui.data_ui import data_toplevel
+from funing._ui._about_ui import about_toplevel
+from funing._ui._data_ui import data_toplevel
 from funing.ui.main_ui import MainUI
 
 '''

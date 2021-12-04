@@ -15,6 +15,8 @@ class DataToplevel():
         self.db_tl.title(_('Data'))
         self.db_tl.resizable(0, 0)
 
+        
+
     def destroy(self):
         self.db_tl.destroy()
         self.db_tl = None
@@ -22,5 +24,3 @@ class DataToplevel():
     def mainloop(self):
         self.db_tl.mainloop()
     pass
-
-def data_toplevel(): return DataToplevel()
