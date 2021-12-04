@@ -3,3 +3,4 @@ PyYAML
 Pillow
 numpy
 appdirs
+pygubu

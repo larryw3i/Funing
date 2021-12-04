@@ -4,3 +4,4 @@ pep8
 autopep8
 isort
 twine
+pygubu-designer
