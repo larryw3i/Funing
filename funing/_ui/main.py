@@ -90,7 +90,7 @@ class SourceType(Enum):
     VID = 2     # VIDEO
 
 
-class FDoing(Enum):
+class Status(Enum):
     '''
     What app is doing.
     '''
@@ -102,7 +102,7 @@ class MainApplication(pygubu.TkApplication):
 
     def _create_ui(self):
 
-        self.fdoing = FDoing.PICK
+        self.status = Status.PICK
 
         # pygubu builder
         self.builder = builder = pygubu.Builder(translator)
@@ -115,10 +115,6 @@ class MainApplication(pygubu.TkApplication):
         self.builder.add_from_file(main_ui_path)
 
         # some variables
-        self.show_from_dict = {'file': _('File'), 'camera': _('Camera')}
-        self.show_from_opt_stringvar = tk.StringVar(self.master)
-        self.show_from_opt_stringvar.trace(
-            'w', self.show_from_opt_stringvar_trace)
         self.status_label_stringvar = tk.StringVar(self.master)
         self.pause_play_btn_stringvar = tk.StringVar(self.master)
         self.face_was_detected_str = _('Face was detected.')
@@ -132,20 +128,25 @@ class MainApplication(pygubu.TkApplication):
         self.click_to_remove_p = _('Click the picked face image to remove.')
         self.double_click_to_remove_r = _(
             'Double click the face image to remove.')
+        self.is_about_dialog_showing = False
 
 
         # widgets
         self.main_window = builder.get_object('main_frame', self.master)
         self.vidframe_label = builder.get_object('vidframe_label', self.master)
         self.info_text = builder.get_object('info_text', self.master)
+        self.go_combobox = builder.get_object('go_combobox', self.master)
         self.face_frame = builder.get_object(
             'face_frame', self.master)  # not vid frame, it shows picture.
-        self.is_about_dialog_showing = False
         self.about_dialog = self.builder.get_object(\
         'about_dialog', self.master)
-        self.builder.get_object('version_label')['text'] = version
         self.data_toplevel = None
 
+        # initial widget
+        self.builder.get_object('version_label')['text'] = version
+        self.go_combobox.config(values = [_('File'),_('Camera')])
+        self.go_combobox.current(1)
+        
         # vid
         self.vid = None
         self.frame_width = self.frame_height = 0
@@ -317,42 +318,92 @@ class MainApplication(pygubu.TkApplication):
             self.clear_status_msg()
         if debug:
             print(len(self.picked_face_frames))
+    
+    def show_from_file(self):
+        self.face_src_path = tkf.askopenfilename(
+            title=_('Select a file'),
+            filetypes=[(_('Image or video'), self.filetype_exts)],
+            initialdir='~')
+
+        if len(self.face_src_path) < 1:
+            return
+
+        ext = os.path.splitext(self.face_src_path)[1][1:]
+        self.go_combobox.set(self.face_src_path)
+
+        if ext in self.image_exts:
+            self.view_image()
+        elif ext in self.video_exts:
+            self.source = self.face_src_path
+            self.play_video()
+            
+    def show_from_camera(self):
+        self.source = 0
+        self.go_combobox.set(self.source)
+        self.play_video()
+    
+    def go_combobox_selected(self,args):
+        
+        go_combobox_var = self.go_combobox.get()
+        if len(go_combobox_var.strip()) < 1:
+            return
+        self.rec_img = False
+        self.cancel_root_after()
+
+        if go_combobox_var == _('File'):
+            self.show_from_file()
+            return
+        elif go_combobox_var == _('Camera'):
+            self.show_from_camera()
+            return
 
     def on_go_btn_clicked(self, *args):
         '''
         Entry source and open it.
         '''
-        show_from_opt_stringvar = self.show_from_opt_stringvar.get()
-        if len(show_from_opt_stringvar.strip()) < 1:
+        go_combobox_var = self.go_combobox.get()
+        if len(go_combobox_var.strip()) < 1:
             return
         self.rec_img = False
         self.cancel_root_after()
-        showf_ext = show_from_opt_stringvar.split('.')[-1]
-        if showf_ext in self.video_exts:
-            self.source = show_from_opt_stringvar
+
+        show_from_ext = go_combobox_var.split('.')[-1]
+        
+        if show_from_ext in self.video_exts:
+            self.source = go_combobox_var
             self.play_video()
             return
-        if re.match(r'\d+', show_from_opt_stringvar):
-            self.source = int(show_from_opt_stringvar)
+        elif re.match(r'\d+', go_combobox_var):
+            self.source = int(go_combobox_var)
             self.play_video()
             return
-        if showf_ext in self.image_exts:
+        elif show_from_ext in self.image_exts:
             self.view_image()
+            return        
+        elif go_combobox_var == _('File'):
+            self.show_from_file()
             return
-        self.show_from_opt_stringvar.set('')
+        elif go_combobox_var == _('Camera'):
+            self.show_from_camera()
+            return
+
+        self.go_combobox.current(1)
         self.show_nsrc_error()
 
     def get_dict_key_by_value(self, _dict, value):
         keys = _dict.keys()
         values = _dict.values()
-        return list(keys)[list(values).index(value)]
+        if value in values:
+            return list(keys)[list(values).index(value)]
+        else:
+            return value
 
-    def show_from_opt_stringvar_trace(self, *args):
+    def show_from_opt_command(self, *args):
         '''
         Show file dialog or turn on the camera.
         '''
         show_from = self.get_dict_key_by_value(
-            self.show_from_dict,
+            self.show_from_opt_dict,
             self.show_from_opt_stringvar.get())
         if show_from == 'file':
             self.face_src_path = tkf.askopenfilename(
@@ -382,7 +433,7 @@ class MainApplication(pygubu.TkApplication):
         Finish refreshing.
         '''
         if self.root_after != -1:
-            self.mainui.root.after_cancel(self.root_after)
+            self.master.after_cancel(self.root_after)
             self.close_vid_cap()
             self.vid = None
 
@@ -424,7 +475,7 @@ class MainApplication(pygubu.TkApplication):
         self.vidframe_label.configure(image=imgtk)
 
         if not self.paused:
-            self.root_after = self.mainui.root.after(
+            self.root_after = self.master.after(
                 int(1000 / self.vid_fps), self.refresh_frame)
 
     def get_img_resize_fxfy(self):
@@ -496,7 +547,7 @@ class MainApplication(pygubu.TkApplication):
         messagebox.showerror(
             self.unable_to_open_vid_source_str,
             self.unable_to_open_vid_source_str + ': ' +
-            str(self.show_from_opt_stringvar.get()))
+            str(self.go_combobox.get()))
 
     def on_save_info_btn_clicked(self):
         if self.cur_info_id is None:
@@ -505,11 +556,12 @@ class MainApplication(pygubu.TkApplication):
         info_file_path = os.path.join(infos_path, self.cur_info_id)
         with open(info_file_path, 'w+') as f:
             f.write(info)
-        if self.fdoing == FDoing.PICK:
+        if self.status == Status.PICK:
             img_path = os.path.join(faces_path, self.cur_info_id)
             os.makedirs(img_path, exist_ok=True)
             count = 0
             for f in self.picked_face_frames:
+                if len(f)<1:continue
                 cv2.imwrite(f'{img_path}/{count}.png', f)
                 count += 1
             self.cur_info_id = None
@@ -617,9 +669,9 @@ class MainApplication(pygubu.TkApplication):
         if self.source_type == SourceType.NULL:
             return
 
-        if self.fdoing == FDoing.REC:
+        if self.status == Status.REC:
             self.clear_faces_frame()
-            self.fdoing = FDoing.PICK  # 'p'
+            self.status = Status.PICK  # 'p'
 
         if self.cur_frame is None:
             return
@@ -655,9 +707,9 @@ class MainApplication(pygubu.TkApplication):
             self.show_data_empty()
             return
 
-        if self.fdoing == FDoing.PICK:
+        if self.status == Status.PICK:
             self.clear_faces_frame()
-            self.fdoing = FDoing.REC
+            self.status = Status.REC
 
         if self.cur_frame is None:
             return
