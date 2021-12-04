@@ -25,7 +25,7 @@ from funing import *
 from funing._ui import error
 from funing.locale import _
 from funing.ui.about_ui import about_toplevel
-from funing.ui.db_ui import db_toplevel
+from funing.ui.data_ui import data_toplevel
 from funing.ui.main_ui import MainUI
 
 '''
@@ -114,6 +114,7 @@ class _MainUI():
         self.bottomfm = self.mainui.bottomframe
         self.status_label_sv = self.bottomfm.status_label_sv
         self.about_tl = None    # about_top_level
+        self.data_tl = None       # data_toplevel
         self.showf_sv = None    # show_from StringVar
 
         # vid
@@ -206,6 +207,11 @@ class _MainUI():
         pass
 
     def db_fn(self):
+        if self.data_tl is None:
+            self.data_tl = data_toplevel()
+        else:
+            self.data_tl.destroy()
+            self.data_tl = None
         pass
 
     def show_status_msg(self, msg):
