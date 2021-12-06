@@ -1,8 +1,4 @@
 
-from funing.ui.about_ui import AboutToplevel
-import webbrowser
-
-
 import gettext
 import os
 import re
@@ -28,27 +24,54 @@ from PIL import Image, ImageTk
 from funing import *
 from funing._ui import error
 from funing.locale import _
+from funing.ui.about_ui import AboutToplevel
 
 translator = _
 
-class About(pygubu.TkApplication):
-    def _create_ui(self):
 
+class AboutTkApplication(pygubu.TkApplication):
+    def __init__(self):
         # pygubu builder
-        self.builder = builder = pygubu.Builder(translator)
-
+        self.builder = pygubu.Builder(translator)
         # ui files
         about_ui_path = os.path.join(
             os.path.join(project_path, 'ui'), 'about.ui')
-
         # add ui files
         self.builder.add_from_file(about_ui_path)
 
-        pass
+        self.mainwindow = None
 
+        self.is_showing = False
 
+    def on_about_ok_btn_clicked(self):
+        self.about_ok()
 
-def view_source_code():
-    
+    def about_ok(self):
+        self.trigger()
 
-def about_toplevel(): return AboutToplevel().about_tl
+    def quit(self, event=None):
+        self.mainwindow.withdraw()
+        self.is_showing = False
+
+    def run(self):
+        if not self.mainwindow:
+            self.mainwindow = self.builder.get_object('about_toplevel')
+            self.builder.get_object('version_label')['text'] = version
+            self.mainwindow.protocol("WM_DELETE_WINDOW", self.on_closing)
+            # connect callbacks
+            self.builder.connect_callbacks(self)
+        else:
+            self.mainwindow.deiconify()
+        self.is_showing = True
+
+    def on_closing(self):
+        self.quit()
+
+    def trigger(self):
+        if not self.is_showing:
+            self.run()
+        else:
+            self.quit()
+
+    def view_source_code(self, *args):
+        webbrowser.open(source_page)

@@ -38,6 +38,7 @@ faces_path = \
     os.path.join(user_data_path, 'faces')
 infos_path = \
     os.path.join(user_data_path, 'infos')
+data_path = os.path.join(user_data_path, 'data')
 
 user_ipynb_dir_path = \
     os.path.join(user_data_path, 'ipynb')
@@ -60,7 +61,12 @@ prev_version = \
 backup_path = \
     os.path.join(user_data_path, '.cp')
 
-user_dirs = [faces_path, infos_path, backup_path, user_ipynb_dir_path]
+user_dirs = [
+    faces_path,
+    infos_path,
+    backup_path,
+    user_ipynb_dir_path,
+    data_path]
 for p in user_dirs:
     os.path.exists(p) or os.makedirs(p)
 
@@ -77,7 +83,7 @@ elif prev_version != __version__:
         yaml.safe_dump(config_yml, f)
 
 
-def data_empty(): return len(os.listdir(faces_path)) < 1
+def data_empty(): return len(os.listdir(data_path)) < 1
 
 
 start_args = ['s', 'st' 'start']

@@ -24,8 +24,9 @@ from PIL import Image, ImageTk
 
 from funing import *
 from funing._ui import error
+from funing._ui.about import AboutTkApplication
+from funing._ui.data import DataTkApplication
 from funing.locale import _
-from funing.ui.main_ui import MainUI
 
 '''
 # __  --> assign a variable that is not used.
@@ -65,15 +66,12 @@ except BaseException:
 
 
 class SourceType(Enum):
-    NULL = 0
+    NULL = 0    # default
     IMG = 1     # IMAGE
     VID = 2     # VIDEO
 
 
 class Status(Enum):
-    '''
-    What app is doing.
-    '''
     REC = 0     # recognize
     PICK = 1    # pick image
 
@@ -97,7 +95,6 @@ class MainApplication(pygubu.TkApplication):
         # mix variables
         self.status_label_stringvar = tk.StringVar(self.master)
         self.pause_play_btn_stringvar = tk.StringVar(self.master)
-        self.is_about_dialog_showing = False
         self.var_face_was_detected_str = _('Face was detected.')
         self.var_no_face_was_detected_str = _('No face was detected.')
         self.var_nothing_was_entered_str = \
@@ -120,12 +117,13 @@ class MainApplication(pygubu.TkApplication):
         self.go_combobox = builder.get_object('go_combobox', self.master)
         self.face_frame = builder.get_object(
             'face_frame', self.master)  # not vid frame, it shows picture.
-        self.about_dialog = self.builder.get_object(
-            'about_dialog', self.master)
         self.data_toplevel = None
 
+        # tk application
+        self.about_tkapp = AboutTkApplication()
+        self.data_tkapp = DataTkApplication()
+
         # initial widget
-        self.builder.get_object('version_label')['text'] = version
         self.go_combobox.config(values=[_('File'), _('Camera')])
         self.go_combobox.current(1)
 
@@ -151,7 +149,7 @@ class MainApplication(pygubu.TkApplication):
 
         # info
         self.cur_info_id = None
-        self.info_ids = []
+        self.info_ids = []  # uuid str array
 
         # cv2
         self.hff_xml_path = os.path.join(haarcascades,
@@ -184,12 +182,14 @@ class MainApplication(pygubu.TkApplication):
         ids = []
         labels = []
         label = 0
-        subdirs = os.listdir(faces_path)
+        subdirs = os.listdir(data_path)
         for subdir in subdirs:
-            subpath = os.path.join(faces_path, subdir)
+            subpath = os.path.join(data_path, subdir)
             if os.path.isdir(subpath):
                 ids.append(subdir)
                 for filename in os.listdir(subpath):
+                    if filename == '0.txt':
+                        continue  # '0.txt' is the info file.
                     imgpath = os.path.join(subpath, filename)
                     img = cv2.imread(imgpath, cv2.IMREAD_COLOR)
                     gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -203,37 +203,23 @@ class MainApplication(pygubu.TkApplication):
     def recognizer_train(self):
         self.set_status_msg(_('Recognizer training. . .'))
         images, labels, self.info_ids = self.load_images()
+        if len(labels) < 1: 
+            self.show_data_empty()
+            return
         self.recognizer.train(images, labels)
         self.set_status_msg(_('Recognizer finish training.'))
-
-    def on_about_ok_btn_clicked(self):
-        self.about_ok()
-
-    def about_ok(self):
-        if self.is_about_dialog_showing:
-            self.about_dialog.close()
-            self.is_about_dialog_showing = False
 
     def on_about_btn_clicked(self):
         self.about()
 
     def about(self):
-        if not self.is_about_dialog_showing:
-            self.about_dialog.show()
-            self.is_about_dialog_showing = True
-        else:
-            self.on_about_ok_btn_clicked()
+        self.about_tkapp.trigger()
 
     def on_data_btn_clicked(self):
         self.data()
 
     def data(self):
-        if self.data_tl is None:
-            self.data_tl = data_toplevel()
-        else:
-            self.data_tl.destroy()
-            self.data_tl = None
-        pass
+        self.data_tkapp.trigger()
 
     def set_status_msg(self, msg):
         self.status_label_stringvar.set(msg)
@@ -550,18 +536,22 @@ class MainApplication(pygubu.TkApplication):
     def save_info(self):
         if self.cur_info_id is None:
             return
+        if len(self.picked_face_frames) < 1:
+            self.set_status_msg(_('No face picture picked'))
+            return
+        data_dir_path = os.path.join(data_path, self.cur_info_id)
+        os.makedirs(data_dir_path, exist_ok=True)
+
         info = self.info_text.get("1.0", "end-1c")
-        info_file_path = os.path.join(infos_path, self.cur_info_id)
+        info_file_path = self.get_info_file_path(self.cur_info_id)
         with open(info_file_path, 'w+') as f:
             f.write(info)
         if self.status == Status.PICK:
-            img_path = os.path.join(faces_path, self.cur_info_id)
-            os.makedirs(img_path, exist_ok=True)
-            count = 0
+            count = 1
             for f in self.picked_face_frames:
                 if len(f) < 1:
                     continue
-                cv2.imwrite(f'{img_path}/{count}.png', f)
+                cv2.imwrite(f'{data_dir_path}/{count}.jpg', f)
                 count += 1
             self.cur_info_id = None
 
@@ -583,6 +573,10 @@ class MainApplication(pygubu.TkApplication):
         label.imgtk = imgtk
         label.configure(image=imgtk)
 
+    def get_info_file_path(self, info_id):
+        data_dir_path = os.path.join(data_path, info_id)
+        return os.path.join(data_dir_path,  '0.txt')
+
     def show_info(self, label, index, cur_info_id):
 
         if (self.zoomed_in_face_label[0] != 0) and \
@@ -600,11 +594,9 @@ class MainApplication(pygubu.TkApplication):
 
         self.zoomed_in_face_label = (label, index)
 
-        info_file_path = os.path.join(
-            infos_path, cur_info_id)
+        info_file_path = self.get_info_file_path(cur_info_id)
 
         self.info_text.delete(1.0, END)
-
         if not os.path.exists(info_file_path):
             _nif_ = _('No informations found')
             self.info_text.insert('1.0', _nif_)

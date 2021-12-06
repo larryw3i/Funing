@@ -12,6 +12,8 @@ update_gitignore(){
 _xgettext(){
     xgettext -v -j -L Python --output=funing/locale/funing.pot \
     `find ./funing/ -name "*.py"`
+    xgettext -L glade --output=funing/locale/funing.pot \
+    $(find ./funing/ui -name "*.ui")
 
     for _po in $(find ./funing/locale/ -name "*.po"); do
         msgmerge -U -v $_po ./funing/locale/funing.pot

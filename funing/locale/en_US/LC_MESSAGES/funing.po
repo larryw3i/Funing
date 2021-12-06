@@ -2,220 +2,130 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# larry <larryw3i@163.com>, 2021.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: Funing 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-31 23:20+0800\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"POT-Creation-Date: 2021-12-06 23:22+0800\n"
+"PO-Revision-Date: 2021-12-06 23:35+0800\n"
+"Last-Translator: larry <larryw3i@163.com>\n"
+"Language-Team: Chinese (Simplified) <larryw3i@163.com>\n"
+"Language: zh_CHS\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"X-Generator: Gtranslator 40.0\n"
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui_/_mainui_.py:40
-#: funing/ui_/_mainui_.py:40 funing/ui_/_mainui_.py:65
-#: funing/ui_/_mainui_.py:71
-msgid "Face was detected."
-msgstr ""
+#: funing/ui/data.ui:27
+msgid "prev_str"
+msgstr "prev"
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui_/_mainui_.py:41
-#: funing/ui_/_mainui_.py:41 funing/ui_/_mainui_.py:66
-#: funing/ui_/_mainui_.py:72
-msgid "No face was detected."
-msgstr ""
+#: funing/ui/data.ui:36
+msgid "show_per_page_str0"
+msgstr "show"
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui_/_mainui_.py:42
-#: funing/ui_/_mainui_.py:42 funing/ui_/_mainui_.py:67
-#: funing/ui_/_mainui_.py:73
-#, fuzzy
-msgid "You haven't entered anything yet!"
-msgstr "You haven't entered data yet! Open a source and click 'Pick' to enter"
+#: funing/ui/data.ui:45
+msgid "10"
+msgstr "10"
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui_/_mainui_.py:43
-#: funing/ui_/_mainui_.py:43 funing/ui_/_mainui_.py:68
-#: funing/ui_/_mainui_.py:74
-msgid "Unable to open video source."
-msgstr ""
+#: funing/ui/data.ui:55
+msgid "show_per_page_str1"
+msgstr "/page"
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui_/_mainui_.py:44
-#: funing/ui_/_mainui_.py:44 funing/ui_/_mainui_.py:69
-#: funing/ui_/_mainui_.py:82
-msgid "Click the picked face image to remove."
-msgstr ""
+#: funing/ui/data.ui:64
+msgid "next_str"
+msgstr "next"
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui_/_mainui_.py:46
-#: funing/ui_/_mainui_.py:46 funing/ui_/_mainui_.py:71
-#: funing/ui_/_mainui_.py:85
-msgid "Double click the face image to remove."
-msgstr ""
-
-#: /home/larry/fun/larryw3i/Funing/funing/ui_/_mainui_.py:123
-#: funing/ui_/_mainui_.py:123 funing/ui_/_mainui_.py:141
-#: funing/ui_/_mainui_.py:153
-msgid "No desktop environment is detected! "
-msgstr ""
-
-#: /home/larry/fun/larryw3i/Funing/funing/ui_/_mainui_.py:174
-#: funing/ui_/_mainui_.py:174 funing/ui_/_mainui_.py:181
-#: funing/ui_/_mainui_.py:193
-msgid "Recognizer training. . ."
-msgstr ""
-
-#: /home/larry/fun/larryw3i/Funing/funing/ui_/_mainui_.py:177
-#: funing/ui_/_mainui_.py:177 funing/ui_/_mainui_.py:184
-#: funing/ui_/_mainui_.py:196
-msgid "Recognizer finish training."
-msgstr ""
-
-#: /home/larry/fun/larryw3i/Funing/funing/ui_/_mainui_.py:215
-#: /home/larry/fun/larryw3i/Funing/funing/ui/mainui_.py:52
-#: funing/ui_/_mainui_.py:215 funing/ui/mainui_.py:51
-#: funing/ui_/_mainui_.py:239 funing/ui_/_mainui_.py:251
-msgid "Pause"
-msgstr ""
-
-#: /home/larry/fun/larryw3i/Funing/funing/ui_/_mainui_.py:222
-#: funing/ui_/_mainui_.py:222 funing/ui_/_mainui_.py:246
-#: funing/ui_/_mainui_.py:258
-msgid "Play"
-msgstr "Play"
-
-#: /home/larry/fun/larryw3i/Funing/funing/ui_/_mainui_.py:295
-#: funing/ui_/_mainui_.py:295 funing/ui_/_mainui_.py:319
-#: funing/ui_/_mainui_.py:338
-msgid "Select a file"
-msgstr ""
-
-#: /home/larry/fun/larryw3i/Funing/funing/ui_/_mainui_.py:296
-#: funing/ui_/_mainui_.py:296 funing/ui_/_mainui_.py:320
-#: funing/ui_/_mainui_.py:339
-msgid "Image or video"
-msgstr ""
-
-#: /home/larry/fun/larryw3i/Funing/funing/ui_/_mainui_.py:484
-#: funing/ui_/_mainui_.py:484 funing/ui_/_mainui_.py:513
-#: funing/ui_/_mainui_.py:535
-msgid "No informations found"
-msgstr ""
-
-#: /home/larry/fun/larryw3i/Funing/funing/ui_/_mainui_.py:610
-#: funing/ui_/_mainui_.py:610 funing/ui_/_mainui_.py:639
-#: funing/ui_/_mainui_.py:661
-msgid "Nothing enter"
-msgstr "Nothing enter"
-
-#: /home/larry/fun/larryw3i/Funing/funing/ui/aboutui_.py:13
-#: /home/larry/fun/larryw3i/Funing/funing/ui/mainui_.py:116
-#: funing/ui/mainui_.py:115 funing/ui/aboutui_.py:13 funing/ui/mainui_.py:114
-msgid "About Funing"
-msgstr ""
-
-#: /home/larry/fun/larryw3i/Funing/funing/ui/aboutui_.py:15
-#: /home/larry/fun/larryw3i/Funing/funing/ui/mainui_.py:18
-#: funing/ui/mainui_.py:17 funing/ui/aboutui_.py:15
+#: funing/ui/about.ui:17
 msgid "Funing"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui/aboutui_.py:27
-#: funing/ui/aboutui_.py:27
-msgid "Licensed under the MIT license"
+#: funing/ui/about.ui:26
+msgid "%version%"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui/mainui_.py:44
-#: funing/ui/mainui_.py:43
+#: funing/ui/about.ui:35
+msgid "Licensed under the MIT license."
+msgstr ""
+
+#: funing/ui/about.ui:44
+msgid "This program comes with ABSOLUTELY NO WARRANTY."
+msgstr ""
+
+#: funing/ui/about.ui:54
+msgid "From larryw3i & contributors."
+msgstr ""
+
+#: funing/ui/about.ui:64
+msgid "OK"
+msgstr ""
+
+#: funing/ui/about.ui:75
+msgid "source code"
+msgstr ""
+
+#: funing/ui/main.ui:22
+msgid "video frame"
+msgstr ""
+
+#: funing/ui/main.ui:52
 msgid "GO"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui/mainui_.py:46
-#: funing/ui/mainui_.py:45
-msgid "File"
+#: funing/ui/main.ui:62
+msgid "Pause"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui/mainui_.py:46
-#: funing/ui/mainui_.py:45
-msgid "Camera"
-msgstr ""
-
-#: /home/larry/fun/larryw3i/Funing/funing/ui/mainui_.py:47
-#: funing/ui/mainui_.py:46
-msgid "Open"
-msgstr ""
-
-#: /home/larry/fun/larryw3i/Funing/funing/ui/mainui_.py:56
-#: funing/ui/mainui_.py:55
+#: funing/ui/main.ui:73
 msgid "Recognize"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui/mainui_.py:60
-#: funing/ui/mainui_.py:59
+#: funing/ui/main.ui:83
 msgid "Pick"
 msgstr "Pick"
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui/mainui_.py:92
-#: funing/ui/mainui_.py:92 funing/ui/mainui_.py:91
-msgid "Write it with certain rules so that you can analyze it later"
-msgstr ""
-"Write it in toml or yaml format, so it's a lot easier for you to analyze it."
-
-#: /home/larry/fun/larryw3i/Funing/funing/ui/mainui_.py:95
-#: funing/ui/mainui_.py:94 funing/ui/mainui_.py:93
+#: funing/ui/main.ui:140
 msgid "Save"
 msgstr ""
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui/mainui_.py:113
-#: funing/ui/mainui_.py:112 funing/ui/mainui_.py:111
+#: funing/ui/main.ui:164
+msgid "About Funing"
+msgstr ""
+
+#: funing/ui/main.ui:174
+msgid "Data"
+msgstr ""
+
+#: funing/ui/main.ui:184
 msgid "Welcome to Funing."
 msgstr ""
 
-#: funing/ui/mainui_.py:92
 #, fuzzy
-msgid ""
-"Write it with certain rules sddddddddddddddddddddddddddddddddddddddddddo "
-"that you can analyze it later"
-msgstr ""
-"Write it in toml or yaml format, so it's a lot easier for you to analyze it."
+#~ msgid "You haven't entered anything yet!"
+#~ msgstr ""
+#~ "You haven't entered data yet! Open a source and click 'Pick' to enter"
 
-#: funing/ui/aboutui_.py:26 funing/ui/aboutui_.py:28
-msgid "From larryw3i & contributors"
-msgstr ""
+#~ msgid "Play"
+#~ msgstr "Play"
 
-#: funing/ui_/_mainui_.py:35
-msgid "haarcascades could not be imported, funing exit."
-msgstr ""
+#~ msgid "Nothing enter"
+#~ msgstr "Nothing enter"
 
-#: funing/ui_/_mainui_.py:42
-msgid ""
-"\n"
-"It seems that you have both 'opencv-python' and 'opencv-contrib-python' "
-"installed, do you want to uninstall them and reinstall 'opencv-contrib-"
-"python'([y]/n)?"
-msgstr ""
+#~ msgid "Write it with certain rules so that you can analyze it later"
+#~ msgstr ""
+#~ "Write it in toml or yaml format, so it's a lot easier for you to analyze "
+#~ "it."
 
-#: funing/ui_/_mainui_.py:51
-msgid "\"EigenFaceRecognizer_create\" could not be imported, funing exit."
-msgstr ""
-
-#: funing/ui/mainui_.py:116
-msgid "Open simple.ipynb file"
-msgstr ""
-
-#: funing/ui_/_mainui_.py:42 funing/ui_/_mainui_.py:48
-msgid ""
-"It seems that you have both 'opencv-python' and 'opencv-contrib-python' "
-"installed, do you want to uninstall them and reinstall 'opencv-contrib-"
-"python'([y]/n)?"
-msgstr ""
-
-#: funing/ui_/_mainui_.py:59
-msgid ""
-"\"EigenFaceRecognizer_create\" and \"haarcascades\" could not be imported, "
-"funing exit."
-msgstr ""
+#, fuzzy
+#~ msgid ""
+#~ "Write it with certain rules sddddddddddddddddddddddddddddddddddddddddddo "
+#~ "that you can analyze it later"
+#~ msgstr ""
+#~ "Write it in toml or yaml format, so it's a lot easier for you to analyze "
+#~ "it."
 
 #~ msgid "tolerance"
 #~ msgstr "tolerance(0.1-0.6)"

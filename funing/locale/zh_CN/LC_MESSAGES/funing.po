@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funing 0.2.44\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-31 23:20+0800\n"
-"PO-Revision-Date: 2021-10-31 23:21+0800\n"
+"POT-Creation-Date: 2021-12-06 23:22+0800\n"
+"PO-Revision-Date: 2021-12-06 23:30+0800\n"
 "Last-Translator: larry <larryw3i@163.com>\n"
 "Language-Team: Chinese (Simplified) <larryw3i@163.com>\n"
 "Language: zh_CHS\n"
@@ -19,210 +19,184 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0\n"
 "X-Generator: Gtranslator 40.0\n"
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui_/_mainui_.py:40
-#: funing/ui_/_mainui_.py:40 funing/ui_/_mainui_.py:65
-#: funing/ui_/_mainui_.py:71
-msgid "Face was detected."
-msgstr "人脸被检测。"
+#: funing/ui/data.ui:27
+msgid "prev_str"
+msgstr "上一页"
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui_/_mainui_.py:41
-#: funing/ui_/_mainui_.py:41 funing/ui_/_mainui_.py:66
-#: funing/ui_/_mainui_.py:72
-msgid "No face was detected."
-msgstr "没有检测到人脸。"
+#: funing/ui/data.ui:36
+msgid "show_per_page_str0"
+msgstr "每页显示"
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui_/_mainui_.py:42
-#: funing/ui_/_mainui_.py:42 funing/ui_/_mainui_.py:67
-#: funing/ui_/_mainui_.py:73
-msgid "You haven't entered anything yet!"
-msgstr "你还没有录入任何数据, 打开摄像头或文件然后点击'录入'。"
+#: funing/ui/data.ui:45
+msgid "10"
+msgstr "10"
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui_/_mainui_.py:43
-#: funing/ui_/_mainui_.py:43 funing/ui_/_mainui_.py:68
-#: funing/ui_/_mainui_.py:74
-msgid "Unable to open video source."
-msgstr "无法打开视频源。"
+#: funing/ui/data.ui:55
+msgid "show_per_page_str1"
+msgstr "条"
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui_/_mainui_.py:44
-#: funing/ui_/_mainui_.py:44 funing/ui_/_mainui_.py:69
-#: funing/ui_/_mainui_.py:82
-msgid "Click the picked face image to remove."
-msgstr "单击被获取的图片就可以删除。"
+#: funing/ui/data.ui:64
+msgid "next_str"
+msgstr "下一页"
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui_/_mainui_.py:46
-#: funing/ui_/_mainui_.py:46 funing/ui_/_mainui_.py:71
-#: funing/ui_/_mainui_.py:85
-msgid "Double click the face image to remove."
-msgstr "双击被获取的图片就可以删除。"
-
-#: /home/larry/fun/larryw3i/Funing/funing/ui_/_mainui_.py:123
-#: funing/ui_/_mainui_.py:123 funing/ui_/_mainui_.py:141
-#: funing/ui_/_mainui_.py:153
-msgid "No desktop environment is detected! "
-msgstr "亲, 好像没有检测到显示器哦! "
-
-#: /home/larry/fun/larryw3i/Funing/funing/ui_/_mainui_.py:174
-#: funing/ui_/_mainui_.py:174 funing/ui_/_mainui_.py:181
-#: funing/ui_/_mainui_.py:193
-msgid "Recognizer training. . ."
-msgstr "正在训练识别器. . ."
-
-#: /home/larry/fun/larryw3i/Funing/funing/ui_/_mainui_.py:177
-#: funing/ui_/_mainui_.py:177 funing/ui_/_mainui_.py:184
-#: funing/ui_/_mainui_.py:196
-msgid "Recognizer finish training."
-msgstr "识别器训练完成。"
-
-#: /home/larry/fun/larryw3i/Funing/funing/ui_/_mainui_.py:215
-#: /home/larry/fun/larryw3i/Funing/funing/ui/mainui_.py:52
-#: funing/ui_/_mainui_.py:215 funing/ui/mainui_.py:51
-#: funing/ui_/_mainui_.py:239 funing/ui_/_mainui_.py:251
-msgid "Pause"
-msgstr "暂停"
-
-#: /home/larry/fun/larryw3i/Funing/funing/ui_/_mainui_.py:222
-#: funing/ui_/_mainui_.py:222 funing/ui_/_mainui_.py:246
-#: funing/ui_/_mainui_.py:258
-msgid "Play"
-msgstr "继续"
-
-#: /home/larry/fun/larryw3i/Funing/funing/ui_/_mainui_.py:295
-#: funing/ui_/_mainui_.py:295 funing/ui_/_mainui_.py:319
-#: funing/ui_/_mainui_.py:338
-msgid "Select a file"
-msgstr "选择一个文件"
-
-#: /home/larry/fun/larryw3i/Funing/funing/ui_/_mainui_.py:296
-#: funing/ui_/_mainui_.py:296 funing/ui_/_mainui_.py:320
-#: funing/ui_/_mainui_.py:339
-msgid "Image or video"
-msgstr "照片或视频"
-
-#: /home/larry/fun/larryw3i/Funing/funing/ui_/_mainui_.py:484
-#: funing/ui_/_mainui_.py:484 funing/ui_/_mainui_.py:513
-#: funing/ui_/_mainui_.py:535
-msgid "No informations found"
-msgstr "未发现信息"
-
-#: /home/larry/fun/larryw3i/Funing/funing/ui_/_mainui_.py:610
-#: funing/ui_/_mainui_.py:610 funing/ui_/_mainui_.py:639
-#: funing/ui_/_mainui_.py:661
-msgid "Nothing enter"
-msgstr "没有录入任何数据"
-
-#: /home/larry/fun/larryw3i/Funing/funing/ui/aboutui_.py:13
-#: /home/larry/fun/larryw3i/Funing/funing/ui/mainui_.py:116
-#: funing/ui/mainui_.py:115 funing/ui/aboutui_.py:13 funing/ui/mainui_.py:114
-msgid "About Funing"
-msgstr "关于Funing"
-
-#: /home/larry/fun/larryw3i/Funing/funing/ui/aboutui_.py:15
-#: /home/larry/fun/larryw3i/Funing/funing/ui/mainui_.py:18
-#: funing/ui/mainui_.py:17 funing/ui/aboutui_.py:15
+#: funing/ui/about.ui:17
 msgid "Funing"
 msgstr "Funing"
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui/aboutui_.py:27
-#: funing/ui/aboutui_.py:27
-msgid "Licensed under the MIT license"
-msgstr "本项目以MIT开源协议授权"
+#: funing/ui/about.ui:26
+msgid "%version%"
+msgstr "%version%"
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui/mainui_.py:44
-#: funing/ui/mainui_.py:43
+#: funing/ui/about.ui:35
+msgid "Licensed under the MIT license."
+msgstr "本项目以MIT开源协议授权。"
+
+#: funing/ui/about.ui:44
+msgid "This program comes with ABSOLUTELY NO WARRANTY."
+msgstr "此程序不提供任何担保。"
+
+#: funing/ui/about.ui:54
+msgid "From larryw3i & contributors."
+msgstr "来自larryw3i和贡献者们。"
+
+#: funing/ui/about.ui:64
+msgid "OK"
+msgstr "好的"
+
+#: funing/ui/about.ui:75
+msgid "source code"
+msgstr "源码"
+
+#: funing/ui/main.ui:22
+msgid "video frame"
+msgstr "视频帧"
+
+#: funing/ui/main.ui:52
 msgid "GO"
 msgstr "直达"
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui/mainui_.py:46
-#: funing/ui/mainui_.py:45
-msgid "File"
-msgstr "文件"
+#: funing/ui/main.ui:62
+msgid "Pause"
+msgstr "暂停"
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui/mainui_.py:46
-#: funing/ui/mainui_.py:45
-msgid "Camera"
-msgstr "摄像头"
-
-#: /home/larry/fun/larryw3i/Funing/funing/ui/mainui_.py:47
-#: funing/ui/mainui_.py:46
-msgid "Open"
-msgstr "打开"
-
-#: /home/larry/fun/larryw3i/Funing/funing/ui/mainui_.py:56
-#: funing/ui/mainui_.py:55
+#: funing/ui/main.ui:73
 msgid "Recognize"
 msgstr "识别"
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui/mainui_.py:60
-#: funing/ui/mainui_.py:59
+#: funing/ui/main.ui:83
 msgid "Pick"
 msgstr "获取"
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui/mainui_.py:92
-#: funing/ui/mainui_.py:92 funing/ui/mainui_.py:91
-msgid "Write it with certain rules so that you can analyze it later"
-msgstr ""
-"信息编写要中规中矩, 比如yaml或toml, \n"
-"这样你分析它们就变得易如反掌。"
-
-#: /home/larry/fun/larryw3i/Funing/funing/ui/mainui_.py:95
-#: funing/ui/mainui_.py:94 funing/ui/mainui_.py:93
+#: funing/ui/main.ui:140
 msgid "Save"
 msgstr "保存"
 
-#: /home/larry/fun/larryw3i/Funing/funing/ui/mainui_.py:113
-#: funing/ui/mainui_.py:112 funing/ui/mainui_.py:111
+#: funing/ui/main.ui:164
+msgid "About Funing"
+msgstr "关于Funing"
+
+#: funing/ui/main.ui:174
+msgid "Data"
+msgstr "数据"
+
+#: funing/ui/main.ui:184
 msgid "Welcome to Funing."
 msgstr "欢迎来到Funing。"
 
-#: funing/ui/mainui_.py:92
-msgid ""
-"Write it with certain rules sddddddddddddddddddddddddddddddddddddddddddo "
-"that you can analyze it later"
-msgstr ""
-"Write it with certain rules sddddddddddddddddddddddddddddddddddddddddddo "
-"that you can analyze it later"
+#~ msgid "Face was detected."
+#~ msgstr "人脸被检测。"
 
-#: funing/ui/aboutui_.py:26 funing/ui/aboutui_.py:28
-msgid "From larryw3i & contributors"
-msgstr "来自larryw3i和贡献者们"
+#~ msgid "No face was detected."
+#~ msgstr "没有检测到人脸。"
 
-#: funing/ui_/_mainui_.py:35
-msgid "haarcascades could not be imported, funing exit."
-msgstr "haarcascades 导入失败, 程序退出。"
+#~ msgid "You haven't entered anything yet!"
+#~ msgstr "你还没有录入任何数据, 打开摄像头或文件然后点击'录入'。"
 
-#: funing/ui_/_mainui_.py:42
-msgid ""
-"\n"
-"It seems that you have both 'opencv-python' and 'opencv-contrib-python' "
-"installed, do you want to uninstall them and reinstall 'opencv-contrib-"
-"python'([y]/n)?"
-msgstr ""
-"\n"
-"好像你同时安装了 opencv-python 和 opencv-contrib-python，要把它们都卸载然后重"
-"装 opencv-contrib-python 吗 ([y]/n)？"
+#~ msgid "Unable to open video source."
+#~ msgstr "无法打开视频源。"
 
-#: funing/ui_/_mainui_.py:51
-msgid "\"EigenFaceRecognizer_create\" could not be imported, funing exit."
-msgstr "EigenFaceRecognizer_create 导入失败，程序退出。"
+#~ msgid "Click the picked face image to remove."
+#~ msgstr "单击被获取的图片就可以删除。"
 
-#: funing/ui/mainui_.py:116
-msgid "Open simple.ipynb file"
-msgstr "打开 simple.ipynb"
+#~ msgid "Double click the face image to remove."
+#~ msgstr "双击被获取的图片就可以删除。"
 
-#: funing/ui_/_mainui_.py:42 funing/ui_/_mainui_.py:48
-msgid ""
-"It seems that you have both 'opencv-python' and 'opencv-contrib-python' "
-"installed, do you want to uninstall them and reinstall 'opencv-contrib-"
-"python'([y]/n)?"
-msgstr ""
-"好像你同时安装了 opencv-python 和 opencv-contrib-python，要把它们都卸载然后重"
-"装 opencv-contrib-python 吗 ([y]/n)？"
+#~ msgid "No desktop environment is detected! "
+#~ msgstr "亲, 好像没有检测到显示器哦! "
 
-#: funing/ui_/_mainui_.py:59
-msgid ""
-"\"EigenFaceRecognizer_create\" and \"haarcascades\" could not be imported, "
-"funing exit."
-msgstr "EigenFaceRecognizer_create 和 haarcascades 导入失败，程序退出。"
+#~ msgid "Recognizer training. . ."
+#~ msgstr "正在训练识别器. . ."
+
+#~ msgid "Recognizer finish training."
+#~ msgstr "识别器训练完成。"
+
+#~ msgid "Play"
+#~ msgstr "继续"
+
+#~ msgid "Select a file"
+#~ msgstr "选择一个文件"
+
+#~ msgid "Image or video"
+#~ msgstr "照片或视频"
+
+#~ msgid "No informations found"
+#~ msgstr "未发现信息"
+
+#~ msgid "Nothing enter"
+#~ msgstr "没有录入任何数据"
+
+#~ msgid "File"
+#~ msgstr "文件"
+
+#~ msgid "Camera"
+#~ msgstr "摄像头"
+
+#~ msgid "Open"
+#~ msgstr "打开"
+
+#~ msgid "Write it with certain rules so that you can analyze it later"
+#~ msgstr ""
+#~ "信息编写要中规中矩, 比如yaml或toml, \n"
+#~ "这样你分析它们就变得易如反掌。"
+
+#~ msgid ""
+#~ "Write it with certain rules sddddddddddddddddddddddddddddddddddddddddddo "
+#~ "that you can analyze it later"
+#~ msgstr ""
+#~ "Write it with certain rules sddddddddddddddddddddddddddddddddddddddddddo "
+#~ "that you can analyze it later"
+
+#~ msgid "haarcascades could not be imported, funing exit."
+#~ msgstr "haarcascades 导入失败, 程序退出。"
+
+#~ msgid ""
+#~ "\n"
+#~ "It seems that you have both 'opencv-python' and 'opencv-contrib-python' "
+#~ "installed, do you want to uninstall them and reinstall 'opencv-contrib-"
+#~ "python'([y]/n)?"
+#~ msgstr ""
+#~ "\n"
+#~ "好像你同时安装了 opencv-python 和 opencv-contrib-python，要把它们都卸载然"
+#~ "后重装 opencv-contrib-python 吗 ([y]/n)？"
+
+#~ msgid "\"EigenFaceRecognizer_create\" could not be imported, funing exit."
+#~ msgstr "EigenFaceRecognizer_create 导入失败，程序退出。"
+
+#~ msgid "Open simple.ipynb file"
+#~ msgstr "打开 simple.ipynb"
+
+#~ msgid ""
+#~ "It seems that you have both 'opencv-python' and 'opencv-contrib-python' "
+#~ "installed, do you want to uninstall them and reinstall 'opencv-contrib-"
+#~ "python'([y]/n)?"
+#~ msgstr ""
+#~ "好像你同时安装了 opencv-python 和 opencv-contrib-python，要把它们都卸载然"
+#~ "后重装 opencv-contrib-python 吗 ([y]/n)？"
+
+#~ msgid ""
+#~ "\"EigenFaceRecognizer_create\" and \"haarcascades\" could not be "
+#~ "imported, funing exit."
+#~ msgstr "EigenFaceRecognizer_create 和 haarcascades 导入失败，程序退出。"
 
 #~ msgid "Restart Funing Now?"
 #~ msgstr "重启应用?"

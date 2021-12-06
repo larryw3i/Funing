@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <interface version="1.1">
-
-  <object class="pygubu.builder.widgets.dialog" id="about_dialog">
+  <object class="tk.Toplevel" id="about_toplevel">
+    <property name="resizable">none</property>
     <child>
       <object class="ttk.Frame" id="about_frame">
         <property name="borderwidth">10</property>
@@ -70,8 +70,10 @@
         </child>
         <child>
           <object class="ttk.Label" id="source_label">
+            <property name="cursor">hand2</property>
             <property name="foreground">#0000d9</property>
             <property name="text" translatable="yes">source code</property>
+            <bind sequence="&lt;Button-1&gt;" handler="view_source_code" add="" />
             <layout manager="pack">
               <property name="propagate">True</property>
               <property name="side">right</property>
