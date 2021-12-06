@@ -80,15 +80,15 @@ class MainApplication(pygubu.TkApplication):
 
     def _create_ui(self):
 
-        self.status = Status.PICK
+        # master
+        self.master.title(_('Funing')+' ('+version+')')
 
+        self.status = Status.PICK
         # pygubu builder
         self.builder = builder = pygubu.Builder(translator)
-
         # ui files
         main_ui_path = os.path.join(
             os.path.join(project_path, 'ui'), 'main.ui')
-
         # add ui files
         self.builder.add_from_file(main_ui_path)
 

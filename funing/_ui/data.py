@@ -17,6 +17,7 @@ from tkinter.ttk import *
 
 import cv2
 import numpy as np
+import math
 import pygubu
 import yaml
 from PIL import Image, ImageTk
@@ -43,9 +44,25 @@ class DataTkApplication(pygubu.TkApplication):
         self.is_showing = False
 
         # data
-        name_ids = {}
+        self.id_name_dict= {}
+        self.data_ids = os.listdir(data_path)
 
-    def get_name_data(self, item_count=10, page_num=0):
+        # page
+        self.d_item_count = len(self.data_ids)
+
+    def get_first_face_pic_path(self, info_id):
+        data_dir_path = os.path.join(data_path, info_id)
+        return os.path.join(data_dir_path,  '1.jpg')
+
+    def get_name_data(self, p_item_count=10, page_num=0):
+        max_page_num = math.ceil(self.d_item_count/p_item_count)
+        if page_num > max_page_num :
+            page_num = max_page_num
+        start_index = page_num*p_item_count - 1
+        end_index = (page_num+1)*p_item_count  - 1
+        for d in self.data_ids[start_index:end_index]:
+            
+
         pass
 
     def quit(self, event=None):
@@ -55,6 +72,7 @@ class DataTkApplication(pygubu.TkApplication):
     def run(self):
         if not self.mainwindow:
             self.mainwindow = self.builder.get_object('data_toplevel')
+            self.mainwindow.title(_('Funing Data'))
             self.mainwindow.protocol("WM_DELETE_WINDOW", self.on_closing)
             # connect callbacks
             self.builder.connect_callbacks(self)

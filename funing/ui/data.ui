@@ -16,7 +16,17 @@
             <property name="scrolltype">both</property>
             <property name="usemousewheel">false</property>
             <layout manager="pack">
+              <property name="fill">both</property>
               <property name="ipady">8</property>
+              <property name="propagate">True</property>
+              <property name="side">top</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="page_num_label">
+            <property name="text" translatable="yes">page_num %page_num% page_num</property>
+            <layout manager="pack">
               <property name="propagate">True</property>
               <property name="side">top</property>
             </layout>
@@ -80,11 +90,72 @@
           <property name="side">left</property>
         </layout>
         <child>
-          <object class="pygubu.builder.widgets.scrolledframe" id="scrolledframe1">
+          <object class="pygubu.builder.widgets.scrolledframe" id="face_pic_scrolledframe">
             <property name="scrolltype">both</property>
             <property name="usemousewheel">false</property>
             <layout manager="pack">
+              <property name="expand">true</property>
+              <property name="fill">both</property>
               <property name="ipady">8</property>
+              <property name="propagate">True</property>
+              <property name="side">top</property>
+            </layout>
+            <child>
+              <object class="ttk.Frame" id="face_pic_frame">
+                <property name="height">200</property>
+                <property name="width">200</property>
+                <layout manager="pack">
+                  <property name="expand">true</property>
+                  <property name="fill">both</property>
+                  <property name="propagate">True</property>
+                  <property name="side">top</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="tk.Text" id="info_text">
+            <property name="height">10</property>
+            <property name="width">50</property>
+            <layout manager="pack">
+              <property name="propagate">True</property>
+              <property name="side">top</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Button" id="save_btn">
+            <property name="text" translatable="yes">Save</property>
+            <layout manager="pack">
+              <property name="propagate">True</property>
+              <property name="side">top</property>
+            </layout>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Frame" id="add_frame">
+        <property name="height">200</property>
+        <property name="width">200</property>
+        <layout manager="pack">
+          <property name="propagate">True</property>
+          <property name="side">left</property>
+        </layout>
+        <child>
+          <object class="ttk.Label" id="face_label">
+            <property name="text" translatable="yes">video frame</property>
+            <layout manager="pack">
+              <property name="propagate">True</property>
+              <property name="side">top</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Button" id="add_btn">
+            <property name="text" translatable="yes">Add face picture</property>
+            <layout manager="pack">
               <property name="propagate">True</property>
               <property name="side">top</property>
             </layout>

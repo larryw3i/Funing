@@ -56,6 +56,7 @@ class AboutTkApplication(pygubu.TkApplication):
     def run(self):
         if not self.mainwindow:
             self.mainwindow = self.builder.get_object('about_toplevel')
+            self.mainwindow.title(_('About Funing'))
             self.builder.get_object('version_label')['text'] = version
             self.mainwindow.protocol("WM_DELETE_WINDOW", self.on_closing)
             # connect callbacks
