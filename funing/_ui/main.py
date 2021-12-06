@@ -224,11 +224,17 @@ class MainApplication(pygubu.TkApplication):
         self.set_status_msg(_('Recognizer finish training.'))
 
     def on_about_ok_btn_clicked(self):
+        self.about_ok()
+
+    def about_ok(self):
         if self.is_about_dialog_showing:
             self.about_dialog.close()
             self.is_about_dialog_showing = False
 
     def on_about_btn_clicked(self):
+        self.about()
+
+    def about(self):
         if not self.is_about_dialog_showing:
             self.about_dialog.show()
             self.is_about_dialog_showing = True
@@ -236,6 +242,9 @@ class MainApplication(pygubu.TkApplication):
             self.on_about_ok_btn_clicked()
 
     def on_data_btn_clicked(self):
+        self.data()
+
+    def data(self):
         if self.data_tl is None:
             self.data_tl = data_toplevel()
         else:
@@ -262,6 +271,9 @@ class MainApplication(pygubu.TkApplication):
         self.vid = None
 
     def on_pause_play_btn_clicked(self, *args):
+        self.pause_play(*args)
+
+    def pause_play(self, *args):
         if self.source_type != SourceType.VID:
             return
         if self.paused:
@@ -355,6 +367,9 @@ class MainApplication(pygubu.TkApplication):
             return
 
     def on_go_btn_clicked(self, *args):
+        self.open_src(*args)
+
+    def open_src(self,*args):
         '''
         Entry source and open it.
         '''
