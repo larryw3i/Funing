@@ -63,27 +63,6 @@ except BaseException:
         ))
         exit()
 
-
-class FUV():
-    '''
-    Frequently used variable.
-    '''
-
-    def __init__(self):
-        self.face_was_detected_str = _('Face was detected.')
-        self.no_face_was_detected_str = _('No face was detected.')
-        self.nothing_was_entered_str = _("You haven't entered anything yet!")
-        self.unable_to_open_vid_source_str = _('Unable to open video source.')
-
-        self.image_exts = ['jpg', 'png', 'jpeg', 'webp']
-        self.video_exts = ['mp4', 'avi', '3gp', 'webm', 'mkv']
-        self.filetype_exts = '*.' + ' *.'.join(
-            self.image_exts + self.video_exts)
-        self.click_to_remove_p = _('Click the picked face image to remove.')
-        self.double_click_to_remove_r = _(
-            'Double click the face image to remove.')
-
-
 class SourceType(Enum):
     NULL = 0
     IMG = 1     # IMAGE
@@ -117,18 +96,19 @@ class MainApplication(pygubu.TkApplication):
         # some variables
         self.status_label_stringvar = tk.StringVar(self.master)
         self.pause_play_btn_stringvar = tk.StringVar(self.master)
-        self.face_was_detected_str = _('Face was detected.')
-        self.no_face_was_detected_str = _('No face was detected.')
-        self.nothing_was_entered_str = _("You haven't entered anything yet!")
-        self.unable_to_open_vid_source_str = _('Unable to open video source.')
-        self.image_exts = ['jpg', 'png', 'jpeg', 'webp']
-        self.video_exts = ['mp4', 'avi', '3gp', 'webm', 'mkv']
-        self.filetype_exts = '*.' + ' *.'.join(
-            self.image_exts + self.video_exts)
+        self.is_about_dialog_showing = False
+        self.var_face_was_detected_str = _('Face was detected.')
+        self.var_no_face_was_detected_str = _('No face was detected.')
+        self.var_nothing_was_entered_str = \
+        _("You haven't entered anything yet!")
+        self.var_unable_to_open_vid_source_str = _('Unable to open video source.')
+        self.var_image_exts = ['jpg', 'png', 'jpeg', 'webp']
+        self.var_video_exts = ['mp4', 'avi', '3gp', 'webm', 'mkv']
+        self.var_img_vid_exts = '*.' + ' *.'.join(
+            self.var_image_exts + self.var_video_exts)
         self.var_click_to_remove_p = _('Click the picked face image to remove.')
         self.var_double_click_to_remove_r = _(
             'Double click the face image to remove.')
-        self.is_about_dialog_showing = False
 
         # widgets
         self.main_window = builder.get_object('main_frame', self.master)
@@ -186,7 +166,7 @@ class MainApplication(pygubu.TkApplication):
 
         # train recognizer
         if data_empty():
-            self.set_status_msg(self.nothing_was_entered_str)
+            self.set_status_msg(self.var_nothing_was_entered_str)
         else:
             self.recognizer_train()
 
@@ -331,7 +311,7 @@ class MainApplication(pygubu.TkApplication):
     def show_from_file(self):
         self.face_src_path = tkf.askopenfilename(
             title=_('Select a file'),
-            filetypes=[(_('Image or video'), self.filetype_exts)],
+            filetypes=[(_('Image or video'), self.var_img_vid_exts)],
             initialdir='~')
 
         if len(self.face_src_path) < 1:
@@ -340,9 +320,9 @@ class MainApplication(pygubu.TkApplication):
         ext = os.path.splitext(self.face_src_path)[1][1:]
         self.go_combobox.set(self.face_src_path)
 
-        if ext in self.image_exts:
+        if ext in self.var_image_exts:
             self.view_image()
-        elif ext in self.video_exts:
+        elif ext in self.var_video_exts:
             self.source = self.face_src_path
             self.play_video()
 
@@ -381,7 +361,7 @@ class MainApplication(pygubu.TkApplication):
 
         show_from_ext = go_combobox_var.split('.')[-1]
 
-        if show_from_ext in self.video_exts:
+        if show_from_ext in self.var_video_exts:
             self.source = go_combobox_var
             self.play_video()
             return
@@ -389,7 +369,7 @@ class MainApplication(pygubu.TkApplication):
             self.source = int(go_combobox_var)
             self.play_video()
             return
-        elif show_from_ext in self.image_exts:
+        elif show_from_ext in self.var_image_exts:
             self.view_image()
             return
         elif go_combobox_var == _('File'):
@@ -420,7 +400,7 @@ class MainApplication(pygubu.TkApplication):
         if show_from == 'file':
             self.face_src_path = tkf.askopenfilename(
                 title=_('Select a file'),
-                filetypes=[(_('Image or video'), self.filetype_exts)],
+                filetypes=[(_('Image or video'), self.var_img_vid_exts)],
                 initialdir='~')
 
             if len(self.face_src_path) < 1:
@@ -429,9 +409,9 @@ class MainApplication(pygubu.TkApplication):
             ext = os.path.splitext(self.face_src_path)[1][1:]
             self.show_from_opt_stringvar.set(self.face_src_path)
 
-            if ext in self.image_exts:
+            if ext in self.var_image_exts:
                 self.view_image()
-            elif ext in self.video_exts:
+            elif ext in self.var_video_exts:
                 self.source = self.face_src_path
                 self.play_video()
 
@@ -557,8 +537,8 @@ class MainApplication(pygubu.TkApplication):
 
     def show_nsrc_error(self):
         messagebox.showerror(
-            self.unable_to_open_vid_source_str,
-            self.unable_to_open_vid_source_str + ': ' +
+            self.var_unable_to_open_vid_source_str,
+            self.var_unable_to_open_vid_source_str + ': ' +
             str(self.go_combobox.get()))
 
     def on_save_info_btn_clicked(self):
@@ -642,7 +622,9 @@ class MainApplication(pygubu.TkApplication):
 
         _label, confidence = self.recognizer.predict(roi_gray)
 
-        self.cur_info_id = self.info_ids[_label]
+        self.cur_info_id = cur_info_id = \
+        self.info_ids[_label] # global self.x and x are different.
+
         _h = max(h, w)
         frame = self.cur_frame[y:y + _h, x:x + _h]
         frame = cv2.resize(frame, self.show_size)
@@ -659,11 +641,11 @@ class MainApplication(pygubu.TkApplication):
                             self.del_face_label_rec(e, index))
         new_face_label.bind(
             "<Button-1>",
-            lambda e: self.show_info(new_face_label,index,self.cur_info_id))
+            lambda e: self.show_info(new_face_label,index,cur_info_id))
 
         new_face_label.pack(side=LEFT)
 
-        self.show_info(new_face_label, index,self.cur_info_id)
+        self.show_info(new_face_label, index,cur_info_id)
 
     def del_face_label_rec(self, e, index):
         if self.zoomed_in_face_label[0] == e.widget:
@@ -705,7 +687,7 @@ class MainApplication(pygubu.TkApplication):
             return
 
         self.status_label_stringvar.set(
-            self.face_was_detected_str +
+            self.var_face_was_detected_str +
             f'({self.var_click_to_remove_p})'
         )
 
@@ -744,7 +726,7 @@ class MainApplication(pygubu.TkApplication):
             return
 
         self.status_label_stringvar.set(
-            self.face_was_detected_str +
+            self.var_face_was_detected_str +
             f'({self.var_double_click_to_remove_r})'
         )
 
@@ -753,14 +735,14 @@ class MainApplication(pygubu.TkApplication):
 
     def show_data_empty(self):
         unable_open_s = _('Nothing enter')
-        self.set_status_msg(self.nothing_was_entered_str)
-        messagebox.showerror(unable_open_s, self.nothing_was_entered_str)
+        self.set_status_msg(self.var_nothing_was_entered_str)
+        messagebox.showerror(unable_open_s, self.var_nothing_was_entered_str)
 
     def show_no_face_was_detected_status_msg(self):
-        self.set_status_msg(self.no_face_was_detected_str)
+        self.set_status_msg(self.var_no_face_was_detected_str)
 
     def show_face_was_detected_status_msg(self):
-        self.set_status_msg(self.face_was_detected_str)
+        self.set_status_msg(self.var_face_was_detected_str)
 
     def clear_status_msg(self):
         self.status_label_stringvar.set('')
