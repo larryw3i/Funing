@@ -130,7 +130,6 @@ class MainApplication(pygubu.TkApplication):
             'Double click the face image to remove.')
         self.is_about_dialog_showing = False
 
-
         # widgets
         self.main_window = builder.get_object('main_frame', self.master)
         self.vidframe_label = builder.get_object('vidframe_label', self.master)
@@ -138,15 +137,15 @@ class MainApplication(pygubu.TkApplication):
         self.go_combobox = builder.get_object('go_combobox', self.master)
         self.face_frame = builder.get_object(
             'face_frame', self.master)  # not vid frame, it shows picture.
-        self.about_dialog = self.builder.get_object(\
-        'about_dialog', self.master)
+        self.about_dialog = self.builder.get_object(
+            'about_dialog', self.master)
         self.data_toplevel = None
 
         # initial widget
         self.builder.get_object('version_label')['text'] = version
-        self.go_combobox.config(values = [_('File'),_('Camera')])
+        self.go_combobox.config(values=[_('File'), _('Camera')])
         self.go_combobox.current(1)
-        
+
         # vid
         self.vid = None
         self.frame_width = self.frame_height = 0
@@ -194,7 +193,6 @@ class MainApplication(pygubu.TkApplication):
         # connect callbacks
         self.builder.connect_callbacks(self)
 
-
     def load_images(self):
         '''
         :reference https://www.cnblogs.com/do-hardworking/p/9867708.html
@@ -224,19 +222,18 @@ class MainApplication(pygubu.TkApplication):
         images, labels, self.info_ids = self.load_images()
         self.recognizer.train(images, labels)
         self.set_status_msg(_('Recognizer finish training.'))
-    
-    def on_about_ok_btn_clicked(self):
-        if self.is_about_dialog_showing :
-            self.about_dialog.close()
-            self.is_about_dialog_showing=False
 
-    def on_about_btn_clicked(self):        
+    def on_about_ok_btn_clicked(self):
+        if self.is_about_dialog_showing:
+            self.about_dialog.close()
+            self.is_about_dialog_showing = False
+
+    def on_about_btn_clicked(self):
         if not self.is_about_dialog_showing:
             self.about_dialog.show()
-            self.is_about_dialog_showing=True
+            self.is_about_dialog_showing = True
         else:
             self.on_about_ok_btn_clicked()
-
 
     def on_data_btn_clicked(self):
         if self.data_tl is None:
@@ -289,7 +286,7 @@ class MainApplication(pygubu.TkApplication):
     def clear_face_text(self):
         self.info_text.delete(1.0, END)
 
-    def add_face_label_p(self, num):
+    def add_face_label_pick(self, num):
         x, y, w, h = self.face_rects[num]
         _w = max(w, h)
 
@@ -302,7 +299,7 @@ class MainApplication(pygubu.TkApplication):
         new_face_label.imgtk = imgtk
         new_face_label.configure(image=imgtk)
         new_face_label.bind("<Button-1>",
-                            lambda e: self.del_face_label_p(e, num))
+                            lambda e: self.del_face_label_pick(e, num))
 
         new_face_label.pack(side=LEFT)
 
@@ -311,14 +308,14 @@ class MainApplication(pygubu.TkApplication):
                                        interpolation=cv2.INTER_LINEAR)
         self.picked_face_frames.append(picked_face_frame)
 
-    def del_face_label_p(self, e, num):
+    def del_face_label_pick(self, e, num):
         del self.picked_face_frames[num]
         e.widget.destroy()
         if len(self.picked_face_frames) < 1:
             self.clear_status_msg()
         if debug:
             print(len(self.picked_face_frames))
-    
+
     def show_from_file(self):
         self.face_src_path = tkf.askopenfilename(
             title=_('Select a file'),
@@ -336,14 +333,14 @@ class MainApplication(pygubu.TkApplication):
         elif ext in self.video_exts:
             self.source = self.face_src_path
             self.play_video()
-            
+
     def show_from_camera(self):
         self.source = 0
         self.go_combobox.set(self.source)
         self.play_video()
-    
-    def go_combobox_selected(self,args):
-        
+
+    def go_combobox_selected(self, args):
+
         go_combobox_var = self.go_combobox.get()
         if len(go_combobox_var.strip()) < 1:
             return
@@ -368,7 +365,7 @@ class MainApplication(pygubu.TkApplication):
         self.cancel_root_after()
 
         show_from_ext = go_combobox_var.split('.')[-1]
-        
+
         if show_from_ext in self.video_exts:
             self.source = go_combobox_var
             self.play_video()
@@ -379,7 +376,7 @@ class MainApplication(pygubu.TkApplication):
             return
         elif show_from_ext in self.image_exts:
             self.view_image()
-            return        
+            return
         elif go_combobox_var == _('File'):
             self.show_from_file()
             return
@@ -550,6 +547,9 @@ class MainApplication(pygubu.TkApplication):
             str(self.go_combobox.get()))
 
     def on_save_info_btn_clicked(self):
+        self.save_info()
+
+    def save_info(self):
         if self.cur_info_id is None:
             return
         info = self.info_text.get("1.0", "end-1c")
@@ -561,7 +561,8 @@ class MainApplication(pygubu.TkApplication):
             os.makedirs(img_path, exist_ok=True)
             count = 0
             for f in self.picked_face_frames:
-                if len(f)<1:continue
+                if len(f) < 1:
+                    continue
                 cv2.imwrite(f'{img_path}/{count}.png', f)
                 count += 1
             self.cur_info_id = None
@@ -613,7 +614,7 @@ class MainApplication(pygubu.TkApplication):
         self.info_text.insert('1.0',
                               open(info_file_path, 'r').read())
 
-    def add_face_label_r(self, num):
+    def add_face_label_rec(self, num):
         index = len(self.showed_face_frames)
 
         new_face_label = Label(self.face_frame)
@@ -663,8 +664,13 @@ class MainApplication(pygubu.TkApplication):
     def clear_faces_frame(self):
         for child in self.face_frame.winfo_children():
             child.destroy()
+        self.picked_face_frames = []
+        self.face_rects = []
 
     def on_pick_btn_clicked(self):
+        self.pick()
+
+    def pick():
 
         if self.source_type == SourceType.NULL:
             return
@@ -696,9 +702,12 @@ class MainApplication(pygubu.TkApplication):
             print(type(self.face_rects))
 
         for i in range(len(self.face_rects)):
-            self.add_face_label_p(i)
+            self.add_face_label_pick(i)
 
     def on_recognize_btn_clicked(self):
+        self.rec()
+
+    def rec(self):
 
         if self.source_type == SourceType.NULL:
             return
@@ -728,7 +737,7 @@ class MainApplication(pygubu.TkApplication):
         )
 
         for i in range(len(self.face_rects)):
-            self.add_face_label_r(i)
+            self.add_face_label_rec(i)
 
     def show_data_empty(self):
         unable_open_s = _('Nothing enter')
