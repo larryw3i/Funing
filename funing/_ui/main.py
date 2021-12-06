@@ -63,6 +63,7 @@ except BaseException:
         ))
         exit()
 
+
 class SourceType(Enum):
     NULL = 0
     IMG = 1     # IMAGE
@@ -93,20 +94,22 @@ class MainApplication(pygubu.TkApplication):
         # add ui files
         self.builder.add_from_file(main_ui_path)
 
-        # some variables
+        # mix variables
         self.status_label_stringvar = tk.StringVar(self.master)
         self.pause_play_btn_stringvar = tk.StringVar(self.master)
         self.is_about_dialog_showing = False
         self.var_face_was_detected_str = _('Face was detected.')
         self.var_no_face_was_detected_str = _('No face was detected.')
         self.var_nothing_was_entered_str = \
-        _("You haven't entered anything yet!")
-        self.var_unable_to_open_vid_source_str = _('Unable to open video source.')
+            _("You haven't entered anything yet!")
+        self.var_unable_to_open_vid_source_str = \
+            _('Unable to open video source.')
         self.var_image_exts = ['jpg', 'png', 'jpeg', 'webp']
         self.var_video_exts = ['mp4', 'avi', '3gp', 'webm', 'mkv']
         self.var_img_vid_exts = '*.' + ' *.'.join(
             self.var_image_exts + self.var_video_exts)
-        self.var_click_to_remove_p = _('Click the picked face image to remove.')
+        self.var_click_to_remove_p = _(
+            'Click the picked face image to remove.')
         self.var_double_click_to_remove_r = _(
             'Double click the face image to remove.')
 
@@ -349,7 +352,7 @@ class MainApplication(pygubu.TkApplication):
     def on_go_btn_clicked(self, *args):
         self.open_src(*args)
 
-    def open_src(self,*args):
+    def open_src(self, *args):
         '''
         Entry source and open it.
         '''
@@ -580,12 +583,12 @@ class MainApplication(pygubu.TkApplication):
         label.imgtk = imgtk
         label.configure(image=imgtk)
 
-    def show_info(self, label, index,cur_info_id):
+    def show_info(self, label, index, cur_info_id):
 
         if (self.zoomed_in_face_label[0] != 0) and \
                 (self.zoomed_in_face_label[0] != label):
             self.restore_face_label_size_rec(index)
-            
+
         frame = self.showed_face_frames[index]
         frame = cv2.resize(frame, self.zoom_in_size)
 
@@ -623,7 +626,7 @@ class MainApplication(pygubu.TkApplication):
         _label, confidence = self.recognizer.predict(roi_gray)
 
         self.cur_info_id = cur_info_id = \
-        self.info_ids[_label] # global self.x and x are different.
+            self.info_ids[_label]  # global self.x and x are different.
 
         _h = max(h, w)
         frame = self.cur_frame[y:y + _h, x:x + _h]
@@ -641,11 +644,11 @@ class MainApplication(pygubu.TkApplication):
                             self.del_face_label_rec(e, index))
         new_face_label.bind(
             "<Button-1>",
-            lambda e: self.show_info(new_face_label,index,cur_info_id))
+            lambda e: self.show_info(new_face_label, index, cur_info_id))
 
         new_face_label.pack(side=LEFT)
 
-        self.show_info(new_face_label, index,cur_info_id)
+        self.show_info(new_face_label, index, cur_info_id)
 
     def del_face_label_rec(self, e, index):
         if self.zoomed_in_face_label[0] == e.widget:
