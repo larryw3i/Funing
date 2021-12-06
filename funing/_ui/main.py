@@ -125,8 +125,8 @@ class MainApplication(pygubu.TkApplication):
         self.video_exts = ['mp4', 'avi', '3gp', 'webm', 'mkv']
         self.filetype_exts = '*.' + ' *.'.join(
             self.image_exts + self.video_exts)
-        self.click_to_remove_p = _('Click the picked face image to remove.')
-        self.double_click_to_remove_r = _(
+        self.var_click_to_remove_p = _('Click the picked face image to remove.')
+        self.var_double_click_to_remove_r = _(
             'Double click the face image to remove.')
         self.is_about_dialog_showing = False
 
@@ -586,7 +586,7 @@ class MainApplication(pygubu.TkApplication):
             print('info > ' + info)
         self.recognizer_train()
 
-    def restore_face_label_size(self, index):
+    def restore_face_label_size_rec(self, index):
         label, index = self.zoomed_in_face_label
         if not label.winfo_exists():
             return
@@ -600,12 +600,12 @@ class MainApplication(pygubu.TkApplication):
         label.imgtk = imgtk
         label.configure(image=imgtk)
 
-    def show_info(self, label, index):
+    def show_info(self, label, index,cur_info_id):
 
         if (self.zoomed_in_face_label[0] != 0) and \
                 (self.zoomed_in_face_label[0] != label):
-            self.restore_face_label_size(index)
-
+            self.restore_face_label_size_rec(index)
+            
         frame = self.showed_face_frames[index]
         frame = cv2.resize(frame, self.zoom_in_size)
 
@@ -618,16 +618,17 @@ class MainApplication(pygubu.TkApplication):
         self.zoomed_in_face_label = (label, index)
 
         info_file_path = os.path.join(
-            infos_path, self.cur_info_id)
+            infos_path, cur_info_id)
+
         self.info_text.delete(1.0, END)
 
         if not os.path.exists(info_file_path):
-            _nif = _('No informations found')
-            self.info_text.insert('1.0', _nif)
-            self.set_status_msg(_nif)
+            _nif_ = _('No informations found')
+            self.info_text.insert('1.0', _nif_)
+            self.set_status_msg(_nif_)
 
-        self.info_text.insert('1.0',
-                              open(info_file_path, 'r').read())
+        with open(info_file_path, 'r') as f:
+            self.info_text.insert('1.0', f.read())
 
     def add_face_label_rec(self, num):
         index = len(self.showed_face_frames)
@@ -639,9 +640,9 @@ class MainApplication(pygubu.TkApplication):
         roi_gray = cv2.resize(roi_gray, self.save_size,
                               interpolation=cv2.INTER_LINEAR)
 
-        label, confidence = self.recognizer.predict(roi_gray)
+        _label, confidence = self.recognizer.predict(roi_gray)
 
-        self.cur_info_id = self.info_ids[label]
+        self.cur_info_id = self.info_ids[_label]
         _h = max(h, w)
         frame = self.cur_frame[y:y + _h, x:x + _h]
         frame = cv2.resize(frame, self.show_size)
@@ -655,19 +656,16 @@ class MainApplication(pygubu.TkApplication):
         new_face_label.configure(image=imgtk)
 
         new_face_label.bind("<Double-Button-1>", lambda e:
-                            self.del_face_label_r(e, index))
-
+                            self.del_face_label_rec(e, index))
         new_face_label.bind(
             "<Button-1>",
-            lambda e: self.show_info(
-                new_face_label,
-                index))
+            lambda e: self.show_info(new_face_label,index,self.cur_info_id))
 
         new_face_label.pack(side=LEFT)
 
-        self.show_info(new_face_label, index)
+        self.show_info(new_face_label, index,self.cur_info_id)
 
-    def del_face_label_r(self, e, index):
+    def del_face_label_rec(self, e, index):
         if self.zoomed_in_face_label[0] == e.widget:
             self.zoomed_in_face_label = (0, 0)
         e.widget.destroy()
@@ -680,12 +678,11 @@ class MainApplication(pygubu.TkApplication):
         for child in self.face_frame.winfo_children():
             child.destroy()
         self.picked_face_frames = []
-        self.face_rects = []
 
     def on_pick_btn_clicked(self):
         self.pick()
 
-    def pick():
+    def pick(self):
 
         if self.source_type == SourceType.NULL:
             return
@@ -709,7 +706,7 @@ class MainApplication(pygubu.TkApplication):
 
         self.status_label_stringvar.set(
             self.face_was_detected_str +
-            f'({self.click_to_remove_p})'
+            f'({self.var_click_to_remove_p})'
         )
 
         if debug:
@@ -748,7 +745,7 @@ class MainApplication(pygubu.TkApplication):
 
         self.status_label_stringvar.set(
             self.face_was_detected_str +
-            f'({self.double_click_to_remove_r})'
+            f'({self.var_double_click_to_remove_r})'
         )
 
         for i in range(len(self.face_rects)):
