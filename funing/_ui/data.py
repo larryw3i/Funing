@@ -26,7 +26,7 @@ from funing import *
 from funing._ui import *
 from funing.locale import _
 from funing.ui.about_ui import AboutToplevel
-
+import shutil
 translator = _
 
 
@@ -84,8 +84,15 @@ class DataTkApplication(pygubu.TkApplication):
         with open(info_file_path, 'r') as f:
             name = f.readline()
         return name
+    
+    def clear_name_btns(self):
+        if len(self.name_btns) < 1: return
+        for b in self.name_btns:
+            b.grid_forget()
+        self.name_btns = []
 
     def get_name_data(self, p_item_count=10, page_num=0):
+        self.clear_name_btns()
         max_page_num = math.ceil(self.d_item_count / p_item_count)
         if page_num > max_page_num:
             page_num = max_page_num
@@ -107,8 +114,8 @@ class DataTkApplication(pygubu.TkApplication):
             self.id_name_dict[d] = name
             new_name_btn = tk.Button(
                 name_frame, text=name_id,
-                command=lambda d=d: self.show_data(d))\
-                .grid(row=item_index % p_item_count_root_ceil,
+                command=(lambda d=d: self.show_data(d)))
+            new_name_btn.grid(row=item_index % p_item_count_root_ceil,
                       column=item_index // p_item_count_root_ceil)
             self.name_btns.append(new_name_btn)
             item_index += 1
@@ -117,25 +124,47 @@ class DataTkApplication(pygubu.TkApplication):
             'page_num_label', self.master)['text'] = str(
             page_num + 1) + '/' + str(max_page_num)
 
+    def clear_face_labels(self):
+        if len(self.cur_face_labels)<1:return
+        for l in self.cur_face_labels:
+            l.grid_forget()
+        self.cur_face_labels = []
+
+
     def del_face_pic(self, info_id, filename, label_index):
+        if debug:
+            print(info_id, filename, label_index)
         is_last_pic = len(self.cur_face_labels) < 2
         ask_str = _("Do you want to delete this face picture?")
         if is_last_pic:
             ask_str += ('\n' +
-                        _('All of {0} data will be deleted').format(
+                        _('All data of {0} will be removed').format(
                             self.cur_name))
         del_or_not = messagebox.askyesnocancel(
             _("Delete face picture?"), ask_str)
 
         if del_or_not:
+            info_path = os.path.join(data_path, info_id)
             if is_last_pic:
+                
+                self.clear_face_labels()
+
+                shutil.rmtree(info_path)
+
+                self.data_ids = os.listdir(data_path)
+                self.d_item_count = len(self.data_ids)
+                
                 self.get_name_data(self.cur_p_item_count, self.cur_page_num)
-                for l in self.cur_face_labels:
-                    l.destroy()
-                info_path = os.path.join(data_path,info_id)
-                os.remove(info_path)
-                self.cur_face_labels = []
-            self.show_data(info_id)
+                self.set_msg(_('face picture has been removed!'))
+            else:
+                img_path = os.path.join(info_path, filename)
+                os.remove(img_path)
+                self.set_msg(_('All data of {0} have been removed!').format(
+                                self.cur_name))
+                self.show_data(info_id)
+
+                self.data_ids = os.listdir(data_path)
+                self.d_item_count = len(self.data_ids)
 
     def show_data(self, info_id):
 
@@ -144,9 +173,7 @@ class DataTkApplication(pygubu.TkApplication):
         info_text = self.builder.get_object(
             'info_text', self.master)
 
-        for l in self.cur_face_labels:
-            l.destroy()
-        self.cur_face_labels = []
+        self.clear_face_labels()
 
         info_path = os.path.join(data_path, info_id)
 
@@ -170,7 +197,8 @@ class DataTkApplication(pygubu.TkApplication):
 
             new_face_label.bind(
                 "<Double-Button-1>",
-                lambda e: self.del_face_pic(info_id, filename, img_index))
+                (lambda e, a=info_id, b=filename, c=img_index:
+                 self.del_face_pic(a, b, c)))
 
             new_face_label.grid(row=img_index // img_len_root_ceil,
                                 column=img_index % img_len_root_ceil)
