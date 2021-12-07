@@ -23,7 +23,7 @@ import yaml
 from PIL import Image, ImageTk
 
 from funing import *
-from funing._ui import error
+from funing._ui import *
 from funing._ui.about import AboutTkApplication
 from funing._ui.data import DataTkApplication
 from funing.locale import _
@@ -81,7 +81,7 @@ class MainApplication(pygubu.TkApplication):
     def _create_ui(self):
 
         # master
-        self.master.title(_('Funing')+' ('+version+')')
+        self.master.title(_('Funing') + ' (' + version + ')')
 
         self.status = Status.PICK
         # pygubu builder
@@ -121,7 +121,7 @@ class MainApplication(pygubu.TkApplication):
 
         # tk application
         self.about_tkapp = AboutTkApplication()
-        self.data_tkapp = DataTkApplication()
+        self.data_tkapp = None
 
         # initial widget
         self.go_combobox.config(values=[_('File'), _('Camera')])
@@ -203,7 +203,7 @@ class MainApplication(pygubu.TkApplication):
     def recognizer_train(self):
         self.set_status_msg(_('Recognizer training. . .'))
         images, labels, self.info_ids = self.load_images()
-        if len(labels) < 1: 
+        if len(labels) < 1:
             self.show_data_empty()
             return
         self.recognizer.train(images, labels)
@@ -219,7 +219,13 @@ class MainApplication(pygubu.TkApplication):
         self.data()
 
     def data(self):
-        self.data_tkapp.trigger()
+        if self.data_tkapp is None:
+            self.data_tkapp = DataTkApplication()
+            self.data_tkapp.master.protocol(
+                "WM_DELETE_WINDOW", self.data)
+        else:
+            self.data_tkapp.quit()
+            self.data_tkapp = None
 
     def set_status_msg(self, msg):
         self.status_label_stringvar.set(msg)
@@ -574,8 +580,7 @@ class MainApplication(pygubu.TkApplication):
         label.configure(image=imgtk)
 
     def get_info_file_path(self, info_id):
-        data_dir_path = os.path.join(data_path, info_id)
-        return os.path.join(data_dir_path,  '0.txt')
+        return get_info_file_path(info_id)
 
     def show_info(self, label, index, cur_info_id):
 

@@ -8,6 +8,12 @@ import uuid
 import cv2
 import yaml
 
+from funing import *
 from funing._ui import error
 
 error.lib_check()
+
+
+def get_info_file_path(info_id):
+    data_dir_path = os.path.join(data_path, info_id)
+    return os.path.join(data_dir_path, '0.txt')

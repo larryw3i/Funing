@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <interface version="1.1">
-  <object class="tk.Toplevel" id="data_toplevel">
+  <object class="ttk.Frame" id="data_frame">
     <property name="height">200</property>
     <property name="width">200</property>
     <child>
@@ -16,6 +16,8 @@
             <property name="scrolltype">both</property>
             <property name="usemousewheel">false</property>
             <layout manager="pack">
+              <property name="anchor">w</property>
+              <property name="expand">true</property>
               <property name="fill">both</property>
               <property name="ipady">8</property>
               <property name="propagate">True</property>
@@ -25,7 +27,7 @@
         </child>
         <child>
           <object class="ttk.Label" id="page_num_label">
-            <property name="text" translatable="yes">page_num %page_num% page_num</property>
+            <property name="text" translatable="yes">%page_num%</property>
             <layout manager="pack">
               <property name="propagate">True</property>
               <property name="side">top</property>
@@ -82,7 +84,7 @@
       </object>
     </child>
     <child>
-      <object class="ttk.Frame" id="frame2">
+      <object class="ttk.Frame" id="info_frame">
         <property name="height">200</property>
         <property name="width">200</property>
         <layout manager="pack">
@@ -127,34 +129,6 @@
         <child>
           <object class="ttk.Button" id="save_btn">
             <property name="text" translatable="yes">Save</property>
-            <layout manager="pack">
-              <property name="propagate">True</property>
-              <property name="side">top</property>
-            </layout>
-          </object>
-        </child>
-      </object>
-    </child>
-    <child>
-      <object class="ttk.Frame" id="add_frame">
-        <property name="height">200</property>
-        <property name="width">200</property>
-        <layout manager="pack">
-          <property name="propagate">True</property>
-          <property name="side">left</property>
-        </layout>
-        <child>
-          <object class="ttk.Label" id="face_label">
-            <property name="text" translatable="yes">video frame</property>
-            <layout manager="pack">
-              <property name="propagate">True</property>
-              <property name="side">top</property>
-            </layout>
-          </object>
-        </child>
-        <child>
-          <object class="ttk.Button" id="add_btn">
-            <property name="text" translatable="yes">Add face picture</property>
             <layout manager="pack">
               <property name="propagate">True</property>
               <property name="side">top</property>
