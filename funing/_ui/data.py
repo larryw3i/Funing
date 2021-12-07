@@ -49,20 +49,27 @@ class DataTkApplication(pygubu.TkApplication):
 
         self.data_frame = self.mainwindow = builder.get_object(
             'data_frame', self.master)
+        builder.get_object('del_btn', self.master).config(bg='red')
 
         # data
         self.id_name_dict = {}
         self.data_ids = os.listdir(data_path)
+        self.cur_name = ''
+        self.cur_face_labels = []
+        self.name_btns = []
+        self.cur_page_num = 0
+        self.cur_p_item_count = 10
 
         # page
         self.d_item_count = len(self.data_ids)
 
         self.get_name_data()
 
-        self.face_labels = []
-
         # Configure callbacks
         self.builder.connect_callbacks(self)
+
+    def set_msg(self, msg):
+        self.builder.get_object('msg_label', self.master)['text'] = msg
 
     def get_first_face_pic_path(self, info_id):
         data_dir_path = os.path.join(data_path, info_id)
@@ -82,55 +89,93 @@ class DataTkApplication(pygubu.TkApplication):
         max_page_num = math.ceil(self.d_item_count / p_item_count)
         if page_num > max_page_num:
             page_num = max_page_num
+        self.cur_p_item_count = p_item_count
+        self.cur_page_num = page_num
         start_index = page_num * p_item_count
         end_index = (page_num + 1) * p_item_count
         if end_index > (self.d_item_count - 1):
             end_index = self.d_item_count - 1
 
-        name_scrolledframe = self.builder.get_object(
-            'name_scrolledframe', self.master)
+        name_frame = self.builder.get_object(
+            'name_frame', self.master)
 
+        p_item_count_root_ceil = math.ceil(p_item_count**0.5)
+        item_index = 0
         for d in self.data_ids[start_index:end_index]:
-            name = self.get_name_from_info_file(d)
-            name_id = name + f'({d})'
+            self.cur_name = name = self.get_name_from_info_file(d)
+            name_id = name + f'\n({d})'
             self.id_name_dict[d] = name
-            tk.Button(name_scrolledframe, text=name_id,
-                      command=lambda d=d:self.show_data(d)).pack()
+            new_name_btn = tk.Button(
+                name_frame, text=name_id,
+                command=lambda d=d: self.show_data(d))\
+                .grid(row=item_index % p_item_count_root_ceil,
+                      column=item_index // p_item_count_root_ceil)
+            self.name_btns.append(new_name_btn)
+            item_index += 1
 
         self.builder.get_object(
             'page_num_label', self.master)['text'] = str(
             page_num + 1) + '/' + str(max_page_num)
 
-    def show_data(self,info_id):
-        
+    def del_face_pic(self, info_id, filename, label_index):
+        is_last_pic = len(self.cur_face_labels) < 2
+        ask_str = _("Do you want to delete this face picture?")
+        if is_last_pic:
+            ask_str += ('\n' +
+                        _('All of {0} data will be deleted').format(
+                            self.cur_name))
+        del_or_not = messagebox.askyesnocancel(
+            _("Delete face picture?"), ask_str)
+
+        if del_or_not:
+            if is_last_pic:
+                self.get_name_data(self.cur_p_item_count, self.cur_page_num)
+                for l in self.cur_face_labels:
+                    l.destroy()
+                info_path = os.path.join(data_path,info_id)
+                os.remove(info_path)
+                self.cur_face_labels = []
+            self.show_data(info_id)
+
+    def show_data(self, info_id):
+
         face_pic_frame = self.builder.get_object(
             'face_pic_frame', self.master)
         info_text = self.builder.get_object(
             'info_text', self.master)
-        
-        for l in self.face_labels:
+
+        for l in self.cur_face_labels:
             l.destroy()
-        self.face_labels = []
+        self.cur_face_labels = []
 
-        subpath = os.path.join(data_path, info_id)
-        if os.path.isdir(subpath):
-            for filename in os.listdir(subpath):
-                if filename == '0.txt':
-                    continue  # '0.txt' is the info file.
-                imgpath = os.path.join(subpath, filename)
+        info_path = os.path.join(data_path, info_id)
 
-                new_face_label = tk.Label(face_pic_frame)
-                img = cv2.imread(imgpath)
-                vid_img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-                vid_img = Image.fromarray(vid_img)
-                imgtk = ImageTk.PhotoImage(image=vid_img)
-                new_face_label.imgtk = imgtk
-                new_face_label.configure(image=imgtk)
-                # new_face_label.bind("<Double-Button-1>", lambda e:
-                #                     self.del_face_label(e, index))
-                new_face_label.pack()
-                self.face_labels.append(new_face_label)
+        if not os.path.isdir(info_path):
+            return
 
+        img_len = len(os.listdir(info_path))
+        img_len_root_ceil = math.ceil(img_len**0.5)
+        img_index = 0
+        for filename in os.listdir(info_path):
+            if filename == '0.txt':
+                continue  # '0.txt' is the info file.
+            imgpath = os.path.join(info_path, filename)
+            new_face_label = tk.Label(face_pic_frame)
+            img = cv2.imread(imgpath)
+            vid_img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+            vid_img = Image.fromarray(vid_img)
+            imgtk = ImageTk.PhotoImage(image=vid_img)
+            new_face_label.imgtk = imgtk
+            new_face_label.configure(image=imgtk)
+
+            new_face_label.bind(
+                "<Double-Button-1>",
+                lambda e: self.del_face_pic(info_id, filename, img_index))
+
+            new_face_label.grid(row=img_index // img_len_root_ceil,
+                                column=img_index % img_len_root_ceil)
+            self.cur_face_labels.append(new_face_label)
+            img_index += 1
 
         info_file_path = self.get_info_file_path(info_id)
         info_text.delete(1.0, END)
@@ -139,4 +184,5 @@ class DataTkApplication(pygubu.TkApplication):
             info_text.insert('1.0', _nif_)
         with open(info_file_path, 'r') as f:
             info_text.insert('1.0', f.read())
-        
+
+        self.set_msg(_('Double click the face image to delete.'))
