@@ -25,7 +25,6 @@ from PIL import Image, ImageTk
 from funing import *
 from funing._ui import *
 from funing._ui.about import AboutTkApplication
-from funing._ui.data import DataTkApplication
 from funing.locale import _
 
 '''
@@ -220,6 +219,7 @@ class MainApplication(pygubu.TkApplication):
 
     def data(self):
         if self.data_tkapp is None:
+            from funing._ui.data import DataTkApplication
             self.data_tkapp = DataTkApplication()
             self.data_tkapp.master.protocol(
                 "WM_DELETE_WINDOW", self.data)

@@ -171,6 +171,7 @@
               <object class="tk.Button" id="del_btn">
                 <property name="activebackground">#d9791e</property>
                 <property name="background">#d9401b</property>
+                <property name="command" type="command" cbtype="simple">on_del_btn_clicked</property>
                 <property name="text" translatable="yes">Delete</property>
                 <layout manager="pack">
                   <property name="propagate">True</property>

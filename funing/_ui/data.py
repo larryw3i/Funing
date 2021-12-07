@@ -3,6 +3,7 @@ import gettext
 import math
 import os
 import re
+import shutil
 import subprocess
 import sys
 import time
@@ -26,7 +27,10 @@ from funing import *
 from funing._ui import *
 from funing.locale import _
 from funing.ui.about_ui import AboutToplevel
-import shutil
+
+from cv2.data import haarcascades
+from cv2.face import EigenFaceRecognizer_create as recognizer
+
 translator = _
 
 
@@ -35,6 +39,36 @@ class DataTkApplication(pygubu.TkApplication):
         if master is None:
             master = tk.Toplevel()
             master.title('Funing Data')
+        
+        # data
+        self.id_name_dict = {}
+        self.data_ids = os.listdir(data_path)
+        self.cur_name = ''
+        self.cur_face_labels = []
+        self.name_btns = []
+        self.cur_page_num = 0
+        self.cur_p_item_count = 10
+        self.source = 0
+        self.cur_info_id = None
+
+        # widgets
+        self.add_face_label = None
+
+        # page
+        self.d_item_count = len(self.data_ids)
+        # vid
+        self.vid =None        
+        self.vid_fps = 30
+        self.save_size = (100, 100)
+        self.master_after = -1
+        self.face_frame =  None
+
+        # cv2
+        self.hff_xml_path = os.path.join(haarcascades,
+                                         "haarcascade_frontalface_default.xml")
+        self.recognizer = recognizer()
+        self.face_casecade = cv2.CascadeClassifier(self.hff_xml_path)
+
         super().__init__(master)
 
     def _create_ui(self):
@@ -50,18 +84,6 @@ class DataTkApplication(pygubu.TkApplication):
         self.data_frame = self.mainwindow = builder.get_object(
             'data_frame', self.master)
         builder.get_object('del_btn', self.master).config(bg='red')
-
-        # data
-        self.id_name_dict = {}
-        self.data_ids = os.listdir(data_path)
-        self.cur_name = ''
-        self.cur_face_labels = []
-        self.name_btns = []
-        self.cur_page_num = 0
-        self.cur_p_item_count = 10
-
-        # page
-        self.d_item_count = len(self.data_ids)
 
         self.get_name_data()
 
@@ -84,9 +106,10 @@ class DataTkApplication(pygubu.TkApplication):
         with open(info_file_path, 'r') as f:
             name = f.readline()
         return name
-    
+
     def clear_name_btns(self):
-        if len(self.name_btns) < 1: return
+        if len(self.name_btns) < 1:
+            return
         for b in self.name_btns:
             b.grid_forget()
         self.name_btns = []
@@ -116,7 +139,7 @@ class DataTkApplication(pygubu.TkApplication):
                 name_frame, text=name_id,
                 command=(lambda d=d: self.show_data(d)))
             new_name_btn.grid(row=item_index % p_item_count_root_ceil,
-                      column=item_index // p_item_count_root_ceil)
+                              column=item_index // p_item_count_root_ceil)
             self.name_btns.append(new_name_btn)
             item_index += 1
 
@@ -125,16 +148,16 @@ class DataTkApplication(pygubu.TkApplication):
             page_num + 1) + '/' + str(max_page_num)
 
     def clear_face_labels(self):
-        if len(self.cur_face_labels)<1:return
+        if len(self.cur_face_labels) < 1:
+            return
         for l in self.cur_face_labels:
             l.grid_forget()
         self.cur_face_labels = []
 
-
-    def del_face_pic(self, info_id, filename, label_index):
+    def del_face_pic(self, info_id, filename='', del_all = False):
         if debug:
-            print(info_id, filename, label_index)
-        is_last_pic = len(self.cur_face_labels) < 2
+            print(info_id, filename)
+        is_last_pic = del_all or len(self.cur_face_labels) < 2
         ask_str = _("Do you want to delete this face picture?")
         if is_last_pic:
             ask_str += ('\n' +
@@ -146,27 +169,34 @@ class DataTkApplication(pygubu.TkApplication):
         if del_or_not:
             info_path = os.path.join(data_path, info_id)
             if is_last_pic:
-                
+
                 self.clear_face_labels()
 
                 shutil.rmtree(info_path)
 
                 self.data_ids = os.listdir(data_path)
                 self.d_item_count = len(self.data_ids)
-                
+
                 self.get_name_data(self.cur_p_item_count, self.cur_page_num)
                 self.set_msg(_('face picture has been removed!'))
             else:
                 img_path = os.path.join(info_path, filename)
                 os.remove(img_path)
                 self.set_msg(_('All data of {0} have been removed!').format(
-                                self.cur_name))
+                    self.cur_name))
                 self.show_data(info_id)
 
                 self.data_ids = os.listdir(data_path)
                 self.d_item_count = len(self.data_ids)
 
     def show_data(self, info_id):
+
+
+        info_path = os.path.join(data_path, info_id)
+        if not os.path.isdir(info_path):
+            return
+
+        self.cur_info_id = info_id
 
         face_pic_frame = self.builder.get_object(
             'face_pic_frame', self.master)
@@ -175,10 +205,7 @@ class DataTkApplication(pygubu.TkApplication):
 
         self.clear_face_labels()
 
-        info_path = os.path.join(data_path, info_id)
-
-        if not os.path.isdir(info_path):
-            return
+        self.cur_name = name = self.get_name_from_info_file(info_id)
 
         img_len = len(os.listdir(info_path))
         img_len_root_ceil = math.ceil(img_len**0.5)
@@ -187,23 +214,36 @@ class DataTkApplication(pygubu.TkApplication):
             if filename == '0.txt':
                 continue  # '0.txt' is the info file.
             imgpath = os.path.join(info_path, filename)
-            new_face_label = tk.Label(face_pic_frame)
             img = cv2.imread(imgpath)
             vid_img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
             vid_img = Image.fromarray(vid_img)
             imgtk = ImageTk.PhotoImage(image=vid_img)
+
+            new_face_label = tk.Label(face_pic_frame)
             new_face_label.imgtk = imgtk
             new_face_label.configure(image=imgtk)
 
             new_face_label.bind(
                 "<Double-Button-1>",
-                (lambda e, a=info_id, b=filename, c=img_index:
-                 self.del_face_pic(a, b, c)))
+                (lambda e, a=info_id, b=filename:
+                 self.del_face_pic(a, b)))
 
             new_face_label.grid(row=img_index // img_len_root_ceil,
                                 column=img_index % img_len_root_ceil)
             self.cur_face_labels.append(new_face_label)
             img_index += 1
+
+        self.add_face_label = tk.Label(face_pic_frame, text=_('ADD'),
+                                       font=("NONE", 16),background='blue',
+                                       cursor='hand2')
+        self.add_face_label.grid(row=img_index // img_len_root_ceil,
+                                 column=img_index % img_len_root_ceil)
+
+        self.add_face_label.bind(
+                "<Button-1>",
+                (lambda e, a=info_id:self.add_face_pic(a)))
+
+        self.cur_face_labels.append(self.add_face_label)
 
         info_file_path = self.get_info_file_path(info_id)
         info_text.delete(1.0, END)
@@ -214,3 +254,80 @@ class DataTkApplication(pygubu.TkApplication):
             info_text.insert('1.0', f.read())
 
         self.set_msg(_('Double click the face image to delete.'))
+
+
+    def refresh_frame(self):
+        if self.cur_face_labels == None:
+            return
+
+        if self.vid is None:
+            self.vid = cv2.VideoCapture(self.source)
+        if not self.vid.isOpened():
+            self.set_msg(_('Unable to open video source.'))
+            return
+
+        rect, cur_frame = self.vid.read()
+        rec_gray_img = cv2.cvtColor(cur_frame, cv2.COLOR_BGR2GRAY)
+        face_rects = self.face_casecade.detectMultiScale(
+            rec_gray_img, 1.3, 5)
+
+        (x, y, w, h) = (0,0,self.save_size[0],self.save_size[1])
+        if len(face_rects)>0:
+            (x, y, w, h) = face_rects[0]
+            self.face_frame = cur_frame = cv2.resize(\
+            cur_frame[y:y + h, x:x + w],self.save_size,
+                                        interpolation=cv2.INTER_LINEAR)
+        else:
+             cur_frame =  cur_frame[y:y + h, x:x + w]
+             self.face_frame =None
+        vid_img = cv2.cvtColor(cur_frame, cv2.COLOR_BGR2RGB)
+        vid_img = Image.fromarray(vid_img)
+        imgtk = ImageTk.PhotoImage(image=vid_img)
+        self.add_face_label.imgtk = imgtk
+        self.add_face_label.configure(image=imgtk)
+
+        self.master_after = self.master.after(
+            int(1000 / self.vid_fps), self.refresh_frame)
+
+    def add_face_pic(self,info_id):
+        if self.master_after == -1:
+            self.refresh_frame()
+        else:
+            self.cancel_master_after()
+
+
+    def cancel_master_after(self):
+        if self.master_after != -1:
+            self.master.after_cancel(self.master_after)
+            self.vid.release()
+            self.master_after = -1
+            self.vid = None
+    
+    def on_del_btn_clicked(self):
+        if self.cur_info_id == None:
+            return
+        self.del_face_pic(self.cur_info_id,del_all=True)
+        
+
+
+    def on_save_btn_clicked(self):
+        self.save_info()
+
+    def save(self):
+        if self.cur_info_id is None:
+            return
+        if self.face_frame == None:
+            self.set_msg(_('No face picture picked'))
+            return
+        data_dir_path = os.path.join(data_path, self.cur_info_id)
+        os.makedirs(data_dir_path, exist_ok=True)
+
+        info = self.info_text.get("1.0", "end-1c")
+        info_file_path = self.get_info_file_path(self.cur_info_id)
+        with open(info_file_path, 'w+') as f:
+            f.write(info)
+
+        img_num = len(os.listdir(data_dir_path))
+        cv2.imwrite(f'{data_dir_path}/{img_num}.jpg', self.face_frame)
+
+        self.cancel_master_after()
