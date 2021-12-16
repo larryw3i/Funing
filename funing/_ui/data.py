@@ -26,7 +26,6 @@ from PIL import Image, ImageTk
 from funing import *
 from funing._ui import *
 from funing.locale import _
-from funing.ui.about_ui import AboutToplevel
 
 from cv2.data import haarcascades
 from cv2.face import EigenFaceRecognizer_create as recognizer

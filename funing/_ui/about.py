@@ -24,7 +24,6 @@ from PIL import Image, ImageTk
 from funing import *
 from funing._ui import error
 from funing.locale import _
-from funing.ui.about_ui import AboutToplevel
 
 translator = _
 
