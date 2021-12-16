@@ -280,7 +280,7 @@ class DataTkApplication(pygubu.TkApplication):
             _h = cur_frame.shape[0]
             _w = cur_frame.shape[1]
             _wh_min = _h if _h < _w else _w
-            _wh_diff_d2 = int( abs(_h - _w)/2  )
+            _wh_diff_d2 = int(abs(_h - _w) / 2)
             _y_start = 0 if _h < _w else _wh_diff_d2
             _x_start = 0 if _w < _h else _wh_diff_d2
 
@@ -309,7 +309,7 @@ class DataTkApplication(pygubu.TkApplication):
             self.vid.release()
             self.master_after = -1
             self.vid = None
-        
+
             if self.face_frame is None:
                 self.add_face_label.imgtk = None
                 self.add_face_label.configure(image=None)
