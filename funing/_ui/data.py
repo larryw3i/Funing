@@ -59,7 +59,7 @@ class DataTkApplication(pygubu.TkApplication):
         self.vid_fps = 30
         self.save_size = (100, 100)
         self.master_after = -1
-        self.face_frame = None
+        self.face_frame = 1     # default:  add new face label
 
         self.added_face_frames = []
 
@@ -307,8 +307,9 @@ class DataTkApplication(pygubu.TkApplication):
         self.master_after = self.master.after(
             int(1000 / self.vid_fps), self.refresh_frame)
 
-    def del_face_pic_new(self, label_index=-1):
-
+    def del_face_pic_new(self, label_index=-2):
+        self.cur_face_labels[label_index].grid_forget()
+        del self.cur_face_labels[label_index]
         pass
 
     def add_face_pic(self, info_id):
@@ -319,8 +320,6 @@ class DataTkApplication(pygubu.TkApplication):
                     "<Double-Button-1>",
                     (lambda e, index=len(self.cur_face_labels):
                     self.del_face_pic_new(index)))
-                new_face_label.grid(row=img_index // img_len_root_ceil,
-                                    column=img_index % img_len_root_ceil)
                 self.cur_face_labels.insert(-1,new_face_label)
                 self.grid_face_labels()
                 self.face_frame = None
@@ -336,8 +335,6 @@ class DataTkApplication(pygubu.TkApplication):
             self.vid = None
 
             if self.face_frame is None:
-                self.add_face_label.imgtk = None
-                self.add_face_label.configure(image=None)
                 self.set_msg(_('No face picture picked'))
 
     def on_del_btn_clicked(self):
@@ -363,6 +360,8 @@ class DataTkApplication(pygubu.TkApplication):
             f.write(info)
 
         img_num = len(os.listdir(data_dir_path))
-        cv2.imwrite(f'{data_dir_path}/{img_num}.jpg', self.face_frame)
+        for i in range(img_num,img_num+len(self.added_face_frames)+1):
+            cv2.imwrite(f'{data_dir_path}/{img_num}.jpg', \
+            self.added_face_frames[i-img_num])
 
         self.cancel_master_after()
