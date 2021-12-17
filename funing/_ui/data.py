@@ -36,7 +36,7 @@ class DataTkApplication(pygubu.TkApplication):
     def __init__(self, master=None):
         if master is None:
             master = tk.Toplevel()
-            master.title('Funing Data')
+            master.title(_('Funing Data'))
 
         # data
         self.id_name_dict = {}
@@ -61,6 +61,8 @@ class DataTkApplication(pygubu.TkApplication):
         self.master_after = -1
         self.face_frame = None
 
+        self.added_face_frames = []
+
         # cv2
         self.hff_xml_path = os.path.join(haarcascades,
                                          "haarcascade_frontalface_default.xml")
@@ -81,6 +83,12 @@ class DataTkApplication(pygubu.TkApplication):
 
         self.data_frame = self.mainwindow = builder.get_object(
             'data_frame', self.master)
+
+        self.face_pic_frame = self.builder.get_object(
+            'face_pic_frame', self.master)
+        self.info_text = self.builder.get_object(
+            'info_text', self.master)
+
         builder.get_object('del_btn', self.master).config(bg='red')
 
         self.get_name_data()
@@ -152,7 +160,7 @@ class DataTkApplication(pygubu.TkApplication):
             l.grid_forget()
         self.cur_face_labels = []
 
-    def del_face_pic(self, info_id, filename='', del_all=False):
+    def del_face_pic_file(self, info_id, filename='', del_all=False):
         if debug:
             print(info_id, filename)
         is_last_pic = del_all or len(self.cur_face_labels) < 2
@@ -187,6 +195,12 @@ class DataTkApplication(pygubu.TkApplication):
                 self.data_ids = os.listdir(data_path)
                 self.d_item_count = len(self.data_ids)
 
+    def grid_face_labels(self):
+        img_len_root_ceil = math.ceil(len(self.cur_face_labels))
+        for i, l in enumerate(self.cur_face_labels):
+            l.grid(row=i // img_len_root_ceil,
+                   column=i % img_len_root_ceil)
+
     def show_data(self, info_id):
 
         info_path = os.path.join(data_path, info_id)
@@ -194,11 +208,6 @@ class DataTkApplication(pygubu.TkApplication):
             return
 
         self.cur_info_id = info_id
-
-        face_pic_frame = self.builder.get_object(
-            'face_pic_frame', self.master)
-        info_text = self.builder.get_object(
-            'info_text', self.master)
 
         self.clear_face_labels()
 
@@ -216,21 +225,20 @@ class DataTkApplication(pygubu.TkApplication):
             vid_img = Image.fromarray(vid_img)
             imgtk = ImageTk.PhotoImage(image=vid_img)
 
-            new_face_label = tk.Label(face_pic_frame)
+            new_face_label = tk.Label(self.face_pic_frame)
             new_face_label.imgtk = imgtk
             new_face_label.configure(image=imgtk)
 
             new_face_label.bind(
                 "<Double-Button-1>",
                 (lambda e, a=info_id, b=filename:
-                 self.del_face_pic(a, b)))
+                 self.del_face_pic_file(a, b)))
 
-            new_face_label.grid(row=img_index // img_len_root_ceil,
-                                column=img_index % img_len_root_ceil)
             self.cur_face_labels.append(new_face_label)
             img_index += 1
+        self.grid_face_labels()
 
-        self.add_face_label = tk.Label(face_pic_frame, text=_('ADD'),
+        self.add_face_label = tk.Label(self.face_pic_frame, text=_('ADD'),
                                        font=("NONE", 16), background='blue',
                                        cursor='hand2')
         self.add_face_label.grid(row=img_index // img_len_root_ceil,
@@ -243,12 +251,12 @@ class DataTkApplication(pygubu.TkApplication):
         self.cur_face_labels.append(self.add_face_label)
 
         info_file_path = self.get_info_file_path(info_id)
-        info_text.delete(1.0, END)
+        self.info_text.delete(1.0, END)
         if not os.path.exists(info_file_path):
             _nif_ = _('No informations found')
-            info_text.insert('1.0', _nif_)
+            self.info_text.insert('1.0', _nif_)
         with open(info_file_path, 'r') as f:
-            info_text.insert('1.0', f.read())
+            self.info_text.insert('1.0', f.read())
 
         self.set_msg(_('Double click the face image to delete.'))
 
@@ -291,14 +299,31 @@ class DataTkApplication(pygubu.TkApplication):
         vid_img = cv2.cvtColor(cur_frame, cv2.COLOR_BGR2RGB)
         vid_img = Image.fromarray(vid_img)
         imgtk = ImageTk.PhotoImage(image=vid_img)
-        self.add_face_label.imgtk = imgtk
-        self.add_face_label.configure(image=imgtk)
+
+        new_label = self.cur_face_labels[-2]
+        new_label.imgtk = imgtk
+        new_label.configure(image=imgtk)
 
         self.master_after = self.master.after(
             int(1000 / self.vid_fps), self.refresh_frame)
 
+    def del_face_pic_new(self, label_index=-1):
+
+        pass
+
     def add_face_pic(self, info_id):
         if self.master_after == -1:
+            if self.face_frame != None:
+                new_face_label = tk.Label(self.face_pic_frame)
+                new_face_label.bind(
+                    "<Double-Button-1>",
+                    (lambda e, index=len(self.cur_face_labels):
+                    self.del_face_pic_new(index)))
+                new_face_label.grid(row=img_index // img_len_root_ceil,
+                                    column=img_index % img_len_root_ceil)
+                self.cur_face_labels.insert(-1,new_face_label)
+                self.grid_face_labels()
+                self.face_frame = None
             self.refresh_frame()
         else:
             self.cancel_master_after()
@@ -318,7 +343,7 @@ class DataTkApplication(pygubu.TkApplication):
     def on_del_btn_clicked(self):
         if self.cur_info_id is None:
             return
-        self.del_face_pic(self.cur_info_id, del_all=True)
+        self.del_face_pic_file(self.cur_info_id, del_all=True)
 
     def on_save_btn_clicked(self):
         self.save()
