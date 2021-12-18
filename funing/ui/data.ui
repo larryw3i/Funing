@@ -46,6 +46,7 @@
             </child>
             <child>
               <object class="tk.Button" id="prev_btn">
+                <property name="command" type="command" cbtype="simple">on_prev_btn_clicked</property>
                 <property name="text" translatable="yes">prev_str</property>
                 <layout manager="pack">
                   <property name="propagate">True</property>
@@ -66,6 +67,8 @@
               <object class="tk.Entry" id="show_per_page_entry">
                 <property name="justify">right</property>
                 <property name="text" translatable="yes">10</property>
+                <property name="validate">all</property>
+                <property name="validatecommand" type="command" cbtype="entry_validate" args="%P">show_per_page_entry_validatecommand</property>
                 <property name="width">6</property>
                 <layout manager="pack">
                   <property name="propagate">True</property>
@@ -84,6 +87,7 @@
             </child>
             <child>
               <object class="tk.Button" id="next_btn">
+                <property name="command" type="command" cbtype="simple">on_next_btn_clicked</property>
                 <property name="text" translatable="yes">next_str</property>
                 <layout manager="pack">
                   <property name="propagate">True</property>

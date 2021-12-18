@@ -83,11 +83,13 @@ class DataTkApplication(pygubu.TkApplication):
 
         self.data_frame = self.mainwindow = builder.get_object(
             'data_frame', self.master)
-
         self.face_pic_frame = self.builder.get_object(
             'face_pic_frame', self.master)
         self.info_text = self.builder.get_object(
             'info_text', self.master)
+
+        self.show_per_page_entry = self.builder.get_object(
+            'show_per_page_entry', self.master)
 
         builder.get_object('del_btn', self.master).config(bg='red')
 
@@ -95,6 +97,12 @@ class DataTkApplication(pygubu.TkApplication):
 
         # Configure callbacks
         self.builder.connect_callbacks(self)
+
+    def show_per_page_entry_validatecommand(self, P):
+        if str.isdigit(P) or P == "":
+            return True
+        else:
+            return False
 
     def set_msg(self, msg):
         self.builder.get_object('msg_label', self.master)['text'] = msg
@@ -119,6 +127,16 @@ class DataTkApplication(pygubu.TkApplication):
         for b in self.name_btns:
             b.grid_forget()
         self.name_btns = []
+
+    def get_p_item_count(self):
+        return int(self.show_per_page_entry.get()) if \
+            len(self.show_per_page_entry.get()) > 0 else 10
+
+    def on_prev_btn_clicked(self):
+        self.get_name_data(self.get_p_item_count(), self.cur_page_num - 1)
+
+    def on_next_btn_clicked(self):
+        self.get_name_data(self.get_p_item_count(), self.cur_page_num + 1)
 
     def get_name_data(self, p_item_count=10, page_num=0):
         self.clear_name_btns()
@@ -257,7 +275,7 @@ class DataTkApplication(pygubu.TkApplication):
         with open(info_file_path, 'r') as f:
             self.info_text.insert('1.0', f.read())
 
-        self.set_msg(_('Double click the face image to delete.'))
+        self.set_msg(_('Click the face image to pick.'))
 
     def refresh_frame(self):
         if self.cur_face_labels is None:
@@ -312,10 +330,10 @@ class DataTkApplication(pygubu.TkApplication):
         self.added_face_frames[index] = None
 
     def del_face_pic_new(self, label, index):
-        self.cur_face_labels[label]
+        self.cancel_master_after()
+        self.cur_face_labels.remove(label)
         self.del_added_face_frame(index)
         label.grid_forget()
-        pass
 
     def _update_pause_play_(self):
         if self.master_after == -1:
@@ -350,7 +368,7 @@ class DataTkApplication(pygubu.TkApplication):
                             new_face_label,
                             index)))
                 new_face_label.bind(
-                    "<Button-1>",
+                    "<Button-3>",
                     (lambda e:
                         self._update_pause_play_()))
                 self.cur_face_labels.insert(-1, new_face_label)
@@ -360,6 +378,9 @@ class DataTkApplication(pygubu.TkApplication):
                 self.added_face_frames.append(self.face_frame)
 
                 self.scroll_face_pic_tkscrolledframe_bottom()
+
+                self.set_msg(\
+                _('Right click: pause or play, double click: delete.'))
 
             self.refresh_frame()
 

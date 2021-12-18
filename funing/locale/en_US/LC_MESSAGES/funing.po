@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Funing 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-06 23:22+0800\n"
+"POT-Creation-Date: 2021-12-18 21:11+0800\n"
 "PO-Revision-Date: 2021-12-06 23:35+0800\n"
 "Last-Translator: larry <larryw3i@163.com>\n"
 "Language-Team: Chinese (Simplified) <larryw3i@163.com>\n"
@@ -19,27 +19,43 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0\n"
 "X-Generator: Gtranslator 40.0\n"
 
-#: funing/ui/data.ui:27
+#: funing/ui/data.ui:40
+msgid "%page_num%"
+msgstr ""
+
+#: funing/ui/data.ui:50
 msgid "prev_str"
 msgstr "prev"
 
-#: funing/ui/data.ui:36
+#: funing/ui/data.ui:59
 msgid "show_per_page_str0"
 msgstr "show"
 
-#: funing/ui/data.ui:45
+#: funing/ui/data.ui:69
 msgid "10"
 msgstr "10"
 
-#: funing/ui/data.ui:55
+#: funing/ui/data.ui:81
 msgid "show_per_page_str1"
 msgstr "/page"
 
-#: funing/ui/data.ui:64
+#: funing/ui/data.ui:91
 msgid "next_str"
 msgstr "next"
 
-#: funing/ui/about.ui:17
+#: funing/ui/data.ui:102
+msgid "Funing data."
+msgstr ""
+
+#: funing/ui/data.ui:168 funing/ui/main.ui:140
+msgid "Save"
+msgstr ""
+
+#: funing/ui/data.ui:180
+msgid "Delete"
+msgstr ""
+
+#: funing/ui/about.ui:17 funing/_ui/main.py:83
 msgid "Funing"
 msgstr ""
 
@@ -75,7 +91,7 @@ msgstr ""
 msgid "GO"
 msgstr ""
 
-#: funing/ui/main.ui:62
+#: funing/ui/main.ui:62 funing/_ui/main.py:257
 msgid "Pause"
 msgstr ""
 
@@ -87,11 +103,7 @@ msgstr ""
 msgid "Pick"
 msgstr "Pick"
 
-#: funing/ui/main.ui:140
-msgid "Save"
-msgstr ""
-
-#: funing/ui/main.ui:164
+#: funing/ui/main.ui:164 funing/_ui/about.py:58
 msgid "About Funing"
 msgstr ""
 
@@ -103,16 +115,125 @@ msgstr ""
 msgid "Welcome to Funing."
 msgstr ""
 
+#: funing/_ui/main.py:50
+msgid ""
+"It seems that you have both 'opencv-python' and 'opencv-contrib-python' "
+"installed, do you want to uninstall them and reinstall 'opencv-contrib-"
+"python'([y]/n)?"
+msgstr ""
+
+#: funing/_ui/main.py:61
+msgid ""
+"\"EigenFaceRecognizer_create\" and \"haarcascades\" could not be imported, "
+"funing exit."
+msgstr ""
+
+#: funing/_ui/main.py:97
+msgid "Face was detected."
+msgstr ""
+
+#: funing/_ui/main.py:98
+msgid "No face was detected."
+msgstr ""
+
+#: funing/_ui/main.py:100
 #, fuzzy
-#~ msgid "You haven't entered anything yet!"
-#~ msgstr ""
-#~ "You haven't entered data yet! Open a source and click 'Pick' to enter"
+msgid "You haven't entered anything yet!"
+msgstr "You haven't entered data yet! Open a source and click 'Pick' to enter"
 
-#~ msgid "Play"
-#~ msgstr "Play"
+#: funing/_ui/main.py:102 funing/_ui/data.py:287
+msgid "Unable to open video source."
+msgstr ""
 
-#~ msgid "Nothing enter"
-#~ msgstr "Nothing enter"
+#: funing/_ui/main.py:108
+msgid "Click the picked face image to remove."
+msgstr ""
+
+#: funing/_ui/main.py:110
+msgid "Double click the face image to remove."
+msgstr ""
+
+#: funing/_ui/main.py:126 funing/_ui/main.py:337 funing/_ui/main.py:370
+msgid "File"
+msgstr ""
+
+#: funing/_ui/main.py:126 funing/_ui/main.py:340 funing/_ui/main.py:373
+msgid "Camera"
+msgstr ""
+
+#: funing/_ui/main.py:164
+msgid "No desktop environment is detected! "
+msgstr ""
+
+#: funing/_ui/main.py:203
+msgid "Recognizer training. . ."
+msgstr ""
+
+#: funing/_ui/main.py:209
+msgid "Recognizer finish training."
+msgstr ""
+
+#: funing/_ui/main.py:264
+msgid "Play"
+msgstr "Play"
+
+#: funing/_ui/main.py:308 funing/_ui/main.py:397
+msgid "Select a file"
+msgstr ""
+
+#: funing/_ui/main.py:309 funing/_ui/main.py:398
+msgid "Image or video"
+msgstr ""
+
+#: funing/_ui/main.py:546 funing/_ui/data.py:394 funing/_ui/data.py:408
+msgid "No face picture picked"
+msgstr ""
+
+#: funing/_ui/main.py:604 funing/_ui/data.py:273
+msgid "No informations found"
+msgstr ""
+
+#: funing/_ui/main.py:735
+msgid "Nothing enter"
+msgstr "Nothing enter"
+
+#: funing/_ui/data.py:39
+msgid "Funing Data"
+msgstr ""
+
+#: funing/_ui/data.py:185
+msgid "Do you want to delete this face picture?"
+msgstr ""
+
+#: funing/_ui/data.py:188
+#, python-brace-format
+msgid "All data of {0} will be removed"
+msgstr ""
+
+#: funing/_ui/data.py:191
+msgid "Delete face picture?"
+msgstr ""
+
+#: funing/_ui/data.py:205
+msgid "face picture has been removed!"
+msgstr ""
+
+#: funing/_ui/data.py:209
+#, python-brace-format
+msgid "All data of {0} have been removed!"
+msgstr ""
+
+#: funing/_ui/data.py:258
+msgid "ADD"
+msgstr ""
+
+#: funing/_ui/data.py:278
+msgid "Click the face image to pick."
+msgstr ""
+
+#: funing/_ui/data.py:382
+msgid "Click"
+msgstr ""
 
 #~ msgid "Write it with certain rules so that you can analyze it later"
 #~ msgstr ""
