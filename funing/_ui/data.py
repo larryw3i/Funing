@@ -59,7 +59,7 @@ class DataTkApplication(pygubu.TkApplication):
         self.vid_fps = 30
         self.save_size = (100, 100)
         self.master_after = -1
-        self.face_frame = 1     # default:  add new face label
+        self.face_frame = 1    # default:  add new face label
 
         self.added_face_frames = []
 
@@ -170,7 +170,7 @@ class DataTkApplication(pygubu.TkApplication):
                 _('All data of {0} will be removed').format(
                     self.cur_name)
         del_or_not = messagebox.askyesnocancel(
-            _("Delete face picture?"), ask_str)
+            _("Delete face picture?"), ask_str, parent=self.master)
 
         if del_or_not:
             info_path = os.path.join(data_path, info_id)
@@ -198,7 +198,6 @@ class DataTkApplication(pygubu.TkApplication):
     def grid_face_labels(self):
         img_len_root_ceil = math.ceil(len(self.cur_face_labels)**0.5)
         for i, l in enumerate(self.cur_face_labels):
-            print(img_len_root_ceil,i // img_len_root_ceil,i % img_len_root_ceil )
             l.grid(row=i // img_len_root_ceil,
                    column=i % img_len_root_ceil)
 
@@ -207,10 +206,10 @@ class DataTkApplication(pygubu.TkApplication):
         info_path = os.path.join(data_path, info_id)
         if not os.path.isdir(info_path):
             return
-
         self.cur_info_id = info_id
 
         self.clear_face_labels()
+        self.added_face_frames = []
 
         self.cur_name = name = self.get_name_from_info_file(info_id)
 
@@ -218,8 +217,8 @@ class DataTkApplication(pygubu.TkApplication):
         img_len_root_ceil = math.ceil(img_len**0.5)
         img_index = 0
         for filename in os.listdir(info_path):
-            if filename == '0.txt':
-                continue  # '0.txt' is the info file.
+            if filename == info_file_name:
+                continue
             imgpath = os.path.join(info_path, filename)
             img = cv2.imread(imgpath)
             vid_img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
@@ -237,7 +236,6 @@ class DataTkApplication(pygubu.TkApplication):
 
             self.cur_face_labels.append(new_face_label)
             img_index += 1
-        self.grid_face_labels()
 
         self.add_face_label = tk.Label(self.face_pic_frame, text=_('ADD'),
                                        font=("NONE", 16), background='blue',
@@ -248,6 +246,8 @@ class DataTkApplication(pygubu.TkApplication):
             "<Button-1>",
             (lambda e: self.add_face_pic()))
         self.cur_face_labels.append(self.add_face_label)
+
+        self.grid_face_labels()
 
         info_file_path = self.get_info_file_path(info_id)
         self.info_text.delete(1.0, END)
@@ -306,8 +306,14 @@ class DataTkApplication(pygubu.TkApplication):
         self.master_after = self.master.after(
             int(1000 / self.vid_fps), self.refresh_frame)
 
-    def del_face_pic_new(self, label):
-        del self.cur_face_labels[-2]
+    def del_added_face_frame(self, index):
+        if len(self.added_face_frames) - 1 < index:
+            return
+        self.added_face_frames[index] = None
+
+    def del_face_pic_new(self, label, index):
+        self.cur_face_labels[label]
+        self.del_added_face_frame(index)
         label.grid_forget()
         pass
 
@@ -315,30 +321,47 @@ class DataTkApplication(pygubu.TkApplication):
         if self.master_after == -1:
             self.refresh_frame()
         else:
-            if not self.face_frame is None:
-                self.added_face_frames.append(self.face_frame)
+            if self.face_frame is not None:
+                self.added_face_frames[-1] = self.face_frame
             self.cancel_master_after()
             self.grid_face_labels()
 
+    def scroll_face_pic_tkscrolledframe_bottom(self):
+        face_pic_tkscrolledframe = self.builder.get_object(
+            'face_pic_tkscrolledframe', self.master)
+        face_pic_tkscrolledframe.yview(mode='moveto', value=1)
+        face_pic_tkscrolledframe.xview(mode='moveto', value=1)
 
     def add_face_pic(self):
         if self.master_after == -1:
-            if not self.face_frame is None:
+            if self.face_frame is not None:
+                if not isinstance(self.face_frame, int) and \
+                        self.face_frame is not None:
+                    self.added_face_frames.append(self.face_frame)
+
                 new_face_label = tk.Label(self.face_pic_frame)
+                added_face_frames_len = len(self.added_face_frames)
                 new_face_label.bind(
                     "<Double-Button-1>",
-                    (lambda e, label=new_face_label:
-                    self.del_face_pic_new(new_face_label)))
+                    (lambda e,
+                        label=new_face_label,
+                        index=added_face_frames_len:
+                        self.del_face_pic_new(
+                            new_face_label,
+                            index)))
                 new_face_label.bind(
                     "<Button-1>",
                     (lambda e:
-                    self._update_pause_play_()))
-                self.cur_face_labels.insert(-1,new_face_label)
+                        self._update_pause_play_()))
+                self.cur_face_labels.insert(-1, new_face_label)
                 self.grid_face_labels()
                 self.face_frame = None
-            self.refresh_frame()            
-        else:
-            self.cancel_master_after()
+
+                self.added_face_frames.append(self.face_frame)
+
+                self.scroll_face_pic_tkscrolledframe_bottom()
+
+            self.refresh_frame()
 
     def cancel_master_after(self):
         if self.master_after != -1:
@@ -373,8 +396,13 @@ class DataTkApplication(pygubu.TkApplication):
             f.write(info)
 
         img_num = len(os.listdir(data_dir_path))
-        for i in range(img_num,img_num+len(self.added_face_frames)+1):
-            cv2.imwrite(f'{data_dir_path}/{img_num}.jpg', \
-            self.added_face_frames[i-img_num])
+
+        for f in self.added_face_frames:
+            if f is None or len(f) < 1:
+                return
+            cv2.imwrite(f'{data_dir_path}/{str(uuid.uuid4())}.jpg', f)
 
         self.cancel_master_after()
+
+        self.get_name_data()
+        self.show_data(self.cur_info_id)

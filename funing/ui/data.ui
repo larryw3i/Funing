@@ -159,6 +159,7 @@
             </layout>
             <child>
               <object class="tk.Button" id="save_btn">
+                <property name="command" type="command" cbtype="simple">on_save_btn_clicked</property>
                 <property name="foreground">#4044d9</property>
                 <property name="text" translatable="yes">Save</property>
                 <layout manager="pack">

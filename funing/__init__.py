@@ -70,6 +70,8 @@ user_dirs = [
 for p in user_dirs:
     os.path.exists(p) or os.makedirs(p)
 
+info_file_name = 'info.toml'
+
 os.path.exists(user_ipynb_path) or \
     shutil.copyfile(project_ipynb_path, user_ipynb_path)
 os.path.exists(example_ipynb_path) or \

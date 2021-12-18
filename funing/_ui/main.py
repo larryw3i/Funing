@@ -187,8 +187,8 @@ class MainApplication(pygubu.TkApplication):
             if os.path.isdir(subpath):
                 ids.append(subdir)
                 for filename in os.listdir(subpath):
-                    if filename == '0.txt':
-                        continue  # '0.txt' is the info file.
+                    if filename == info_file_name:
+                        continue
                     imgpath = os.path.join(subpath, filename)
                     img = cv2.imread(imgpath, cv2.IMREAD_COLOR)
                     gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -553,12 +553,10 @@ class MainApplication(pygubu.TkApplication):
         with open(info_file_path, 'w+') as f:
             f.write(info)
         if self.status == Status.PICK:
-            count = 1
             for f in self.picked_face_frames:
                 if len(f) < 1:
                     continue
-                cv2.imwrite(f'{data_dir_path}/{count}.jpg', f)
-                count += 1
+                cv2.imwrite(f'{data_dir_path}/{str(uuid.uuid4())}.jpg', f)
             self.cur_info_id = None
 
         if debug:
