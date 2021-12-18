@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-18 21:14+0800\n"
+"POT-Creation-Date: 2021-12-18 21:48+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -184,6 +184,7 @@ msgid "Image or video"
 msgstr ""
 
 #: funing/_ui/main.py:546 funing/_ui/data.py:394 funing/_ui/data.py:408
+#: funing/_ui/data.py:395 funing/_ui/data.py:409
 msgid "No face picture picked"
 msgstr ""
 
@@ -231,4 +232,8 @@ msgstr ""
 
 #: funing/_ui/data.py:382
 msgid "Click"
+msgstr ""
+
+#: funing/_ui/data.py:383
+msgid "Right click: pause or play, double click: delete."
 msgstr ""

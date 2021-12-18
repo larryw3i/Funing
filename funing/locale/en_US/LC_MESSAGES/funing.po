@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Funing 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-18 21:11+0800\n"
+"POT-Creation-Date: 2021-12-18 21:48+0800\n"
 "PO-Revision-Date: 2021-12-06 23:35+0800\n"
 "Last-Translator: larry <larryw3i@163.com>\n"
 "Language-Team: Chinese (Simplified) <larryw3i@163.com>\n"
@@ -186,6 +186,7 @@ msgid "Image or video"
 msgstr ""
 
 #: funing/_ui/main.py:546 funing/_ui/data.py:394 funing/_ui/data.py:408
+#: funing/_ui/data.py:395 funing/_ui/data.py:409
 msgid "No face picture picked"
 msgstr ""
 
@@ -233,6 +234,10 @@ msgstr ""
 
 #: funing/_ui/data.py:382
 msgid "Click"
+msgstr ""
+
+#: funing/_ui/data.py:383
+msgid "Right click: pause or play, double click: delete."
 msgstr ""
 
 #~ msgid "Write it with certain rules so that you can analyze it later"
