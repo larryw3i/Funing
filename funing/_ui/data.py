@@ -196,8 +196,9 @@ class DataTkApplication(pygubu.TkApplication):
                 self.d_item_count = len(self.data_ids)
 
     def grid_face_labels(self):
-        img_len_root_ceil = math.ceil(len(self.cur_face_labels))
+        img_len_root_ceil = math.ceil(len(self.cur_face_labels)**0.5)
         for i, l in enumerate(self.cur_face_labels):
+            print(img_len_root_ceil,i // img_len_root_ceil,i % img_len_root_ceil )
             l.grid(row=i // img_len_root_ceil,
                    column=i % img_len_root_ceil)
 
@@ -243,11 +244,9 @@ class DataTkApplication(pygubu.TkApplication):
                                        cursor='hand2')
         self.add_face_label.grid(row=img_index // img_len_root_ceil,
                                  column=img_index % img_len_root_ceil)
-
         self.add_face_label.bind(
             "<Button-1>",
-            (lambda e, a=info_id: self.add_face_pic(a)))
-
+            (lambda e: self.add_face_pic()))
         self.cur_face_labels.append(self.add_face_label)
 
         info_file_path = self.get_info_file_path(info_id)
@@ -307,23 +306,37 @@ class DataTkApplication(pygubu.TkApplication):
         self.master_after = self.master.after(
             int(1000 / self.vid_fps), self.refresh_frame)
 
-    def del_face_pic_new(self, label_index=-2):
-        self.cur_face_labels[label_index].grid_forget()
-        del self.cur_face_labels[label_index]
+    def del_face_pic_new(self, label):
+        del self.cur_face_labels[-2]
+        label.grid_forget()
         pass
 
-    def add_face_pic(self, info_id):
+    def _update_pause_play_(self):
         if self.master_after == -1:
-            if self.face_frame != None:
+            self.refresh_frame()
+        else:
+            if not self.face_frame is None:
+                self.added_face_frames.append(self.face_frame)
+            self.cancel_master_after()
+            self.grid_face_labels()
+
+
+    def add_face_pic(self):
+        if self.master_after == -1:
+            if not self.face_frame is None:
                 new_face_label = tk.Label(self.face_pic_frame)
                 new_face_label.bind(
                     "<Double-Button-1>",
-                    (lambda e, index=len(self.cur_face_labels):
-                    self.del_face_pic_new(index)))
+                    (lambda e, label=new_face_label:
+                    self.del_face_pic_new(new_face_label)))
+                new_face_label.bind(
+                    "<Button-1>",
+                    (lambda e:
+                    self._update_pause_play_()))
                 self.cur_face_labels.insert(-1,new_face_label)
                 self.grid_face_labels()
                 self.face_frame = None
-            self.refresh_frame()
+            self.refresh_frame()            
         else:
             self.cancel_master_after()
 
