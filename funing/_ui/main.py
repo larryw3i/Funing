@@ -241,20 +241,34 @@ class MainApplication(pygubu.TkApplication):
     def clear_face_text(self):
         self.info_text.delete(1.0, END)
 
-    def add_face_label_pick(self, num):
-        x, y, w, h = self.face_rects[num]
+    def add_face_label_pick(self, index):
+        x, y, w, h = self.face_rects[index]
         _w = max(w, h)
 
-        new_face_label = Label(self.face_frame)
         frame = self.cur_frame[y:y + _w, x:x + _w]
         frame = cv2.resize(frame, self.show_size)
         vid_img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         vid_img = Image.fromarray(vid_img)
         imgtk = ImageTk.PhotoImage(image=vid_img)
+
+        new_face_label = Label(self.face_frame)
         new_face_label.imgtk = imgtk
         new_face_label.configure(image=imgtk)
+
+        menu = Menu(self.master, tearoff=0)
+        menu.add_command(
+            label=_("delete"),
+            command=(lambda label=new_face_label, index=index:
+                     self.del_face_label_pick(label, index)))
+
+        new_face_label.bind(
+            "<Button-3>",
+            (lambda event: menu.tk_popup(
+                event.x_root,
+                event.y_root)))
         new_face_label.bind("<Button-1>",
-                            lambda e: self.del_face_label_pick(e, num))
+                            (lambda e, label=new_face_label, index=index:
+                             self.del_face_label_pick(label, index)))
 
         new_face_label.pack(side=LEFT)
 
@@ -263,9 +277,9 @@ class MainApplication(pygubu.TkApplication):
                                        interpolation=cv2.INTER_LINEAR)
         self.picked_face_frames.append(picked_face_frame)
 
-    def del_face_label_pick(self, e, num):
-        del self.picked_face_frames[num]
-        e.widget.destroy()
+    def del_face_label_pick(self, label, index):
+        del self.picked_face_frames[index]
+        label.destroy()
         if len(self.picked_face_frames) < 1:
             self.clear_status_msg()
         if debug:
@@ -576,12 +590,12 @@ class MainApplication(pygubu.TkApplication):
         with open(info_file_path, 'r') as f:
             self.info_text.insert('1.0', f.read())
 
-    def add_face_label_rec(self, num):
-        index = len(self.showed_face_frames)
+    def add_face_label_rec(self, f_index):
+        showed_face_index = len(self.showed_face_frames)
 
         new_face_label = Label(self.face_frame)
 
-        x, y, w, h = self.face_rects[num]
+        x, y, w, h = self.face_rects[f_index]
         roi_gray = self.rec_gray_img[y:y + h, x:x + w]
         roi_gray = cv2.resize(roi_gray, self.save_size,
                               interpolation=cv2.INTER_LINEAR)
@@ -603,20 +617,39 @@ class MainApplication(pygubu.TkApplication):
         new_face_label.imgtk = imgtk
         new_face_label.configure(image=imgtk)
 
-        new_face_label.bind("<Double-Button-1>", lambda e:
-                            self.del_face_label_rec(e, index))
+        menu = Menu(self.master, tearoff=0)
+        menu.add_command(
+            label=_("delete"),
+            command=(lambda _label=new_face_label, _index=showed_face_index:
+                     self.del_face_label_rec(_label, _index)))
+
+        new_face_label.bind("<Double-Button-1>",
+                            lambda e, _label=new_face_label, \
+                            _index=showed_face_index:
+                            self.del_face_label_rec(_label,_index))
         new_face_label.bind(
             "<Button-1>",
-            lambda e: self.show_info(new_face_label, index, cur_info_id))
+            (lambda e,_label=new_face_label,
+            _index=showed_face_index,
+            _info_id =cur_info_id : \
+            self.show_info(
+                _label,
+                _index,
+                _info_id)))
+        new_face_label.bind(
+            "<Button-3>",
+            (lambda event: menu.tk_popup(
+                event.x_root,
+                event.y_root)))
 
         new_face_label.pack(side=LEFT)
 
-        self.show_info(new_face_label, index, cur_info_id)
+        self.show_info(new_face_label, showed_face_index, cur_info_id)
 
-    def del_face_label_rec(self, e, index):
-        if self.zoomed_in_face_label[0] == e.widget:
+    def del_face_label_rec(self, label, index):
+        if self.zoomed_in_face_label[0] == label:
             self.zoomed_in_face_label = (0, 0)
-        e.widget.destroy()
+        label.destroy()
         self.showed_face_frames[index] = None
         self.info_text.delete(1.0, END)
         if np.all(np.array(self.showed_face_frames, dtype=object) is None):
@@ -661,8 +694,8 @@ class MainApplication(pygubu.TkApplication):
             print(self.face_rects)
             print(type(self.face_rects))
 
-        for i in range(len(self.face_rects)):
-            self.add_face_label_pick(i)
+        for index in range(len(self.face_rects)):
+            self.add_face_label_pick(index)
 
     def on_recognize_btn_clicked(self):
         self.rec()
@@ -696,8 +729,8 @@ class MainApplication(pygubu.TkApplication):
             f'({self.var_double_click_to_remove_r})'
         )
 
-        for i in range(len(self.face_rects)):
-            self.add_face_label_rec(i)
+        for index in range(len(self.face_rects)):
+            self.add_face_label_rec(index)
 
     def show_data_empty(self):
         unable_open_s = _('Nothing enter')

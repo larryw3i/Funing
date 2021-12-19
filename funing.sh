@@ -90,6 +90,17 @@ active_venv(){
     source venv/bin/activate
 }
 
+cat_bt(){
+    echo funing.sh; cat -bt funing.sh
+    echo funing.py; cat -bt funing.py
+    echo setup.py;  cat -bt setup.py
+    for f in $(find ./funing/ -name "*.py" -o -name "*.ui")
+    do
+        echo $f
+        cat -bt $f
+    done
+}
+
 tu(){       twine_upload;       }
 ugi(){      update_gitignore;   }
 gpo(){      generate_po;        }
@@ -107,5 +118,7 @@ bdup(){     bd; tu;             }
 _s(){       _start;             }
 
 venv(){     active_venv;        }
+_cat(){     cat_bt;             }
+_cat_(){    _cat | tr -s '\n';   }
 
 ${_args[0]}

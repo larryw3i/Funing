@@ -252,19 +252,16 @@ class DataTkApplication(pygubu.TkApplication):
                 (lambda e, a=info_id, b=filename:
                  self.del_face_pic_file(a, b)))
 
-
             menu = Menu(self.master, tearoff=0)
             menu.add_command(
                 label=_("delete"),
-                command=\
-                (lambda info_id=info_id, filename=filename:
-                self.del_face_pic_file(info_id, filename)))
-            
+                command=(lambda info_id=info_id, filename=filename:
+                         self.del_face_pic_file(info_id, filename)))
+
             new_face_label.bind(
                 "<Button-3>",
-                (lambda event: menu.tk_popup(event.x_root,event.y_root)))
+                (lambda event: menu.tk_popup(event.x_root, event.y_root)))
 
-                    
             self.cur_face_labels.append(new_face_label)
             img_index += 1
 
@@ -380,17 +377,17 @@ class DataTkApplication(pygubu.TkApplication):
                     label=_("delete"),
                     command=(
                         lambda label=new_face_label,
-                        index=added_face_frames_len: \
-                        self.del_face_pic_new(new_face_label,index)))
+                        index=added_face_frames_len:
+                        self.del_face_pic_new(new_face_label, index)))
                 menu.add_command(
                     label=_("pick/stop"),
-                    command= (lambda: self._update_pause_play_()))
-                
+                    command=(lambda: self._update_pause_play_()))
+
                 new_face_label.bind(
-                    "<Button-1>",(lambda e: self._update_pause_play_()))
+                    "<Button-1>", (lambda e: self._update_pause_play_()))
                 new_face_label.bind(
                     "<Button-3>",
-                    lambda event: menu.tk_popup(event.x_root,event.y_root))
+                    lambda event: menu.tk_popup(event.x_root, event.y_root))
 
                 self.cur_face_labels.insert(-1, new_face_label)
                 self.grid_face_labels()
