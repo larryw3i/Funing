@@ -57,7 +57,7 @@ class DataTkApplication(pygubu.TkApplication):
         self.vid_fps = 30
         self.save_size = (100, 100)
         self.master_after = -1
-        self.face_frame = 1    # default:  add new face label
+        self.face_frame = 0    # default:  add new face label
 
         self.added_face_frames = []
 
@@ -252,6 +252,19 @@ class DataTkApplication(pygubu.TkApplication):
                 (lambda e, a=info_id, b=filename:
                  self.del_face_pic_file(a, b)))
 
+
+            menu = Menu(self.master, tearoff=0)
+            menu.add_command(
+                label=_("delete"),
+                command=\
+                (lambda info_id=info_id, filename=filename:
+                self.del_face_pic_file(info_id, filename)))
+            
+            new_face_label.bind(
+                "<Button-3>",
+                (lambda event: menu.tk_popup(event.x_root,event.y_root)))
+
+                    
             self.cur_face_labels.append(new_face_label)
             img_index += 1
 
@@ -353,24 +366,32 @@ class DataTkApplication(pygubu.TkApplication):
     def add_face_pic(self):
         if self.master_after == -1:
             if self.face_frame is not None:
+
+                # default value of self.face_frame is 0.
                 if not isinstance(self.face_frame, int) and \
                         self.face_frame is not None:
                     self.added_face_frames.append(self.face_frame)
 
                 new_face_label = tk.Label(self.face_pic_frame)
                 added_face_frames_len = len(self.added_face_frames)
+
+                menu = Menu(self.master, tearoff=0)
+                menu.add_command(
+                    label=_("delete"),
+                    command=(
+                        lambda label=new_face_label,
+                        index=added_face_frames_len: \
+                        self.del_face_pic_new(new_face_label,index)))
+                menu.add_command(
+                    label=_("pick/stop"),
+                    command= (lambda: self._update_pause_play_()))
+                
                 new_face_label.bind(
-                    "<Double-Button-1>",
-                    (lambda e,
-                        label=new_face_label,
-                        index=added_face_frames_len:
-                        self.del_face_pic_new(
-                            new_face_label,
-                            index)))
+                    "<Button-1>",(lambda e: self._update_pause_play_()))
                 new_face_label.bind(
                     "<Button-3>",
-                    (lambda e:
-                        self._update_pause_play_()))
+                    lambda event: menu.tk_popup(event.x_root,event.y_root))
+
                 self.cur_face_labels.insert(-1, new_face_label)
                 self.grid_face_labels()
                 self.face_frame = None

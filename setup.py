@@ -1,5 +1,6 @@
 
 import os
+
 import pkg_resources
 
 if 'opencv-python' in [i.key for i in pkg_resources.working_set]:
@@ -14,7 +15,9 @@ if 'opencv-python' in [i.key for i in pkg_resources.working_set]:
         print("Funing may not work properly.")
 
 import re
+
 import setuptools
+
 from funing import __appauthor__, __version__
 
 long_description = open("README.md", "r", encoding="utf-8").read()
