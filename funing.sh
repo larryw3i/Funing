@@ -119,6 +119,6 @@ _s(){       _start;             }
 
 venv(){     active_venv;        }
 _cat(){     cat_bt;             }
-_cat_(){    _cat | tr -s '\n';   }
+_cat_(){    _cat | tr -s '\n';  }
 
 ${_args[0]}
