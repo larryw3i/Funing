@@ -9,9 +9,6 @@ import cv2
 import yaml
 
 from funing import *
-from funing._ui import error
-
-error.lib_check()
 
 
 def get_info_file_path(info_id):

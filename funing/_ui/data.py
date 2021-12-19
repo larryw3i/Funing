@@ -21,8 +21,6 @@ import cv2
 import numpy as np
 import pygubu
 import yaml
-from cv2.data import haarcascades
-from cv2.face import EigenFaceRecognizer_create as recognizer
 from PIL import Image, ImageTk
 
 from funing import *
@@ -62,12 +60,6 @@ class DataTkApplication(pygubu.TkApplication):
         self.face_frame = 1    # default:  add new face label
 
         self.added_face_frames = []
-
-        # cv2
-        self.hff_xml_path = os.path.join(haarcascades,
-                                         "haarcascade_frontalface_default.xml")
-        self.recognizer = recognizer()
-        self.face_casecade = cv2.CascadeClassifier(self.hff_xml_path)
 
         super().__init__(master)
 
@@ -264,8 +256,7 @@ class DataTkApplication(pygubu.TkApplication):
             img_index += 1
 
         self.add_face_label = tk.Label(self.face_pic_frame, text=_('ADD'),
-                                       font=("NONE", 16), background='blue',
-                                       cursor='hand2')
+                                       font=("NONE", 16), cursor='hand2')
         self.add_face_label.grid(row=img_index // img_len_root_ceil,
                                  column=img_index % img_len_root_ceil)
         self.add_face_label.bind(
@@ -297,7 +288,7 @@ class DataTkApplication(pygubu.TkApplication):
 
         rect, cur_frame = self.vid.read()
         rec_gray_img = cv2.cvtColor(cur_frame, cv2.COLOR_BGR2GRAY)
-        face_rects = self.face_casecade.detectMultiScale(
+        face_rects = face_casecade.detectMultiScale(
             rec_gray_img, 1.3, 5)
 
         (x, y, w, h) = (

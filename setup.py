@@ -1,7 +1,20 @@
+
+import os
+import pkg_resources
+
+if 'opencv-python' in [i.key for i in pkg_resources.working_set]:
+    _ask_ = "\n'opencv-python' and 'opencv-contrib-python' " +\
+        "are conflicting, do you want to uninstall them " +\
+        "and reinstall 'opencv-contrib-python' ([y]/n)? "
+    if input(_ask_) in "Yy":
+        os.system(
+            'pip3 uninstall opencv-contrib-python opencv-python -v -y;' +
+            'pip3 install opencv-contrib-python -v')
+    else:
+        print("Funing may not work properly.")
+
 import re
-
 import setuptools
-
 from funing import __appauthor__, __version__
 
 long_description = open("README.md", "r", encoding="utf-8").read()

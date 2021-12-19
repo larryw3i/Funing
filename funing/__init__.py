@@ -17,11 +17,12 @@ import cv2
 import yaml
 from appdirs import user_data_dir
 from cv2.data import haarcascades
-from cv2.face import EigenFaceRecognizer_create as recognizer
+from cv2.face import EigenFaceRecognizer_create
 
 __version__ = version = "0.2.46"
 __appname__ = appname = 'Funing'
 __appauthor__ = appauthor = 'Larry & Contributors'
+
 
 debug = os.environ.get('FUNING_TEST') == '1'
 
@@ -78,7 +79,7 @@ info_file_name = 'info.toml'
 # cv2
 hff_xml_path = os.path.join(haarcascades,
                             "haarcascade_frontalface_default.xml")
-recognizer = recognizer()
+recognizer = EigenFaceRecognizer_create()
 face_casecade = cv2.CascadeClassifier(hff_xml_path)
 
 os.path.exists(user_ipynb_path) or \

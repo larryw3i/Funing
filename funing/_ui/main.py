@@ -37,32 +37,6 @@ self.frame_width, self.frame_height, __ = self.cur_frame.shape
 
 translator = _
 
-try:
-    '''
-    importing 'haarcascades' and 'EigenFaceRecognizer_create' fails when A and B
-    are installed at the same time.
-    '''
-    from cv2.data import haarcascades
-    from cv2.face import EigenFaceRecognizer_create as recognizer
-except BaseException:
-
-    print('', _(
-        "It seems that you have both 'opencv-python' and " +
-        "'opencv-contrib-python' installed, do you want to uninstall them " +
-        "and reinstall 'opencv-contrib-python'([y]/n)?"
-    ), end=' ')
-
-    if input() in "Yy":
-        os.system('pip3 uninstall opencv-contrib-python opencv-python -v -y')
-        os.system('pip3 install opencv-contrib-python -v')
-        os.execv(sys.executable, ['python'] + sys.argv)
-    else:
-        print(_(
-            '"EigenFaceRecognizer_create" and "haarcascades" could not be ' +
-            'imported, funing exit.'
-        ))
-        exit()
-
 
 class SourceType(Enum):
     NULL = 0    # default
@@ -150,12 +124,6 @@ class MainApplication(pygubu.TkApplication):
         self.cur_info_id = None
         self.info_ids = []  # uuid str array
 
-        # cv2
-        self.hff_xml_path = os.path.join(haarcascades,
-                                         "haarcascade_frontalface_default.xml")
-        self.recognizer = recognizer()
-        self.face_casecade = cv2.CascadeClassifier(self.hff_xml_path)
-
         # screen
         try:
             self.screenwidth = self.master.winfo_screenwidth()
@@ -205,7 +173,7 @@ class MainApplication(pygubu.TkApplication):
         if len(labels) < 1:
             self.show_data_empty()
             return
-        self.recognizer.train(images, labels)
+        recognizer.train(images, labels)
         self.set_status_msg(_('Recognizer finish training.'))
 
     def on_about_btn_clicked(self):
@@ -445,7 +413,7 @@ class MainApplication(pygubu.TkApplication):
         __, self.cur_frame = self.vid.read()
 
         self.rec_gray_img = cv2.cvtColor(self.cur_frame, cv2.COLOR_BGR2GRAY)
-        self.face_rects = self.face_casecade.detectMultiScale(
+        self.face_rects = face_casecade.detectMultiScale(
             self.rec_gray_img, 1.3, 5)
 
         for (x, y, w, h) in self.face_rects:
@@ -490,7 +458,7 @@ class MainApplication(pygubu.TkApplication):
                                     fx=self.fxfy, fy=self.fxfy)
 
         self.rec_gray_img = cv2.cvtColor(self.cur_frame, cv2.COLOR_BGR2GRAY)
-        self.face_rects = self.face_casecade.detectMultiScale(
+        self.face_rects = face_casecade.detectMultiScale(
             self.rec_gray_img, 1.3, 5)
 
         if len(self.face_rects) < 1:
@@ -618,7 +586,7 @@ class MainApplication(pygubu.TkApplication):
         roi_gray = cv2.resize(roi_gray, self.save_size,
                               interpolation=cv2.INTER_LINEAR)
 
-        _label, confidence = self.recognizer.predict(roi_gray)
+        _label, confidence = recognizer.predict(roi_gray)
 
         self.cur_info_id = cur_info_id = \
             self.info_ids[_label]  # global self.x and x are different.
