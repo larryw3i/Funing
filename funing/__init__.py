@@ -13,10 +13,9 @@ import shutil
 import sys
 from pathlib import Path
 
+import cv2
 import yaml
 from appdirs import user_data_dir
-
-import cv2
 from cv2.data import haarcascades
 from cv2.face import EigenFaceRecognizer_create as recognizer
 
@@ -78,7 +77,7 @@ info_file_name = 'info.toml'
 
 # cv2
 hff_xml_path = os.path.join(haarcascades,
-                                    "haarcascade_frontalface_default.xml")
+                            "haarcascade_frontalface_default.xml")
 recognizer = recognizer()
 face_casecade = cv2.CascadeClassifier(hff_xml_path)
 
