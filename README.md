@@ -15,7 +15,3 @@ a **simple** face recognition GUI, try it just type:
 ```bash
 pip3 install funing; funing
 ```
-
-## TODOs
-### 1. save size error
-### 2. data view

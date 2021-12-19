@@ -139,10 +139,11 @@ class DataTkApplication(pygubu.TkApplication):
         self.get_name_data(self.get_p_item_count(), self.cur_page_num + 1)
 
     def get_name_data(self, p_item_count=10, page_num=0):
-        self.clear_name_btns()
         max_page_num = math.ceil(self.d_item_count / p_item_count)
-        if page_num > max_page_num:
+        if page_num > max_page_num - 1 or page_num < 0:
             page_num = max_page_num
+            return
+        self.clear_name_btns()
         self.cur_p_item_count = p_item_count
         self.cur_page_num = page_num
         start_index = page_num * p_item_count
@@ -178,6 +179,9 @@ class DataTkApplication(pygubu.TkApplication):
             l.grid_forget()
         self.cur_face_labels = []
 
+    def clear_info_text(self):
+        self.builder.get_object('info_text', self.master).delete(1.0, END)
+
     def del_face_pic_file(self, info_id, filename='', del_all=False):
         if debug:
             print(info_id, filename)
@@ -196,13 +200,17 @@ class DataTkApplication(pygubu.TkApplication):
 
                 self.clear_face_labels()
 
-                shutil.rmtree(info_path)
+                # shutil.rmtree(info_path)
+                shutil.move(info_path, backup_path)
 
                 self.data_ids = os.listdir(data_path)
                 self.d_item_count = len(self.data_ids)
 
                 self.get_name_data(self.cur_p_item_count, self.cur_page_num)
                 self.set_msg(_('face picture has been removed!'))
+
+                self.clear_info_text()
+
             else:
                 img_path = os.path.join(info_path, filename)
                 os.remove(img_path)
@@ -266,9 +274,9 @@ class DataTkApplication(pygubu.TkApplication):
         self.cur_face_labels.append(self.add_face_label)
 
         self.grid_face_labels()
+        self.clear_info_text()
 
         info_file_path = self.get_info_file_path(info_id)
-        self.info_text.delete(1.0, END)
         if not os.path.exists(info_file_path):
             _nif_ = _('No informations found')
             self.info_text.insert('1.0', _nif_)
@@ -334,6 +342,7 @@ class DataTkApplication(pygubu.TkApplication):
         self.cur_face_labels.remove(label)
         self.del_added_face_frame(index)
         label.grid_forget()
+        self.grid_face_labels()
 
     def _update_pause_play_(self):
         if self.master_after == -1:
@@ -379,8 +388,8 @@ class DataTkApplication(pygubu.TkApplication):
 
                 self.scroll_face_pic_tkscrolledframe_bottom()
 
-                self.set_msg(\
-                _('Right click: pause or play, double click: delete.'))
+                self.set_msg(
+                    _('Right click: pause or play, double click: delete.'))
 
             self.refresh_frame()
 
