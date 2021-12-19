@@ -16,6 +16,10 @@ from pathlib import Path
 import yaml
 from appdirs import user_data_dir
 
+import cv2
+from cv2.data import haarcascades
+from cv2.face import EigenFaceRecognizer_create as recognizer
+
 __version__ = version = "0.2.46"
 __appname__ = appname = 'Funing'
 __appauthor__ = appauthor = 'Larry & Contributors'
@@ -71,6 +75,12 @@ for p in user_dirs:
     os.path.exists(p) or os.makedirs(p)
 
 info_file_name = 'info.toml'
+
+# cv2
+hff_xml_path = os.path.join(haarcascades,
+                                    "haarcascade_frontalface_default.xml")
+recognizer = recognizer()
+face_casecade = cv2.CascadeClassifier(hff_xml_path)
 
 os.path.exists(user_ipynb_path) or \
     shutil.copyfile(project_ipynb_path, user_ipynb_path)
