@@ -186,15 +186,19 @@ class MainApplication(pygubu.TkApplication):
         self.data()
 
     def data(self):
-        self.cancel_root_after()
+        
+        self.cancel_root_after()        
+
         if self.data_tkapp is None:
             from funing._ui.data import DataTkApplication
             self.data_tkapp = DataTkApplication()
             self.data_tkapp.master.protocol(
                 "WM_DELETE_WINDOW", self.data)
+            self.master.withdraw()
         else:
             self.data_tkapp.quit()
             self.data_tkapp = None
+            self.master.deiconify()
 
     def set_status_msg(self, msg):
         self.status_label_stringvar.set(msg)
