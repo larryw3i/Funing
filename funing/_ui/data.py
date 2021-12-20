@@ -143,12 +143,11 @@ class DataTkApplication(pygubu.TkApplication):
         if end_index > (self.d_item_count - 1):
             end_index = self.d_item_count - 1
 
-        name_frame = self.builder.get_object(
-            'name_frame', self.master)
+        name_frame = self.builder.get_object('name_frame', self.master)
 
         p_item_count_root_ceil = math.ceil(p_item_count**0.5)
         item_index = 0
-        for d in self.data_ids[start_index:end_index]:
+        for d in self.data_ids[start_index:end_index+1]:
             self.cur_name = name = self.get_name_from_info_file(d)
             name_id = name + f'\n({d})'
             self.id_name_dict[d] = name
@@ -177,9 +176,9 @@ class DataTkApplication(pygubu.TkApplication):
     def del_face_pic_file(self, info_id, filename='', del_all=False):
         if debug:
             print(info_id, filename)
-        is_last_pic = del_all or len(self.cur_face_labels) < 2
+        _is_last_pic_ = del_all or len(self.cur_face_labels) < 2
         ask_str = _("Do you want to delete this face picture?")
-        if is_last_pic:
+        if _is_last_pic_:
             ask_str += '\n' +\
                 _('All data of {0} will be removed').format(
                     self.cur_name)
@@ -188,7 +187,7 @@ class DataTkApplication(pygubu.TkApplication):
 
         if del_or_not:
             info_path = os.path.join(data_path, info_id)
-            if is_last_pic:
+            if _is_last_pic_:
 
                 self.clear_face_labels()
 

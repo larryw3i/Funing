@@ -186,6 +186,7 @@ class MainApplication(pygubu.TkApplication):
         self.data()
 
     def data(self):
+        self.cancel_root_after()
         if self.data_tkapp is None:
             from funing._ui.data import DataTkApplication
             self.data_tkapp = DataTkApplication()
