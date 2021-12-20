@@ -4,7 +4,7 @@ import os
 import pkg_resources
 
 if 'opencv-python' in [i.key for i in pkg_resources.working_set]:
-    _ask_ = "\n'opencv-python' and 'opencv-contrib-python' " +\
+    _ask_ = "'opencv-python' and 'opencv-contrib-python' " +\
         "are conflicting, do you want to uninstall them " +\
         "and reinstall 'opencv-contrib-python' ([y]/n)? "
     if input(_ask_) in "Yy":
