@@ -19,7 +19,7 @@ from appdirs import user_data_dir
 from cv2.data import haarcascades
 from cv2.face import EigenFaceRecognizer_create
 
-from funing.settings import *
+from funing import *
 
 project_path = \
     os.path.abspath(os.path.dirname(__file__))

@@ -13,7 +13,7 @@ import shutil
 import sys
 from pathlib import Path
 
-__version__ = version = "0.2.46"
+__version__ = version = "0.2.47"
 __appname__ = appname = 'Funing'
 __appauthor__ = appauthor = 'larryw3i'
 __appauthor_email__ = appauthor_email = 'null.null@null.null'
