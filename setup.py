@@ -1,24 +1,22 @@
 
 import os
-
-import pkg_resources
-
-if 'opencv-python' in [i.key for i in pkg_resources.working_set]:
-    _ask_ = "'opencv-python' and 'opencv-contrib-python' " +\
-        "are conflicting, do you want to uninstall them " +\
-        "and reinstall 'opencv-contrib-python' ([y]/n)? "
-    if input(_ask_) in "Yy":
-        os.system(
-            'pip3 uninstall opencv-contrib-python opencv-python -v -y;' +
-            'pip3 install opencv-contrib-python -v')
-    else:
-        print("Funing may not work properly.")
-
 import re
 
+import pkg_resources
 import setuptools
 
-from funing import __appauthor__, __version__
+from funing import *
+
+if 'opencv-python' in [i.key for i in pkg_resources.working_set]:
+    print(
+        "'opencv-python' and 'opencv-contrib-python' " +
+        "are conflicting, Funing will uninstall 'opencv-python' " +
+        "and install 'opencv-contrib-python'. . ."
+    )
+    os.system(
+        'pip3 uninstall opencv-contrib-python opencv-python -v -y;' +
+        'pip3 install opencv-contrib-python -v')
+
 
 long_description = open("README.md", "r", encoding="utf-8").read()
 
@@ -30,9 +28,9 @@ def get_requirements():
 
 setuptools.setup(
     name="funing",
-    version=__version__,
-    author=__appauthor__,
-    author_email="",
+    version=version,
+    author=appauthor,
+    author_email=appauthor_email,
     description="A face recognition gui",
     long_description=long_description,
     long_description_content_type="text/markdown",

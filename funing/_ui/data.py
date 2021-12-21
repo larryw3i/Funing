@@ -26,6 +26,7 @@ from PIL import Image, ImageTk
 from funing import *
 from funing._ui import *
 from funing.locale import _
+from funing.settings import *
 
 translator = _
 
@@ -121,7 +122,7 @@ class DataTkApplication(pygubu.TkApplication):
         self.name_btns = []
 
     def get_p_item_count(self):
-        return int(self.show_per_page_entry.get()) if \
+        return int(self.show_per_page_entry.get()) - 1 if \
             len(self.show_per_page_entry.get()) > 0 else 10
 
     def on_prev_btn_clicked(self):
@@ -147,7 +148,7 @@ class DataTkApplication(pygubu.TkApplication):
 
         p_item_count_root_ceil = math.ceil(p_item_count**0.5)
         item_index = 0
-        for d in self.data_ids[start_index:end_index+1]:
+        for d in self.data_ids[start_index:end_index + 1]:
             self.cur_name = name = self.get_name_from_info_file(d)
             name_id = name + f'\n({d})'
             self.id_name_dict[d] = name

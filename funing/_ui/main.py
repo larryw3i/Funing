@@ -26,6 +26,7 @@ from funing import *
 from funing._ui import *
 from funing._ui.about import AboutTkApplication
 from funing.locale import _
+from funing.settings import *
 
 '''
 # __  --> assign a variable that is not used.
@@ -66,8 +67,8 @@ class MainApplication(pygubu.TkApplication):
         self.builder.add_from_file(main_ui_path)
 
         # mix variables
-        self.status_label_stringvar = tk.StringVar(self.master)
-        self.pause_play_btn_stringvar = tk.StringVar(self.master)
+        self.status_label_stringvar = tk.StringVar(self.master, value='(^_^)')
+        self.pause_play_btn_stringvar = tk.StringVar(self.master, value='Play')
         self.var_face_was_detected_str = _('Face was detected.')
         self.var_no_face_was_detected_str = _('No face was detected.')
         self.var_nothing_was_entered_str = \
@@ -90,7 +91,10 @@ class MainApplication(pygubu.TkApplication):
         self.go_combobox = builder.get_object('go_combobox', self.master)
         self.face_frame = builder.get_object(
             'face_frame', self.master)  # not vid frame, it shows picture.
+        self.pause_play_btn = builder.get_object('pause_play_btn', self.master)
         self.data_toplevel = None
+
+        self.pause_play_btn.config(textvariable=self.pause_play_btn_stringvar)
 
         # tk application
         self.about_tkapp = AboutTkApplication()
@@ -186,8 +190,8 @@ class MainApplication(pygubu.TkApplication):
         self.data()
 
     def data(self):
-        
-        self.cancel_root_after()        
+
+        self.cancel_root_after()
 
         if self.data_tkapp is None:
             from funing._ui.data import DataTkApplication

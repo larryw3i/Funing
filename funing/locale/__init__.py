@@ -7,6 +7,7 @@ import sys
 import yaml
 
 from funing import *
+from funing.settings import *
 
 sys_lang_code = locale.getdefaultlocale()[0]
 

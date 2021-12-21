@@ -23,6 +23,7 @@ from PIL import Image, ImageTk
 
 from funing import *
 from funing.locale import _
+from funing.settings import *
 
 translator = _
 
