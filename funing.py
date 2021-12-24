@@ -6,6 +6,7 @@ import os
 import sys
 
 from funing import *
+from funing.settings import *
 
 if __name__ == '__main__':
     sys_argv = sys.argv[1:]
