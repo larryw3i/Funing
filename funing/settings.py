@@ -39,14 +39,6 @@ infos_path = \
     os.path.join(user_data_path, 'infos')
 data_path = os.path.join(user_data_path, 'data')
 
-user_ipynb_dir_path = \
-    os.path.join(user_data_path, 'ipynb')
-user_ipynb_path = \
-    os.path.join(user_ipynb_dir_path, 'simple.your.ipynb')
-example_ipynb_path = \
-    os.path.join(user_ipynb_dir_path, 'simple.example.ipynb')
-project_ipynb_path = \
-    os.path.join(project_path, 'simple.ipynb')
 
 locale_langcodes =  \
     [d for d in os.listdir(locale_path)
@@ -64,7 +56,6 @@ user_dirs = [
     faces_path,
     infos_path,
     backup_path,
-    user_ipynb_dir_path,
     data_path]
 for p in user_dirs:
     os.path.exists(p) or os.makedirs(p)
@@ -76,11 +67,6 @@ hff_xml_path = os.path.join(haarcascades,
                             "haarcascade_frontalface_default.xml")
 recognizer = EigenFaceRecognizer_create()
 face_casecade = cv2.CascadeClassifier(hff_xml_path)
-
-os.path.exists(user_ipynb_path) or \
-    shutil.copyfile(project_ipynb_path, user_ipynb_path)
-os.path.exists(example_ipynb_path) or \
-    shutil.copyfile(project_ipynb_path, example_ipynb_path)
 
 if not os.path.exists(_config_path):
     shutil.copyfile(config_path, _config_path)
