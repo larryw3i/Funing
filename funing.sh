@@ -54,6 +54,11 @@ bdist(){
     python3 setup.py sdist bdist_wheel
 }
 
+bdist_deb(){
+    rm -rf deb_dist/  dist/  funing.egg-info/ funing-0.2.48.tar.gz
+    python3 setup.py --command-packages=stdeb.command bdist_deb
+}
+
 _i_test(){
     bdist
     pip3 uninstall funing -y
@@ -120,5 +125,7 @@ _s(){       _start;             }
 venv(){     active_venv;        }
 _cat(){     cat_bt;             }
 _cat_(){    _cat | tr -s '\n';  }
+
+bdeb(){     bdist_deb;          }
 
 ${_args[0]}

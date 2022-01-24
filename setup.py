@@ -25,12 +25,16 @@ def get_requirements():
     return [i.strip('\n') for i in
             open("./requirements/product.txt").readlines()]
 
+appmaintainer = appauthor
+appmaintainer_email = appauthor_email
 
 setuptools.setup(
     name="funing",
     version=version,
     author=appauthor,
     author_email=appauthor_email,
+    maintainer= appmaintainer,
+    maintainer_email = appmaintainer_email,
     description="A face recognition gui",
     long_description=long_description,
     long_description_content_type="text/markdown",

@@ -16,7 +16,7 @@ from pathlib import Path
 __version__ = version = "0.2.48"
 __appname__ = appname = 'Funing'
 __appauthor__ = appauthor = 'larryw3i'
-__appauthor_email__ = appauthor_email = 'null.null@null.null'
+__appauthor_email__ = appauthor_email = 'larryw3i@163.com'
 
 debug = os.environ.get('FUNING_TEST') == '1'
 

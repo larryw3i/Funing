@@ -167,3 +167,9 @@ funing.build/
 
 # .cp
 .cp/
+
+# dist
+*dist/
+
+# Funing*tar.gz
+funing-*.tar.gz
