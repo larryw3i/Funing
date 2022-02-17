@@ -10,7 +10,7 @@ install_requires=[
     'pygubu >= 0.16'
 ]
 ```
-a **simple** face recognition GUI, try it just type:  
+a **simple** face recognition GUI, try it just enter:  
 ```bash
 pip3 install funing; funing
 ```
