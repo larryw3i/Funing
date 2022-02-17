@@ -9,8 +9,7 @@ exclude funing.py
 exclude funing.sh
 exclude requirements.txt
 
-recursive-exclude requirements development.txt
-
+prune funing/dev_req/
 prune funing/.home/
 prune venv/
 prune tests/

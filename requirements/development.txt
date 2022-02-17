@@ -1,7 +1,0 @@
-pip
-Babel
-pep8
-autopep8
-isort
-twine
-pygubu-designer

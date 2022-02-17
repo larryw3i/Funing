@@ -20,11 +20,6 @@ if 'opencv-python' in [i.key for i in pkg_resources.working_set]:
 
 long_description = open("README.md", "r", encoding="utf-8").read()
 
-
-def get_requirements():
-    return [i.strip('\n') for i in
-            open("./requirements/product.txt").readlines()]
-
 appmaintainer = appauthor
 appmaintainer_email = appauthor_email
 
@@ -33,8 +28,8 @@ setuptools.setup(
     version=version,
     author=appauthor,
     author_email=appauthor_email,
-    maintainer= appmaintainer,
-    maintainer_email = appmaintainer_email,
+    maintainer=appmaintainer,
+    maintainer_email=appmaintainer_email,
     description="A face recognition gui",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -51,6 +46,6 @@ setuptools.setup(
         ]
     },
     python_requires='>=3.6',
-    install_requires=get_requirements(),
+    install_requires=get_product_req(),
     include_package_data=True,
 )

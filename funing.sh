@@ -34,6 +34,8 @@ p8(){
     autopep8 -i -a -a -r -v ./funing.py
     isort ./setup.py
     autopep8 -i -a -a -r -v ./setup.py
+    isort ./requirements/__init__.py
+    autopep8 -i -a -a -r -v ./requirements/__init__.py
 }
 
 git_add(){
@@ -41,7 +43,7 @@ git_add(){
 }
 
 _pip3(){
-    pip3 install -U $(cat requirements/*)
+    python3 funing.py p3
 }
 
 twine_upload(){
