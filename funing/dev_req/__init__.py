@@ -33,8 +33,10 @@ dev_req = [
     )
 ] + product_req
 
+
 def get_dev_req_str():
-    return ' '.join([r[0]+r[1] for r in dev_req])
+    return ' '.join([r[0] + r[1] for r in dev_req])
+
 
 def install_dev_req():
-    os.system('pip3 install -U '+get_dev_req_str())
+    os.system('pip3 install -U ' + get_dev_req_str())

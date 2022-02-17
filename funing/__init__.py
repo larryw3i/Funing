@@ -13,7 +13,7 @@ import shutil
 import sys
 from pathlib import Path
 
-__version__ = version = "0.2.49"
+__version__ = version = "0.2.50"
 __appname__ = appname = 'Funing'
 __appauthor__ = appauthor = 'larryw3i'
 __appauthor_email__ = appauthor_email = 'larryw3i@163.com'
@@ -57,8 +57,10 @@ product_req = [
 
 ]
 
+
 def get_product_req():
-    return [r[0]+r[1] for r in product_req]
+    return [r[0] + r[1] for r in product_req]
+
 
 def simple():
     from funing._ui import main

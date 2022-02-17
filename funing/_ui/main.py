@@ -629,27 +629,41 @@ class MainApplication(pygubu.TkApplication):
         menu = Menu(self.master, tearoff=0)
         menu.add_command(
             label=_("delete"),
-            command=(lambda _label=new_face_label, _index=showed_face_index:
-                     self.del_face_label_rec(_label, _index)))
+            command=(
+                lambda \
+                    _label=new_face_label, \
+                    _index=showed_face_index:
+                        self.del_face_label_rec(_label, _index)
+            )
+        )
 
-        new_face_label.bind("<Double-Button-1>",
-                            lambda e, _label=new_face_label,
-                            _index=showed_face_index:
-                            self.del_face_label_rec(_label, _index))
+        new_face_label.bind(
+            "<Double-Button-1>",
+            lambda e, \
+                _label=new_face_label,\
+                _index=showed_face_index:
+                    self.del_face_label_rec(_label, _index)
+        )
         new_face_label.bind(
             "<Button-1>",
-            (lambda e, _label=new_face_label,
-             _index=showed_face_index,
-             _info_id=cur_info_id:
-             self.show_info(
-                 _label,
-                 _index,
-                 _info_id)))
+            (
+                lambda e, \
+                    _label=new_face_label,\
+                    _index=showed_face_index,\
+                    _info_id=cur_info_id:
+                        self.show_info(_label,_index,_info_id)
+            )
+        )
         new_face_label.bind(
             "<Button-3>",
-            (lambda event: menu.tk_popup(
-                event.x_root,
-                event.y_root)))
+            (
+                lambda event:
+                    menu.tk_popup(
+                        event.x_root,
+                        event.y_root
+                    )
+            )
+        )
 
         new_face_label.pack(side=LEFT)
 

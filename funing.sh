@@ -34,8 +34,6 @@ p8(){
     autopep8 -i -a -a -r -v ./funing.py
     isort ./setup.py
     autopep8 -i -a -a -r -v ./setup.py
-    isort ./requirements/__init__.py
-    autopep8 -i -a -a -r -v ./requirements/__init__.py
 }
 
 git_add(){

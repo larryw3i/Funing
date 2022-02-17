@@ -180,8 +180,8 @@ class DataTkApplication(pygubu.TkApplication):
         _is_last_pic_ = del_all or len(self.cur_face_labels) < 2
         ask_str = _("Do you want to delete this face picture?")
         if _is_last_pic_:
-            ask_str += '\n' +\
-                _('All data of {0} will be removed').format(
+            ask_str += '\n' \
+                + _('All data of {0} will be removed').format(
                     self.cur_name)
         del_or_not = messagebox.askyesnocancel(
             _("Delete face picture?"), ask_str, parent=self.master)
@@ -265,9 +265,11 @@ class DataTkApplication(pygubu.TkApplication):
             self.cur_face_labels.append(new_face_label)
             img_index += 1
 
-        self.add_face_label = tk.Label(self.face_pic_frame, text=_('ADD'),
+        self.add_face_label = tk.Label(
+            self.face_pic_frame, text=_('ADD'),
                                        font=("NONE", 16), cursor='hand2')
-        self.add_face_label.grid(row=img_index // img_len_root_ceil,
+        self.add_face_label.grid(
+            row=img_index // img_len_root_ceil,
                                  column=img_index % img_len_root_ceil)
         self.add_face_label.bind(
             "<Button-1>",
