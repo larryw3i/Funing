@@ -5,11 +5,15 @@ import sys
 from pathlib import Path
 import getopt
 from funing import settings
-from funing._fui import Enjoy
+
+
+class LarryFuning():
+    def __init__(self):
+        pass
+        
 
 def run():
     sys_argv = sys.argv[1:]
-    f = Enjoy()
     optlist , args  = getopt.getopt( sys_argv, '' )    
     if len(args) < 1: f.start()
     for a in args:
