@@ -157,4 +157,7 @@ output/
 # data/xgettext_f.txt
 data/xgettext_f.txt
 
+# *.po~
+*.po~
+
 ##
