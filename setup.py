@@ -1,4 +1,3 @@
-
 import os
 import re
 
@@ -7,15 +6,16 @@ import setuptools
 
 from funing import *
 
-if 'opencv-python' in [i.key for i in pkg_resources.working_set]:
+if "opencv-python" in [i.key for i in pkg_resources.working_set]:
     print(
-        "'opencv-python' and 'opencv-contrib-python' " +
-        "are conflicting, Funing will uninstall 'opencv-python' " +
-        "and install 'opencv-contrib-python'. . ."
+        "'opencv-python' and 'opencv-contrib-python' "
+        + "are conflicting, Funing will uninstall 'opencv-python' "
+        + "and install 'opencv-contrib-python'. . ."
     )
     os.system(
-        'pip3 uninstall opencv-contrib-python opencv-python -v -y;' +
-        'pip3 install opencv-contrib-python -v')
+        "pip3 uninstall opencv-contrib-python opencv-python -v -y;"
+        + "pip3 install opencv-contrib-python -v"
+    )
 
 
 long_description = open("README.md", "r", encoding="utf-8").read()
@@ -41,11 +41,11 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     entry_points={
-        'console_scripts': [
-            'funing=funing:simple',
+        "console_scripts": [
+            "funing=funing:simple",
         ]
     },
-    python_requires='>=3.6',
+    python_requires=">=3.6",
     install_requires=get_product_req(),
     include_package_data=True,
 )

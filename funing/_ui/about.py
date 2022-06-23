@@ -1,4 +1,3 @@
-
 import gettext
 import os
 import re
@@ -33,8 +32,7 @@ class AboutTkApplication(pygubu.TkApplication):
         # pygubu builder
         self.builder = pygubu.Builder(translator)
         # ui files
-        about_ui_path = os.path.join(
-            os.path.join(project_path, 'ui'), 'about.ui')
+        about_ui_path = os.path.join(os.path.join(project_path, "ui"), "about.ui")
         # add ui files
         self.builder.add_from_file(about_ui_path)
 
@@ -54,9 +52,9 @@ class AboutTkApplication(pygubu.TkApplication):
 
     def run(self):
         if not self.mainwindow:
-            self.mainwindow = self.builder.get_object('about_toplevel')
-            self.mainwindow.title(_('About Funing'))
-            self.builder.get_object('version_label')['text'] = version
+            self.mainwindow = self.builder.get_object("about_toplevel")
+            self.mainwindow.title(_("About Funing"))
+            self.builder.get_object("version_label")["text"] = version
             self.mainwindow.protocol("WM_DELETE_WINDOW", self.on_closing)
             # connect callbacks
             self.builder.connect_callbacks(self)
