@@ -67,7 +67,9 @@ class DataTkApplication(pygubu.TkApplication):
         # pygubu builder
         self.builder = builder = pygubu.Builder(translator)
         # ui files
-        data_ui_path = os.path.join(os.path.join(project_path, "ui"), "data.ui")
+        data_ui_path = os.path.join(
+            os.path.join(project_path, "ui"), "data.ui"
+        )
 
         # add ui files
         self.builder.add_from_file(data_ui_path)
@@ -75,7 +77,9 @@ class DataTkApplication(pygubu.TkApplication):
         self.data_frame = self.mainwindow = builder.get_object(
             "data_frame", self.master
         )
-        self.face_pic_frame = self.builder.get_object("face_pic_frame", self.master)
+        self.face_pic_frame = self.builder.get_object(
+            "face_pic_frame", self.master
+        )
         self.info_text = self.builder.get_object("info_text", self.master)
 
         self.show_per_page_entry = self.builder.get_object(
@@ -147,14 +151,16 @@ class DataTkApplication(pygubu.TkApplication):
 
         name_frame = self.builder.get_object("name_frame", self.master)
 
-        p_item_count_root_ceil = math.ceil(p_item_count ** 0.5)
+        p_item_count_root_ceil = math.ceil(p_item_count**0.5)
         item_index = 0
         for d in self.data_ids[start_index : end_index + 1]:
             self.cur_name = name = self.get_name_from_info_file(d)
             name_id = name + f"\n({d})"
             self.id_name_dict[d] = name
             new_name_btn = tk.Button(
-                name_frame, text=name_id, command=(lambda d=d: self.show_data(d))
+                name_frame,
+                text=name_id,
+                command=(lambda d=d: self.show_data(d)),
             )
             new_name_btn.grid(
                 row=item_index % p_item_count_root_ceil,
@@ -183,7 +189,9 @@ class DataTkApplication(pygubu.TkApplication):
         _is_last_pic_ = del_all or len(self.cur_face_labels) < 2
         ask_str = _("Do you want to delete this face picture?")
         if _is_last_pic_:
-            ask_str += "\n" + _("All data of {0} will be removed").format(self.cur_name)
+            ask_str += "\n" + _("All data of {0} will be removed").format(
+                self.cur_name
+            )
         del_or_not = messagebox.askyesnocancel(
             _("Delete face picture?"), ask_str, parent=self.master
         )
@@ -209,7 +217,9 @@ class DataTkApplication(pygubu.TkApplication):
                 img_path = os.path.join(info_path, filename)
                 os.remove(img_path)
                 self.set_msg(
-                    _("All data of {0} have been removed!").format(self.cur_name)
+                    _("All data of {0} have been removed!").format(
+                        self.cur_name
+                    )
                 )
                 self.show_data(info_id)
 
@@ -234,7 +244,7 @@ class DataTkApplication(pygubu.TkApplication):
         self.cur_name = name = self.get_name_from_info_file(info_id)
 
         img_len = len(os.listdir(info_path))
-        img_len_root_ceil = math.ceil(img_len ** 0.5)
+        img_len_root_ceil = math.ceil(img_len**0.5)
         img_index = 0
         for filename in os.listdir(info_path):
             if filename == info_file_name:
@@ -251,7 +261,11 @@ class DataTkApplication(pygubu.TkApplication):
 
             new_face_label.bind(
                 "<Double-Button-1>",
-                (lambda e, a=info_id, b=filename: self.del_face_pic_file(a, b)),
+                (
+                    lambda e, a=info_id, b=filename: self.del_face_pic_file(
+                        a, b
+                    )
+                ),
             )
 
             menu = Menu(self.master, tearoff=0)
@@ -265,17 +279,22 @@ class DataTkApplication(pygubu.TkApplication):
             )
 
             new_face_label.bind(
-                "<Button-3>", (lambda event: menu.tk_popup(event.x_root, event.y_root))
+                "<Button-3>",
+                (lambda event: menu.tk_popup(event.x_root, event.y_root)),
             )
 
             self.cur_face_labels.append(new_face_label)
             img_index += 1
 
         self.add_face_label = tk.Label(
-            self.face_pic_frame, text=_("ADD"), font=("NONE", 16), cursor="hand2"
+            self.face_pic_frame,
+            text=_("ADD"),
+            font=("NONE", 16),
+            cursor="hand2",
         )
         self.add_face_label.grid(
-            row=img_index // img_len_root_ceil, column=img_index % img_len_root_ceil
+            row=img_index // img_len_root_ceil,
+            column=img_index % img_len_root_ceil,
         )
         self.add_face_label.bind("<Button-1>", (lambda e: self.add_face_pic()))
         self.cur_face_labels.append(self.add_face_label)
@@ -378,7 +397,10 @@ class DataTkApplication(pygubu.TkApplication):
             if self.face_frame is not None:
 
                 # default value of self.face_frame is 0.
-                if not isinstance(self.face_frame, int) and self.face_frame is not None:
+                if (
+                    not isinstance(self.face_frame, int)
+                    and self.face_frame is not None
+                ):
                     self.added_face_frames.append(self.face_frame)
 
                 new_face_label = tk.Label(self.face_pic_frame)
@@ -394,7 +416,8 @@ class DataTkApplication(pygubu.TkApplication):
                     ),
                 )
                 menu.add_command(
-                    label=_("pick/stop"), command=(lambda: self._update_pause_play_())
+                    label=_("pick/stop"),
+                    command=(lambda: self._update_pause_play_()),
                 )
 
                 new_face_label.bind(
@@ -413,7 +436,9 @@ class DataTkApplication(pygubu.TkApplication):
 
                 self.scroll_face_pic_tkscrolledframe_bottom()
 
-                self.set_msg(_("Right click: pause or play, double click: delete."))
+                self.set_msg(
+                    _("Right click: pause or play, double click: delete.")
+                )
 
             self.refresh_frame()
 

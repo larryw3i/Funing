@@ -58,7 +58,9 @@ class MainApplication(pygubu.TkApplication):
         # pygubu builder
         self.builder = builder = pygubu.Builder(translator)
         # ui files
-        main_ui_path = os.path.join(os.path.join(project_path, "ui"), "main.ui")
+        main_ui_path = os.path.join(
+            os.path.join(project_path, "ui"), "main.ui"
+        )
         # add ui files
         self.builder.add_from_file(main_ui_path)
 
@@ -67,15 +69,23 @@ class MainApplication(pygubu.TkApplication):
         self.pause_play_btn_stringvar = tk.StringVar(self.master, value="Play")
         self.var_face_was_detected_str = _("Face was detected.")
         self.var_no_face_was_detected_str = _("No face was detected.")
-        self.var_nothing_was_entered_str = _("You haven't entered anything yet!")
-        self.var_unable_to_open_vid_source_str = _("Unable to open video source.")
+        self.var_nothing_was_entered_str = _(
+            "You haven't entered anything yet!"
+        )
+        self.var_unable_to_open_vid_source_str = _(
+            "Unable to open video source."
+        )
         self.var_image_exts = ["jpg", "png", "jpeg", "webp"]
         self.var_video_exts = ["mp4", "avi", "3gp", "webm", "mkv"]
         self.var_img_vid_exts = "*." + " *.".join(
             self.var_image_exts + self.var_video_exts
         )
-        self.var_click_to_remove_p = _("Click the picked face image to remove.")
-        self.var_double_click_to_remove_r = _("Double click the face image to remove.")
+        self.var_click_to_remove_p = _(
+            "Click the picked face image to remove."
+        )
+        self.var_double_click_to_remove_r = _(
+            "Double click the face image to remove."
+        )
 
         # widgets
         self.main_window = builder.get_object("main_frame", self.master)
@@ -269,7 +279,8 @@ class MainApplication(pygubu.TkApplication):
         )
 
         new_face_label.bind(
-            "<Button-3>", (lambda event: menu.tk_popup(event.x_root, event.y_root))
+            "<Button-3>",
+            (lambda event: menu.tk_popup(event.x_root, event.y_root)),
         )
         new_face_label.bind(
             "<Button-1>",
@@ -441,14 +452,18 @@ class MainApplication(pygubu.TkApplication):
         __, self.cur_frame = self.vid.read()
 
         self.rec_gray_img = cv2.cvtColor(self.cur_frame, cv2.COLOR_BGR2GRAY)
-        self.face_rects = face_casecade.detectMultiScale(self.rec_gray_img, 1.3, 5)
+        self.face_rects = face_casecade.detectMultiScale(
+            self.rec_gray_img, 1.3, 5
+        )
 
         for (x, y, w, h) in self.face_rects:
             self.cur_frame = cv2.rectangle(
                 self.cur_frame, (x, y), (x + w, y + h), (255, 0, 0), 2
             )
 
-        vid_img = cv2.resize(self.cur_frame, (0, 0), fx=self.fxfy, fy=self.fxfy)
+        vid_img = cv2.resize(
+            self.cur_frame, (0, 0), fx=self.fxfy, fy=self.fxfy
+        )
 
         vid_img = cv2.cvtColor(vid_img, cv2.COLOR_BGR2RGB)
         vid_img = Image.fromarray(vid_img)
@@ -482,10 +497,14 @@ class MainApplication(pygubu.TkApplication):
 
         self.get_img_resize_fxfy()
 
-        self.cur_frame = cv2.resize(self.cur_frame, (0, 0), fx=self.fxfy, fy=self.fxfy)
+        self.cur_frame = cv2.resize(
+            self.cur_frame, (0, 0), fx=self.fxfy, fy=self.fxfy
+        )
 
         self.rec_gray_img = cv2.cvtColor(self.cur_frame, cv2.COLOR_BGR2GRAY)
-        self.face_rects = face_casecade.detectMultiScale(self.rec_gray_img, 1.3, 5)
+        self.face_rects = face_casecade.detectMultiScale(
+            self.rec_gray_img, 1.3, 5
+        )
 
         if len(self.face_rects) < 1:
             self.show_no_face_was_detected_status_msg()
@@ -503,7 +522,9 @@ class MainApplication(pygubu.TkApplication):
         self.vidframe_label.configure(image=imgtk)
 
     def cur_frame2label(self):
-        vid_img = cv2.resize(self.cur_frame, (0, 0), fx=self.fxfy, fy=self.fxfy)
+        vid_img = cv2.resize(
+            self.cur_frame, (0, 0), fx=self.fxfy, fy=self.fxfy
+        )
         vid_img = cv2.cvtColor(vid_img, cv2.COLOR_BGR2RGB)
         vid_img = Image.fromarray(vid_img)
         imgtk = ImageTk.PhotoImage(image=vid_img)
@@ -527,7 +548,9 @@ class MainApplication(pygubu.TkApplication):
     def show_nsrc_error(self):
         messagebox.showerror(
             self.var_unable_to_open_vid_source_str,
-            self.var_unable_to_open_vid_source_str + ": " + str(self.go_combobox.get()),
+            self.var_unable_to_open_vid_source_str
+            + ": "
+            + str(self.go_combobox.get()),
         )
 
     def on_save_info_btn_clicked(self):
@@ -610,7 +633,9 @@ class MainApplication(pygubu.TkApplication):
 
         x, y, w, h = self.face_rects[f_index]
         roi_gray = self.rec_gray_img[y : y + h, x : x + w]
-        roi_gray = cv2.resize(roi_gray, self.save_size, interpolation=cv2.INTER_LINEAR)
+        roi_gray = cv2.resize(
+            roi_gray, self.save_size, interpolation=cv2.INTER_LINEAR
+        )
 
         _label, confidence = recognizer.predict(roi_gray)
 
@@ -655,7 +680,8 @@ class MainApplication(pygubu.TkApplication):
             ),
         )
         new_face_label.bind(
-            "<Button-3>", (lambda event: menu.tk_popup(event.x_root, event.y_root))
+            "<Button-3>",
+            (lambda event: menu.tk_popup(event.x_root, event.y_root)),
         )
 
         new_face_label.pack(side=LEFT)
@@ -740,7 +766,8 @@ class MainApplication(pygubu.TkApplication):
             return
 
         self.status_label_stringvar.set(
-            self.var_face_was_detected_str + f"({self.var_double_click_to_remove_r})"
+            self.var_face_was_detected_str
+            + f"({self.var_double_click_to_remove_r})"
         )
 
         for index in range(len(self.face_rects)):
