@@ -40,6 +40,7 @@ class Funing():
                     os.system(f'xgettext -f {self.xgettext_path} '+\
                     f'--join-existing -d funing -o {f_path}' )
         # os.remove( self.xgettext_path )
+
     def msgfmt( self ):
         from funing._fui import Enjoy
         Enjoy().msgfmt()
