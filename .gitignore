@@ -161,3 +161,9 @@ data/xgettext_f.txt
 *.po~
 
 ##
+
+# deb_dist
+deb_dist/
+
+# funing*.tar.gz
+funing*.tar.gz

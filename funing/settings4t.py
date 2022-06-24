@@ -7,5 +7,6 @@ from pathlib import Path
 import getopt
 import sys
 
-app_name =  "funing"
-app_version =  "0.2.35"
+app_name =  "@app_name"
+app_version =  "@app_version"
+
