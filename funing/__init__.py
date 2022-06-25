@@ -6,18 +6,29 @@ from pathlib import Path
 import getopt
 from funing import settings
 
+def get_dep_requirements():
+    return [
+    'opencv-contrib-python >= 4.5.3.56',
+    'Pillow >= 8.3.0',
+    'numpy >= 1.21.1',
+    ]
 
-class LarryFuning():
-    def __init__(self):
-        pass
-        
+def install_dep_requirements(test =False):
+    dep_requirements = get_dep_requirements()
+    sh = "pip3 install -U "+(" ".join(dep_requirements))
+    if test:
+        print(sh)
+    os.system(sh)
+
+def show():
+    pass
 
 def run():
     sys_argv = sys.argv[1:]
-    optlist , args  = getopt.getopt( sys_argv, '' )    
-    if len(args) < 1: f.start()
+    optlist , args  = getopt.getopt( sys_argv, '' )   
+    print(args) 
+    if len(args) < 1: show()
     for a in args:
-        if a in [ 's', 'ts' ,'st', 'start' ]:   f.start()
-        if a in [ 'm' , 'msg' , 'msgfmt' ]:     f.msgfmt()
-        if a in [ 'init', 'initial' ]:          f.initialize()
-        if a in [ 'kc', 'keep_code' ]:          f.keep_code()
+        if a in [ 'dep' ]:      install_dep_requirements()
+        if a in [ 'ok' ]:       break
+        
