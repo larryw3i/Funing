@@ -8,5 +8,4 @@ from pathlib import Path
 from funing.local import _
 
 app_name = _("@app_name")
-app_version = _("@app_version")
 app_description = _("@app_description")

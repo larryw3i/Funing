@@ -11,55 +11,31 @@ from pathlib import Path
 
 from funing.settings import *
 from funing import settings
+from funing import *
 from funing.path import *
+
+
+
+def get_dev_dep_requirements():
+    return [
+        "opencv-contrib-python >= 4.5.3.56",
+        "Pillow >= 8.3.0",
+        "numpy >= 1.21.1",
+    ]+get_dep_requirements()
+
+def install_dev_dep_requirements():
+    install_dep_requirements(test = True,dep_requirements = get_dev_dep_requirements())
+def install_dev_dep_requirements_u():
+    install_dep_requirements(test = True,dep_requirements = get_dev_dep_requirements(),upgrade =True)
 
 
 def start():
     sys.argv[0] = re.sub(r"(-script\.pyw|\.exe)?$", "", sys.argv[0])
     from funing import run
-
     sys.exit(run())
 
 
-def xgettext():
-    from funing import settings
-
-    mo_files = []
-    xgettext_files = []
-    for root, dirs, files in os.walk(project_path):
-        for f in files:
-            if f.endswith(".py"):
-                xgettext_files.append(os.path.join(root, f))
-    xgettext_files = "\n".join(xgettext_files)
-    open(xgettext_f_path, "w+").write(xgettext_files)
-    for root, dirs, files in os.walk(locale_path):
-        for f in files:
-            if f.endswith(".po"):
-                f_path = os.path.join(root, f)
-                os.system(
-                    f"xgettext -f {xgettext_f_path} "
-                    + f"--join-existing -d funing -o {f_path}"
-                )
-
-
-def msgfmt():
-    from funing._fui import Enjoy
-
-    Enjoy().msgfmt()
-
-
-def keep_code():
-    from funing._fui import Enjoy
-
-    Enjoy().keep_code()
-
-
-def pip_install_r():
-    os.system("pip3 install -r requirements.txt ")
-
-
 def settings4xget():
-
     _pwd = os.path.abspath(os.path.dirname(__file__))
     settings4t = ""
     settings4t_txt_path = os.path.join(_pwd, app_name, "settings4t.txt")
@@ -86,11 +62,9 @@ if __name__ == "__main__":
             start()
         if a in ["4xget"]:
             settings4xget()
-        if a in ["xgettext", "xg"]:
-            xgettext()
-        if a in ["m", "msg", "msgfmt"]:
-            msgfmt()
-        if a in ["kc", "keep_code"]:
-            keep_code()
-        if a in ["pip", "pip_install"]:
-            pip_install_r()
+        if a in ["dep"]:
+            install_dev_dep_requirements()
+        if a in ["depu"]:
+            install_dev_dep_requirements_u()
+        if a in ["pass"]:
+            break

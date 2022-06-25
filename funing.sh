@@ -58,7 +58,11 @@ git_add(){
 }
 
 _pip3(){
-    ${bin_dir}/python3 ${app_name}.py req_dev_u
+    ${bin_dir}/python3 ${app_name}.py dep
+}
+
+_pip3_u(){
+    ${bin_dir}/python3 ${app_name}.py depu
 }
 
 twine_upload(){
@@ -94,10 +98,15 @@ gen4xget(){
 }
 
 active_venv(){
-    [[ -f "${bin_dir}/activate" ]] || \
-    [[ -f "$(which virtualenv)" ]] && virtualenv venv || \
-    echo "Installing virtualenv..." && pip3 install -U virtualenv
+    if [[ ! -f "${bin_dir}/activate" ]] ; then
+        if [[ ! -f "$(which virtualenv)" ]]; then
+            echo "Installing virtualenv..."
+            pip3 install -U virtualenv
+        fi
+        virtualenv venv
+    fi
     source ${bin_dir}/activate
+    
 }
 
 cat_bt(){
@@ -123,7 +132,7 @@ gita(){     git_add;            }
 bd(){       bdist;              }
 kc(){       keep_code;          }
 
-p3(){       active_venv;_pip3;  }
+venv(){     active_venv;        }
 msgf(){     _msgfmt;            }
 xget(){     _xgettext;          }
 
@@ -131,7 +140,7 @@ its(){       _i_test;           }
 bdup(){     bd; tu;             }
 _s(){       _start;             }
 
-venv(){     active_venv;        }
+p3(){       venv;_pip3;  }
 _cat(){     cat_bt;             }
 _cat_(){    _cat | tr -s '\n';  }
 
@@ -140,6 +149,9 @@ wcl(){      _cat_ | wc -l;      }
 blk(){      _black;             }
 
 4xget(){    gen4xget;           }
-style(){    blk;             }
+style(){    blk;                }
+dep(){      p3;                 }
+
+depu(){     _pip3_u;            }
 
 $@
