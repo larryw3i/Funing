@@ -1,12 +1,11 @@
-
-import os
-import shutil
-import yaml
-import re
-from pathlib import Path
 import getopt
+import os
+import re
+import shutil
 import sys
+from pathlib import Path
 
-app_name =  "@app_name"
-app_version =  "@app_version"
+import yaml
 
+app_name = "@app_name"
+app_version = "@app_version"

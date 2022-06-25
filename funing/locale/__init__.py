@@ -1,6 +1,3 @@
-
-import os
-
 import gettext
 import locale
 import os

@@ -1,5 +1,7 @@
-import setuptools
 import re
+
+import setuptools
+
 from funing.settings import version
 
 long_description = open("README.md", "r", encoding="utf-8").read()
@@ -19,15 +21,15 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     entry_points={
-        'console_scripts': [
-            'funing=funing:run',
+        "console_scripts": [
+            "funing=funing:run",
         ]
     },
-    python_requires='>=3.6',
+    python_requires=">=3.6",
     install_requires=[
-        'opencv-contrib-python >= 4.5.3.56',
-        'Pillow >= 8.3.0',
-        'numpy >= 1.21.1',
+        "opencv-contrib-python >= 4.5.3.56",
+        "Pillow >= 8.3.0",
+        "numpy >= 1.21.1",
     ],
-    include_package_data = True,
+    include_package_data=True,
 )
