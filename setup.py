@@ -2,18 +2,19 @@ import re
 
 import setuptools
 
-from funing.settings import version
+from funing import *
+from funing.settings import *
 
 long_description = open("README.md", "r", encoding="utf-8").read()
 setuptools.setup(
-    name="funing",
-    version=version,
-    author="larryw3i",
-    author_email="",
-    description="A face recognition gui",
+    name=app_name,
+    version=app_version,
+    author=app_author[0],
+    author_email=app_author[1],
+    description=app_description,
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/larryw3i/Funing",
+    url=app_url,
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
@@ -26,10 +27,6 @@ setuptools.setup(
         ]
     },
     python_requires=">=3.6",
-    install_requires=[
-        "opencv-contrib-python >= 4.5.3.56",
-        "Pillow >= 8.3.0",
-        "numpy >= 1.21.1",
-    ],
+    install_requires=get_dep_requirements(),
     include_package_data=True,
 )

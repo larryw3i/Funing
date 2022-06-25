@@ -15,11 +15,32 @@ from funing.path import *
 from funing.settings import *
 
 
+def get_dev_dep_requirements_full():
+    return [
+        (
+            "virtualenv >= 4.5.3.56",
+            "https://github.com/pypa/virtualenv",
+            "MIT license",
+            "https://github.com/pypa/virtualenv/blob/main/LICENSE",
+        ),
+        (
+            "pip >= 22.1.2",
+            "https://github.com/pypa/pip",
+            "MIT License",
+            "https://github.com/pypa/pip/blob/main/LICENSE.txt",
+        ),
+        (
+            "thonny >= 3.3.14",
+            "https://github.com/thonny/thonny",
+            "MIT License",
+            "https://github.com/thonny/thonny/blob/master/LICENSE.txt",
+        ),
+    ]
+
+
 def get_dev_dep_requirements():
     return [
-        "opencv-contrib-python >= 4.5.3.56",
-        "Pillow >= 8.3.0",
-        "numpy >= 1.21.1",
+        f[0] for f in get_dev_dep_requirements_full()
     ] + get_dep_requirements()
 
 

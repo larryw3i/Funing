@@ -9,12 +9,33 @@ from funing import settings
 from funing.locale import _
 
 
+def get_dep_requirements_full():
+    return [
+        (
+            "opencv-contrib-python >= 4.6.0.66",
+            "https://github.com/opencv/opencv_contrib",
+            "Apache License 2.0",
+            "https://github.com/opencv/opencv_contrib/blob/4.x/LICENSE",
+        ),
+        (
+            "numpy >= 1.23.0",
+            "https://github.com/numpy/numpy",
+            'BSD 3-Clause "New" or "Revised" License',
+            "https://github.com/numpy/numpy/blob/main/LICENSE.txt",
+        ),
+        (
+            "Pillow >= 9.1.0",
+            "https://github.com/python-pillow/Pillow",
+            "Historical Permission Notice and Disclaimer (HPND)",
+            "https://github.com/python-pillow/Pillow/blob/main/LICENSE",
+        ),
+    ]
+
+
 def get_dep_requirements():
     return [
-        "opencv-contrib-python >= 4.5.3.56",
-        "Pillow >= 8.3.0",
-        "numpy >= 1.21.1",
-    ]
+        f[0] for f in get_dep_requirements_full()
+     ]
 
 
 def install_dep_requirements(test=False, dep_requirements=None, upgrade=False):
