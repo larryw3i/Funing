@@ -33,9 +33,7 @@ def get_dep_requirements_full():
 
 
 def get_dep_requirements():
-    return [
-        f[0] for f in get_dep_requirements_full()
-     ]
+    return [f[0] for f in get_dep_requirements_full()]
 
 
 def install_dep_requirements(test=False, dep_requirements=None, upgrade=False):
