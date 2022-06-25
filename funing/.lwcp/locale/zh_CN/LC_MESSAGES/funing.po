@@ -1,0 +1,278 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# larry <larryw3i@163.com>, 2021-2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: funing 0.2.44\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-06-25 22:56+0800\n"
+"PO-Revision-Date: 2022-06-25 22:59+0800\n"
+"Last-Translator: larry <larryw3i@163.com>\n"
+"Language-Team: Chinese (Simplified) <larryw3i@163.com>\n"
+"Language: zh_CHS\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"X-Generator: Gtranslator 41.0\n"
+
+#: funing/settings4t.py:10
+msgid "funing"
+msgstr "Funing"
+
+#: funing/settings4t.py:11
+msgid "0.2.35"
+msgstr "0.2.35"
+
+#: funing/settings4t.py:12 funing/settings4t.py:11
+msgid "A face recognition gui"
+msgstr "一个人脸识别 GUI "
+
+#: funing/.lwcp/fui/main_ui.py:20 funing/.lwcp/_fui/_main_ui.py:121
+#: funing/.lwcp/ui/main_ui.py:20
+msgid "Funing"
+msgstr "Funing"
+
+#: funing/.lwcp/fui/main_ui.py:47 funing/.lwcp/ui/c_ui.py:19
+#: funing/.lwcp/ui/main_ui.py:76
+msgid "GO"
+msgstr "直达"
+
+#: funing/.lwcp/fui/main_ui.py:49 funing/.lwcp/ui/c_ui.py:21
+#: funing/.lwcp/ui/main_ui.py:78
+msgid "File"
+msgstr "文件"
+
+#: funing/.lwcp/fui/main_ui.py:49 funing/.lwcp/ui/c_ui.py:21
+#: funing/.lwcp/ui/main_ui.py:78
+msgid "Camera"
+msgstr "摄像头"
+
+#: funing/.lwcp/fui/main_ui.py:50 funing/.lwcp/ui/c_ui.py:22
+#: funing/.lwcp/ui/main_ui.py:79
+msgid "Open"
+msgstr "打开"
+
+#: funing/.lwcp/fui/main_ui.py:56 funing/.lwcp/ui/c_ui.py:30
+#: funing/.lwcp/ui/main_ui.py:85
+msgid "tolerance"
+msgstr "误差（0.1-0.6）"
+
+#: funing/.lwcp/fui/main_ui.py:63 funing/.lwcp/_fui/_main_ui.py:189
+#: funing/.lwcp/ui/c_ui.py:37 funing/.lwcp/ui/main_ui.py:92
+msgid "Pause"
+msgstr "暂停"
+
+#: funing/.lwcp/fui/main_ui.py:66
+msgid "Recognize"
+msgstr "识别"
+
+#: funing/.lwcp/fui/main_ui.py:69 funing/.lwcp/ui/c_ui.py:40
+#: funing/.lwcp/ui/main_ui.py:95
+msgid "Pick"
+msgstr "获取"
+
+#: funing/.lwcp/fui/main_ui.py:110
+msgid "Write it with certain rules so that you can analyze it later"
+msgstr ""
+"信息编写要中规中矩, 比如yaml或toml, \n"
+"这样你分析它们就变得易如反掌。"
+
+#: funing/.lwcp/fui/main_ui.py:114 funing/.lwcp/ui/c_ui.py:55
+#: funing/.lwcp/ui/main_ui.py:126
+msgid "Save"
+msgstr "保存"
+
+#: funing/.lwcp/fui/main_ui.py:137 funing/.lwcp/_fui/_main_ui.py:119
+msgid "About Funing"
+msgstr "关于Funing"
+
+#: funing/.lwcp/_fui/_main_ui.py:85
+msgid "No desktop environment is detected! (^_^)"
+msgstr "亲, 好像没有检测到显示器哦! "
+
+#: funing/.lwcp/_fui/_main_ui.py:135
+msgid "Licensed under the MIT license"
+msgstr "本项目以MIT开源协议授权。"
+
+#: funing/.lwcp/_fui/_main_ui.py:195
+msgid "Play"
+msgstr "继续"
+
+#: funing/.lwcp/_fui/_main_ui.py:319
+msgid "Select a file"
+msgstr "选择一个文件"
+
+#: funing/.lwcp/_fui/_main_ui.py:322
+msgid "Image or video"
+msgstr "照片或视频"
+
+#: funing/.lwcp/_fui/_main_ui.py:465 funing/.lwcp/_fui/_main_ui.py:722
+msgid "Unable to open video source"
+msgstr "无法打开视频源。"
+
+#: funing/.lwcp/_fui/_main_ui.py:614
+msgid "No informations found"
+msgstr "未发现信息"
+
+#: funing/.lwcp/_fui/_main_ui.py:713
+msgid "Restart Funing Now?"
+msgstr "重启应用?"
+
+#: funing/.lwcp/_fui/_main_ui.py:728
+msgid "Nothing enter"
+msgstr "没有录入任何数据"
+
+#: funing/.lwcp/_fui/_main_ui.py:729
+msgid "You haven't entered anything yet! "
+msgstr "你还没有录入任何数据, 打开摄像头或文件然后点击'录入'。"
+
+#: funing/.lwcp/ui/c_ui.py:48 funing/.lwcp/ui/main_ui.py:119
+msgid "prev_symb"
+msgstr "上一页"
+
+#: funing/.lwcp/ui/c_ui.py:50 funing/.lwcp/ui/main_ui.py:121
+msgid "next_symb"
+msgstr "下一页"
+
+#: funing/settings4t.txt.py:10
+msgid "@app_name"
+msgstr "@app_name"
+
+#: funing/settings4t.txt.py:11
+msgid "@app_description"
+msgstr "@app_description"
+
+#~ msgid "%page_num%"
+#~ msgstr "%page_num%"
+
+#~ msgid "show_per_page_str0"
+#~ msgstr "每页显示"
+
+#~ msgid "10"
+#~ msgstr "10"
+
+#~ msgid "show_per_page_str1"
+#~ msgstr "条"
+
+#~ msgid "Funing data."
+#~ msgstr "Funing 数据"
+
+#~ msgid "Delete"
+#~ msgstr "删除"
+
+#~ msgid "%version%"
+#~ msgstr "%version%"
+
+#~ msgid "This program comes with ABSOLUTELY NO WARRANTY."
+#~ msgstr "此程序不提供任何担保。"
+
+#~ msgid "From larryw3i & contributors."
+#~ msgstr "来自larryw3i和贡献者们。"
+
+#~ msgid "OK"
+#~ msgstr "好的"
+
+#~ msgid "source code"
+#~ msgstr "源码"
+
+#~ msgid "video frame"
+#~ msgstr "视频帧"
+
+#~ msgid "Data"
+#~ msgstr "数据"
+
+#~ msgid "Welcome to Funing."
+#~ msgstr "欢迎来到Funing。"
+
+#~ msgid ""
+#~ "It seems that you have both 'opencv-python' and 'opencv-contrib-python' "
+#~ "installed, do you want to uninstall them and reinstall 'opencv-contrib-"
+#~ "python'([y]/n)?"
+#~ msgstr ""
+#~ "好像你同时安装了 opencv-python 和 opencv-contrib-python，要把它们都卸载然"
+#~ "后重装 opencv-contrib-python 吗 ([y]/n)？"
+
+#~ msgid ""
+#~ "\"EigenFaceRecognizer_create\" and \"haarcascades\" could not be "
+#~ "imported, funing exit."
+#~ msgstr "EigenFaceRecognizer_create 和 haarcascades 导入失败，程序退出。"
+
+#~ msgid "Face was detected."
+#~ msgstr "人脸被检测。"
+
+#~ msgid "No face was detected."
+#~ msgstr "没有检测到人脸。"
+
+#~ msgid "Click the picked face image to remove."
+#~ msgstr "单击被获取的图片就可以删除。"
+
+#~ msgid "Double click the face image to remove."
+#~ msgstr "双击被获取的图片就可以删除。"
+
+#~ msgid "Recognizer training. . ."
+#~ msgstr "正在训练识别器. . ."
+
+#~ msgid "Recognizer finish training."
+#~ msgstr "识别器训练完成。"
+
+#~ msgid "No face picture picked"
+#~ msgstr "没有检测到人脸。"
+
+#~ msgid "Funing Data"
+#~ msgstr "Funing 数据"
+
+#~ msgid "Do you want to delete this face picture?"
+#~ msgstr "删除这张脸部图片?"
+
+#, python-brace-format
+#~ msgid "All data of {0} will be removed"
+#~ msgstr "{0} 的全部数据会被移除"
+
+#~ msgid "Delete face picture?"
+#~ msgstr "删除脸部图片?"
+
+#~ msgid "face picture has been removed!"
+#~ msgstr "脸部图片被删除!"
+
+#, python-brace-format
+#~ msgid "All data of {0} have been removed!"
+#~ msgstr "{0}的全部数据已删除!"
+
+#~ msgid "ADD"
+#~ msgstr "添加"
+
+#~ msgid "Click the face image to pick."
+#~ msgstr "单击图片来获取它。"
+
+#~ msgid "Click"
+#~ msgstr "点击"
+
+#~ msgid ""
+#~ "Write it with certain rules sddddddddddddddddddddddddddddddddddddddddddo "
+#~ "that you can analyze it later"
+#~ msgstr ""
+#~ "Write it with certain rules sddddddddddddddddddddddddddddddddddddddddddo "
+#~ "that you can analyze it later"
+
+#~ msgid "haarcascades could not be imported, funing exit."
+#~ msgstr "haarcascades 导入失败, 程序退出。"
+
+#~ msgid ""
+#~ "\n"
+#~ "It seems that you have both 'opencv-python' and 'opencv-contrib-python' "
+#~ "installed, do you want to uninstall them and reinstall 'opencv-contrib-"
+#~ "python'([y]/n)?"
+#~ msgstr ""
+#~ "\n"
+#~ "好像你同时安装了 opencv-python 和 opencv-contrib-python，要把它们都卸载然"
+#~ "后重装 opencv-contrib-python 吗 ([y]/n)？"
+
+#~ msgid "\"EigenFaceRecognizer_create\" could not be imported, funing exit."
+#~ msgstr "EigenFaceRecognizer_create 导入失败，程序退出。"
+
+#~ msgid "Open simple.ipynb file"
+#~ msgstr "打开 simple.ipynb"
