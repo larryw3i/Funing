@@ -7,6 +7,6 @@ from pathlib import Path
 
 from funing.local import _
 
-app_name = _("funing")
-app_version = _("0.2.35")
-app_description = _("A face recognition gui")
+app_name = _("@app_name")
+app_version = _("@app_version")
+app_description = _("@app_description")

@@ -5,7 +5,7 @@ app_name='funing'
 local_dir="${app_name}/locale"
 pot_path="${local_dir}/${app_name}.pot"
 first_mo_path="${local_dir}/en_US/LC_MESSAGES/${app_name}.mo"
-
+first_po_path="${local_dir}/en_US/LC_MESSAGES/${app_name}.po"
 
 update_gitignore(){
     git rm -r --cached . && git add .
@@ -15,8 +15,12 @@ update_gitignore(){
 }
 
 _xgettext(){
+    [[ -f $pot_path ]] || touch $pot_path
+
     xgettext -v -j -L Python --output=${pot_path} \
     $(find ${app_name}/ -name "*.py")
+
+    [[ -f $first_po_path ]] || touch $first_po_path
 
     for _po in $(find ${local_dir}/ -name "*.po"); do
         msgmerge -U -v $_po ${pot_path}

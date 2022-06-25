@@ -2,6 +2,7 @@ import gettext
 import locale
 import os
 import sys
+from funing.settings import *
 
 sys_lang_code = locale.getdefaultlocale()[0]
 locale_path = locale_dir_path = os.path.abspath(os.path.dirname(__file__))
@@ -15,7 +16,7 @@ if sys_lang_code not in locale_langcodes:
     sys_lang_code = "en_US"
 
 lang = gettext.translation(
-    "primaryschool", localedir=locale_path, languages=[sys_lang_code]
+    app_name, localedir=locale_path, languages=[sys_lang_code]
 )
 
 lang.install()

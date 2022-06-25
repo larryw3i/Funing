@@ -9,6 +9,7 @@ import sys
 import uuid
 from pathlib import Path
 
+from funing.settings import *
 from funing import settings
 from funing.path import *
 
@@ -25,13 +26,13 @@ def xgettext():
 
     mo_files = []
     xgettext_files = []
-    for root, dirs, files in os.walk(settings.project_path):
+    for root, dirs, files in os.walk(project_path):
         for f in files:
             if f.endswith(".py"):
                 xgettext_files.append(os.path.join(root, f))
     xgettext_files = "\n".join(xgettext_files)
     open(xgettext_f_path, "w+").write(xgettext_files)
-    for root, dirs, files in os.walk(settings.locale_path):
+    for root, dirs, files in os.walk(locale_path):
         for f in files:
             if f.endswith(".po"):
                 f_path = os.path.join(root, f)
@@ -60,8 +61,10 @@ def pip_install_r():
 def settings4xget():
 
     _pwd = os.path.abspath(os.path.dirname(__file__))
+    settings4t = ""
+    settings4t_txt_path = os.path.join(_pwd, app_name, "settings4t.txt")
     settings4t_path = os.path.join(_pwd, app_name, "settings4t.py")
-    with open(settings4t_path, "r") as f:
+    with open(settings4t_txt_path, "r") as f:
         settings4t = f.read()
     _attrs = dir(settings)
     for _attr in _attrs:
@@ -70,15 +73,14 @@ def settings4xget():
             continue
         settings4t = settings4t.replace(f"@{_attr}", _attr_value)
     with open(settings4t_path, "w") as f:
-        f.write(settings_txt)
+        f.write(settings4t)
 
 
 if __name__ == "__main__":
-    f = Funing()
     sys_argv = sys.argv[1:]
     optlist, args = getopt.getopt(sys_argv, "")
     if len(args) < 1:
-        f.start()
+        pass
     for a in args:
         if a in ["s", "ts", "st", "start"]:
             start()
