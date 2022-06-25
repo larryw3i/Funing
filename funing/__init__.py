@@ -24,7 +24,7 @@ def install_dep_requirements(test=False, dep_requirements=None, upgrade=False):
         sh = "pip3 install -U " + (" ".join(dep_requirements))
     else:
         dep_requirements = [d.replace(" ", "") for d in dep_requirements]
-        sh = "pip3 install -U -v " + (" ".join(dep_requirements))
+        sh = "pip3 install '" + ("' '".join(dep_requirements)) + "'"
     if test:
         print(sh)
     os.system(sh)
