@@ -2,6 +2,7 @@ import gettext
 import locale
 import os
 import sys
+
 from funing.settings import *
 
 sys_lang_code = locale.getdefaultlocale()[0]

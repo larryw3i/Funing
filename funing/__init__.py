@@ -16,14 +16,14 @@ def get_dep_requirements():
     ]
 
 
-def install_dep_requirements(test=False,dep_requirements = None, upgrade = False):
+def install_dep_requirements(test=False, dep_requirements=None, upgrade=False):
     dep_requirements = dep_requirements or get_dep_requirements()
     sh = ""
     if upgrade:
-        dep_requirements = [ d.split(" ")[0] for d in dep_requirements]
+        dep_requirements = [d.split(" ")[0] for d in dep_requirements]
         sh = "pip3 install -U " + (" ".join(dep_requirements))
     else:
-        dep_requirements = [ d.replace(" ","" ) for d in dep_requirements]
+        dep_requirements = [d.replace(" ", "") for d in dep_requirements]
         sh = "pip3 install -U -v " + (" ".join(dep_requirements))
     if test:
         print(sh)
@@ -44,6 +44,6 @@ def run():
         if a in ["dep"]:
             install_dep_requirements()
         if a in ["depu"]:
-            install_dep_requirements(upgrade = True)
+            install_dep_requirements(upgrade=True)
         if a in ["ok"]:
             break

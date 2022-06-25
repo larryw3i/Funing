@@ -9,11 +9,10 @@ import sys
 import uuid
 from pathlib import Path
 
-from funing.settings import *
-from funing import settings
 from funing import *
+from funing import settings
 from funing.path import *
-
+from funing.settings import *
 
 
 def get_dev_dep_requirements():
@@ -21,24 +20,32 @@ def get_dev_dep_requirements():
         "opencv-contrib-python >= 4.5.3.56",
         "Pillow >= 8.3.0",
         "numpy >= 1.21.1",
-    ]+get_dep_requirements()
+    ] + get_dep_requirements()
+
 
 def install_dev_dep_requirements():
-    install_dep_requirements(test = True,dep_requirements = get_dev_dep_requirements())
+    install_dep_requirements(
+        test=True, dep_requirements=get_dev_dep_requirements()
+    )
+
+
 def install_dev_dep_requirements_u():
-    install_dep_requirements(test = True,dep_requirements = get_dev_dep_requirements(),upgrade =True)
+    install_dep_requirements(
+        test=True, dep_requirements=get_dev_dep_requirements(), upgrade=True
+    )
 
 
 def start():
     sys.argv[0] = re.sub(r"(-script\.pyw|\.exe)?$", "", sys.argv[0])
     from funing import run
+
     sys.exit(run())
 
 
 def settings4xget():
     _pwd = os.path.abspath(os.path.dirname(__file__))
     settings4t = ""
-    settings4t_txt_path = os.path.join(_pwd, app_name, "settings4t.txt")
+    settings4t_txt_path = os.path.join(_pwd, app_name, "settings4t.txt.py")
     settings4t_path = os.path.join(_pwd, app_name, "settings4t.py")
     with open(settings4t_txt_path, "r") as f:
         settings4t = f.read()
