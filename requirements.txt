@@ -1,5 +1,0 @@
-opencv-contrib-python
-langcodes[data]
-PyYAML
-Pillow
-numpy

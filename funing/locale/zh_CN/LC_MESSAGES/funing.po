@@ -2,14 +2,14 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# larry <larryw3i@163.com>, 2021.
+# larry <larryw3i@163.com>, 2021-2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: funing 0.2.44\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-25 14:44+0800\n"
-"PO-Revision-Date: 2021-12-18 21:14+0800\n"
+"POT-Creation-Date: 2022-06-25 22:56+0800\n"
+"PO-Revision-Date: 2022-06-25 22:59+0800\n"
 "Last-Translator: larry <larryw3i@163.com>\n"
 "Language-Team: Chinese (Simplified) <larryw3i@163.com>\n"
 "Language: zh_CHS\n"
@@ -17,20 +17,19 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"X-Generator: Gtranslator 40.0\n"
+"X-Generator: Gtranslator 41.0\n"
 
 #: funing/settings4t.py:10
-#, fuzzy
 msgid "funing"
 msgstr "Funing"
 
 #: funing/settings4t.py:11
 msgid "0.2.35"
-msgstr ""
+msgstr "0.2.35"
 
 #: funing/settings4t.py:12 funing/settings4t.py:11
 msgid "A face recognition gui"
-msgstr ""
+msgstr "一个人脸识别 GUI "
 
 #: funing/.lwcp/fui/main_ui.py:20 funing/.lwcp/_fui/_main_ui.py:121
 #: funing/.lwcp/ui/main_ui.py:20
@@ -92,12 +91,10 @@ msgid "About Funing"
 msgstr "关于Funing"
 
 #: funing/.lwcp/_fui/_main_ui.py:85
-#, fuzzy
 msgid "No desktop environment is detected! (^_^)"
 msgstr "亲, 好像没有检测到显示器哦! "
 
 #: funing/.lwcp/_fui/_main_ui.py:135
-#, fuzzy
 msgid "Licensed under the MIT license"
 msgstr "本项目以MIT开源协议授权。"
 
@@ -114,7 +111,6 @@ msgid "Image or video"
 msgstr "照片或视频"
 
 #: funing/.lwcp/_fui/_main_ui.py:465 funing/.lwcp/_fui/_main_ui.py:722
-#, fuzzy
 msgid "Unable to open video source"
 msgstr "无法打开视频源。"
 
@@ -131,19 +127,24 @@ msgid "Nothing enter"
 msgstr "没有录入任何数据"
 
 #: funing/.lwcp/_fui/_main_ui.py:729
-#, fuzzy
 msgid "You haven't entered anything yet! "
 msgstr "你还没有录入任何数据, 打开摄像头或文件然后点击'录入'。"
 
 #: funing/.lwcp/ui/c_ui.py:48 funing/.lwcp/ui/main_ui.py:119
-#, fuzzy
 msgid "prev_symb"
 msgstr "上一页"
 
 #: funing/.lwcp/ui/c_ui.py:50 funing/.lwcp/ui/main_ui.py:121
-#, fuzzy
 msgid "next_symb"
 msgstr "下一页"
+
+#: funing/settings4t.txt.py:10
+msgid "@app_name"
+msgstr "@app_name"
+
+#: funing/settings4t.txt.py:11
+msgid "@app_description"
+msgstr "@app_description"
 
 #~ msgid "%page_num%"
 #~ msgstr "%page_num%"

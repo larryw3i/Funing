@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-25 14:44+0800\n"
+"POT-Creation-Date: 2022-06-25 22:59+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -132,4 +132,12 @@ msgstr ""
 
 #: funing/.lwcp/ui/c_ui.py:50 funing/.lwcp/ui/main_ui.py:121
 msgid "next_symb"
+msgstr ""
+
+#: funing/settings4t.txt.py:10
+msgid "@app_name"
+msgstr ""
+
+#: funing/settings4t.txt.py:11
+msgid "@app_description"
 msgstr ""
