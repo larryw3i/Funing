@@ -35,11 +35,10 @@ def install_dev_dep_requirements_u():
     )
 
 
-def start():
-    sys.argv[0] = re.sub(r"(-script\.pyw|\.exe)?$", "", sys.argv[0])
+def start(test=False):
     from funing import run
 
-    sys.exit(run())
+    run(test)
 
 
 def settings4xget():
@@ -65,8 +64,10 @@ if __name__ == "__main__":
     if len(args) < 1:
         pass
     for a in args:
-        if a in ["s", "ts", "st", "start"]:
+        if a in ["s", "start"]:
             start()
+        if a in ["t", "test"]:
+            start(test=True)
         if a in ["4xget"]:
             settings4xget()
         if a in ["dep"]:

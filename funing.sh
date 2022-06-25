@@ -90,7 +90,7 @@ _i_test(){
 _start(){
     _black
     [[ -f "${first_mo_path}" ]] || _msgfmt
-    ${bin_dir}/python3 ${app_name}.py
+    ${bin_dir}/python3 ${app_name}.py $@
 }
 
 gen4xget(){
@@ -138,7 +138,7 @@ xget(){     _xgettext;          }
 
 its(){       _i_test;           }
 bdup(){     bd; tu;             }
-_s(){       _start;             }
+s(){       _start $@;           }
 
 p3(){       venv;_pip3;  }
 _cat(){     cat_bt;             }

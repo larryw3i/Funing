@@ -6,6 +6,7 @@ import sys
 from pathlib import Path
 
 from funing import settings
+from funing.locale import _
 
 
 def get_dep_requirements():
@@ -30,20 +31,7 @@ def install_dep_requirements(test=False, dep_requirements=None, upgrade=False):
     os.system(sh)
 
 
-def show():
+def run(test=False):
+    if test:
+        print(_("Hello, Funing!"))
     pass
-
-
-def run():
-    sys_argv = sys.argv[1:]
-    optlist, args = getopt.getopt(sys_argv, "")
-    print(args)
-    if len(args) < 1:
-        show()
-    for a in args:
-        if a in ["dep"]:
-            install_dep_requirements()
-        if a in ["depu"]:
-            install_dep_requirements(upgrade=True)
-        if a in ["ok"]:
-            break
