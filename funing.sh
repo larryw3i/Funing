@@ -6,6 +6,7 @@ local_dir="${app_name}/locale"
 pot_path="${local_dir}/${app_name}.pot"
 first_mo_path="${local_dir}/en_US/LC_MESSAGES/${app_name}.mo"
 
+
 update_gitignore(){
     git rm -r --cached . && git add .
     read -p "commit now?(y/N)" commit_now
@@ -39,7 +40,6 @@ p8(){
 }
 
 _black(){
-
     isort ${app_name}/
     isort ${app_name}.py
     isort setup.py
@@ -136,5 +136,6 @@ wcl(){      _cat_ | wc -l;      }
 blk(){      _black;             }
 
 4xget(){    gen4xget;           }
+style(){    blk;             }
 
-$1
+$@
