@@ -30,6 +30,12 @@ def get_dep_requirements_full():
             "Historical Permission Notice and Disclaimer (HPND)",
             "https://github.com/python-pillow/Pillow/blob/main/LICENSE",
         ),
+        (
+            "appdirs >= 1.4.4",
+            "github.com/ActiveState/appdirs",
+            "MIT License",
+            "https://github.com/ActiveState/appdirs/blob/master/LICENSE.txt",
+        ),
     ]
 
 
@@ -38,7 +44,7 @@ def get_dep_requirements():
 
 
 def get_install_dep_requirements_name():
-    return [d.split(" ")[0] for d in dep_requirements]
+    return [d.split(" ")[0] for d in get_dep_requirements()]
 
 
 def get_unsatisfied_deps(full=False):

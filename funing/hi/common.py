@@ -8,7 +8,6 @@ from tkinter import *
 from tkinter import ttk
 
 
-
 def tk_text_insert(text_widget, content, **kwargs):
     newline = kwargs.get("newline", True)
     font = kwargs.get("font", f"None {kwargs.get('fontsize',12)}")

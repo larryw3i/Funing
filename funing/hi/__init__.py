@@ -1,22 +1,11 @@
-import getopt
-import os
-import re
-import shutil
-import sys
-from pathlib import Path
-
-import cv2
-import yaml
-from appdirs import user_data_dir
-from cv2.data import haarcascades
-from cv2.face import EigenFaceRecognizer_create
-
-
 import asyncio
+import getopt
 import importlib
 import os
 import pickle
 import queue
+import re
+import shutil
 import subprocess
 import sys
 import threading
@@ -27,26 +16,23 @@ from functools import partial
 from importlib import import_module
 from itertools import zip_longest
 from multiprocessing import Pipe, Process, Queue
+from pathlib import Path
 from queue import Queue
 from threading import Thread
 from tkinter import *
 from tkinter import ttk
 
-import pygame
-import pygame_menu
-from pygame.locals import *
-from pygame_menu._scrollarea import ScrollArea
-from pygame_menu.baseimage import BaseImage
-from pygame_menu.locals import *
-from pygame_menu.widgets import *
+import cv2
+import yaml
+from appdirs import user_data_dir
+from cv2.data import haarcascades
+from cv2.face import EigenFaceRecognizer_create
 
-from funing.path import *
-from funing.path import user_screenshot_dir_path
-from funing.locale import _
 from funing.hi.common import tk_text_insert
-
+from funing.locale import _
+from funing.path import user_screenshot_dir_path
 from funing.settings import *
-
+from funing.settings4t import *
 
 
 class AboutToplevel(WidgetABC):
@@ -94,7 +80,7 @@ class AboutToplevel(WidgetABC):
             self.place()
 
     def set_title(self, title=None):
-        self.toplevel.title(title or _("About"))
+        self.toplevel.title(title or _("About Funing"))
 
     def set_geometry(self, geometry=None):
         self.toplevel.geometry(
@@ -214,6 +200,7 @@ class HiFuning:
     def __init__(self):
         self.root = Tk()
         self.abouttoplevel = None
+        self.cp = {}
 
     def get_screenwidth(self, of=1):
         return int(self.root.winfo_screenwidth() / of)
@@ -223,6 +210,13 @@ class HiFuning:
 
     def set_title(self, title=None):
         self.root.title(title or _("Funing"))
+
+    def get_cp(self,key):
+        if self.cp == None:
+            with open()
+    
+    def save_cp(self):
+        pass
 
     def about_command(self):
         if self.abouttoplevel:
