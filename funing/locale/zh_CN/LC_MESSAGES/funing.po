@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funing 0.2.44\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-25 22:56+0800\n"
-"PO-Revision-Date: 2022-06-25 22:59+0800\n"
+"POT-Creation-Date: 2022-06-26 13:38+0800\n"
+"PO-Revision-Date: 2022-06-26 13:39+0800\n"
 "Last-Translator: larry <larryw3i@163.com>\n"
 "Language-Team: Chinese (Simplified) <larryw3i@163.com>\n"
 "Language: zh_CHS\n"
@@ -146,6 +146,10 @@ msgstr "@app_name"
 msgid "@app_description"
 msgstr "@app_description"
 
+#: funing/__init__.py:55
+msgid "Hello, Funing!"
+msgstr "你好，富宁！"
+
 #~ msgid "%page_num%"
 #~ msgstr "%page_num%"
 
@@ -184,9 +188,6 @@ msgstr "@app_description"
 
 #~ msgid "Data"
 #~ msgstr "数据"
-
-#~ msgid "Welcome to Funing."
-#~ msgstr "欢迎来到Funing。"
 
 #~ msgid ""
 #~ "It seems that you have both 'opencv-python' and 'opencv-contrib-python' "
