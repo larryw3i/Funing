@@ -2,12 +2,12 @@
 
 import getopt
 import os
+import subprocess
 import sys
 from pathlib import Path
 
 from funing import settings
 from funing.locale import _
-import subprocess
 
 
 def get_dep_requirements_full():
@@ -32,25 +32,28 @@ def get_dep_requirements_full():
         ),
     ]
 
+
 def get_dep_requirements():
     return [f[0] for f in get_dep_requirements_full()]
+
 
 def get_install_dep_requirements_name():
     return [d.split(" ")[0] for d in dep_requirements]
 
-def get_unsatisfied_deps(full = False):
-    sh_output  = subprocess.check_output("pip list",shell=True)
+
+def get_unsatisfied_deps(full=False):
+    sh_output = subprocess.check_output("pip list", shell=True)
     requirements_full = get_dep_requirements_full()
     unsatisfied_deps = []
     for d in requirements_full:
         d_name = d.splite(" ")[0]
         if d_name not in sh_output:
-            unsatisfied_deps.append(d)
+            unsatisfied_deps.append(d if full else d_name)
     return unsatisfied_deps
+
 
 def dep_unsatisfied():
     return len(get_unsatisfied_deps) < 1
-            
 
 
 def install_dep_requirements(test=False, dep_requirements=None, upgrade=False):

@@ -12,4 +12,6 @@ from cv2.data import haarcascades
 from cv2.face import EigenFaceRecognizer_create
 
 
-class 
+class HiFuning:
+    def __init__(self):
+        pass
