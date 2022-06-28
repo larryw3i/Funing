@@ -40,4 +40,11 @@ class WidgetABC(ABC):
     def __init__(self,hf):
         self.hf = hf
         self.root = self.hf.root
+    
+    def palace(self):
+        pass
+    
+    def set_widgets(self):
+        pass
+    
         

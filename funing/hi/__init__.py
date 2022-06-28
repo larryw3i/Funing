@@ -33,6 +33,7 @@ from funing.locale import _
 from funing.path import user_screenshot_dir_path
 from funing.settings import *
 from funing.settings4t import *
+from funing.abc import *
 
 
 class AboutToplevel(WidgetABC):
