@@ -36,6 +36,6 @@ from funing.settings4t import *
 from funing.abc import *
 
 
-class MainWidget(WidgetABC):
+class MainWidget():
     def __init__(self):
         pass
