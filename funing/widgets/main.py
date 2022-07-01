@@ -137,9 +137,24 @@ class MainWidget:
     def sys_exit(self):
         self.root.destroy()
         sys.exit(0)
+    
+    def wm_delete_window_protocol(self):
+        self.save_copy()
+        self.sys_exit()
+    
+    def bind(self):
+        self.root.bind("<Configure>",self.configure)
+    
+    def protocol(self):
+        self.root.protocol("WM_DELETE_WINDOW",self.WM_DELETE_WINDOW_protocol)
+
+    def configure(self):
+        pass
 
     def mainloop(self):
         self.set_title()
         self.set_geometry()
+        self.bind()
+        self.protocol()
 
         self.root.mainloop()
