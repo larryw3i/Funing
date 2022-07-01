@@ -79,4 +79,6 @@ def install_dep_requirements(test=False, dep_requirements=None, upgrade=False):
 def run(test=False):
     if test:
         print(_("Hello, Funing!"))
-    pass
+    from funing.widgets import show
+
+    show()

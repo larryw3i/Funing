@@ -29,8 +29,7 @@ from cv2.data import haarcascades
 from cv2.face import EigenFaceRecognizer_create
 
 from funing.abc import *
-from funing.hi.common import tk_text_insert
 from funing.locale import _
-from funing.path import user_screenshot_dir_path
+from funing.path import *
 from funing.settings import *
 from funing.settings4t import *
