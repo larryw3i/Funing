@@ -28,12 +28,12 @@ from appdirs import user_data_dir
 from cv2.data import haarcascades
 from cv2.face import EigenFaceRecognizer_create
 
+from funing.abc import *
 from funing.hi.common import tk_text_insert
 from funing.locale import _
-from funing.path import user_screenshot_dir_path
+from funing.path import *
 from funing.settings import *
 from funing.settings4t import *
-from funing.abc import *
 
 
 class HiFuning:
@@ -51,10 +51,12 @@ class HiFuning:
     def set_title(self, title=None):
         self.root.title(title or _("Funing"))
 
-    def get_cp(self,key):
+    def get_cp(self, key):
         if self.cp == None:
-            with open()
-    
+            with open(cp_path, "r") as f:
+                self.cp = pickle.load(f)
+        return self.cp
+
     def save_cp(self):
         pass
 

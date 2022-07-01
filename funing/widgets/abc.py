@@ -12,6 +12,7 @@ import threading
 import tkinter as tk
 import uuid
 import webbrowser
+from abc import ABC
 from functools import partial
 from importlib import import_module
 from itertools import zip_longest
@@ -21,7 +22,6 @@ from queue import Queue
 from threading import Thread
 from tkinter import *
 from tkinter import ttk
-from abc import ABC
 
 import cv2
 import yaml
@@ -35,16 +35,13 @@ from funing.path import user_screenshot_dir_path
 from funing.settings import *
 
 
-
 class WidgetABC(ABC):
-    def __init__(self,hf):
+    def __init__(self, hf):
         self.hf = hf
         self.root = self.hf.root
-    
+
     def palace(self):
         pass
-    
+
     def set_widgets(self):
         pass
-    
-        

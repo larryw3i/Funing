@@ -35,6 +35,18 @@ def get_dev_dep_requirements_full():
             "MIT License",
             "https://github.com/thonny/thonny/blob/master/LICENSE.txt",
         ),
+        (
+            "black >= 22.3.0",
+            "https://github.com/psf/black",
+            "MIT License",
+            "https://github.com/psf/black/blob/main/LICENSE",
+        ),
+        (
+            "isort >= 5.10.0",
+            "https://github.com/pycqa/isort",
+            "MIT License",
+            "https://github.com/PyCQA/isort/blob/main/LICENSE",
+        ),
     ]
 
 

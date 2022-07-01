@@ -28,14 +28,23 @@ from appdirs import user_data_dir
 from cv2.data import haarcascades
 from cv2.face import EigenFaceRecognizer_create
 
+from funing.abc import *
 from funing.hi.common import tk_text_insert
 from funing.locale import _
 from funing.path import user_screenshot_dir_path
 from funing.settings import *
 from funing.settings4t import *
-from funing.abc import *
 
 
-class Show():
+class Widget:
     def __init__(self):
+        self.root = Tk()
         pass
+
+    def get_screenheight(self):
+        return self.root.winfo_screenheight()
+        
+    
+    def get_screenwidth(self):
+        return self.root.winfo_screenwidth()
+    
