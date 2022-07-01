@@ -34,17 +34,3 @@ from funing.locale import _
 from funing.path import user_screenshot_dir_path
 from funing.settings import *
 from funing.settings4t import *
-
-
-class Widget:
-    def __init__(self):
-        self.root = Tk()
-        pass
-
-    def get_screenheight(self):
-        return self.root.winfo_screenheight()
-        
-    
-    def get_screenwidth(self):
-        return self.root.winfo_screenwidth()
-    
