@@ -36,5 +36,5 @@ from funing.settings4t import *
 from funing.widgets.main import MainWidget
 
 
-def show():
-    MainWidget().mainloop()
+def show(test=False):
+    MainWidget(test=test).mainloop()

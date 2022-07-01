@@ -81,4 +81,4 @@ def run(test=False):
         print(_("Hello, Funing!"))
     from funing.widgets import show
 
-    show()
+    show(test)

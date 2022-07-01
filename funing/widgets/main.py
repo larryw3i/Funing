@@ -36,8 +36,9 @@ from funing.settings4t import *
 
 
 class MainWidget:
-    def __init__(self, title=None):
+    def __init__(self, title=None, test=True):
         self.root = Tk()
+        self.test = test
         self._title = title or (_("Funing") + f" ({app_version})")
         self._width = self._height = self._x = self._y = self.default_xywh = 10
         self._copy = {}
@@ -137,18 +138,18 @@ class MainWidget:
     def sys_exit(self):
         self.root.destroy()
         sys.exit(0)
-    
+
     def wm_delete_window_protocol(self):
         self.save_copy()
         self.sys_exit()
-    
-    def bind(self):
-        self.root.bind("<Configure>",self.configure)
-    
-    def protocol(self):
-        self.root.protocol("WM_DELETE_WINDOW",self.WM_DELETE_WINDOW_protocol)
 
-    def configure(self):
+    def bind(self):
+        self.root.bind("<Configure>", self.configure)
+
+    def protocol(self):
+        self.root.protocol("WM_DELETE_WINDOW", self.wm_delete_window_protocol)
+
+    def configure(self, event):
         pass
 
     def mainloop(self):

@@ -22,13 +22,13 @@ user_config_dir_path = user_config_dir(app_name, app_author[0])
 
 
 project_path = os.path.abspath(os.path.dirname(__file__))
-cp_path = os.path.join(user_data_dir_path, "copy.pkl")
+copy_path = os.path.join(user_data_dir_path, "copy.pkl")
 
 for d in [user_data_dir_path, user_config_dir_path]:
     if not os.path.exists(d):
         os.makedirs(d, exist_ok=True)
 
-for f in [cp_path]:
+for f in [copy_path]:
     if not os.path.exists(f):
         with open(f, "wb") as f:
             pickle.dump({"name": "funing"}, f)
