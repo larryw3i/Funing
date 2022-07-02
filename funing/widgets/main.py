@@ -33,6 +33,7 @@ from funing.locale import _
 from funing.path import *
 from funing.settings import *
 from funing.settings4t import *
+from funing.widgets.top import TopWidget
 
 
 class MainWidget:
@@ -42,6 +43,7 @@ class MainWidget:
         self._title = title or (_("Funing") + f" ({app_version})")
         self._width = self._height = self._x = self._y = self.default_xywh = 10
         self._copy = {}
+        self.top_widget = TopWidget(self)
 
     def set_title(self, title=None):
         if title:
@@ -104,11 +106,11 @@ class MainWidget:
         if update_widget:
             self.root.geometry(self.get_geometry_str())
 
-    def get_screenheight(self, of=1):
-        return int(self.root.winfo_screenheight() / of)
+    def get_screenheight(self, times=1, of=1):
+        return int(self.root.winfo_screenheight() * times / of)
 
-    def get_screenwidth(self, of=1):
-        return int(self.root.winfo_screenwidth() / of)
+    def get_screenwidth(self, times=1, of=1):
+        return int(self.root.winfo_screenwidth() * times / of)
 
     def get_copy(self, key):
         if self._copy == None:
@@ -129,12 +131,6 @@ class MainWidget:
         if save_now:
             self.save_copy()
 
-    def about_command(self):
-        if self.abouttoplevel:
-            self.abouttoplevel.ok()
-        else:
-            self.abouttoplevel = AboutToplevel(self)
-
     def sys_exit(self):
         self.root.destroy()
         sys.exit(0)
@@ -149,12 +145,16 @@ class MainWidget:
     def protocol(self):
         self.root.protocol("WM_DELETE_WINDOW", self.wm_delete_window_protocol)
 
+    def set_widgets(self):
+        self.top_widget.set_widgets()
+
     def configure(self, event):
         pass
 
     def mainloop(self):
         self.set_title()
         self.set_geometry()
+        self.set_widgets()
         self.bind()
         self.protocol()
 

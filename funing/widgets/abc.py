@@ -35,9 +35,9 @@ from funing.settings import *
 
 
 class WidgetABC(ABC):
-    def __init__(self, hf):
-        self.hf = hf
-        self.root = self.hf.root
+    def __init__(self, mw):
+        self.mw = mw
+        self.root = self.mw.root
 
     def palace(self):
         pass
