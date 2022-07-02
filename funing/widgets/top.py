@@ -58,7 +58,7 @@ class AboutToplevel:
         self.h = h or self.mw.get_screenheight(of=4)
         self.x = x or 3 * self.mw.get_screenwidth(of=8)
         self.y = y or 3 * self.mw.get_screenheight(of=8)
-        self.withdraw = True
+        self.withdraw = False
         self.toplevel = tk.Toplevel(self.root)
         self.toplevel.resizable(*resizable)
         self.toplevel.protocol("WM_DELETE_WINDOW", self.ok)
@@ -171,7 +171,7 @@ class AboutToplevel:
         )
 
         self.default_text_insert(
-            content=app_author, font="None 10", justify="center"
+            content=app_author[0], font="None 10", justify="center"
         )
 
         self.default_text_insert(
@@ -180,7 +180,7 @@ class AboutToplevel:
 
         for app_contributor in app_contributors[1:]:
             self.default_text_insert(
-                content=app_contributor, font="None 10", justify="center"
+                content=app_contributor[0], font="None 10", justify="center"
             )
 
         self.text.config(state="disabled")

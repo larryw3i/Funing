@@ -38,6 +38,7 @@ class WidgetABC(ABC):
     def __init__(self, mw):
         self.mw = mw
         self.root = self.mw.root
+        self.copy = self.mw.get_copy()
 
     def palace(self):
         pass

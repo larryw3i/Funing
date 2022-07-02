@@ -33,3 +33,9 @@ from funing.locale import _
 from funing.path import *
 from funing.settings import *
 from funing.settings4t import *
+from funing.widgets.abc import *
+
+
+class LeftWidget(WidgetABC):
+    def __init__(self, mw):
+        super().__init__(mw)

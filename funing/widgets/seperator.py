@@ -33,3 +33,29 @@ from funing.locale import _
 from funing.path import *
 from funing.settings import *
 from funing.settings4t import *
+from funing.widgets.abc import *
+
+
+class SeperatorWidget(WidgetABC):
+    def __init__(self, mw):
+        super().__init__(mw)
+        self._x = self.mw.default_xywh
+        self._x_copy_str = "lr_sep_x"
+        self.seperator = ttk.Separator(self.root, orient="vertical")
+
+    def get_x(self):
+        if self._x == self.mw.default_xywh:
+            self._x = self.copy.get(self._x_copy_str, self.mw.get_width(of=2))
+        return self._x
+
+    def set_x(self, x):
+        self._x = x
+        self.place()
+        self.mw.set_copy(self._x_copy_str, self._x)
+
+    def place(self):
+        self.seperator.place(self.get_x())
+        pass
+
+    def set_widgets(self):
+        pass

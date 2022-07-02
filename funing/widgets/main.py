@@ -41,7 +41,9 @@ class MainWidget:
         self.root = Tk()
         self.test = test
         self._title = title or (_("Funing") + f" ({app_version})")
-        self._width = self._height = self._x = self._y = self.default_xywh = 10
+        self._lr_sep_x = (
+            self._width
+        ) = self._height = self._x = self._y = self.default_xywh = 10
         self._copy = {}
         self.top_widget = TopWidget(self)
 
@@ -80,19 +82,19 @@ class MainWidget:
             self.get_y(),
         )
 
-    def get_width(self):
+    def get_width(self, of=1):
         self._width = (
             self.get_screenwidth(of=2)
             if self._width == self.default_xywh
             else self._width
         )
-        return self._width
+        return int(self._width / of)
 
-    def get_height(self):
+    def get_height(self, of=1):
         self._height = (
             self.get_screenheight(of=2)
             if self._height == self.default_xywh
-            else self._height
+            else int(self._height / of)
         )
         return self._height
 
