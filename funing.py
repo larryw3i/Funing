@@ -98,9 +98,7 @@ if __name__ == "__main__":
         pass
     for a in args:
         if a in ["s", "start"]:
-            start()
-        if a in ["t", "test"]:
-            start(test=True)
+            start(test=any(_a in ["t", "test"] for _a in args))
         if a in ["4xget"]:
             settings4xget()
         if a in ["dep"]:

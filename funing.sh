@@ -1,5 +1,6 @@
 #!/usr/bin/bash
 
+args=$@
 app_name='funing'
 [[ -d "venv/local" ]] && bin_dir='venv/local/bin' || bin_dir='venv/bin'
 local_dir="${app_name}/locale"
@@ -90,7 +91,7 @@ _i_test(){
 _start(){
     _black
     [[ -f "${first_mo_path}" ]] || _msgfmt
-    ${bin_dir}/python3 ${app_name}.py $@
+    ${bin_dir}/python3 ${app_name}.py $args
 }
 
 gen4xget(){
@@ -138,7 +139,7 @@ xget(){     _xgettext;          }
 
 its(){       _i_test;           }
 bdup(){     bd; tu;             }
-s(){       _start $@;           }
+s(){       _start;           }
 
 p3(){       venv;_pip3;  }
 _cat(){     cat_bt;             }
