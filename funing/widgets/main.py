@@ -123,7 +123,6 @@ class MainWidget:
         return self._copy.get(key, None) if key else self._copy
 
     def save_copy(self):
-
         with open(copy_path, "wb") as f:
             pickle.dump(self._copy, f)
 
@@ -131,7 +130,7 @@ class MainWidget:
         if self._copy == None:
             with open(copy_path, "r") as f:
                 self._copy = pickle.load(f)
-        self._copy.set(key, value)
+        self._copy[key] = value
         if save_now:
             self.save_copy()
 

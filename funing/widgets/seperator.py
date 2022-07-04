@@ -41,24 +41,34 @@ class SeperatorWidget(WidgetABC):
         super().__init__(mw)
         self._x = self.mw.default_xywh
         self._x_copy_str = "lr_sep_x"
-        self.seperator = ttk.Separator(self.root, orient="vertical")
+        self.seperator = None
+
+    def seperator_button1_bind(self, event):
+        self.set_x(self.root.winfo_pointerx() - self.mw.get_x())
+        pass
+
+    def set_widgets(self):
+        self.seperator = ttk.Separator(
+            self.root, orient="vertical", cursor="hand2"
+        )
+        self.seperator.bind("<B1-Motion>", self.seperator_button1_bind)
 
     def get_x(self):
         if self._x == self.mw.default_xywh:
             self._x = self.copy.get(self._x_copy_str, self.mw.get_width(of=2))
         return int(self._x)
 
-    def set_x(self, x):
-        self._x = x
-        self.place()
+    def set_x(self, x, update_place=True):
+        self._x = int(x)
+        if update_place:
+            self.place()
         self.mw.set_copy(self._x_copy_str, self._x)
 
     def get_height(self):
         return self.mw.get_height()
 
     def place(self):
-        self.seperator.place(x=self.get_x(), y=0, height=self.get_height())
-        pass
-
-    def set_widgets(self):
+        self.seperator.place(
+            x=self.get_x(), y=0, width=10, height=self.get_height()
+        )
         pass
