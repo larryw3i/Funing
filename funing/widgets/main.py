@@ -33,6 +33,7 @@ from funing.locale import _
 from funing.path import *
 from funing.settings import *
 from funing.settings4t import *
+from funing.widgets.seperator import SeperatorWidget
 from funing.widgets.top import TopWidget
 
 
@@ -46,6 +47,7 @@ class MainWidget:
         ) = self._height = self._x = self._y = self.default_xywh = 10
         self._copy = {}
         self.top_widget = TopWidget(self)
+        self.sep_widget = SeperatorWidget(self)
 
     def set_title(self, title=None):
         if title:
@@ -114,11 +116,11 @@ class MainWidget:
     def get_screenwidth(self, times=1, of=1):
         return int(self.root.winfo_screenwidth() * times / of)
 
-    def get_copy(self, key):
+    def get_copy(self, key=None):
         if self._copy == None:
             with open(copy_path, "r") as f:
                 self._copy = pickle.load(f)
-        return self._copy.get(key, None)
+        return self._copy.get(key, None) if key else self._copy
 
     def save_copy(self):
 
@@ -149,9 +151,14 @@ class MainWidget:
 
     def set_widgets(self):
         self.top_widget.set_widgets()
+        self.sep_widget.set_widgets()
+
+    def place(self):
+        self.top_widget.place()
+        self.sep_widget.place()
 
     def configure(self, event):
-        pass
+        self.place()
 
     def mainloop(self):
         self.set_title()
