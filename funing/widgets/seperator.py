@@ -39,7 +39,7 @@ from funing.widgets.abc import *
 class SeperatorWidget(WidgetABC):
     def __init__(self, mw):
         super().__init__(mw)
-        self._x_copy_str = "lr_sep_x"
+        self._x_copy_str = "lr_sep_x_perct"
         self._x = self.mw.default_xywh
         self.seperator = None
         self.min_margin = 10
@@ -64,17 +64,18 @@ class SeperatorWidget(WidgetABC):
         self.seperator.bind("<Button-3>", self.seperator_button2_bind)
 
     def get_x(self):
-        if self._x == self.mw.default_xywh:
-            self._x = self.get_copy(
-                self._x_copy_str, None
-            ) or self.mw.get_width(of=2)
+        x_copy = self.get_copy(self._x_copy_str, None)
+        self._x = (
+            x_copy * self.mw.get_width() if x_copy else self.mw.get_width(of=2)
+        )
+
         return int(self._x)
 
     def set_x(self, x, update_place=True):
         self._x = int(x)
+        self.set_copy(self._x_copy_str, self._x / self.mw.get_width())
         if update_place:
             self.place()
-        self.set_copy(self._x_copy_str, self._x)
 
     def get_height(self):
         return self.mw.get_height()

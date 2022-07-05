@@ -79,10 +79,10 @@ class MainWidget:
         else:
             self._x = self.root.winfo_rooty()
         return self._y
-    
+
     def get_seperator_x(self):
         return self.sep_widget.get_x()
-    
+
     def get_sep_x(self):
         return self.get_seperator_x()
 
@@ -98,7 +98,7 @@ class MainWidget:
         self._width = (
             self.get_screenwidth(of=2)
             if self._width == self.default_xywh
-            else self.root.winfo_width()
+            else int(self.root.winfo_width() / of)
         )
         return int(self._width / of)
 
@@ -106,7 +106,7 @@ class MainWidget:
         self._height = (
             self.get_screenheight(of=2)
             if self._height == self.default_xywh
-            else int(self._height / of)
+            else int(self.root.winfo_height() / of)
         )
         return self._height
 
