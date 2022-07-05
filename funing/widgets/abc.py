@@ -41,6 +41,7 @@ class WidgetABC(ABC):
         self.get_copy = self.mw.get_copy
         self.set_copy = self.mw.set_copy
         self.copy = self.get_copy()
+        self.test = self.mw.test
 
     def palace(self):
         pass

@@ -42,16 +42,26 @@ class SeperatorWidget(WidgetABC):
         self._x_copy_str = "lr_sep_x"
         self._x = self.mw.default_xywh
         self.seperator = None
+        self.min_margin = 10
 
-    def seperator_button1_bind(self, event):
-        self.set_x(self.root.winfo_pointerx() - self.mw.get_x())
+    def seperator_button1_motion_bind(self, event):
+        pointerx = self.root.winfo_pointerx()
+        if pointerx > (
+            self.mw.get_x() + self.mw.get_width() - self.min_margin
+        ) or pointerx < (self.root.winfo_rootx() + self.min_margin):
+            return
+        self.set_x(pointerx - self.mw.get_x())
         pass
+
+    def seperator_button2_bind(self, event):
+        self.set_x(self.mw.get_width(of=2))
 
     def set_widgets(self):
         self.seperator = ttk.Separator(
-            self.root, orient="vertical", cursor="hand2"
+            self.root, orient="vertical", cursor="sizing"
         )
-        self.seperator.bind("<B1-Motion>", self.seperator_button1_bind)
+        self.seperator.bind("<B1-Motion>", self.seperator_button1_motion_bind)
+        self.seperator.bind("<Button-3>", self.seperator_button2_bind)
 
     def get_x(self):
         if self._x == self.mw.default_xywh:
@@ -64,13 +74,19 @@ class SeperatorWidget(WidgetABC):
         self._x = int(x)
         if update_place:
             self.place()
-        self.mw.set_copy(self._x_copy_str, self._x)
+        self.set_copy(self._x_copy_str, self._x)
 
     def get_height(self):
         return self.mw.get_height()
 
+    def get_width(self):
+        return 8
+
     def place(self):
         self.seperator.place(
-            x=self.get_x(), y=0, width=10, height=self.get_height()
+            x=self.get_x(),
+            y=0,
+            width=self.get_width(),
+            height=self.get_height(),
         )
         pass

@@ -38,7 +38,7 @@ from funing.widgets.top import TopWidget
 
 
 class MainWidget:
-    def __init__(self, title=None, test=True):
+    def __init__(self, title=None, test=False):
         self.root = Tk()
         self.test = test
         self._title = title or (_("Funing") + f" ({app_version})")
@@ -79,6 +79,12 @@ class MainWidget:
         else:
             self._x = self.root.winfo_rooty()
         return self._y
+    
+    def get_seperator_x(self):
+        return self.sep_widget.get_x()
+    
+    def get_sep_x(self):
+        return self.get_seperator_x()
 
     def get_geometry(self):
         return (
@@ -92,7 +98,7 @@ class MainWidget:
         self._width = (
             self.get_screenwidth(of=2)
             if self._width == self.default_xywh
-            else self._width
+            else self.root.winfo_width()
         )
         return int(self._width / of)
 
@@ -122,9 +128,9 @@ class MainWidget:
 
     def get_copy(self, key=None, default=None):
         if self._copy == {}:
-            with open(copy_path, "r") as f:
-                self._copy = pickle.load(f)
-        print(self._copy)
+            with open(copy_path, "rb") as f:
+                self._copy = pickle.load(f, encoding="utf-8")
+
         return (
             self._copy.get(key, None)
             if key
@@ -136,7 +142,8 @@ class MainWidget:
     def save_copy(self):
         with open(copy_path, "wb") as f:
             pickle.dump(self._copy, f)
-        print(_("Copy Saved!"))
+        if self.test:
+            print(_("Copy Saved!"))
 
     def set_copy(self, key, value, save_now=False):
         if self._copy == None:
