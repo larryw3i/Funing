@@ -69,11 +69,15 @@ class MainWidget:
     def get_x(self):
         if self._x == self.default_xywh:
             self._x = self.get_screenwidth(of=4)
+        else:
+            self._x = self.root.winfo_rootx()
         return self._x
 
     def get_y(self):
         if self._y == self.default_xywh:
             self._y = self.get_screenheight(of=4)
+        else:
+            self._x = self.root.winfo_rooty()
         return self._y
 
     def get_geometry(self):
