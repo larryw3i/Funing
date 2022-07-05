@@ -31,4 +31,4 @@ for d in [user_data_dir_path, user_config_dir_path]:
 for f in [copy_path]:
     if not os.path.exists(f):
         with open(f, "wb") as f:
-            pickle.dump({"name": "funing"}, f)
+            pickle.dump({}, f)

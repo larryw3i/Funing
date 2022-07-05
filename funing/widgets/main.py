@@ -120,15 +120,23 @@ class MainWidget:
     def get_screenwidth(self, times=1, of=1):
         return int(self.root.winfo_screenwidth() * times / of)
 
-    def get_copy(self, key=None):
-        if self._copy == None:
+    def get_copy(self, key=None, default=None):
+        if self._copy == {}:
             with open(copy_path, "r") as f:
                 self._copy = pickle.load(f)
-        return self._copy.get(key, None) if key else self._copy
+        print(self._copy)
+        return (
+            self._copy.get(key, None)
+            if key
+            else default
+            if default
+            else self._copy
+        )
 
     def save_copy(self):
         with open(copy_path, "wb") as f:
             pickle.dump(self._copy, f)
+        print(_("Copy Saved!"))
 
     def set_copy(self, key, value, save_now=False):
         if self._copy == None:
