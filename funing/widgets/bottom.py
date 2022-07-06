@@ -33,36 +33,48 @@ from funing.locale import _
 from funing.path import *
 from funing.settings import *
 from funing.settings4t import *
+from funing.widgets.abc import *
 
 
 class BottomWidget(WidgetABC):
-    def __init__(self,mw):
+    def __init__(self, mw):
         super().__init__(mw)
-    
-    
+        self.main_msg_label = None
+
+    def set_widgets(self):
+        self.main_msg_label = ttk.Label(
+            self.root, text=_("Hello, Welcome to Funing.")
+        )
+
     def set_x(self):
         pass
-    
+
     def get_x(self):
-        pass
+        return 0
 
     def set_y(self):
         pass
-    
+
     def get_y(self):
-        pass
-    
+        return int(self.mw.get_height() - self.get_height())
+
     def set_width(self):
         pass
-    
+
     def get_width(self):
-        pass
-    
+        return self.mw.get_width()
+
     def set_height(self):
         pass
-    
+
     def get_height(self):
-        pass
+        return self.main_msg_label.winfo_reqheight()
 
     def place(self):
+        self.main_msg_label.place(
+            x=self.get_x(),
+            y=self.get_y(),
+            width=self.get_width(),
+            height=self.get_height(),
+        )
         pass

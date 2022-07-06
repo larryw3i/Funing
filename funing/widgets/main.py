@@ -33,9 +33,9 @@ from funing.locale import _
 from funing.path import *
 from funing.settings import *
 from funing.settings4t import *
+from funing.widgets.bottom import BottomWidget
 from funing.widgets.seperator import SeperatorWidget
 from funing.widgets.top import TopWidget
-from funing.widgets.bottom import BottomWidget
 
 
 class MainWidget:
@@ -50,6 +50,7 @@ class MainWidget:
         self.top_widget = TopWidget(self)
         self.bottom_widget = BottomWidget(self)
         self.sep_widget = SeperatorWidget(self)
+        self.widgets = [self.top_widget, self.bottom_widget, self.sep_widget]
 
     def set_title(self, title=None):
         if title:
@@ -87,6 +88,12 @@ class MainWidget:
 
     def get_sep_x(self):
         return self.get_seperator_x()
+
+    def get_bottom_height(self):
+        return self.bottom_widget.get_height()
+
+    def get_bottom_widget_height(self):
+        return self.get_bottom_height()
 
     def get_geometry(self):
         return (
@@ -170,12 +177,12 @@ class MainWidget:
         self.root.protocol("WM_DELETE_WINDOW", self.wm_delete_window_protocol)
 
     def set_widgets(self):
-        self.top_widget.set_widgets()
-        self.sep_widget.set_widgets()
+        for w in self.widgets:
+            w.set_widgets()
 
     def place(self):
-        self.top_widget.place()
-        self.sep_widget.place()
+        for w in self.widgets:
+            w.place()
 
     def configure(self, event):
         self.place()

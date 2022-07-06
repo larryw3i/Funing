@@ -78,7 +78,7 @@ class SeperatorWidget(WidgetABC):
             self.place()
 
     def get_height(self):
-        return self.mw.get_height()
+        return int(self.mw.get_height() - self.mw.get_bottom_height())
 
     def get_width(self):
         return 8
