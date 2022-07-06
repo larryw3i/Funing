@@ -44,8 +44,41 @@ class WidgetABC(ABC):
         self.test = self.mw.test
         self.width = self.height = self.y = self.x = self.mw.default_xywh
 
-    def palace(self):
-        pass
-
     def set_widgets(self):
         pass
+
+    def set_x(self):
+        pass
+
+    def get_x(self):
+        pass
+
+    def set_y(self):
+        pass
+
+    def get_y(self):
+        pass
+
+    def set_width(self):
+        pass
+
+    def get_width(self):
+        pass
+
+    def set_height(self):
+        pass
+
+    def get_height(self):
+        pass
+
+    def place(self):
+        pass
+
+
+class MidWidgetABC(WidgetABC):
+    def __init__(self, mw):
+        super().__init__(mw)
+
+    def set_widgets(self):
+        super().set_widgets()
+        self.text = tk.Text(self.root)

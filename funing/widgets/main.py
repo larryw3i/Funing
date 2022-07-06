@@ -34,6 +34,8 @@ from funing.path import *
 from funing.settings import *
 from funing.settings4t import *
 from funing.widgets.bottom import BottomWidget
+from funing.widgets.left import LeftWidget
+from funing.widgets.right import RightWidget
 from funing.widgets.seperator import SeperatorWidget
 from funing.widgets.top import TopWidget
 
@@ -49,8 +51,16 @@ class MainWidget:
         self._copy = {}
         self.top_widget = TopWidget(self)
         self.bottom_widget = BottomWidget(self)
+        self.left_widget = LeftWidget(self)
+        self.right_widget = RightWidget(self)
         self.sep_widget = SeperatorWidget(self)
-        self.widgets = [self.top_widget, self.bottom_widget, self.sep_widget]
+        self.widgets = [
+            self.top_widget,
+            self.bottom_widget,
+            self.sep_widget,
+            self.left_widget,
+            self.right_widget,
+        ]
 
     def set_title(self, title=None):
         if title:
@@ -186,6 +196,15 @@ class MainWidget:
 
     def configure(self, event):
         self.place()
+
+    def set_msg(self, label=None, msg=None):
+        self.set_bottom_msg(label, msg)
+
+    def set_status_msg(self, label=None, msg=None):
+        self.set_bottom_msg(label, msg)
+
+    def set_bottom_msg(self, label=None, msg=None):
+        self.bottom_widget.set_msg(label, msg)
 
     def mainloop(self):
         self.set_title()

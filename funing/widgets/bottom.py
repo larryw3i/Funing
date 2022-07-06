@@ -70,6 +70,11 @@ class BottomWidget(WidgetABC):
     def get_height(self):
         return self.main_msg_label.winfo_reqheight()
 
+    def set_msg(self, label=None, msg=None):
+        label = label or self.main_msg_label
+        msg = msg or _("Hello!")
+        label.configure(text=msg)
+
     def place(self):
         self.main_msg_label.place(
             x=self.get_x(),
