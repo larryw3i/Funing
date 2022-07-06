@@ -33,3 +33,36 @@ from funing.locale import _
 from funing.path import *
 from funing.settings import *
 from funing.settings4t import *
+
+
+class BottomWidget(WidgetABC):
+    def __init__(self,mw):
+        super().__init__(mw)
+    
+    
+    def set_x(self):
+        pass
+    
+    def get_x(self):
+        pass
+
+    def set_y(self):
+        pass
+    
+    def get_y(self):
+        pass
+    
+    def set_width(self):
+        pass
+    
+    def get_width(self):
+        pass
+    
+    def set_height(self):
+        pass
+    
+    def get_height(self):
+        pass
+
+    def place(self):
+        pass

@@ -35,6 +35,7 @@ from funing.settings import *
 from funing.settings4t import *
 from funing.widgets.seperator import SeperatorWidget
 from funing.widgets.top import TopWidget
+from funing.widgets.bottom import BottomWidget
 
 
 class MainWidget:
@@ -47,6 +48,7 @@ class MainWidget:
         ) = self._height = self._x = self._y = self.default_xywh = 10
         self._copy = {}
         self.top_widget = TopWidget(self)
+        self.bottom_widget = BottomWidget(self)
         self.sep_widget = SeperatorWidget(self)
 
     def set_title(self, title=None):
