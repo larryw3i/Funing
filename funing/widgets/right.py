@@ -40,7 +40,6 @@ class RightWidget(MidWidgetABC):
     def __init__(self, mw):
         super().__init__(mw)
 
-
     def get_max_width(self):
         return int(self.mw.get_width() - self.mw.get_sep_x())
 
