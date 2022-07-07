@@ -94,7 +94,7 @@ class MainWidget:
         return self._y
 
     def get_seperator_x(self):
-        return self.sep_widget.get_x()
+        return int(self.sep_widget.get_x())
 
     def get_sep_x(self):
         return self.get_seperator_x()

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-26 13:38+0800\n"
+"POT-Creation-Date: 2022-07-07 08:55+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,7 +30,8 @@ msgid "A face recognition gui"
 msgstr ""
 
 #: funing/.lwcp/fui/main_ui.py:20 funing/.lwcp/_fui/_main_ui.py:121
-#: funing/.lwcp/ui/main_ui.py:20
+#: funing/.lwcp/ui/main_ui.py:20 funing/settings4t.py:10
+#: funing/widgets/main.py:47
 msgid "Funing"
 msgstr ""
 
@@ -83,6 +84,7 @@ msgid "Save"
 msgstr ""
 
 #: funing/.lwcp/fui/main_ui.py:137 funing/.lwcp/_fui/_main_ui.py:119
+#: funing/widgets/top.py:54 funing/widgets/about.py:85
 msgid "About Funing"
 msgstr ""
 
@@ -142,6 +144,34 @@ msgstr ""
 msgid "@app_description"
 msgstr ""
 
-#: funing/__init__.py:55
+#: funing/__init__.py:55 funing/__init__.py:81
 msgid "Hello, Funing!"
+msgstr ""
+
+#: funing/widgets/top.py:57
+msgid "About"
+msgstr ""
+
+#: funing/widgets/main.py:165
+msgid "Copy Saved!"
+msgstr ""
+
+#: funing/widgets/bottom.py:46
+msgid "Hello, Welcome to Funing."
+msgstr ""
+
+#: funing/widgets/bottom.py:75
+msgid "Hello!"
+msgstr ""
+
+#: funing/widgets/about.py:71
+msgid "OK"
+msgstr ""
+
+#: funing/widgets/about.py:170
+msgid "Author:"
+msgstr ""
+
+#: funing/widgets/about.py:178
+msgid "Contributors:"
 msgstr ""

@@ -39,6 +39,9 @@ from funing.widgets.abc import *
 class LeftWidget(MidWidgetABC):
     def __init__(self, mw):
         super().__init__(mw)
+        
+    def get_max_width(self):
+        return self.mw.get_sep_x()
 
     def set_widgets(self):
         super().set_widgets()

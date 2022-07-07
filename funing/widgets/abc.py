@@ -78,6 +78,7 @@ class WidgetABC(ABC):
 class MidWidgetABC(WidgetABC):
     def __init__(self, mw):
         super().__init__(mw)
+        self.max_width = self.mw.default_xywh
 
     def set_widgets(self):
         super().set_widgets()
