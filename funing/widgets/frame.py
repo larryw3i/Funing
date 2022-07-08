@@ -46,8 +46,12 @@ class FrameWidget(TextSubWidgetABC):
         self.openfrom_combobox_var = StringVar()
         self.openfrom_Combobox = None
         self.opensrc_button = None
+        self.play_button = None
+        self.pause_button = None
+        self.pick_button = None
+        self.recog_button = None
 
-    def start_video(self):
+    def play_video(self):
         pass
 
     def pause_video(self):
