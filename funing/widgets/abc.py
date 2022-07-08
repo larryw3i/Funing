@@ -80,6 +80,45 @@ class MidWidgetABC(WidgetABC):
         super().__init__(mw)
         self.max_width = self.mw.default_xywh
 
+    def get_vscrollbar_width(self):
+        return int(self.vscrollbar.req_width())
+
+    def get_vscrollbar_height(self):
+        return int(self.mw.get_height() - self.mw.get_bottom_height())
+
+    def get_vscrollbar_x(self):
+        pass
+
+    def get_vscrollbar_y(self):
+        pass
+
+    def get_text_width(self):
+        pass
+
+    def get_text_height(self):
+        return self.get_vscrollbar_height()
+
+    def get_text_x(self):
+        pass
+
+    def get_text_y(self):
+        pass
+
     def set_widgets(self):
         super().set_widgets()
         self.text = tk.Text(self.root)
+        self.vscrollbar = Scrollbar(self.root, orient="vertical")
+
+    def place(self):
+        self.text.place(
+            x=self.get_text_x(),
+            y=self.get_text_y(),
+            width=self.get_text_width(),
+            height=self.get_text_height(),
+        )
+        self.vscrollbar.place(
+            x=self.get_vscrollbar_x(),
+            y=sele.get_vscrollbar_y(),
+            width=self.get_vscrollbar_width(),
+            height=self.get_vscrollbar_height(),
+        )

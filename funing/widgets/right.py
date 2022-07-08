@@ -71,4 +71,5 @@ class RightWidget(MidWidgetABC):
         pass
 
     def place(self):
+        super().place()
         pass
