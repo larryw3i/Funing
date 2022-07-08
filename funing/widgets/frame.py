@@ -37,8 +37,8 @@ from funing.widgets.abc import *
 
 
 class FrameWidget(TextSubWidgetABC):
-    def __init__(self, mw,mid_widget):
-        super().__init__(mw,mid_widget)
+    def __init__(self, mw, mid_widget):
+        super().__init__(mw, mid_widget)
         self.label = None
         self.frame_size = 25
         self.video_src = None

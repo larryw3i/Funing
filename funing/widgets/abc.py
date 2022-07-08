@@ -151,7 +151,7 @@ class MidWidgetABC(WidgetABC):
 
 
 class TextSubWidgetABC(WidgetABC):
-    def __init__(self,mw,mid_widget):
+    def __init__(self, mw, mid_widget):
         super().__init__(mw)
-        self.parent = self.parent_widget = self.mid_widget= mid_widget
+        self.parent = self.parent_widget = self.mid_widget = mid_widget
         self.text = self.parent.text
