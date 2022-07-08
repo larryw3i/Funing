@@ -146,3 +146,5 @@ class MidWidgetABC(WidgetABC):
             width=self.get_vscrollbar_width(),
             height=self.get_vscrollbar_height(),
         )
+        self.vscrollbar.configure(command=self.text.yview)
+        self.text.config(yscrollcommand=self.vscrollbar.set)
