@@ -80,29 +80,53 @@ class MidWidgetABC(WidgetABC):
         super().__init__(mw)
         self.max_width = self.mw.default_xywh
 
-    def get_vscrollbar_width(self):
-        return int(self.vscrollbar.req_width())
+    def set_x(self):
+        pass
 
-    def get_vscrollbar_height(self):
+    def get_x(self):
+        pass
+
+    def set_y(self):
+        pass
+
+    def get_y(self):
+        return 0
+
+    def set_width(self):
+        pass
+
+    def get_width(self):
+        pass
+
+    def set_height(self):
+        pass
+
+    def get_height(self):
         return int(self.mw.get_height() - self.mw.get_bottom_height())
 
+    def get_vscrollbar_width(self):
+        return int(self.vscrollbar.winfo_reqwidth())
+
+    def get_vscrollbar_height(self):
+        return self.get_height()
+
     def get_vscrollbar_x(self):
-        pass
+        return int(self.get_x() + self.get_text_width())
 
     def get_vscrollbar_y(self):
-        pass
+        return 0
 
     def get_text_width(self):
-        pass
+        return int(self.get_width() - self.get_vscrollbar_width())
 
     def get_text_height(self):
         return self.get_vscrollbar_height()
 
     def get_text_x(self):
-        pass
+        return int(self.get_x())
 
     def get_text_y(self):
-        pass
+        return int(self.get_y())
 
     def set_widgets(self):
         super().set_widgets()
@@ -118,7 +142,7 @@ class MidWidgetABC(WidgetABC):
         )
         self.vscrollbar.place(
             x=self.get_vscrollbar_x(),
-            y=sele.get_vscrollbar_y(),
+            y=self.get_vscrollbar_y(),
             width=self.get_vscrollbar_width(),
             height=self.get_vscrollbar_height(),
         )

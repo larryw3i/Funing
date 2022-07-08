@@ -96,6 +96,12 @@ class MainWidget:
     def get_seperator_x(self):
         return int(self.sep_widget.get_x())
 
+    def get_seperator_width(self):
+        return int(self.sep_widget.get_width())
+
+    def get_sep_width(self):
+        return int(self.sep_widget.get_width())
+
     def get_sep_x(self):
         return self.get_seperator_x()
 

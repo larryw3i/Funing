@@ -41,7 +41,9 @@ class RightWidget(MidWidgetABC):
         super().__init__(mw)
 
     def get_max_width(self):
-        return int(self.mw.get_width() - self.mw.get_sep_x())
+        return int(
+            self.mw.get_width() - self.mw.get_sep_x() - self.mw.get_sep_width()
+        )
 
     def set_widgets(self):
         super().set_widgets()
@@ -50,24 +52,18 @@ class RightWidget(MidWidgetABC):
         pass
 
     def get_x(self):
-        return 0
+        return int(self.mw.get_sep_x() + self.mw.get_sep_width())
 
     def set_y(self):
-        pass
-
-    def get_y(self):
         pass
 
     def set_width(self):
         pass
 
     def get_width(self):
-        pass
+        return self.get_max_width()
 
     def set_height(self):
-        pass
-
-    def get_height(self):
         pass
 
     def place(self):

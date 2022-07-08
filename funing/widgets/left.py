@@ -50,24 +50,18 @@ class LeftWidget(MidWidgetABC):
         pass
 
     def get_x(self):
-        pass
+        return 0
 
     def set_y(self):
-        pass
-
-    def get_y(self):
         pass
 
     def set_width(self):
         pass
 
     def get_width(self):
-        pass
+        return int(self.mw.get_sep_x())
 
     def set_height(self):
-        pass
-
-    def get_height(self):
         pass
 
     def place(self):
