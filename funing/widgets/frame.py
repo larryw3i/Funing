@@ -36,17 +36,16 @@ from funing.settings4t import *
 from funing.widgets.abc import *
 
 
-class FrameWidget(WidgetABC):
-    def __init__(self, mw, text):
-        super().__init__(mw)
-        self.parent = self.parent_widget = self.mw.left_widget
-        self.text = text
+class FrameWidget(TextSubWidgetABC):
+    def __init__(self, mw,mid_widget):
+        super().__init__(mw,mid_widget)
         self.label = None
         self.frame_size = 25
         self.video_src = None
         self.image_src = None
-        self.openfrom_button = None
-        self.detectsrc_button = None
+        self.openfrom_combobox_var = StringVar()
+        self.openfrom_Combobox = None
+        self.opensrc_button = None
 
     def start_video(self):
         pass
@@ -85,7 +84,8 @@ class FrameWidget(WidgetABC):
         return int(self.parent.get_text_height() * 0.8)
 
     def set_widgets(self):
-        self.label = Label(self.root, text=_("Video frame label."))
+        self.label = Label(self.text, text=_("Video frame label."))
+        self.openfrom_combobox = ttk.Combobox(self.text)
         pass
 
     def set_x(self):
