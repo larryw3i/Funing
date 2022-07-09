@@ -108,6 +108,65 @@ class FrameWidget(WidgetABC):
     def get_frame_label_height(self):
         return self.get_frame_label_max_height()
 
+        
+    def get_recog_button_x(self):
+        pass
+
+    def get_recog_button_y(self):
+        pass
+
+    def get_recog_button_width(self):
+        pass
+
+    def get_recog_button_height(self):
+        pass
+    def get_pick_button_x(self):
+        pass
+
+    def get_pick_button_y(self):
+        pass
+
+    def get_pick_button_width(self):
+        pass
+
+    def get_pick_button_height(self):
+        pass
+    def get_pause_button_x(self):
+        pass
+
+    def get_pause_button_y(self):
+        pass
+
+    def get_pause_button_width(self):
+        pass
+
+    def get_pause_button_height(self):
+        pass
+    def get_play_button_x(self):
+        pass
+
+    def get_play_button_y(self):
+        pass
+
+    def get_play_button_width(self):
+        pass
+
+    def get_play_button_height(self):
+        pass
+    def get_opensrc_button_x(self):
+        pass
+
+    def get_opensrc_button_y(self):
+        pass
+
+    def get_opensrc_button_width(self):
+        pass
+
+    def get_opensrc_button_height(self):
+        pass
+
+        
+
     def set_widgets(self):
 
         self.frame_label = Label(
