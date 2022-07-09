@@ -37,5 +37,5 @@ from funing.widgets.abc import *
 
 
 class InfoWidget(TextSubWidgetABC):
-    def __init__(self, mid_widget):
-        super().__init__(mid_widget)
+    def __init__(self, mw):
+        super().__init__(mw)

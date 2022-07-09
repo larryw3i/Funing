@@ -39,8 +39,8 @@ from funing.widgets.enum import *
 
 
 class FrameWidget(WidgetABC):
-    def __init__(self, mid_widget):
-        super().__init__(mid_widget)
+    def __init__(self, mw):
+        super().__init__(mw)
         self.src_frame_label = None
         self.src_frame_size = 25
         self.video_src = None
@@ -81,7 +81,7 @@ class FrameWidget(WidgetABC):
     def set_image_src(self):
         pass
 
-    def set_vid_frame(self,frame=25):
+    def set_vid_frame(self, frame=25):
         self.set_video_frame(frame)
 
     def set_video_frame(self, frame=25):
@@ -97,10 +97,10 @@ class FrameWidget(WidgetABC):
         pass
 
     def get_frame_label_x(self):
-        return self.parent.get_x()
+        return self.mw.get_x()
 
     def get_frame_label_y(self):
-        return self.parent.get_y()
+        return self.mw.get_y()
 
     def get_frame_label_width(self):
         return self.get_frame_label_max_width()
@@ -116,24 +116,20 @@ class FrameWidget(WidgetABC):
             background="red",
         )
         self.openfrom_combobox = ttk.Combobox(
-            self.canvas, textvariable=self.openfrom_combobox_var
+            self.root, textvariable=self.openfrom_combobox_var
         )
 
-        self.canvas.create_window(
-            self.get_frame_label_x(),
-            self.get_frame_label_y(),
-            window=self.openfrom_combobox,
-            anchor="center",
-            width=self.get_frame_label_width(),
-            height=self.get_frame_label_height(),
-        )
-        pass
+        self.opensrc_button = tk.Button(self.root, text=_("Open"))
+        self.play_button = tk.Button(self.root, text=_("Play"))
+        self.pause_button = tk.Button(self.root, text=_("Pause"))
+        self.pick_button = tk.Button(self.root, text=_("Pick"))
+        self.recog_button = tk.Button(self.root, text=_("Recognize"))
 
     def set_x(self):
         pass
 
     def get_x(self):
-        return self.canvas.get_x()
+        return self.mw.get_x()
 
     def get_y(self):
         return 0

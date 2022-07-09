@@ -40,7 +40,7 @@ from funing.widgets.frame import FrameWidget
 class Mid0Widget(MidWidgetABC):
     def __init__(self, mw):
         super().__init__(mw)
-        self.frame_widget = FrameWidget(self)
+        self.frame_widget = FrameWidget(self.mw)
         self.widgets = [self.frame_widget]
 
     def get_max_width(self):
