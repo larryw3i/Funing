@@ -81,6 +81,12 @@ class MidWidgetABC(WidgetABC):
         self.max_width = self.mw.default_xywh
         self.text = None
 
+    def get_text_widget(self):
+        return self.text
+
+    def get_text(self):
+        return self.get_text_widget()
+
     def set_x(self):
         pass
 
@@ -157,3 +163,9 @@ class TextSubWidgetABC(WidgetABC):
         super().__init__(self.mid_widget.mw)
         self.parent = self.parent_widget = self.mid_widget
         self.text = self.parent.text
+
+    def get_text_widget(self):
+        return self.mid_widget.get_text()
+
+    def get_text(self):
+        return self.get_text_widget()

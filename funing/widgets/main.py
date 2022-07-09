@@ -188,6 +188,7 @@ class MainWidget:
 
     def bind(self):
         self.root.bind("<Configure>", self.configure)
+        self.configure()
 
     def protocol(self):
         self.root.protocol("WM_DELETE_WINDOW", self.wm_delete_window_protocol)
@@ -200,7 +201,7 @@ class MainWidget:
         for w in self.widgets:
             w.place()
 
-    def configure(self, event):
+    def configure(self, event=None):
         self.place()
 
     def set_msg(self, label=None, msg=None):

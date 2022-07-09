@@ -90,7 +90,7 @@ class FrameWidget(TextSubWidgetABC):
 
     def get_max_height(self):
         return int(self.parent.get_text_height() * 0.8)
-    
+
     def get_frame_label_x(self):
         pass
 
@@ -104,8 +104,16 @@ class FrameWidget(TextSubWidgetABC):
         pass
 
     def set_widgets(self):
+        if not self.text:
+            self.text = self.get_text()
+
         self.frame_label = Label(self.text, text=_("Video frame label."))
-        self.openfrom_combobox = ttk.Combobox(self.text)
+        self.openfrom_combobox = ttk.Combobox(
+            self.text, textvariable=self.openfrom_combobox_var
+        )
+
+        self.text.window_create("end", window=self.frame_label)
+        self.text.window_create("end", window=self.openfrom_combobox)
         pass
 
     def set_x(self):
@@ -130,5 +138,4 @@ class FrameWidget(TextSubWidgetABC):
         pass
 
     def place(self):
-        
         pass

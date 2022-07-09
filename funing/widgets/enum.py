@@ -12,6 +12,7 @@ import threading
 import tkinter as tk
 import uuid
 import webbrowser
+from enum import Enum
 from functools import partial
 from importlib import import_module
 from itertools import zip_longest
@@ -39,6 +40,7 @@ from funing.widgets.abc import *
 class SRC_TYPE(Enum):
     VIDEO = 0
     IMAGE = 1
+
 
 class ACTION(Enum):
     PICK = 0

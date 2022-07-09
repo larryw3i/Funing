@@ -34,17 +34,22 @@ from funing.path import *
 from funing.settings import *
 from funing.settings4t import *
 from funing.widgets.abc import *
+from funing.widgets.frame import FrameWidget
 
 
 class Mid0Widget(MidWidgetABC):
     def __init__(self, mw):
         super().__init__(mw)
+        self.frame_widget = FrameWidget(self)
+        self.widgets = [self.frame_widget]
 
     def get_max_width(self):
         return self.mw.get_sep_x()
 
     def set_widgets(self):
         super().set_widgets()
+        for w in self.widgets:
+            w.set_widgets()
 
     def set_x(self):
         pass
@@ -66,4 +71,6 @@ class Mid0Widget(MidWidgetABC):
 
     def place(self):
         super().place()
+        for w in self.widgets:
+            w.place()
         pass
