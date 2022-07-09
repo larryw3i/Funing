@@ -156,16 +156,3 @@ class MidWidgetABC(WidgetABC):
         self.vscrollbar.configure(command=self.canvas.yview)
         self.canvas.config(yscrollcommand=self.vscrollbar.set)
 
-
-class TextSubWidgetABC(WidgetABC):
-    def __init__(self, mid_widget):
-        self.mid_widget = mid_widget
-        super().__init__(self.mid_widget.mw)
-        self.parent = self.parent_widget = self.mid_widget
-        self.canvas = self.parent.canvas
-
-    def get_canvas_widget(self):
-        return self.mid_widget.get_canvas()
-
-    def get_canvas(self):
-        return self.get_canvas_widget()

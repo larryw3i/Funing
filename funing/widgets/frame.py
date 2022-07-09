@@ -38,11 +38,11 @@ from funing.widgets.abc import *
 from funing.widgets.enum import *
 
 
-class FrameWidget(TextSubWidgetABC):
+class FrameWidget(WidgetABC):
     def __init__(self, mid_widget):
         super().__init__(mid_widget)
-        self.frame_label = None
-        self.frame_size = 25
+        self.src_frame_label = None
+        self.src_frame_size = 25
         self.video_src = None
         self.image_src = None
         self.openfrom_combobox_var = StringVar()
@@ -54,6 +54,8 @@ class FrameWidget(TextSubWidgetABC):
         self.recog_button = None
         self.image_exts = ["jpg", "png", "jpeg", "webp"]
         self.video_exts = ["mp4", "avi", "3gp", "webm", "mkv"]
+        self.src_type = None
+        self.action = None
 
     def play_video(self):
         pass
@@ -64,7 +66,7 @@ class FrameWidget(TextSubWidgetABC):
     def show_image(self):
         pass
 
-    def get_frame(self):
+    def get_src_frame(self):
         pass
 
     def get_video_src(self):
@@ -79,17 +81,20 @@ class FrameWidget(TextSubWidgetABC):
     def set_image_src(self):
         pass
 
-    def set_frame_size(self, frame=25):
+    def set_vid_frame(self,frame=25):
+        self.set_video_frame(frame)
+
+    def set_video_frame(self, frame=25):
         self.frame_size = frame
 
-    def get_frame_size(self):
-        return self.frame_size
+    def get_src_frame_size(self):
+        return self.src_frame_size
 
     def get_frame_label_max_width(self):
-        return self.parent.get_canvas_width()
+        pass
 
     def get_frame_label_max_height(self):
-        return int(self.parent.get_canvas_height() * 0.5)
+        pass
 
     def get_frame_label_x(self):
         return self.parent.get_x()
@@ -104,15 +109,11 @@ class FrameWidget(TextSubWidgetABC):
         return self.get_frame_label_max_height()
 
     def set_widgets(self):
-        if not self.canvas:
-            self.canvas = self.get_canvas()
 
         self.frame_label = Label(
-            self.canvas,
+            self.root,
             text=_("Video frame label."),
             background="red",
-            justify="center",
-            anchor="center",
         )
         self.openfrom_combobox = ttk.Combobox(
             self.canvas, textvariable=self.openfrom_combobox_var
@@ -121,7 +122,7 @@ class FrameWidget(TextSubWidgetABC):
         self.canvas.create_window(
             self.get_frame_label_x(),
             self.get_frame_label_y(),
-            window=self.frame_label,
+            window=self.openfrom_combobox,
             anchor="center",
             width=self.get_frame_label_width(),
             height=self.get_frame_label_height(),
