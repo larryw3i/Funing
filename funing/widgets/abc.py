@@ -79,13 +79,13 @@ class MidWidgetABC(WidgetABC):
     def __init__(self, mw):
         super().__init__(mw)
         self.max_width = self.mw.default_xywh
-        self.text = None
+        self.canvas = None
 
-    def get_text_widget(self):
-        return self.text
+    def get_canvas_widget(self):
+        return self.canvas
 
-    def get_text(self):
-        return self.get_text_widget()
+    def get_canvas(self):
+        return self.get_canvas_widget()
 
     def set_x(self):
         pass
@@ -118,34 +118,34 @@ class MidWidgetABC(WidgetABC):
         return self.get_height()
 
     def get_vscrollbar_x(self):
-        return int(self.get_x() + self.get_text_width())
+        return int(self.get_x() + self.get_canvas_width())
 
     def get_vscrollbar_y(self):
         return 0
 
-    def get_text_width(self):
+    def get_canvas_width(self):
         return int(self.get_width() - self.get_vscrollbar_width())
 
-    def get_text_height(self):
+    def get_canvas_height(self):
         return self.get_vscrollbar_height()
 
-    def get_text_x(self):
+    def get_canvas_x(self):
         return int(self.get_x())
 
-    def get_text_y(self):
+    def get_canvas_y(self):
         return int(self.get_y())
 
     def set_widgets(self):
         super().set_widgets()
-        self.text = tk.Text(self.root)
+        self.canvas = tk.Canvas(self.root)
         self.vscrollbar = Scrollbar(self.root, orient="vertical")
 
     def place(self):
-        self.text.place(
-            x=self.get_text_x(),
-            y=self.get_text_y(),
-            width=self.get_text_width(),
-            height=self.get_text_height(),
+        self.canvas.place(
+            x=self.get_canvas_x(),
+            y=self.get_canvas_y(),
+            width=self.get_canvas_width(),
+            height=self.get_canvas_height(),
         )
         self.vscrollbar.place(
             x=self.get_vscrollbar_x(),
@@ -153,8 +153,8 @@ class MidWidgetABC(WidgetABC):
             width=self.get_vscrollbar_width(),
             height=self.get_vscrollbar_height(),
         )
-        self.vscrollbar.configure(command=self.text.yview)
-        self.text.config(yscrollcommand=self.vscrollbar.set)
+        self.vscrollbar.configure(command=self.canvas.yview)
+        self.canvas.config(yscrollcommand=self.vscrollbar.set)
 
 
 class TextSubWidgetABC(WidgetABC):
@@ -162,10 +162,10 @@ class TextSubWidgetABC(WidgetABC):
         self.mid_widget = mid_widget
         super().__init__(self.mid_widget.mw)
         self.parent = self.parent_widget = self.mid_widget
-        self.text = self.parent.text
+        self.canvas = self.parent.canvas
 
-    def get_text_widget(self):
-        return self.mid_widget.get_text()
+    def get_canvas_widget(self):
+        return self.mid_widget.get_canvas()
 
-    def get_text(self):
-        return self.get_text_widget()
+    def get_canvas(self):
+        return self.get_canvas_widget()

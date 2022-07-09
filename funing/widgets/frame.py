@@ -85,42 +85,54 @@ class FrameWidget(TextSubWidgetABC):
     def get_frame_size(self):
         return self.frame_size
 
-    def get_max_width(self):
-        return self.parent.get_text_width()
+    def get_frame_label_max_width(self):
+        return self.parent.get_canvas_width()
 
-    def get_max_height(self):
-        return int(self.parent.get_text_height() * 0.8)
+    def get_frame_label_max_height(self):
+        return int(self.parent.get_canvas_height() * 0.5)
 
     def get_frame_label_x(self):
-        pass
+        return self.parent.get_x()
 
     def get_frame_label_y(self):
-        pass
+        return self.parent.get_y()
 
     def get_frame_label_width(self):
-        pass
+        return self.get_frame_label_max_width()
 
     def get_frame_label_height(self):
-        pass
+        return self.get_frame_label_max_height()
 
     def set_widgets(self):
-        if not self.text:
-            self.text = self.get_text()
+        if not self.canvas:
+            self.canvas = self.get_canvas()
 
-        self.frame_label = Label(self.text, text=_("Video frame label."))
+        self.frame_label = Label(
+            self.canvas,
+            text=_("Video frame label."),
+            background="red",
+            justify="center",
+            anchor="center",
+        )
         self.openfrom_combobox = ttk.Combobox(
-            self.text, textvariable=self.openfrom_combobox_var
+            self.canvas, textvariable=self.openfrom_combobox_var
         )
 
-        self.text.window_create("end", window=self.frame_label)
-        self.text.window_create("end", window=self.openfrom_combobox)
+        self.canvas.create_window(
+            self.get_frame_label_x(),
+            self.get_frame_label_y(),
+            window=self.frame_label,
+            anchor="center",
+            width=self.get_frame_label_width(),
+            height=self.get_frame_label_height(),
+        )
         pass
 
     def set_x(self):
         pass
 
     def get_x(self):
-        return self.text.get_x()
+        return self.canvas.get_x()
 
     def get_y(self):
         return 0
