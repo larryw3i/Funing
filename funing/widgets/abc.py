@@ -79,6 +79,7 @@ class MidWidgetABC(WidgetABC):
     def __init__(self, mw):
         super().__init__(mw)
         self.max_width = self.mw.default_xywh
+        self.text = None
 
     def set_x(self):
         pass
@@ -105,7 +106,7 @@ class MidWidgetABC(WidgetABC):
         return int(self.mw.get_height() - self.mw.get_bottom_height())
 
     def get_vscrollbar_width(self):
-        return int(self.vscrollbar.winfo_reqwidth())
+        return int(self.vscrollbar.winfo_reqwidth() * 0.8)
 
     def get_vscrollbar_height(self):
         return self.get_height()
@@ -151,7 +152,8 @@ class MidWidgetABC(WidgetABC):
 
 
 class TextSubWidgetABC(WidgetABC):
-    def __init__(self, mw, mid_widget):
-        super().__init__(mw)
-        self.parent = self.parent_widget = self.mid_widget = mid_widget
+    def __init__(self, mid_widget):
+        self.mid_widget = mid_widget
+        super().__init__(self.mid_widget.mw)
+        self.parent = self.parent_widget = self.mid_widget
         self.text = self.parent.text

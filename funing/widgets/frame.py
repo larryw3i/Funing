@@ -12,6 +12,7 @@ import threading
 import tkinter as tk
 import uuid
 import webbrowser
+from enum import Enum
 from functools import partial
 from importlib import import_module
 from itertools import zip_longest
@@ -34,12 +35,13 @@ from funing.path import *
 from funing.settings import *
 from funing.settings4t import *
 from funing.widgets.abc import *
+from funing.widgets.enum import *
 
 
 class FrameWidget(TextSubWidgetABC):
-    def __init__(self, mw, mid_widget):
-        super().__init__(mw, mid_widget)
-        self.label = None
+    def __init__(self, mid_widget):
+        super().__init__(mid_widget)
+        self.frame_label = None
         self.frame_size = 25
         self.video_src = None
         self.image_src = None
@@ -50,6 +52,8 @@ class FrameWidget(TextSubWidgetABC):
         self.pause_button = None
         self.pick_button = None
         self.recog_button = None
+        self.image_exts = ["jpg", "png", "jpeg", "webp"]
+        self.video_exts = ["mp4", "avi", "3gp", "webm", "mkv"]
 
     def play_video(self):
         pass
@@ -86,9 +90,21 @@ class FrameWidget(TextSubWidgetABC):
 
     def get_max_height(self):
         return int(self.parent.get_text_height() * 0.8)
+    
+    def get_frame_label_x(self):
+        pass
+
+    def get_frame_label_y(self):
+        pass
+
+    def get_frame_label_width(self):
+        pass
+
+    def get_frame_label_height(self):
+        pass
 
     def set_widgets(self):
-        self.label = Label(self.text, text=_("Video frame label."))
+        self.frame_label = Label(self.text, text=_("Video frame label."))
         self.openfrom_combobox = ttk.Combobox(self.text)
         pass
 
@@ -114,4 +130,5 @@ class FrameWidget(TextSubWidgetABC):
         pass
 
     def place(self):
+        
         pass

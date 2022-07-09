@@ -36,6 +36,36 @@ from funing.settings4t import *
 from funing.widgets.abc import *
 
 
-class InfoWidget(TextSubWidgetABC):
-    def __init__(self, mid_widget):
-        super().__init__(mid_widget)
+class Mid1Widget(MidWidgetABC):
+    def __init__(self, mw):
+        super().__init__(mw)
+
+    def get_max_width(self):
+        return int(
+            self.mw.get_width() - self.mw.get_sep_x() - self.mw.get_sep_width()
+        )
+
+    def set_widgets(self):
+        super().set_widgets()
+
+    def set_x(self):
+        pass
+
+    def get_x(self):
+        return int(self.mw.get_sep_x() + self.mw.get_sep_width())
+
+    def set_y(self):
+        pass
+
+    def set_width(self):
+        pass
+
+    def get_width(self):
+        return self.get_max_width()
+
+    def set_height(self):
+        pass
+
+    def place(self):
+        super().place()
+        pass

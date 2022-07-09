@@ -23,8 +23,9 @@ user_config_dir_path = user_config_dir(app_name, app_author[0])
 
 project_path = os.path.abspath(os.path.dirname(__file__))
 copy_path = os.path.join(user_data_dir_path, "copy.pkl")
+info_dir_path = os.path.join(user_data_dir_path, "info")
 
-for d in [user_data_dir_path, user_config_dir_path]:
+for d in [user_data_dir_path, user_config_dir_path,info_dir_path]:
     if not os.path.exists(d):
         os.makedirs(d, exist_ok=True)
 

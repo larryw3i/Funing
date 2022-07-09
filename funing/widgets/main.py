@@ -34,8 +34,8 @@ from funing.path import *
 from funing.settings import *
 from funing.settings4t import *
 from funing.widgets.bottom import BottomWidget
-from funing.widgets.left import LeftWidget
-from funing.widgets.right import RightWidget
+from funing.widgets.mid0 import Mid0Widget
+from funing.widgets.mid1 import Mid1Widget
 from funing.widgets.seperator import SeperatorWidget
 from funing.widgets.top import TopWidget
 
@@ -51,15 +51,15 @@ class MainWidget:
         self._copy = {}
         self.top_widget = TopWidget(self)
         self.bottom_widget = BottomWidget(self)
-        self.left_widget = LeftWidget(self)
-        self.right_widget = RightWidget(self)
+        self.mid0_widget = Mid0Widget(self)
+        self.mid1_widget = Mid1Widget(self)
         self.sep_widget = SeperatorWidget(self)
         self.widgets = [
             self.top_widget,
             self.bottom_widget,
             self.sep_widget,
-            self.left_widget,
-            self.right_widget,
+            self.mid0_widget,
+            self.mid1_widget,
         ]
 
     def set_title(self, title=None):

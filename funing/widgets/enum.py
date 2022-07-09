@@ -36,34 +36,10 @@ from funing.settings4t import *
 from funing.widgets.abc import *
 
 
-class LeftWidget(MidWidgetABC):
-    def __init__(self, mw):
-        super().__init__(mw)
+class SRC_TYPE(Enum):
+    VIDEO = 0
+    IMAGE = 1
 
-    def get_max_width(self):
-        return self.mw.get_sep_x()
-
-    def set_widgets(self):
-        super().set_widgets()
-
-    def set_x(self):
-        pass
-
-    def get_x(self):
-        return 0
-
-    def set_y(self):
-        pass
-
-    def set_width(self):
-        pass
-
-    def get_width(self):
-        return int(self.mw.get_sep_x())
-
-    def set_height(self):
-        pass
-
-    def place(self):
-        super().place()
-        pass
+class ACTION(Enum):
+    PICK = 0
+    RECOG = 1
