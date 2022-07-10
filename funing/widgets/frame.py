@@ -42,9 +42,13 @@ class FrameWidget(WidgetABC):
     def __init__(self, mw):
         super().__init__(mw)
         self.src_frame_label = None
-        self.src_frame_size = 25
+        self.src_frame_size = None
         self.video_src = None
+        self.video_frame_fps = None
+        self.video_exts = ["mp4", "avi", "3gp", "webm", "mkv"]
+        self.video_signal = VIDEO_SIGNAL.PAUSE
         self.image_src = None
+        self.image_exts = ["jpg", "png", "jpeg", "webp"]
         self.openfrom_combobox_var = StringVar()
         self.openfrom_Combobox = None
         self.opensrc_button = None
@@ -53,8 +57,6 @@ class FrameWidget(WidgetABC):
         self.pick_button = None
         self.recog_button = None
         self.oper_widgets = None
-        self.image_exts = ["jpg", "png", "jpeg", "webp"]
-        self.video_exts = ["mp4", "avi", "3gp", "webm", "mkv"]
         self.src_type = None
         self.action = None
         self.oper_widgets_x_list = None
@@ -62,6 +64,11 @@ class FrameWidget(WidgetABC):
         self.oper_widgets_width = None
         self.oper_widgets_height = None
         self.oper_widgets_margin = 2
+        self.oper_widget_min_height = None
+
+    def video_switch_signal(self):
+        pass
+        
 
     def set_oper_widgets_width_list(self):
         prev_width = width = self.get_oper_widgets()[0].winfo_reqwidth()
@@ -123,36 +130,42 @@ class FrameWidget(WidgetABC):
         if not self.oper_widgets:
             self.set_oper_widgets()
         return self.oper_widgets
-
-    def play_video(self):
+    
+    def video_refresh_frame(self):
+        pass
+    
+    def video_pause_frame(self):
         pass
 
-    def pause_video(self):
+    def video_play(self):
         pass
 
-    def show_image(self):
+    def video_pause(self):
+        pass
+
+    def image_show(self):
         pass
 
     def get_src_frame(self):
         pass
 
-    def get_video_src(self):
+    def video_get_src(self):
         pass
 
-    def set_video_src(self):
+    def video_set_src(self):
         pass
 
-    def get_image_src(self):
+    def image_get_src(self):
         pass
 
-    def set_image_src(self):
+    def image_set_src(self):
         pass
 
-    def set_vid_frame(self, frame=25):
-        self.set_video_frame(frame)
+    def video_set_frame_fps(self, fps=25):
+        pass
 
-    def set_video_frame(self, frame=25):
-        self.frame_size = frame
+    def video_set_frame_size(self, size=None):
+        self.frame_size = size
 
     def get_src_frame_size(self):
         return self.src_frame_size
@@ -230,16 +243,24 @@ class FrameWidget(WidgetABC):
         self.pick_button = tk.Button(self.root, text=_("Pick"))
         self.recog_button = tk.Button(self.root, text=_("Recognize"))
 
+    def set_oper_widget_min_height(self):
+        self.oper_widget_min_height = (
+            max(w.winfo_reqheight() for w in self.get_oper_widgets())
+            + self.get_oper_widgets_margin()
+        )
+
+    def get_oper_widget_min_height(self):
+        if not self.oper_widget_min_height:
+            self.set_oper_widget_min_height()
+        return self.oper_widget_min_height
+
     def oper_widgets_place(self):
         widgets = self.get_oper_widgets()
         width_list = self.get_oper_widgets_width_list()
         width_index = 0
         x = int((self.get_width() - width_list[width_index]) / 2)
         y = self.get_frame_label_height() + self.get_oper_widgets_margin()
-        min_y = (
-            max(w.winfo_reqheight() for w in widgets)
-            + self.get_oper_widgets_margin()
-        )
+        min_y = self.get_oper_widget_min_height()
         prev_widget = widgets[0]
         prev_widget.place(x=x, y=y)
         for w in widgets[1:]:
