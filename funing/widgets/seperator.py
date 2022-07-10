@@ -45,7 +45,7 @@ class SeperatorWidget(WidgetABC):
         self.min_margin = 10
 
     def seperator_button1_motion_bind(self, event):
-        self.set_seperator_x_by_mouse
+        self.set_seperator_x_by_mouse()
 
     def set_seperator_x_by_mouse(self):
         pointerx = self.root.winfo_pointerx()
@@ -66,9 +66,7 @@ class SeperatorWidget(WidgetABC):
         self.seperator = ttk.Separator(
             self.root, orient="vertical", cursor="sizing"
         )
-        self.seperator.bind(
-            "<ButtonRelease-1>", self.seperator_buttonrelease1_bind
-        )
+        self.seperator.bind("<B1-Motion>", self.seperator_button1_motion_bind)
         self.seperator.bind("<Button-3>", self.seperator_button2_bind)
 
     def get_x(self):
