@@ -21,7 +21,7 @@ from pathlib import Path
 from queue import Queue
 from threading import Thread
 from tkinter import *
-from tkinter import ttk
+from tkinter import filedialog, ttk
 
 import cv2
 import yaml
@@ -43,13 +43,15 @@ class FrameWidget(WidgetABC):
         super().__init__(mw)
         self.src_frame_label = None
         self.src_frame_size = None
-        self.video_src = None
+        self.video_src_path = None
         self.video_frame_fps = None
         self.video_exts = ["mp4", "avi", "3gp", "webm", "mkv"]
         self.video_signal = VIDEO_SIGNAL.PAUSE
-        self.image_src = None
+        self.image_src_path = None
         self.image_exts = ["jpg", "png", "jpeg", "webp"]
         self.openfrom_combobox_var = StringVar()
+        self.openfrom_combobox_file_str = _("File")
+        self.openfrom_combobox_camera_str = _("Camera")
         self.openfrom_Combobox = None
         self.opensrc_button = None
         self.play_button = None
@@ -68,7 +70,6 @@ class FrameWidget(WidgetABC):
 
     def video_switch_signal(self):
         pass
-        
 
     def set_oper_widgets_width_list(self):
         prev_width = width = self.get_oper_widgets()[0].winfo_reqwidth()
@@ -130,10 +131,10 @@ class FrameWidget(WidgetABC):
         if not self.oper_widgets:
             self.set_oper_widgets()
         return self.oper_widgets
-    
+
     def video_refresh_frame(self):
         pass
-    
+
     def video_pause_frame(self):
         pass
 
@@ -149,17 +150,19 @@ class FrameWidget(WidgetABC):
     def get_src_frame(self):
         pass
 
-    def video_get_src(self):
-        pass
+    def video_get_src_path(self):
+        return self.video_src_path
 
-    def video_set_src(self):
-        pass
+    def video_set_src_path(self,src_path):
+        self.video_src_path = src_path
+        self.image_src_path = None
 
-    def image_get_src(self):
-        pass
+    def image_get_src_path(self):
+        return self.image_src_path
 
-    def image_set_src(self):
-        pass
+    def image_set_src_path(self,src_path):
+        self.image_src_path = src_path
+        self.video_src_path  =None
 
     def video_set_frame_fps(self, fps=25):
         pass
@@ -224,8 +227,60 @@ class FrameWidget(WidgetABC):
     def get_height(self):
         return int(self.mw.get_height() - self.mw.get_bottom_height())
 
-    def set_widgets(self):
+    def video_refresh_frame_via_camera(self):
+        pass
 
+    def filepath_is_video_type(self, path):
+        return any(path.endswith(ext) for ext in self.video_exts)
+
+    def filepath_is_image_type(self, path):
+        return any(path.endswith(ext) for ext in self.image_exts)
+
+    def open_filedialog(self):
+        src_path = filedialog.askopenfilename(
+            initialdir="~/Videos",
+            title=_("Select video or image file"),
+            filetypes=[
+                ("", f"*.{ext}") for ext in self.video_exts + self.image_exts
+            ],
+        )
+        if self.filepath_is_image_type(src_path):
+            self.video_set_src
+        elif self.filepath_is_video_type(src_path):
+            pass
+        else:
+            return
+        self.openfrom_combobox_var.set(src_path)
+
+    def openfrom_combobox_var_trace_w(self, *args):
+        openfrom_combobox_get = self.openfrom_combobox_var.get()
+        if openfrom_combobox_get == self.openfrom_combobox_camera_str:
+            self.video_refresh_frame_via_camera()
+        elif openfrom_combobox_get == self.openfrom_combobox_file_str:
+            self.open_filedialog()
+
+    def opensrc_button_command(self):
+        pass
+
+    def play_button_command(self):
+        pass
+
+    def pause_button_command(self):
+        pass
+
+    def pick_button_command(self):
+        pass
+
+    def recog_button_command(self):
+        pass
+
+    def get_openfrom_combobox_values(self):
+        return [
+            self.openfrom_combobox_file_str,
+            self.openfrom_combobox_camera_str,
+        ]
+
+    def set_widgets(self):
         self.frame_label = Label(
             self.root,
             text=_("Video frame."),
@@ -234,14 +289,28 @@ class FrameWidget(WidgetABC):
             justify="center",
         )
         self.openfrom_combobox = ttk.Combobox(
-            self.root, textvariable=self.openfrom_combobox_var
+            self.root,
+            textvariable=self.openfrom_combobox_var,
+            values=self.get_openfrom_combobox_values(),
         )
-
-        self.opensrc_button = tk.Button(self.root, text=_("Open"))
-        self.play_button = tk.Button(self.root, text=_("Play"))
-        self.pause_button = tk.Button(self.root, text=_("Pause"))
-        self.pick_button = tk.Button(self.root, text=_("Pick"))
-        self.recog_button = tk.Button(self.root, text=_("Recognize"))
+        self.openfrom_combobox_var.trace(
+            "w", self.openfrom_combobox_var_trace_w
+        )
+        self.opensrc_button = tk.Button(
+            self.root, text=_("Open"), command=self.opensrc_button_command
+        )
+        self.play_button = tk.Button(
+            self.root, text=_("Play"), command=self.play_button_command
+        )
+        self.pause_button = tk.Button(
+            self.root, text=_("Pause"), command=self.pause_button_command
+        )
+        self.pick_button = tk.Button(
+            self.root, text=_("Pick"), command=self.pick_button_command
+        )
+        self.recog_button = tk.Button(
+            self.root, text=_("Recognize"), command=self.recog_button_command
+        )
 
     def set_oper_widget_min_height(self):
         self.oper_widget_min_height = (

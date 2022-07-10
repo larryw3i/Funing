@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funing 0.2.44\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-07 08:52+0800\n"
-"PO-Revision-Date: 2022-07-07 08:55+0800\n"
+"POT-Creation-Date: 2022-07-10 19:02+0800\n"
+"PO-Revision-Date: 2022-07-10 19:04+0800\n"
 "Last-Translator: larry <larryw3i@163.com>\n"
 "Language-Team: Chinese (Simplified) <larryw3i@163.com>\n"
 "Language: zh_CHS\n"
@@ -33,7 +33,7 @@ msgstr "一个人脸识别 GUI "
 
 #: funing/.lwcp/fui/main_ui.py:20 funing/.lwcp/_fui/_main_ui.py:121
 #: funing/.lwcp/ui/main_ui.py:20 funing/settings4t.py:10
-#: funing/widgets/main.py:47
+#: funing/widgets/main.py:47 funing/widgets/main.py:49
 msgid "Funing"
 msgstr "Funing"
 
@@ -53,7 +53,7 @@ msgid "Camera"
 msgstr "摄像头"
 
 #: funing/.lwcp/fui/main_ui.py:50 funing/.lwcp/ui/c_ui.py:22
-#: funing/.lwcp/ui/main_ui.py:79
+#: funing/.lwcp/ui/main_ui.py:79 funing/widgets/frame.py:239
 msgid "Open"
 msgstr "打开"
 
@@ -64,15 +64,16 @@ msgstr "误差（0.1-0.6）"
 
 #: funing/.lwcp/fui/main_ui.py:63 funing/.lwcp/_fui/_main_ui.py:189
 #: funing/.lwcp/ui/c_ui.py:37 funing/.lwcp/ui/main_ui.py:92
+#: funing/widgets/frame.py:241
 msgid "Pause"
 msgstr "暂停"
 
-#: funing/.lwcp/fui/main_ui.py:66
+#: funing/.lwcp/fui/main_ui.py:66 funing/widgets/frame.py:243
 msgid "Recognize"
 msgstr "识别"
 
 #: funing/.lwcp/fui/main_ui.py:69 funing/.lwcp/ui/c_ui.py:40
-#: funing/.lwcp/ui/main_ui.py:95
+#: funing/.lwcp/ui/main_ui.py:95 funing/widgets/frame.py:242
 msgid "Pick"
 msgstr "获取"
 
@@ -100,7 +101,7 @@ msgstr "亲, 好像没有检测到显示器哦! "
 msgid "Licensed under the MIT license"
 msgstr "本项目以MIT开源协议授权。"
 
-#: funing/.lwcp/_fui/_main_ui.py:195
+#: funing/.lwcp/_fui/_main_ui.py:195 funing/widgets/frame.py:240
 msgid "Play"
 msgstr "继续"
 
@@ -156,13 +157,13 @@ msgstr "你好，富宁！"
 msgid "About"
 msgstr "关于"
 
-#: funing/widgets/main.py:165
+#: funing/widgets/main.py:165 funing/widgets/main.py:175
 msgid "Copy Saved!"
 msgstr "备份被保存！"
 
 #: funing/widgets/bottom.py:46
 msgid "Hello, Welcome to Funing."
-msgstr "你好，富宁欢迎您！"
+msgstr "你好，Funing 欢迎您！"
 
 #: funing/widgets/bottom.py:75
 msgid "Hello!"
@@ -179,6 +180,10 @@ msgstr "作者："
 #: funing/widgets/about.py:178
 msgid "Contributors:"
 msgstr "贡献者："
+
+#: funing/widgets/frame.py:230
+msgid "Video frame."
+msgstr "视频帧。"
 
 #~ msgid "%page_num%"
 #~ msgstr "%page_num%"
@@ -209,9 +214,6 @@ msgstr "贡献者："
 
 #~ msgid "source code"
 #~ msgstr "源码"
-
-#~ msgid "video frame"
-#~ msgstr "视频帧"
 
 #~ msgid "Data"
 #~ msgstr "数据"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-07 08:55+0800\n"
+"POT-Creation-Date: 2022-07-10 19:02+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,7 +31,7 @@ msgstr ""
 
 #: funing/.lwcp/fui/main_ui.py:20 funing/.lwcp/_fui/_main_ui.py:121
 #: funing/.lwcp/ui/main_ui.py:20 funing/settings4t.py:10
-#: funing/widgets/main.py:47
+#: funing/widgets/main.py:47 funing/widgets/main.py:49
 msgid "Funing"
 msgstr ""
 
@@ -51,7 +51,7 @@ msgid "Camera"
 msgstr ""
 
 #: funing/.lwcp/fui/main_ui.py:50 funing/.lwcp/ui/c_ui.py:22
-#: funing/.lwcp/ui/main_ui.py:79
+#: funing/.lwcp/ui/main_ui.py:79 funing/widgets/frame.py:239
 msgid "Open"
 msgstr ""
 
@@ -62,15 +62,16 @@ msgstr ""
 
 #: funing/.lwcp/fui/main_ui.py:63 funing/.lwcp/_fui/_main_ui.py:189
 #: funing/.lwcp/ui/c_ui.py:37 funing/.lwcp/ui/main_ui.py:92
+#: funing/widgets/frame.py:241
 msgid "Pause"
 msgstr ""
 
-#: funing/.lwcp/fui/main_ui.py:66
+#: funing/.lwcp/fui/main_ui.py:66 funing/widgets/frame.py:243
 msgid "Recognize"
 msgstr ""
 
 #: funing/.lwcp/fui/main_ui.py:69 funing/.lwcp/ui/c_ui.py:40
-#: funing/.lwcp/ui/main_ui.py:95
+#: funing/.lwcp/ui/main_ui.py:95 funing/widgets/frame.py:242
 msgid "Pick"
 msgstr ""
 
@@ -96,7 +97,7 @@ msgstr ""
 msgid "Licensed under the MIT license"
 msgstr ""
 
-#: funing/.lwcp/_fui/_main_ui.py:195
+#: funing/.lwcp/_fui/_main_ui.py:195 funing/widgets/frame.py:240
 msgid "Play"
 msgstr ""
 
@@ -152,7 +153,7 @@ msgstr ""
 msgid "About"
 msgstr ""
 
-#: funing/widgets/main.py:165
+#: funing/widgets/main.py:165 funing/widgets/main.py:175
 msgid "Copy Saved!"
 msgstr ""
 
@@ -174,4 +175,8 @@ msgstr ""
 
 #: funing/widgets/about.py:178
 msgid "Contributors:"
+msgstr ""
+
+#: funing/widgets/frame.py:230
+msgid "Video frame."
 msgstr ""
