@@ -74,9 +74,13 @@ class SeperatorWidget(WidgetABC):
     def get_x(self):
         x_copy = self.get_copy(self._x_copy_str, None)
         self._x = (
-            x_copy * self.mw.get_width() if x_copy else self.mw.get_width(of=2)
+            (x_copy * self.mw.get_width())
+            if x_copy
+            else self.mw.get_width(of=2)
         )
-
+        if self._x < 1:
+            print("self.mw.get_width()", self.mw.get_width())
+            print("sep_x", self._x)
         return int(self._x)
 
     def set_x(self, x, update_place=True):

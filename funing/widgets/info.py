@@ -36,6 +36,6 @@ from funing.settings4t import *
 from funing.widgets.abc import *
 
 
-class InfoWidget(TextSubWidgetABC):
+class InfoWidget(WidgetABC):
     def __init__(self, mw):
         super().__init__(mw)

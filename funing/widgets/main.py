@@ -34,6 +34,8 @@ from funing.path import *
 from funing.settings import *
 from funing.settings4t import *
 from funing.widgets.bottom import BottomWidget
+from funing.widgets.frame import FrameWidget
+from funing.widgets.info import InfoWidget
 from funing.widgets.mid0 import Mid0Widget
 from funing.widgets.mid1 import Mid1Widget
 from funing.widgets.seperator import SeperatorWidget
@@ -51,15 +53,15 @@ class MainWidget:
         self._copy = {}
         self.top_widget = TopWidget(self)
         self.bottom_widget = BottomWidget(self)
-        self.mid0_widget = Mid0Widget(self)
-        self.mid1_widget = Mid1Widget(self)
+        self.frame_widget = FrameWidget(self)
+        self.info_widget = InfoWidget(self)
         self.sep_widget = SeperatorWidget(self)
         self.widgets = [
             self.top_widget,
             self.bottom_widget,
             self.sep_widget,
-            self.mid0_widget,
-            self.mid1_widget,
+            self.frame_widget,
+            self.info_widget,
         ]
 
     def set_title(self, title=None):
@@ -120,17 +122,19 @@ class MainWidget:
         )
 
     def get_width(self, of=1):
+        root_width = self.root.winfo_width()
         self._width = (
             self.get_screenwidth(of=2)
-            if self._width == self.default_xywh
+            if (self._width == self.default_xywh or root_width == 1)
             else self.root.winfo_width()
         )
         return int(self._width / of)
 
     def get_height(self, of=1):
+        root_height = self.root.winfo_height()
         self._height = (
             self.get_screenheight(of=2)
-            if self._height == self.default_xywh
+            if (self._height == self.default_xywh or root_height == 1)
             else self.root.winfo_height()
         )
         return int(self._height / of)
