@@ -28,6 +28,8 @@ import yaml
 from appdirs import user_data_dir
 from cv2.data import haarcascades
 from cv2.face import EigenFaceRecognizer_create
+from PIL import Image, ImageTk
+from PIL.Image import fromarray as pil_image_fromarray
 
 from funing.abc import *
 from funing.locale import _
@@ -54,6 +56,7 @@ class FrameWidget(WidgetABC):
         self.video_frame_fxfy = None
         self.video_frame_width = None
         self.video_frame_height = None
+        self.video_refresh_time = None
         self.image_src_path = None
         self.image_exts = ["jpg", "png", "jpeg", "webp"]
         self.image_size = None
@@ -78,6 +81,14 @@ class FrameWidget(WidgetABC):
         self.oper_widgets_margin = 2
         self.oper_widget_min_height = None
 
+    def set_video_refresh_time(self):
+        self.video_refresh_time = int(1000 / self.get_video_frame_fps())
+
+    def get_video_refresh_time(self):
+        if not self.video_refresh_time:
+            self.set_video_refresh_time()
+        return self.video_refresh_time
+
     def get_recognizer(self):
         if not self.face_recognizer:
             self.set_face_recognizer()
@@ -95,7 +106,10 @@ class FrameWidget(WidgetABC):
         hff_xml_path = os.path.join(
             haarcascades, "haarcascade_frontalface_default.xml"
         )
-        self.face_casecade = cv2.CascadeClassifier(self.hff_xml_path)
+        if not os.path.exists(hff_xml_path):
+            self.mw.set_msg(_("haarcascades data doesn't exist."))
+            self.release_video_capture()
+        self.face_casecade = cv2.CascadeClassifier(hff_xml_path)
 
     def get_face_casecade(self):
         if not self.face_casecade:
@@ -103,7 +117,10 @@ class FrameWidget(WidgetABC):
         return self.face_casecade
 
     def switch_video_signal(self):
-        pass
+        if self.video_signal == VIDEO_SIGNAL.PAUSE:
+            self.video_signal = REFRESH
+        elif self.video_signal == VIDEO_SIGNAL.REFRESH:
+            self.video_signal = PAUSE
 
     def set_oper_widgets_width_list(self):
         prev_width = width = self.get_oper_widgets()[0].winfo_reqwidth()
@@ -170,7 +187,7 @@ class FrameWidget(WidgetABC):
         self.update_video_frame()
 
     def pause_video_frame(self):
-        pass
+        self.stop_video_frame()
 
     def play_video(self):
         self.video_signal = VIDEO_SIGNAL.REFRESH
@@ -229,23 +246,23 @@ class FrameWidget(WidgetABC):
             self.set_video_frame_size()
         return self.video_frame_size
 
-    def get_frame_label_max_width(self):
+    def get_video_frame_label_max_width(self):
         return int(self.get_width())
 
-    def get_frame_label_max_height(self):
+    def get_video_frame_label_max_height(self):
         return int(self.get_height() * 0.5)
 
-    def get_frame_label_x(self):
+    def get_video_frame_label_x(self):
         return self.get_x()
 
-    def get_frame_label_y(self):
+    def get_video_frame_label_y(self):
         return self.get_y()
 
     def get_video_frame_label_width(self):
-        return self.get_frame_label_max_width()
+        return self.get_video_frame_label_max_width()
 
     def get_video_frame_label_height(self):
-        return self.get_frame_label_max_height()
+        return self.get_video_frame_label_max_height()
 
     def get_openfrom_combobox_x(self):
         pass
@@ -312,15 +329,15 @@ class FrameWidget(WidgetABC):
         self.video_update_identifier = None
 
     def set_video_frame_fxfy(self):
-        w = self.get_frame_label_width() / 2
-        h = self.get_frame_label_height() / 2
+        w = self.get_video_frame_label_width() / 2
+        h = self.get_video_frame_label_height() / 2
         r = w / h
-        r0 = self.video_frame / self.vid_height
+        r0 = self.get_video_frame_width() / self.get_video_frame_height()
         r1 = r0 / r
         self.video_frame_fxfy = (
             h / self.get_video_frame_height()
             if r1 < r
-            else w / self.get_video_frame_height()
+            else w / self.get_video_frame_width()
         )
 
     def get_video_frame_fxfy(self):
@@ -328,30 +345,37 @@ class FrameWidget(WidgetABC):
             self.set_video_frame_fxfy()
         return self.video_frame_fxfy
 
-    def update_video_frame(self):
-        video_capture = self.get_video_capture()
+    def show_video_frame(self):
+        frame = self.video_frame
         face_casecade = self.get_face_casecade()
         video_frame_fxfy = self.get_video_frame_fxfy()
+        gray_img = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        rects = face_casecade.detectMultiScale(gray_img, 1.3, 5)
+        for (x, y, w, h) in rects:
+            frame = cv2.rectangle(
+                frame, (x, y), (x + w, y + h), (255, 0, 0), 2
+            )
+        rects = None
+        vid_img = cv2.resize(
+            frame,
+            (0, 0),
+            fx=self.get_video_frame_fxfy(),
+            fy=self.get_video_frame_fxfy(),
+        )
+        vid_img = cv2.cvtColor(vid_img, cv2.COLOR_BGR2RGB)
+        vid_img = pil_image_fromarray(vid_img)
+        imgtk = ImageTk.PhotoImage(image=vid_img)
+        self.video_frame_label.imgtk = imgtk
+        self.video_frame_label.configure(image=imgtk)
+
+    def update_video_frame(self):
+        video_capture = self.get_video_capture()
+        video_refresh_time = self.get_video_refresh_time()
         if self.video_signal == VIDEO_SIGNAL.REFRESH:
             _, self.video_frame = video_capture.read()
-            gray_img = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-            rects = face_casecade.detectMultiScale(gray_img, 1.3, 5)
-            for (x, y, w, h) in rects:
-                frame = cv2.rectangle(
-                    frame, (x, y), (x + w, y + h), (255, 0, 0), 2
-                )
-            rects = None
-            vid_img = cv2.resize(
-                frame, (0, 0), fx=video_frame_fxfy, fy=video_frame_fxfy
-            )
-            vid_img = cv2.cvtColor(vid_img, cv2.COLOR_BGR2RGB)
-            vid_img = Image.fromarray(vid_img)
-            imgtk = ImageTk.PhotoImage(image=vid_img)
-            self.video_frame_label.imgtk = imgtk
-            self.video_frame_label.configure(image=imgtk)
-
+            self.show_video_frame()
             self.video_update_identifier = self.root.after(
-                self.get_video_frame_fps(), self.update_video_frame
+                video_refresh_time, self.update_video_frame
             )
 
     def filepath_is_video_type(self, path):
@@ -368,6 +392,8 @@ class FrameWidget(WidgetABC):
                 ("", f"*.{ext}") for ext in self.video_exts + self.image_exts
             ],
         )
+        if src_path == ():
+            return
         if self.filepath_is_image_type(src_path):
             self.set_video_src_path(src_path)
         elif self.filepath_is_video_type(src_path):
@@ -383,6 +409,8 @@ class FrameWidget(WidgetABC):
             self.turnon_camera()
         elif openfrom_combobox_get == self.openfrom_combobox_file_str:
             self.open_filedialog()
+        elif str.isnumeric(openfrom_combobox_get):
+            self.play_video()
 
     def opensrc_button_command(self):
         pass
@@ -453,7 +481,10 @@ class FrameWidget(WidgetABC):
         width_list = self.get_oper_widgets_width_list()
         width_index = 0
         x = int((self.get_width() - width_list[width_index]) / 2)
-        y = self.get_frame_label_height() + self.get_oper_widgets_margin()
+        y = (
+            self.get_video_frame_label_height()
+            + self.get_oper_widgets_margin()
+        )
         min_y = self.get_oper_widget_min_height()
         prev_widget = widgets[0]
         prev_widget.place(x=x, y=y)
@@ -469,8 +500,8 @@ class FrameWidget(WidgetABC):
     def place(self):
 
         self.video_frame_label.place(
-            x=self.get_frame_label_x(),
-            y=self.get_frame_label_y(),
+            x=self.get_video_frame_label_x(),
+            y=self.get_video_frame_label_y(),
             width=self.get_video_frame_label_width(),
             height=self.get_video_frame_label_height(),
         )
