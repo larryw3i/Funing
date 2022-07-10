@@ -45,8 +45,9 @@ class SRC_TYPE(Enum):
 class ACTION(Enum):
     PICK = 0
     RECOG = 1
+    NONE = 2
 
 
 class VIDEO_SIGNAL(Enum):
-    REFRESH = 0
-    PAUSE = 1
+    REFRESH = UPDATE = 0
+    PAUSE = NONE = 1
