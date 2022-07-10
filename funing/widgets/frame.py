@@ -61,7 +61,6 @@ class FrameWidget(WidgetABC):
         self.oper_widgets_width_list = None
         self.oper_widgets_width = None
         self.oper_widgets_height = None
-        self.operbuttons_margin = 2
         self.oper_widgets_margin = 2
 
     def set_oper_widgets_width_list(self):
@@ -77,15 +76,14 @@ class FrameWidget(WidgetABC):
         self.oper_widgets_width_list.append(width)
 
     def get_oper_widgets_width_list(self):
-        if not self.oper_widgets_width_list:
-            self.set_oper_widgets_width_list()
+        self.set_oper_widgets_width_list()
         return self.oper_widgets_width_list
 
-    def get_operbuttons_margin(self):
-        return self.operbuttons_margin
+    def get_oper_widgets_margin(self):
+        return self.oper_widgets_margin
 
-    def set_operbuttons_margin(self, margin=2):
-        self.operbuttons_margin = margin
+    def set_oper_widgets_margin(self, margin=2):
+        self.oper_widgets_margin = margin
 
     def set_oper_widgets_margin(self, margin=2):
         self.oper_widgets_margin = margin
@@ -235,6 +233,14 @@ class FrameWidget(WidgetABC):
         self.pick_button = tk.Button(self.root, text=_("Pick"))
         self.recog_button = tk.Button(self.root, text=_("Recognize"))
 
+    def oper_widgets_place(self):
+        widgets = self.get_oper_widgets()
+        width_list = self.get_oper_widgets_width_list()
+        width_index = 0
+        x = new_x = int((self.get_width() - width_list[width_index]) / 2)
+        y = self.get_frame_label_height() + self.get_oper_widgets_margin()
+        
+
     def place(self):
 
         self.frame_label.place(
@@ -243,31 +249,5 @@ class FrameWidget(WidgetABC):
             width=self.get_frame_label_width(),
             height=self.get_frame_label_height(),
         )
-        oper_widgets_width_list = self.get_oper_widgets_width_list()
-        oper_widgets_width_index = 0
 
-        x = int(
-            (
-                self.get_width()
-                - oper_widgets_width_list[oper_widgets_width_index]
-            )
-            / 2
-        )
-        y = self.get_frame_label_height() + self.get_operbuttons_margin()
-
-        for w in self.get_oper_widgets():
-            w.place(x=x, y=y)
-            x += self.get_oper_widgets_margin() + w.winfo_reqwidth()
-            if x > self.get_width():
-                oper_widgets_width_index += 1
-                x = int(
-                    (
-                        self.get_width()
-                        - oper_widgets_width_list[oper_widgets_width_index]
-                    )
-                    / 2
-                )
-                y += (
-                    self.oper_widgets[0].winfo_reqheight()
-                    + self.get_operbuttons_margin()
-                )
+        self.oper_widgets_place()
