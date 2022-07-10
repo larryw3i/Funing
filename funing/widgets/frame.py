@@ -88,9 +88,6 @@ class FrameWidget(WidgetABC):
     def set_oper_widgets_margin(self, margin=2):
         self.oper_widgets_margin = margin
 
-    def get_oper_widgets_margin(self):
-        return self.oper_widgets_margin
-
     def get_oper_widgets_width(self):
         self.oper_widgets_width = 0
         for b in self.get_oper_widgets():
@@ -237,9 +234,22 @@ class FrameWidget(WidgetABC):
         widgets = self.get_oper_widgets()
         width_list = self.get_oper_widgets_width_list()
         width_index = 0
-        x = new_x = int((self.get_width() - width_list[width_index]) / 2)
+        x = int((self.get_width() - width_list[width_index]) / 2)
         y = self.get_frame_label_height() + self.get_oper_widgets_margin()
-        
+        min_y = (
+            max(w.winfo_reqheight() for w in widgets)
+            + self.get_oper_widgets_margin()
+        )
+        prev_widget = widgets[0]
+        prev_widget.place(x=x, y=y)
+        for w in widgets[1:]:
+            x += prev_widget.winfo_reqwidth() + self.get_oper_widgets_margin()
+            if (x + w.winfo_reqwidth()) > self.get_width():
+                width_index += 1
+                x = int((self.get_width() - width_list[width_index]) / 2)
+                y += min_y
+            w.place(x=x, y=y)
+            prev_widget = w
 
     def place(self):
 
