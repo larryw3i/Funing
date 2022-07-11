@@ -196,6 +196,7 @@ class FrameWidget(WidgetABC):
             self.set_video_src_path(src_path)
 
         self.video_signal = VIDEO_SIGNAL.REFRESH
+        self.video_frame_label.configure(background="")
         self.update_video_frame()
 
     def play_video(self, src_path=None):
@@ -343,11 +344,6 @@ class FrameWidget(WidgetABC):
         self.set_video_src_path(src_path)
         self.play_video()
 
-    def stop_video_frame(self):
-        self.root.after_cancel(self.video_update_identifier)
-        self.release_video_capture()
-        self.video_update_identifier = None
-
     def set_video_frame_fxfy(self):
         if self.video_capture is None:
             return
@@ -427,6 +423,7 @@ class FrameWidget(WidgetABC):
         self.openfrom_combobox_var.set(src_path)
 
     def openfrom_combobox_var_trace_w(self, *args):
+        self.check_video_capture()
         src_path = openfrom_combobox_get = self.openfrom_combobox_var.get()
         if src_path == self.openfrom_combobox_camera_str:
             self.turnon_camera()
@@ -533,13 +530,25 @@ class FrameWidget(WidgetABC):
 
         self.set_video_frame_fxfy()
 
+    def check_video_capture(self):
+        self.stop_video_frame()
+
     def turnoff_video_capture(self):
         self.release_video_capture()
 
     def close_video_capture(self):
         self.release_video_capture()
 
+    def stop_video_frame(self):
+        if self.video_update_identifier:
+            self.root.after_cancel(self.video_update_identifier)
+            self.video_update_identifier = None
+        self.release_video_capture()
+        self.video_frame_label.configure(background="black")
+
     def release_video_capture(self):
+        if not self.video_capture:
+            return
         if self.video_capture.isOpened():
             self.video_capture.release()
         self.video_capture = None
