@@ -81,7 +81,10 @@ class FrameWidget(WidgetABC):
         self.oper_widgets_margin = 2
         self.oper_widget_min_height = None
 
-    def set_video_refresh_time(self):
+    def set_video_refresh_time(self, to_none=False):
+        if to_none:
+            self.video_refresh_time = None
+            return
         self.video_refresh_time = int(1000 / self.get_video_frame_fps())
 
     def get_video_refresh_time(self):
@@ -191,8 +194,17 @@ class FrameWidget(WidgetABC):
     def pause_video_frame(self):
         self.stop_video_frame()
 
-    def read_video_src(self, src_path=None):
-        if (not self.video_src_path) or src_path:
+    def del_prev_video_capture_values(self):
+        self.set_video_frame_fxfy(to_none=True)
+        self.set_video_frame_width(to_none=True)
+        self.set_video_frame_height(to_none=True)
+
+    def read_video_src(
+        self,
+        src_path=None,
+    ):
+        self.del_prev_video_capture_values()
+        if (not self.video_src_path) or isinstance(src_path, int) or src_path:
             self.set_video_src_path(src_path)
         self.video_signal = VIDEO_SIGNAL.REFRESH
         self.video_frame_label.configure(background="")
@@ -225,11 +237,11 @@ class FrameWidget(WidgetABC):
 
     def set_video_src_path(self, src_path="0"):
         self.video_src_path = (
-            "0"
-            if (src_path == 0 or src_path is None)
-            else str(src_path)
-            if isinstance(src_path, int)
-            else src_path
+            src_path is None
+            and "0"
+            or isinstance(src_path, int)
+            and str(src_path)
+            or src_path
         )
         self.image_src_path = None
 
@@ -240,29 +252,49 @@ class FrameWidget(WidgetABC):
         self.image_src_path = src_path
         self.video_src_path = None
 
-    def set_video_frame_fps(self, fps=25):
-        self.video_frame_fps = fps
+    def set_video_frame_fps(self, fps=None, to_none=False):
+        if to_none:
+            self.video_frame_fps = None
+            return
+        self.video_frame_fps = fps or int(
+            self.video_capture.get(cv2.CAP_PROP_FPS)
+        )
 
     def get_video_frame_fps(self, fps=25):
         if not self.video_frame_fps:
             self.set_video_frame_fps()
         return self.video_frame_fps
 
+    def set_video_frame_width(self, to_none=False):
+        if to_none:
+            self.video_frame_width = None
+            return
+        self.video_frame_width = self.video_capture.get(
+            cv2.CAP_PROP_FRAME_WIDTH
+        )
+
     def get_video_frame_width(self):
         if not self.video_frame_width:
-            self.video_frame_width = self.video_capture.get(
-                cv2.CAP_PROP_FRAME_WIDTH
-            )
+            self.set_video_frame_width()
         return self.video_frame_width
+
+    def set_video_frame_height(self, to_none=False):
+        if to_none:
+            self.video_frame_height = None
+            return
+        self.video_frame_height = self.video_capture.get(
+            cv2.CAP_PROP_FRAME_HEIGHT
+        )
 
     def get_video_frame_height(self):
         if not self.video_frame_height:
-            self.video_frame_height = self.video_capture.get(
-                cv2.CAP_PROP_FRAME_HEIGHT
-            )
+            self.set_video_frame_height()
         return self.video_frame_height
 
-    def set_video_frame_size(self, size=25):
+    def set_video_frame_size(self, size=25, to_none=False):
+        if to_none:
+            self.video_frame_size = None
+            return
         self.video_frame_size = size
 
     def get_video_frame_size(self):
@@ -342,13 +374,12 @@ class FrameWidget(WidgetABC):
         return self.video_capture
 
     def turnon_camera(self, src_path=0):
-        if (
-            self.video_signal == VIDEO_SIGNAL.PAUSE
-            or self.get_video_src_path() != src_path
-        ):
-            self.play_video(src_path)
+        self.play_video(src_path=src_path)
 
-    def set_video_frame_fxfy(self):
+    def set_video_frame_fxfy(self, to_none=False):
+        if to_none:
+            self.video_frame_fxfy = None
+            return
         if self.video_capture is None:
             return
         if not self.video_capture.isOpened():
@@ -427,7 +458,7 @@ class FrameWidget(WidgetABC):
         if self.filepath_is_image_type(src_path):
             self.show_image(src_path)
         elif self.filepath_is_video_type(src_path):
-            self.play_video(src_path)
+            self.play_video(src_path=src_path)
         else:
             return
         self.openfrom_combobox_var.set(src_path)
@@ -439,14 +470,14 @@ class FrameWidget(WidgetABC):
         elif src_path == self.openfrom_combobox_file_str:
             self.open_filedialog()
         elif str.isnumeric(src_path):
-            self.play_video(src_path)
+            self.play_video(src_path=src_path)
 
     def opensrc_button_command(self):
         src_path = openfrom_combobox_get = self.openfrom_combobox_var.get()
         if self.filepath_is_image_type(src_path):
             self.show_image(src_path)
         elif self.filepath_is_video_type(src_path):
-            self.play_video(src_path)
+            self.play_video(src_path=src_path)
 
     def play_button_command(self):
         if self.video_signal == VIDEO_SIGNAL.PAUSE:
