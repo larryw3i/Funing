@@ -116,6 +116,30 @@ class FrameWidget(WidgetABC):
             return
         self.face_casecade = cv2.CascadeClassifier(hff_xml_path)
 
+    def set_src_type(self, src_type=SRC_TYPE.NONE):
+        self.src_type = src_type
+
+    def get_src_type(self):
+        if not self.src_type:
+            self.set_src_type()
+        return self.src_type
+
+    def set_action(self, action=ACTION.NONE):
+        self.action = action
+
+    def get_action(self):
+        if not self.action:
+            self.set_action()
+        return self.action
+
+    def set_video_signal(self, video_signal=VIDEO_SIGNAL.NONE):
+        self.video_signal = video_signal
+
+    def get_video_signal(self):
+        if not self.video_signal:
+            self.get_video_signal()
+        return self.video_signal
+
     def get_face_casecade(self):
         if not self.face_casecade:
             self.set_face_casecade()
