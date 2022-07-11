@@ -44,7 +44,7 @@ class FrameWidget(WidgetABC):
     def __init__(self, mw):
         super().__init__(mw)
         self.video_frame_label = None
-        self.video_frame_size = None
+        self.video_frame_count = None
         self.video_src_path = None
         self.video_frame_fps = None
         self.video_frame_size = None
@@ -102,8 +102,8 @@ class FrameWidget(WidgetABC):
         self.recognizer = cv2.face.EigenFaceRecognizer_create()
 
     def train_recognizer(self):
-        self.mw.set_msg(_("Train face recognizer."))
-        self.mw.set_msg(_("Finish Training."))
+        self.set_msg(_("Train face recognizer."))
+        self.set_msg(_("Finish Training."))
         pass
 
     def set_face_casecade(self):
@@ -210,6 +210,14 @@ class FrameWidget(WidgetABC):
         self.video_frame_label.configure(background="")
         self.update_video_frame()
 
+    def play_camera_video(self, src_path=None, check_video_capture=True):
+        self.src_type = SRC_TYPE.CAMERA
+        self.play_video(src_path, check_video_capture)
+
+    def play_file_video(self, src_path=None, check_video_capture=True):
+        self.src_type = SRC_TYPE.VIDEO
+        self.play_video(src_path, check_video_capture)
+
     def play_video(self, src_path=None, check_video_capture=True):
         if check_video_capture:
             self.check_video_capture()
@@ -219,9 +227,9 @@ class FrameWidget(WidgetABC):
         pass
 
     def show_image(self, src_path=None):
+        self.src_type = SRC_TYPE.IMAGE
         if not src_path:
             self.set_image_src_path(src_path)
-        pass
 
     def get_src_frame(self):
         pass
@@ -291,16 +299,20 @@ class FrameWidget(WidgetABC):
             self.set_video_frame_height()
         return self.video_frame_height
 
-    def set_video_frame_size(self, size=25, to_none=False):
+    def set_video_frame_count(self, to_none=False):
         if to_none:
-            self.video_frame_size = None
+            self.video_frame_count = None
             return
-        self.video_frame_size = size
+        self.video_frame_count = int(
+            self.video_capture.get(cv2.CAP_PROP_FRAME_COUNT)
+        )
 
-    def get_video_frame_size(self):
-        if not self.video_frame_size:
-            self.set_video_frame_size()
-        return self.video_frame_size
+    def get_video_frame_count(self):
+        if not self.src_type == SRC_TYPE.VIDEO:
+            return
+        if not self.video_frame_count:
+            self.set_video_frame_count()
+        return self.video_frame_count
 
     def get_video_frame_label_max_width(self):
         return int(self.get_width())
@@ -366,7 +378,7 @@ class FrameWidget(WidgetABC):
         src_path = self.get_video_src_path()
         self.video_capture = cv2.VideoCapture(src_path)
         if not self.video_capture.isOpened():
-            self.mw.set_msg(_("Unable to open video source %s.") % src_path)
+            self.set_msg(_("Unable to open video source %s.") % src_path)
 
     def get_video_capture(self):
         if not self.video_capture:
@@ -374,7 +386,7 @@ class FrameWidget(WidgetABC):
         return self.video_capture
 
     def turnon_camera(self, src_path=0):
-        self.play_video(src_path=src_path)
+        self.play_camera_video(src_path=src_path)
 
     def set_video_frame_fxfy(self, to_none=False):
         if to_none:
@@ -410,7 +422,7 @@ class FrameWidget(WidgetABC):
             frame = cv2.rectangle(
                 frame, (x, y), (x + w, y + h), (255, 0, 0), 2
             )
-        rects = None
+        del rects
         vid_img = cv2.resize(
             frame,
             (0, 0),
@@ -423,13 +435,20 @@ class FrameWidget(WidgetABC):
         self.video_frame_label.imgtk = imgtk
         self.video_frame_label.configure(image=imgtk)
 
+    def set_msg(self, msg=None):
+        self.mw.set_msg(msg, Label=None)
+
+    def finished_video_reading_listener(self):
+        self.stop_video_frame()
+        self.src_type = SRC_TYPE.NONE
+
     def update_video_frame(self):
         video_capture = self.get_video_capture()
         video_refresh_time = self.get_video_refresh_time()
         if self.video_signal == VIDEO_SIGNAL.REFRESH:
             _, frame = video_capture.read()
             if frame is None:
-                self.stop_video_frame()
+                self.finished_video_reading_listener()
                 return
             self.video_frame = frame
             self.show_video_frame()
@@ -458,7 +477,7 @@ class FrameWidget(WidgetABC):
         if self.filepath_is_image_type(src_path):
             self.show_image(src_path)
         elif self.filepath_is_video_type(src_path):
-            self.play_video(src_path=src_path)
+            self.play_file_video(src_path=src_path)
         else:
             return
         self.openfrom_combobox_var.set(src_path)
@@ -470,7 +489,7 @@ class FrameWidget(WidgetABC):
         elif src_path == self.openfrom_combobox_file_str:
             self.open_filedialog()
         elif str.isnumeric(src_path):
-            self.play_video(src_path=src_path)
+            self.play_camera_video(src_path=src_path)
 
     def opensrc_button_command(self):
         src_path = openfrom_combobox_get = self.openfrom_combobox_var.get()
@@ -570,9 +589,7 @@ class FrameWidget(WidgetABC):
             width=self.get_video_frame_label_width(),
             height=self.get_video_frame_label_height(),
         )
-
         self.oper_widgets_place()
-
         self.set_video_frame_fxfy()
 
     def check_video_capture(self):

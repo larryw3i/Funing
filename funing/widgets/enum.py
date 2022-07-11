@@ -40,6 +40,8 @@ from funing.widgets.abc import *
 class SRC_TYPE(Enum):
     VIDEO = 0
     IMAGE = 1
+    CAMERA = 2
+    NONE = 3
 
 
 class ACTION(Enum):
