@@ -231,7 +231,6 @@ class FrameWidget(WidgetABC):
             if isinstance(src_path, int)
             else src_path
         )
-        print("self.video_src_path", self.video_src_path)
         self.image_src_path = None
 
     def get_image_src_path(self):
@@ -343,7 +342,10 @@ class FrameWidget(WidgetABC):
         return self.video_capture
 
     def turnon_camera(self, src_path=0):
-        if self.video_signal == VIDEO_SIGNAL.PAUSE:
+        if (
+            self.video_signal == VIDEO_SIGNAL.PAUSE
+            or self.get_video_src_path() != src_path
+        ):
             self.play_video(src_path)
 
     def set_video_frame_fxfy(self):
@@ -391,17 +393,14 @@ class FrameWidget(WidgetABC):
         self.video_frame_label.configure(image=imgtk)
 
     def update_video_frame(self):
-        if (
-            self.video_capture
-            and (self.video_signal == VIDEO_SIGNAL.REFRESH)
-            and (not self.video_capture.isOpened())
-        ):  # video finish.
-            self.stop_video_frame()
-            return
         video_capture = self.get_video_capture()
         video_refresh_time = self.get_video_refresh_time()
         if self.video_signal == VIDEO_SIGNAL.REFRESH:
-            _, self.video_frame = video_capture.read()
+            _, frame = video_capture.read()
+            if frame is None:
+                self.stop_video_frame()
+                return
+            self.video_frame = frame
             self.show_video_frame()
             self.video_update_identifier = self.root.after(
                 video_refresh_time, self.update_video_frame
