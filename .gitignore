@@ -166,3 +166,6 @@ deb_dist/
 
 # funing*.tar.gz
 funing*.tar.gz
+
+# *.autosave
+*.autosave

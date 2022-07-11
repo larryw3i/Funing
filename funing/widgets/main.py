@@ -208,14 +208,14 @@ class MainWidget:
     def configure(self, event=None):
         self.place()
 
-    def set_msg(self, label=None, msg=None):
-        self.set_bottom_msg(label, msg)
+    def set_msg(self, msg=None, label=None):
+        self.set_bottom_msg(msg, label)
 
-    def set_status_msg(self, label=None, msg=None):
-        self.set_bottom_msg(label, msg)
+    def set_status_msg(self, msg=None, label=None):
+        self.set_bottom_msg(msg, label)
 
-    def set_bottom_msg(self, label=None, msg=None):
-        self.bottom_widget.set_msg(label, msg)
+    def set_bottom_msg(self, msg=None, label=None):
+        self.bottom_widget.set_msg(msg, label)
 
     def mainloop(self):
         self.set_title()

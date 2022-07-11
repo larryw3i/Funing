@@ -99,8 +99,9 @@ class FrameWidget(WidgetABC):
         self.recognizer = cv2.face.EigenFaceRecognizer_create()
 
     def train_recognizer(self):
-        images, labels, self.info_ids = self.load_images()
-        self.recognizer.train(images, labels)
+        self.mw.set_msg(_("Train face recognizer."))
+        self.mw.set_msg(_("Finish Training."))
+        pass
 
     def set_face_casecade(self):
         hff_xml_path = os.path.join(
@@ -109,6 +110,7 @@ class FrameWidget(WidgetABC):
         if not os.path.exists(hff_xml_path):
             self.mw.set_msg(_("haarcascades data doesn't exist."))
             self.release_video_capture()
+            return
         self.face_casecade = cv2.CascadeClassifier(hff_xml_path)
 
     def get_face_casecade(self):
@@ -189,23 +191,36 @@ class FrameWidget(WidgetABC):
     def pause_video_frame(self):
         self.stop_video_frame()
 
-    def play_video(self):
+    def read_video_src(self, src_path=None):
+        if not src_path:
+            self.set_video_src_path(src_path)
         self.video_signal = VIDEO_SIGNAL.REFRESH
         self.update_video_frame()
+
+    def play_video(self, src_path=None):
+        self.read_video_src(src_path)
 
     def pause_video(self):
         pass
 
-    def show_image(self):
+    def show_image(self, src_path=None):
+        if not src_path:
+            self.set_image_src_path(src_path)
         pass
 
     def get_src_frame(self):
         pass
 
     def get_video_src_path(self):
-        return self.video_src_path
+        if not self.video_src_path:
+            self.set_video_src_path()
+        return (
+            int(self.video_src_path)
+            if str.isnumeric(self.video_src_path)
+            else self.video_src_path
+        )
 
-    def set_video_src_path(self, src_path):
+    def set_video_src_path(self, src_path="0"):
         self.video_src_path = src_path
         self.image_src_path = None
 
@@ -307,21 +322,19 @@ class FrameWidget(WidgetABC):
         self.set_video_capture()
 
     def set_video_capture(self):
-        if not self.video_src_path:
-            self.video_src_path = 0
-        self.video_capture = cv2.VideoCapture(self.video_src_path)
+        src_path = self.get_video_src_path()
+        self.video_capture = cv2.VideoCapture(src_path)
         if not self.video_capture.isOpened():
-            self.mw.set_msg(
-                _("Unable to open video source %s.") % self.video_src_path
-            )
+            self.mw.set_msg(_("Unable to open video source %s.") % src_path)
 
     def get_video_capture(self):
         if not self.video_capture:
             self.set_video_capture()
         return self.video_capture
 
-    def turnon_camera(self):
-        return self.get_video_capture()
+    def turnon_camera(self, src_path=0):
+        self.set_video_src_path(src_path)
+        self.play_video()
 
     def stop_video_frame(self):
         self.root.after_cancel(self.video_update_identifier)
@@ -329,8 +342,8 @@ class FrameWidget(WidgetABC):
         self.video_update_identifier = None
 
     def set_video_frame_fxfy(self):
-        w = self.get_video_frame_label_width() / 2
-        h = self.get_video_frame_label_height() / 2
+        w = self.get_video_frame_label_width()
+        h = self.get_video_frame_label_height()
         r = w / h
         r0 = self.get_video_frame_width() / self.get_video_frame_height()
         r1 = r0 / r
@@ -395,22 +408,21 @@ class FrameWidget(WidgetABC):
         if src_path == ():
             return
         if self.filepath_is_image_type(src_path):
-            self.set_video_src_path(src_path)
+            self.show_image(src_path)
         elif self.filepath_is_video_type(src_path):
-            self.image_set_src_path(src_path)
-            self.play_video()
+            self.play_video(src_path)
         else:
             return
         self.openfrom_combobox_var.set(src_path)
 
     def openfrom_combobox_var_trace_w(self, *args):
-        openfrom_combobox_get = self.openfrom_combobox_var.get()
-        if openfrom_combobox_get == self.openfrom_combobox_camera_str:
+        src_path = openfrom_combobox_get = self.openfrom_combobox_var.get()
+        if src_path == self.openfrom_combobox_camera_str:
             self.turnon_camera()
-        elif openfrom_combobox_get == self.openfrom_combobox_file_str:
+        elif src_path == self.openfrom_combobox_file_str:
             self.open_filedialog()
-        elif str.isnumeric(openfrom_combobox_get):
-            self.play_video()
+        elif str.isnumeric(src_path):
+            self.play_video(src_path)
 
     def opensrc_button_command(self):
         pass
