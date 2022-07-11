@@ -194,6 +194,7 @@ class FrameWidget(WidgetABC):
     def read_video_src(self, src_path=None):
         if not src_path:
             self.set_video_src_path(src_path)
+
         self.video_signal = VIDEO_SIGNAL.REFRESH
         self.update_video_frame()
 
@@ -221,7 +222,13 @@ class FrameWidget(WidgetABC):
         )
 
     def set_video_src_path(self, src_path="0"):
-        self.video_src_path = src_path
+        self.video_src_path = (
+            "0"
+            if (src_path == 0 or src_path is None)
+            else str(src_path)
+            if str.isnumeric(src_path)
+            else src_path
+        )
         self.image_src_path = None
 
     def get_image_src_path(self):
@@ -342,6 +349,10 @@ class FrameWidget(WidgetABC):
         self.video_update_identifier = None
 
     def set_video_frame_fxfy(self):
+        if self.video_capture is None:
+            return
+        if not self.video_capture.isOpened():
+            return
         w = self.get_video_frame_label_width()
         h = self.get_video_frame_label_height()
         r = w / h
@@ -519,6 +530,8 @@ class FrameWidget(WidgetABC):
         )
 
         self.oper_widgets_place()
+
+        self.set_video_frame_fxfy()
 
     def turnoff_video_capture(self):
         self.release_video_capture()
