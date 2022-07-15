@@ -52,4 +52,5 @@ class ACTION(Enum):
 
 class VIDEO_SIGNAL(Enum):
     REFRESH = UPDATE = 0
-    PAUSE = NONE = 1
+    PAUSE = 1
+    NONE = 2

@@ -24,6 +24,8 @@ from tkinter import *
 from tkinter import filedialog, ttk
 
 import cv2
+import numpy
+import numpy as np
 import yaml
 from appdirs import user_data_dir
 from cv2.data import haarcascades
@@ -43,13 +45,13 @@ from funing.widgets.enum import *
 class FrameWidget(WidgetABC):
     def __init__(self, mw):
         super().__init__(mw)
-        self.video_frame_label = None
+        self.image_label = self.video_frame_label = None
         self.video_frame_count = None
         self.video_src_path = None
         self.video_frame_fps = None
         self.video_frame_size = None
         self.video_exts = ["mp4", "avi", "3gp", "webm", "mkv"]
-        self.video_signal = VIDEO_SIGNAL.PAUSE
+        self.video_signal = VIDEO_SIGNAL.NONE
         self.video_capture = None
         self.video_update_identifier = None
         self.video_frame = None
@@ -57,9 +59,13 @@ class FrameWidget(WidgetABC):
         self.video_frame_width = None
         self.video_frame_height = None
         self.video_refresh_time = None
+        self.video_black_image = np.zeros(shape=[512, 512, 3], dtype=np.uint8)
         self.image_src_path = None
         self.image_exts = ["jpg", "png", "jpeg", "webp"]
         self.image_size = None
+        self.image = None
+        self.image_size = None
+        self.image_fxfy = None
         self.face_casecade = None
         self.face_recognizer = None
         self.openfrom_combobox_var = StringVar()
@@ -220,7 +226,6 @@ class FrameWidget(WidgetABC):
         if (not self.video_src_path) or isinstance(src_path, int) or src_path:
             self.set_video_src_path(src_path)
         self.video_signal = VIDEO_SIGNAL.REFRESH
-        self.video_frame_label.configure(background="")
         self.update_video_frame()
 
     def play_camera_video(self, src_path=None, check_video_capture=True):
@@ -239,10 +244,38 @@ class FrameWidget(WidgetABC):
     def pause_video(self):
         pass
 
+    def get_frame(self):
+        return self.video_frame or self.image or None
+
     def show_image(self, src_path=None):
-        self.src_type = SRC_TYPE.IMAGE
         if not src_path:
             self.set_image_src_path(src_path)
+            self.image = cv2.imread(self.image_src_path)
+            image = self.image.copy()
+            image = self.draw_face_rect(image)
+            image = self.resize_by_image_label_size(image)
+            self.update_video_frame_label(image)
+
+    def set_image_size(self, and_channels=False, to_none=False):
+        if to_none:
+            self.image_size = None
+            return
+        if not self.image:
+            return (0, 0)
+        self.image_size = (
+            self.image.shape if and_channels else self.image.shape[:2]
+        )
+
+    def get_image_size(self):
+        if not self.image_size:
+            self.set_image_size()
+        return self.image_size
+
+    def get_image_width(self):
+        return self.get_image_size()[1]
+
+    def get_image_height(self):
+        return self.get_image_size()[0]
 
     def get_src_frame(self):
         pass
@@ -256,7 +289,10 @@ class FrameWidget(WidgetABC):
             else self.video_src_path
         )
 
-    def set_video_src_path(self, src_path="0"):
+    def set_video_src_path(self, src_path="0", to_none=False):
+        if to_none:
+            self.video_src_path = None
+            return
         self.video_src_path = (
             src_path is None
             and "0"
@@ -270,8 +306,10 @@ class FrameWidget(WidgetABC):
         return self.image_src_path
 
     def set_image_src_path(self, src_path):
+        self.src_type = SRC_TYPE.IMAGE
+        self.video_signal = VIDEO_SIGNAL.NONE
+        self.set_video_src_path(to_none=True)
         self.image_src_path = src_path
-        self.video_src_path = None
 
     def set_video_frame_fps(self, fps=None, to_none=False):
         if to_none:
@@ -295,6 +333,8 @@ class FrameWidget(WidgetABC):
         )
 
     def get_video_frame_width(self):
+        if self.video_signal == VIDEO_SIGNAL.PAUSE:
+            return self.video_frame.shape[1]
         if not self.video_frame_width:
             self.set_video_frame_width()
         return self.video_frame_width
@@ -308,6 +348,8 @@ class FrameWidget(WidgetABC):
         )
 
     def get_video_frame_height(self):
+        if self.video_signal == VIDEO_SIGNAL.PAUSE:
+            return self.video_frame.shape[0]
         if not self.video_frame_height:
             self.set_video_frame_height()
         return self.video_frame_height
@@ -338,6 +380,12 @@ class FrameWidget(WidgetABC):
 
     def get_video_frame_label_y(self):
         return self.get_y()
+
+    def get_image_label_width(self):
+        return self.get_video_frame_label_width()
+
+    def get_image_label_height(self):
+        return self.get_video_frame_label_height()
 
     def get_video_frame_label_width(self):
         return self.get_video_frame_label_max_width()
@@ -401,6 +449,29 @@ class FrameWidget(WidgetABC):
     def turnon_camera(self, src_path=0):
         self.play_camera_video(src_path=src_path)
 
+    def set_image_fxfy(self, to_none=False):
+        if to_none:
+            self.image_fxfy = None
+        if not self.image:
+            return
+        image_label_width = self.get_image_label_width()
+        image_label_height = self.get_image_label_height()
+        image_width = self.get_image_width()
+        image_height = self.get_image_height()
+        rate = image_label_width / image_label_height
+        rate0 = image_width / image_height
+        rate1 = rate0 / rate
+        self.image_fxfy = (
+            image_label_height / image_height
+            if rate0 < rate
+            else image_label_width / image_width
+        )
+
+    def get_image_fxfy(self):
+        if not self.image_fxfy:
+            self.get_image_fxfy()
+        return self.image_fxfy
+
     def set_video_frame_fxfy(self, to_none=False):
         if to_none:
             self.video_frame_fxfy = None
@@ -427,14 +498,16 @@ class FrameWidget(WidgetABC):
             self.set_video_frame_fxfy()
         return self.video_frame_fxfy
 
-    def show_video_frame(self):
-        frame = self.video_frame
+    def show_video_frame(self, frame=None):
+        frame = frame or self.video_frame.copy()
         if frame is None:
             return
-
         frame = self.draw_rect(frame)
         frame = self.resize_by_video_frame_label_size(frame)
         self.update_video_frame_label(frame)
+
+    def draw_face_rect(self, frame):
+        return self.draw_rect(frame)
 
     def draw_rect(self, frame):
         gray_img = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -448,6 +521,12 @@ class FrameWidget(WidgetABC):
         return frame
 
     def resize_by_video_frame_label_size(self, frame):
+        return self.resize_by_frame_label_size()
+
+    def resize_by_image_label_size(self, frame):
+        return self.resize_by_frame_label_size()
+
+    def resize_by_frame_label_size(self, frame):
         video_frame_fxfy = self.get_video_frame_fxfy()
         vid_img = cv2.resize(
             frame,
@@ -458,11 +537,17 @@ class FrameWidget(WidgetABC):
         return vid_img
 
     def update_video_frame_label(self, image):
+        self.update_video_image_label(image)
+
+    def update_video_image_label(self, image):
         vid_img = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         vid_img = pil_image_fromarray(vid_img)
         imgtk = ImageTk.PhotoImage(image=vid_img)
         self.video_frame_label.imgtk = imgtk
         self.video_frame_label.configure(image=imgtk)
+
+    def update_image_label(self):
+        self.update_video_image_label(image)
 
     def set_msg(self, msg=None):
         self.mw.set_msg(msg, Label=None)
@@ -528,7 +613,7 @@ class FrameWidget(WidgetABC):
             self.play_video(src_path=src_path)
 
     def play_button_command(self):
-        if self.video_signal == VIDEO_SIGNAL.PAUSE:
+        if self.video_signal != VIDEO_SIGNAL.REFRESH:
             self.play_video()
 
     def pause_button_command(self):
@@ -547,14 +632,20 @@ class FrameWidget(WidgetABC):
             self.openfrom_combobox_camera_str,
         ]
 
+    def set_video_image_label(self, label=None):
+        if not label:
+            return
+        self.image_label = self.video_frame_label = label
+
     def set_widgets(self):
-        self.video_frame_label = Label(
+        label = Label(
             self.root,
             text=_("Video frame."),
-            background="black",
-            foreground="white",
             justify="center",
+            anchor="center",
         )
+        self.set_video_image_label(label)
+
         self.openfrom_combobox = ttk.Combobox(
             self.root,
             textvariable=self.openfrom_combobox_var,
@@ -621,6 +712,12 @@ class FrameWidget(WidgetABC):
         self.oper_widgets_place()
         self.set_video_frame_fxfy()
 
+        self.show_video_frame4widgets_size_changed()
+
+    def show_video_frame4widgets_size_changed(self):
+        if self.video_signal == VIDEO_SIGNAL.PAUSE:
+            pass
+
     def check_video_capture(self):
         self.stop_video_frame()
 
@@ -635,7 +732,6 @@ class FrameWidget(WidgetABC):
             self.root.after_cancel(self.video_update_identifier)
             self.video_update_identifier = None
         self.release_video_capture()
-        self.video_frame_label.configure(background="black")
         self.video_signal = VIDEO_SIGNAL.PAUSE
 
     def release_video_capture(self):
