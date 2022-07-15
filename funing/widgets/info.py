@@ -39,3 +39,5 @@ from funing.widgets.abc import *
 class InfoWidget(WidgetABC):
     def __init__(self, mw):
         super().__init__(mw)
+        self.fw = self.frame_widget = self.mw.frame_widget
+        self.set_msg = self.mw.set_msg

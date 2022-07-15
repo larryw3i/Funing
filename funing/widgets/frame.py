@@ -86,6 +86,8 @@ class FrameWidget(WidgetABC):
         self.oper_widgets_height = None
         self.oper_widgets_margin = 2
         self.oper_widget_min_height = None
+        self.info =None
+        self.iw = self.info_widget = self.mw.info_widget
 
     def set_video_refresh_time(self, to_none=False):
         if to_none:
@@ -97,6 +99,102 @@ class FrameWidget(WidgetABC):
         if not self.video_refresh_time:
             self.set_video_refresh_time()
         return self.video_refresh_time
+    
+    def set_info(self,key=None,value=None,save_now=False,to_none=None):
+        """
+        Use multiple parameters to set the information.
+
+        Args:
+            key (Union[uuid.UUID,str]): the information key.
+            value (str): the information value.
+            save_now (bool): save information or not.
+            to_none (bool): clear information.
+        
+        """
+        self.set_info_by_default(key=None,value=None,save_now=False,to_none=None)
+    
+    def save_info(self):
+        self.set_info(save_now=True)
+
+    def set_info_by_default(self,key=None,value=None,save_now=False,to_none):
+        """
+        The default method using multiple parameters to set the information.
+        """
+        if to_none:
+            self.info = None
+        if key:
+            self.info[key]= value
+        if save_now:
+            id = self.info.get('id',None)
+            cleared_data = self.info.copy()
+            del cleared_data['id']
+            if not id:
+                return
+            with open(info_dir_path/id+'.pkl','wb') as f:
+                pickle.dump(cleared_data,f)
+
+    def get_info(self, id: uuid.UUID = None):
+        """
+        Get information by id.
+        
+        Args:
+            id (uuid.UUID): The ID of information.
+        
+        Returns:
+            dict: the keys and values of information.
+        """
+        return self.get_info_by_default(id)
+
+    def get_info_by_default(self, id: uuid.UUID = None):
+        """
+        The default method for getting information.
+        """
+        if not id:
+            return
+        id = str(id)
+        if self.info and id == self.info.get('id',None):
+            return self.info
+        info_path = info_dir_path / id + ".pkl"
+        info = None
+        if not os.path.exists(info_path):
+            self.set_msg(_("Information of %s doesn't exist."))
+            return info
+        with open(info_path,'rb') as f:
+            self.info = pickle.load(f)
+        return self.info
+
+
+
+    def get_infos_dataset(self):
+        """
+        recog_datas_dir:
+            id
+                face_image
+                face_image0
+                ...
+            id0
+                face_image
+                face_image0
+                ...
+            ...
+        """
+        images = ids = labels = []
+        label = 0
+        subdirs = os.listdir(faces_dir_path)
+        for subdir in subdirs:
+            subpath = os.path.join(faces_dir_path, subdir)
+            if os.path.isdir(subpath):
+                ids.append(subdir)
+                for filename in os.listdir(subpath):
+                    imgpath = os.path.join(subpath, filename)
+                    img = cv2.imread(imgpath, cv2.IMREAD_COLOR)
+                    gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+                    images.append(gray_img)
+                    labels.append(label)
+                label += 1
+        images = np.asarray(images)
+        labels = np.asarray(labels)
+        return images, labels, ids
 
     def get_recognizer(self):
         if not self.face_recognizer:
@@ -247,13 +345,15 @@ class FrameWidget(WidgetABC):
     def get_frame(self):
         return self.video_frame or self.image or None
 
-    def show_image(self, src_path=None):
+    def show_image(self, src_path=None, resize=True, draw_face_rect=True):
         if src_path:
             self.set_image_src_path(src_path)
             self.image = cv2.imread(self.image_src_path)
             image = self.image.copy()
-            image = self.draw_face_rect(image)
-            image = self.resize_by_image_label_size(image)
+            if draw_face_rect:
+                image = self.draw_face_rect(image)
+            if resize:
+                image = self.resize_by_image_label_size(image)
             self.update_video_frame_label(image)
 
     def set_image_size(self, and_channels=False, to_none=False):
@@ -498,12 +598,14 @@ class FrameWidget(WidgetABC):
             self.set_video_frame_fxfy()
         return self.video_frame_fxfy
 
-    def show_video_frame(self, frame=None):
+    def show_video_frame(self, frame=None, resize=True, draw_face_rect=True):
         frame = frame or self.video_frame.copy()
         if frame is None:
             return
-        frame = self.draw_rect(frame)
-        frame = self.resize_by_video_frame_label_size(frame)
+        if draw_face_rect:
+            frame = self.draw_face_rect(frame)
+        if resize:
+            frame = self.resize_by_video_frame_label_size(frame)
         self.update_video_frame_label(frame)
 
     def draw_face_rect(self, frame):
@@ -521,18 +623,19 @@ class FrameWidget(WidgetABC):
         return frame
 
     def resize_by_video_frame_label_size(self, frame):
-        return self.resize_by_frame_label_size(frame)
+        video_frame_fxfy = self.get_video_frame_fxfy()
+        return self.resize_by_frame_label_size(frame, video_frame_fxfy)
 
     def resize_by_image_label_size(self, frame):
-        return self.resize_by_frame_label_size(frame)
-
-    def resize_by_frame_label_size(self, frame):
         image_fxfy = self.get_image_fxfy()
+        return self.resize_by_frame_label_size(frame, image_fxfy)
+
+    def resize_by_frame_label_size(self, frame, fxfy):
         vid_img = cv2.resize(
             frame,
             (0, 0),
-            fx=image_fxfy,
-            fy=image_fxfy,
+            fx=fxfy,
+            fy=fxfy,
         )
         return vid_img
 
