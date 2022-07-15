@@ -248,7 +248,7 @@ class FrameWidget(WidgetABC):
         return self.video_frame or self.image or None
 
     def show_image(self, src_path=None):
-        if not src_path:
+        if src_path:
             self.set_image_src_path(src_path)
             self.image = cv2.imread(self.image_src_path)
             image = self.image.copy()
@@ -260,7 +260,7 @@ class FrameWidget(WidgetABC):
         if to_none:
             self.image_size = None
             return
-        if not self.image:
+        if self.image is None:
             return (0, 0)
         self.image_size = (
             self.image.shape if and_channels else self.image.shape[:2]
@@ -452,7 +452,7 @@ class FrameWidget(WidgetABC):
     def set_image_fxfy(self, to_none=False):
         if to_none:
             self.image_fxfy = None
-        if not self.image:
+        if self.image is None:
             return
         image_label_width = self.get_image_label_width()
         image_label_height = self.get_image_label_height()
@@ -469,7 +469,7 @@ class FrameWidget(WidgetABC):
 
     def get_image_fxfy(self):
         if not self.image_fxfy:
-            self.get_image_fxfy()
+            self.set_image_fxfy()
         return self.image_fxfy
 
     def set_video_frame_fxfy(self, to_none=False):
@@ -521,18 +521,18 @@ class FrameWidget(WidgetABC):
         return frame
 
     def resize_by_video_frame_label_size(self, frame):
-        return self.resize_by_frame_label_size()
+        return self.resize_by_frame_label_size(frame)
 
     def resize_by_image_label_size(self, frame):
-        return self.resize_by_frame_label_size()
+        return self.resize_by_frame_label_size(frame)
 
     def resize_by_frame_label_size(self, frame):
-        video_frame_fxfy = self.get_video_frame_fxfy()
+        image_fxfy = self.get_image_fxfy()
         vid_img = cv2.resize(
             frame,
             (0, 0),
-            fx=video_frame_fxfy,
-            fy=video_frame_fxfy,
+            fx=image_fxfy,
+            fy=image_fxfy,
         )
         return vid_img
 
