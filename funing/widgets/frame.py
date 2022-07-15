@@ -186,17 +186,6 @@ class FrameWidget(WidgetABC):
         self.get_oper_widgets()
         return self.oper_widgets[0].winfo_reqheight()
 
-    def oper_widgets_x_list(self):
-        self.get_oper_widgets()
-        if not self.oper_widgets_width:
-            self.oper_widgets_width()
-        if not self.oper_widgets_height:
-            self.get_oper_widgets_height()
-        if self.oper_widgets_width < self.get_width():
-            return int((self.get_width() - self.get_oper_widgets()) / 2)
-        else:
-            pass
-
     def set_oper_widgets(self):
         self.oper_widgets = [
             self.openfrom_combobox,
@@ -420,15 +409,17 @@ class FrameWidget(WidgetABC):
             return
         if not self.video_capture.isOpened():
             return
-        w = self.get_video_frame_label_width()
-        h = self.get_video_frame_label_height()
-        r = w / h
-        r0 = self.get_video_frame_width() / self.get_video_frame_height()
-        r1 = r0 / r
+        video_frame_label_width = self.get_video_frame_label_width()
+        video_frame_label_height = self.get_video_frame_label_height()
+        video_frame_width = self.get_video_frame_width()
+        video_frame_height = self.get_video_frame_height()
+        rate = video_frame_label_width / video_frame_label_height
+        rate0 = video_frame_width / video_frame_height
+        rate1 = rate0 / rate
         self.video_frame_fxfy = (
-            h / self.get_video_frame_height()
-            if r1 < r
-            else w / self.get_video_frame_width()
+            video_frame_label_height / video_frame_height
+            if rate0 < rate
+            else video_frame_label_width / video_frame_width
         )
 
     def get_video_frame_fxfy(self):
@@ -438,22 +429,36 @@ class FrameWidget(WidgetABC):
 
     def show_video_frame(self):
         frame = self.video_frame
-        face_casecade = self.get_face_casecade()
-        video_frame_fxfy = self.get_video_frame_fxfy()
+        if frame is None:
+            return
+
+        frame = self.draw_rect(frame)
+        frame = self.resize_by_video_frame_label_size(frame)
+        self.update_video_frame_label(frame)
+
+    def draw_rect(self, frame):
         gray_img = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        face_casecade = self.get_face_casecade()
         rects = face_casecade.detectMultiScale(gray_img, 1.3, 5)
         for (x, y, w, h) in rects:
             frame = cv2.rectangle(
                 frame, (x, y), (x + w, y + h), (255, 0, 0), 2
             )
         del rects
+        return frame
+
+    def resize_by_video_frame_label_size(self, frame):
+        video_frame_fxfy = self.get_video_frame_fxfy()
         vid_img = cv2.resize(
             frame,
             (0, 0),
-            fx=self.get_video_frame_fxfy(),
-            fy=self.get_video_frame_fxfy(),
+            fx=video_frame_fxfy,
+            fy=video_frame_fxfy,
         )
-        vid_img = cv2.cvtColor(vid_img, cv2.COLOR_BGR2RGB)
+        return vid_img
+
+    def update_video_frame_label(self, image):
+        vid_img = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         vid_img = pil_image_fromarray(vid_img)
         imgtk = ImageTk.PhotoImage(image=vid_img)
         self.video_frame_label.imgtk = imgtk

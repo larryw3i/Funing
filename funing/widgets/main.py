@@ -36,8 +36,6 @@ from funing.settings4t import *
 from funing.widgets.bottom import BottomWidget
 from funing.widgets.frame import FrameWidget
 from funing.widgets.info import InfoWidget
-from funing.widgets.mid0 import Mid0Widget
-from funing.widgets.mid1 import Mid1Widget
 from funing.widgets.seperator import SeperatorWidget
 from funing.widgets.top import TopWidget
 

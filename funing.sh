@@ -1,12 +1,27 @@
-#!/usr/bin/bash
+#!/bin/bash
 
-args=$@
+args=$*
 app_name='funing'
 [[ -d "venv/local" ]] && bin_dir='venv/local/bin' || bin_dir='venv/bin'
 local_dir="${app_name}/locale"
 pot_path="${local_dir}/${app_name}.pot"
-first_mo_path="${local_dir}/en_US/LC_MESSAGES/${app_name}.mo"
-first_po_path="${local_dir}/en_US/LC_MESSAGES/${app_name}.po"
+mo0_path="${local_dir}/en_US/LC_MESSAGES/${app_name}.mo"
+po0_path="${local_dir}/en_US/LC_MESSAGES/${app_name}.po"
+
+activate_venv(){
+    # Use virtualenv 'venv' if exists
+    echo "virtualenv is used, enter 'deactivate' to exit."
+    for v in \
+        "./venv/bin/activate" \
+        "./venv/local/bin/activate" # python 3.10
+    do
+        [[ -f $v ]] && . $v
+    done
+}
+
+deactivate(){
+    deactivate
+}
 
 update_gitignore(){
     git rm -r --cached . && git add .
@@ -21,7 +36,7 @@ _xgettext(){
     xgettext -v -j -L Python --output=${pot_path} \
     $(find ${app_name}/ -name "*.py")
 
-    [[ -f $first_po_path ]] || touch $first_po_path
+    [[ -f $po0_path ]] || touch $po0_path
 
     for _po in $(find ${local_dir}/ -name "*.po"); do
         msgmerge -U -v $_po ${pot_path}
@@ -90,24 +105,12 @@ _i_test(){
 
 _start(){
     _black
-    [[ -f "${first_mo_path}" ]] || _msgfmt
+    [[ -f "${mo0_path}" ]] || _msgfmt
     ${bin_dir}/python3 ${app_name}.py $args
 }
 
 gen4xget(){
     ${bin_dir}/python3 ${app_name}.py 4xget
-}
-
-active_venv(){
-    if [[ ! -f "${bin_dir}/activate" ]] ; then
-        if [[ ! -f "$(which virtualenv)" ]]; then
-            echo "Installing virtualenv..."
-            pip3 install -U virtualenv
-        fi
-        virtualenv venv
-    fi
-    source ${bin_dir}/activate
-    
 }
 
 cat_bt(){
@@ -125,6 +128,22 @@ test(){
     ${bin_dir}/python3 ${app_name}.py test
 }
 
+if [[ \
+    $PATH != *"${PWD}/venv/local/bin"* && \
+    $PATH != *"${PWD}/venv/bin"* ]]
+then
+    if [[ -d "${PWD}/venv" ]];then
+        activate_venv
+    elif [[ -x $(which virtualenv) ]]
+    then 
+        virtualenv venv
+        activate_venv
+    else
+        echo "virtualenv is not installed, cancel virtual environment."
+    fi
+
+fi
+
 tu(){       twine_upload;       }
 ugi(){      update_gitignore;   }
 tst(){      test;               }
@@ -133,15 +152,15 @@ gita(){     git_add;            }
 bd(){       bdist;              }
 kc(){       keep_code;          }
 
-venv(){     active_venv;        }
+venv(){     activate_venv;        }
 msgf(){     _msgfmt;            }
 xget(){     _xgettext;          }
 
 its(){       _i_test;           }
 bdup(){     bd; tu;             }
-s(){       _start;           }
+s(){       _start;              }
 
-p3(){       venv;_pip3;  }
+p3(){       venv;_pip3;         }
 _cat(){     cat_bt;             }
 _cat_(){    _cat | tr -s '\n';  }
 
@@ -155,4 +174,4 @@ dep(){      p3;                 }
 
 depu(){     _pip3_u;            }
 
-$@
+$*
