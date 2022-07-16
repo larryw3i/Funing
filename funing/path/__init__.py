@@ -24,10 +24,15 @@ user_config_dir_path = user_config_dir(app_name, app_author[0])
 project_path = os.path.abspath(os.path.dirname(__file__))
 copy_path = os.path.join(user_data_dir_path, "copy.pkl")
 recog_datas_dir_path = os.path.join(user_data_dir_path, "recog_datas")
-faces_dir_path = recog_datas_dir_path / "face_images"
-infos_dir_path = recog_datas_dir_path / "infos"
+faces_dir_path = os.path.join(recog_datas_dir_path, "face_images")
+infos_dir_path = os.path.join(recog_datas_dir_path, "infos")
 
-for d in [user_data_dir_path, user_config_dir_path, info_dir_path]:
+for d in [
+    user_data_dir_path,
+    user_config_dir_path,
+    infos_dir_path,
+    faces_dir_path,
+]:
     if not os.path.exists(d):
         os.makedirs(d, exist_ok=True)
 

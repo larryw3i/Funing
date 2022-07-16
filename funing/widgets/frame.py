@@ -86,8 +86,28 @@ class FrameWidget(WidgetABC):
         self.oper_widgets_height = None
         self.oper_widgets_margin = 2
         self.oper_widget_min_height = None
-        self.info =None
+        self.info = None
+        self.info_ids = []
+        self.face_recognizer = self.recognizer = None
+        self.iw = self.info_widget = None
+
+    def set_info_ids(self, info_ids=None):
+        if not info_ids:
+            return
+        self.info_ids = info_ids
+
+    def get_info_ids(self):
+        if not self.info_ids:
+            return []
+        return self.info_ids
+
+    def set_info_widget(self):
+        if not self.mw.info_widget:
+            return
         self.iw = self.info_widget = self.mw.info_widget
+
+    def get_info_widget(self):
+        return self.iw
 
     def set_video_refresh_time(self, to_none=False):
         if to_none:
@@ -99,8 +119,8 @@ class FrameWidget(WidgetABC):
         if not self.video_refresh_time:
             self.set_video_refresh_time()
         return self.video_refresh_time
-    
-    def set_info(self,key=None,value=None,save_now=False,to_none=None):
+
+    def set_info(self, key=None, value=None, save_now=False, to_none=False):
         """
         Use multiple parameters to set the information.
 
@@ -109,37 +129,41 @@ class FrameWidget(WidgetABC):
             value (str): the information value.
             save_now (bool): save information or not.
             to_none (bool): clear information.
-        
+
         """
-        self.set_info_by_default(key=None,value=None,save_now=False,to_none=None)
-    
+        self.set_info_by_default(
+            key=None, value=None, save_now=False, to_none=False
+        )
+
     def save_info(self):
         self.set_info(save_now=True)
 
-    def set_info_by_default(self,key=None,value=None,save_now=False,to_none):
+    def set_info_by_default(
+        self, key=None, value=None, save_now=False, to_none=False
+    ):
         """
         The default method using multiple parameters to set the information.
         """
         if to_none:
             self.info = None
         if key:
-            self.info[key]= value
+            self.info[key] = value
         if save_now:
-            id = self.info.get('id',None)
+            id = self.info.get("id", None)
             cleared_data = self.info.copy()
-            del cleared_data['id']
+            del cleared_data["id"]
             if not id:
                 return
-            with open(info_dir_path/id+'.pkl','wb') as f:
-                pickle.dump(cleared_data,f)
+            with open(info_dir_path / id + ".pkl", "wb") as f:
+                pickle.dump(cleared_data, f)
 
     def get_info(self, id: uuid.UUID = None):
         """
         Get information by id.
-        
+
         Args:
             id (uuid.UUID): The ID of information.
-        
+
         Returns:
             dict: the keys and values of information.
         """
@@ -152,18 +176,16 @@ class FrameWidget(WidgetABC):
         if not id:
             return
         id = str(id)
-        if self.info and id == self.info.get('id',None):
+        if self.info and id == self.info.get("id", None):
             return self.info
-        info_path = info_dir_path / id + ".pkl"
+        info_path = os.path.join(info_dir_path, id + ".pkl")
         info = None
         if not os.path.exists(info_path):
             self.set_msg(_("Information of %s doesn't exist."))
             return info
-        with open(info_path,'rb') as f:
+        with open(info_path, "rb") as f:
             self.info = pickle.load(f)
         return self.info
-
-
 
     def get_infos_dataset(self):
         """
@@ -192,25 +214,53 @@ class FrameWidget(WidgetABC):
                     images.append(gray_img)
                     labels.append(label)
                 label += 1
+        if images is None:
+            return None
         images = np.asarray(images)
         labels = np.asarray(labels)
         return images, labels, ids
 
+    def get_face_recognizer(self):
+        return self.get_recognizer()
+
     def get_recognizer(self):
         if not self.face_recognizer:
             self.set_face_recognizer()
-            self.train_recognizer()
+            self.train_face_recognizer()
         return self.face_recognizer
 
     def set_face_recognizer(self):
-        self.recognizer = cv2.face.EigenFaceRecognizer_create()
+        self.set_recognizer()
+
+    def set_recognizer(self):
+        """
+        Set face recognizer
+        """
+        self.face_recognizer = (
+            self.recognizer
+        ) = cv2.face.EigenFaceRecognizer_create()
+
+    def train_face_recognizer(self):
+        self.train_recognizer()
 
     def train_recognizer(self):
+        """
+        Train face recognizer.
+        """
         self.set_msg(_("Train face recognizer."))
+        infos_dataset = self.get_infos_dataset()
+        if not infos_dataset:
+            return
+        images, labels, ids = infos_dataset
+        self.set_info_ids(ids)
+        self.face_recognizer.train(images, labels)
         self.set_msg(_("Finish Training."))
         pass
 
     def set_face_casecade(self):
+        self.set_face_casecade_by_default()
+
+    def set_face_casecade_by_default(self):
         hff_xml_path = os.path.join(
             haarcascades, "haarcascade_frontalface_default.xml"
         )
@@ -245,6 +295,9 @@ class FrameWidget(WidgetABC):
         return self.video_signal
 
     def get_face_casecade(self):
+        return self.get_face_casecade_by_default()
+
+    def get_face_casecade_by_default(self):
         if not self.face_casecade:
             self.set_face_casecade()
         return self.face_casecade
@@ -845,4 +898,4 @@ class FrameWidget(WidgetABC):
         self.video_capture = None
 
     def __del__(self):
-        self.video_capture_release()
+        self.release_video_capture()
