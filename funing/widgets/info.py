@@ -41,6 +41,8 @@ class InfoWidget(WidgetABC):
         super().__init__(mw)
         self.fw = self.frame_widget = None
         self.set_msg = self.mw.set_msg
+        self.info = None
+        self.info_ids = None
 
     def set_info_widget(self):
         if not self.mw.frame_widget:

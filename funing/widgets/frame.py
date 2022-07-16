@@ -150,12 +150,14 @@ class FrameWidget(WidgetABC):
             self.info[key] = value
         if save_now:
             id = self.info.get("id", None)
-            cleared_data = self.info.copy()
-            del cleared_data["id"]
             if not id:
                 return
-            with open(info_dir_path / id + ".pkl", "wb") as f:
+            cleared_data = self.info.copy()
+            del cleared_data["id"]
+            info_path = os.path.join(info_dir_path, id + ".pkl")
+            with open(info_path, "wb") as f:
                 pickle.dump(cleared_data, f)
+        pass
 
     def get_info(self, id: uuid.UUID = None):
         """
@@ -185,6 +187,7 @@ class FrameWidget(WidgetABC):
             return info
         with open(info_path, "rb") as f:
             self.info = pickle.load(f)
+        self.info.set('id',id)
         return self.info
 
     def get_infos_dataset(self):
@@ -219,6 +222,13 @@ class FrameWidget(WidgetABC):
         images = np.asarray(images)
         labels = np.asarray(labels)
         return images, labels, ids
+    
+    def get_id_by_label(self,label=None):
+        if not label:
+            print(_("Label is None."))
+            return
+        return self.info_ids[label] if label < len(self.info_ids) else None
+
 
     def get_face_recognizer(self):
         return self.get_recognizer()
@@ -393,6 +403,7 @@ class FrameWidget(WidgetABC):
         self.read_video_src(src_path)
 
     def pause_video(self):
+        self.stop_video_frame()
         pass
 
     def get_frame(self):
@@ -418,6 +429,28 @@ class FrameWidget(WidgetABC):
         self.image_size = (
             self.image.shape if and_channels else self.image.shape[:2]
         )
+    
+    def get_labels(self):
+        return self.get_labels_by_frame()
+        
+    def get_labels_by_frame(self,frame=None):
+        if not frame:
+            frame = self.get_frame():
+            if not frame:
+                return
+        labels =  []
+        gray_img = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        face_rects = self.face_casecade.detectMultiScale(
+            gray_img, 1.3, 5
+        )
+        for (x, y, w, h) in face_rects:
+            gray_img_0 = gray_img[y : y + h, x : x + w]
+            gray_img_0 = cv2.resize(
+                gray_img_0, (92, 112), interpolation=cv2.INTER_LINEAR
+            )
+            labels.append(self.recognizer.predict(gray_img_0))
+        return labels
+
 
     def get_image_size(self):
         if not self.image_size:
