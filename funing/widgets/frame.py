@@ -46,7 +46,7 @@ class FrameWidget(WidgetABC):
     def __init__(self, mw):
         super().__init__(mw)
         self.image_label = self.video_frame_label = None
-        self.video_frame_count = None
+        self.video_frame_count = self.video_file_frame_count = None
         self.video_src_path = None
         self.video_frame_fps = None
         self.video_frame_size = None
@@ -60,6 +60,7 @@ class FrameWidget(WidgetABC):
         self.video_frame_height = None
         self.video_refresh_time = None
         self.video_black_image = np.zeros(shape=[512, 512, 3], dtype=np.uint8)
+        self.video_scrollbar = None
         self.image_src_path = None
         self.image_exts = ["jpg", "png", "jpeg", "webp"]
         self.image_size = None
@@ -187,7 +188,7 @@ class FrameWidget(WidgetABC):
             return info
         with open(info_path, "rb") as f:
             self.info = pickle.load(f)
-        self.info.set('id',id)
+        self.info.set("id", id)
         return self.info
 
     def get_infos_dataset(self):
@@ -222,13 +223,12 @@ class FrameWidget(WidgetABC):
         images = np.asarray(images)
         labels = np.asarray(labels)
         return images, labels, ids
-    
-    def get_id_by_label(self,label=None):
+
+    def get_id_by_label(self, label=None):
         if not label:
             print(_("Label is None."))
             return
         return self.info_ids[label] if label < len(self.info_ids) else None
-
 
     def get_face_recognizer(self):
         return self.get_recognizer()
@@ -429,20 +429,18 @@ class FrameWidget(WidgetABC):
         self.image_size = (
             self.image.shape if and_channels else self.image.shape[:2]
         )
-    
+
     def get_labels(self):
         return self.get_labels_by_frame()
-        
-    def get_labels_by_frame(self,frame=None):
+
+    def get_labels_by_frame(self, frame=None):
         if not frame:
-            frame = self.get_frame():
+            frame = self.get_frame()
             if not frame:
                 return
-        labels =  []
+        labels = []
         gray_img = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        face_rects = self.face_casecade.detectMultiScale(
-            gray_img, 1.3, 5
-        )
+        face_rects = self.face_casecade.detectMultiScale(gray_img, 1.3, 5)
         for (x, y, w, h) in face_rects:
             gray_img_0 = gray_img[y : y + h, x : x + w]
             gray_img_0 = cv2.resize(
@@ -450,7 +448,6 @@ class FrameWidget(WidgetABC):
             )
             labels.append(self.recognizer.predict(gray_img_0))
         return labels
-
 
     def get_image_size(self):
         if not self.image_size:
@@ -544,12 +541,12 @@ class FrameWidget(WidgetABC):
         if to_none:
             self.video_frame_count = None
             return
-        self.video_frame_count = int(
+        self.video_frame_count = self.video_file_frame_count = int(
             self.video_capture.get(cv2.CAP_PROP_FRAME_COUNT)
         )
 
     def get_video_frame_count(self):
-        if not self.src_type == SRC_TYPE.VIDEO:
+        if not self.src_type == SRC_TYPE.VIDEO_FILE:
             return
         if not self.video_frame_count:
             self.set_video_frame_count()
@@ -590,6 +587,18 @@ class FrameWidget(WidgetABC):
 
     def get_openfrom_combobox_height(self):
         return self.openfrom_combobox.winfo_reqheight()
+
+    def get_video_scrollbar_x(self):
+        return 0
+
+    def get_video_scrollbar_y(self):
+        return self.get_video_frame_label_height()
+
+    def get_video_scrollbar_width(self):
+        return self.get_width()
+
+    def get_video_scrollbar_height(self):
+        return self.video_scrollbar.winfo_reqheight()
 
     def set_x(self):
         pass
@@ -843,6 +852,13 @@ class FrameWidget(WidgetABC):
         self.openfrom_combobox_var.trace(
             "w", self.openfrom_combobox_var_trace_w
         )
+
+        self.video_scrollbar = ttk.Scrollbar(
+            self.root,
+            cursor="spider",
+            orient="horizontal",
+        )
+
         self.opensrc_button = tk.Button(
             self.root, text=_("Open"), command=self.opensrc_button_command
         )
@@ -870,15 +886,23 @@ class FrameWidget(WidgetABC):
             self.set_oper_widget_min_height()
         return self.oper_widget_min_height
 
+    def get_oper_widgets_x0(self):
+        width_list = self.get_oper_widgets_width_list()
+        return int((self.get_width() - width_list[0]) / 2)
+
+    def get_oper_widgets_y0(self):
+        return (
+            self.get_video_frame_label_height()
+            + self.get_oper_widgets_margin()
+            + self.get_video_scrollbar_height()
+        )
+
     def oper_widgets_place(self):
         widgets = self.get_oper_widgets()
         width_list = self.get_oper_widgets_width_list()
-        width_index = 0
-        x = int((self.get_width() - width_list[width_index]) / 2)
-        y = (
-            self.get_video_frame_label_height()
-            + self.get_oper_widgets_margin()
-        )
+        width_index = 1
+        x = self.get_oper_widgets_x0()
+        y = self.get_oper_widgets_y0()
         min_y = self.get_oper_widget_min_height()
         prev_widget = widgets[0]
         prev_widget.place(x=x, y=y)
@@ -886,7 +910,7 @@ class FrameWidget(WidgetABC):
             x += prev_widget.winfo_reqwidth() + self.get_oper_widgets_margin()
             if (x + w.winfo_reqwidth()) > self.get_width():
                 width_index += 1
-                x = int((self.get_width() - width_list[width_index]) / 2)
+                x = int((self.get_width() - width_list[0]) / 2)
                 y += min_y
             w.place(x=x, y=y)
             prev_widget = w
@@ -897,6 +921,12 @@ class FrameWidget(WidgetABC):
             y=self.get_video_frame_label_y(),
             width=self.get_video_frame_label_width(),
             height=self.get_video_frame_label_height(),
+        )
+        self.video_scrollbar.place(
+            x=self.get_video_scrollbar_x(),
+            y=self.get_video_scrollbar_y(),
+            width=self.get_video_scrollbar_width(),
+            height=self.get_video_scrollbar_height(),
         )
         self.oper_widgets_place()
         self.set_video_frame_fxfy()
