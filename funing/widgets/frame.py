@@ -60,7 +60,8 @@ class FrameWidget(WidgetABC):
         self.video_frame_height = None
         self.video_refresh_time = None
         self.video_black_image = np.zeros(shape=[512, 512, 3], dtype=np.uint8)
-        self.video_scrollbar = None
+        self.video_scale = None
+        self.video_scale_var = DoubleVar()
         self.image_src_path = None
         self.image_exts = ["jpg", "png", "jpeg", "webp"]
         self.image_size = None
@@ -378,6 +379,16 @@ class FrameWidget(WidgetABC):
         self.set_video_frame_fxfy(to_none=True)
         self.set_video_frame_width(to_none=True)
         self.set_video_frame_height(to_none=True)
+        
+    def before_update_camera_video_frame(self):
+        pass
+
+    def before_update_video_file_frame(self):
+        self.set_video_scale(self.get_video_frame_count())
+        pass
+
+    def set_video_scale(self,to=100):
+        self.video_scale.configure(to=int(to))
 
     def read_video_src(
         self,
@@ -387,6 +398,12 @@ class FrameWidget(WidgetABC):
         if (not self.video_src_path) or isinstance(src_path, int) or src_path:
             self.set_video_src_path(src_path)
         self.video_signal = VIDEO_SIGNAL.REFRESH
+        if self.src_type == SRC_TYPE.VIDEO_FILE:
+            self.before_update_video_file_frame()
+            pass
+        if self.src_type == SRC_TYPE.CAMERA:
+            self.before_update_camera_video_frame()
+            pass
         self.update_video_frame()
 
     def play_camera_video(self, src_path=None, check_video_capture=True):
@@ -418,7 +435,7 @@ class FrameWidget(WidgetABC):
                 image = self.draw_face_rect(image)
             if resize:
                 image = self.resize_by_image_label_size(image)
-            self.update_video_frame_label(image)
+            self.update_image_label(image)
 
     def set_image_size(self, and_channels=False, to_none=False):
         if to_none:
@@ -541,6 +558,8 @@ class FrameWidget(WidgetABC):
         if to_none:
             self.video_frame_count = None
             return
+        if not self.video_capture:
+            self.get_video_capture()
         self.video_frame_count = self.video_file_frame_count = int(
             self.video_capture.get(cv2.CAP_PROP_FRAME_COUNT)
         )
@@ -588,17 +607,17 @@ class FrameWidget(WidgetABC):
     def get_openfrom_combobox_height(self):
         return self.openfrom_combobox.winfo_reqheight()
 
-    def get_video_scrollbar_x(self):
+    def get_video_scale_x(self):
         return 0
 
-    def get_video_scrollbar_y(self):
+    def get_video_scale_y(self):
         return self.get_video_frame_label_height()
 
-    def get_video_scrollbar_width(self):
+    def get_video_scale_width(self):
         return self.get_width()
 
-    def get_video_scrollbar_height(self):
-        return self.video_scrollbar.winfo_reqheight()
+    def get_video_scale_height(self):
+        return self.video_scale.winfo_reqheight()
 
     def set_x(self):
         pass
@@ -834,6 +853,31 @@ class FrameWidget(WidgetABC):
         if not label:
             return
         self.image_label = self.video_frame_label = label
+    
+    def set_video_file_frame_position(self):
+        self.set_video_position()
+
+    def set_video_frame_position(self):
+        self.set_video_position()
+
+    def set_video_file_position(self):
+        self.set_video_position()
+        
+    def set_video_position(self,pos=0):
+        if not self.src_type == SRC_TYPE.VIDEO_FILE:
+            return
+        if not self.video_capture:
+            return 
+        if not self.video_capture.isOpened():
+            return
+        pos = int(pos)
+        self.video_capture.set(
+            cv.CAP_PROP_POS_FRAMES,pos)
+
+    def video_scale_var_trace_w(self):
+        video_scale_get = self.video_scale.get()
+
+        pass
 
     def set_widgets(self):
         label = Label(
@@ -853,11 +897,12 @@ class FrameWidget(WidgetABC):
             "w", self.openfrom_combobox_var_trace_w
         )
 
-        self.video_scrollbar = ttk.Scrollbar(
+        self.video_scale = ttk.Scale(
             self.root,
-            cursor="spider",
             orient="horizontal",
+            variable=self.video_scale_var,
         )
+        self.video_scale_var.trace("w", self.video_scale_var_trace_w)
 
         self.opensrc_button = tk.Button(
             self.root, text=_("Open"), command=self.opensrc_button_command
@@ -894,13 +939,13 @@ class FrameWidget(WidgetABC):
         return (
             self.get_video_frame_label_height()
             + self.get_oper_widgets_margin()
-            + self.get_video_scrollbar_height()
+            + self.get_video_scale_height()
         )
 
     def oper_widgets_place(self):
         widgets = self.get_oper_widgets()
         width_list = self.get_oper_widgets_width_list()
-        width_index = 1
+        width_index = 0
         x = self.get_oper_widgets_x0()
         y = self.get_oper_widgets_y0()
         min_y = self.get_oper_widget_min_height()
@@ -910,7 +955,7 @@ class FrameWidget(WidgetABC):
             x += prev_widget.winfo_reqwidth() + self.get_oper_widgets_margin()
             if (x + w.winfo_reqwidth()) > self.get_width():
                 width_index += 1
-                x = int((self.get_width() - width_list[0]) / 2)
+                x = int((self.get_width() - width_list[width_index]) / 2)
                 y += min_y
             w.place(x=x, y=y)
             prev_widget = w
@@ -922,11 +967,11 @@ class FrameWidget(WidgetABC):
             width=self.get_video_frame_label_width(),
             height=self.get_video_frame_label_height(),
         )
-        self.video_scrollbar.place(
-            x=self.get_video_scrollbar_x(),
-            y=self.get_video_scrollbar_y(),
-            width=self.get_video_scrollbar_width(),
-            height=self.get_video_scrollbar_height(),
+        self.video_scale.place(
+            x=self.get_video_scale_x(),
+            y=self.get_video_scale_y(),
+            width=self.get_video_scale_width(),
+            height=self.get_video_scale_height(),
         )
         self.oper_widgets_place()
         self.set_video_frame_fxfy()
