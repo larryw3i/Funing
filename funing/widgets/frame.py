@@ -59,11 +59,12 @@ class FrameWidget(WidgetABC):
         self.video_frame_fxfy = None
         self.video_frame_width = None
         self.video_frame_height = None
-        self.video_refresh_time = None
+        self.video_refresh_mspf = None
         self.video_black_image = np.zeros(shape=[512, 512, 3], dtype=np.uint8)
         self.video_scale = None
         self.video_scale_label = None
         self.video_file_frame_duration = None
+        self.video_capture_mesc = None
         self.image_src_path = None
         self.image_exts = ["jpg", "png", "jpeg", "webp"]
         self.image_size = None
@@ -113,16 +114,21 @@ class FrameWidget(WidgetABC):
     def get_info_widget(self):
         return self.iw
 
-    def set_video_refresh_time(self, to_none=False):
+    def set_video_refresh_mspf(self, to_none=False):
         if to_none:
-            self.video_refresh_time = None
+            self.video_refresh_mspf = None
             return
-        self.video_refresh_time = int(1000 / self.get_video_frame_fps())
+        self.video_refresh_mspf = int(1000 / self.get_video_frame_fps())
+        print("self.video_refresh_mspf", self.video_refresh_mspf)
 
-    def get_video_refresh_time(self):
-        if not self.video_refresh_time:
-            self.set_video_refresh_time()
-        return self.video_refresh_time
+    def get_video_refresh_mspf(
+        self,
+    ):
+        if not (self.video_capture or self.video_capture.isOpened()):
+            return int(1000 / 30)
+        if not self.video_refresh_mspf:
+            self.set_video_refresh_mspf()
+        return self.video_refresh_mspf
 
     def set_info(self, key=None, value=None, save_now=False, to_none=False):
         """
@@ -381,6 +387,7 @@ class FrameWidget(WidgetABC):
         self.set_video_frame_fxfy(to_none=True)
         self.set_video_frame_width(to_none=True)
         self.set_video_frame_height(to_none=True)
+        self.set_video_capture_msec(to_none=True)
         self.set_video_file_frame_duration(to_none=True)
 
     def before_update_camera_video_frame(self):
@@ -398,8 +405,6 @@ class FrameWidget(WidgetABC):
         src_path=None,
     ):
         self.del_prev_video_capture_values()
-        if (not self.video_src_path) or isinstance(src_path, int) or src_path:
-            self.set_video_src_path(src_path)
         self.video_signal = VIDEO_SIGNAL.REFRESH
         if self.src_type == SRC_TYPE.VIDEO_FILE:
             self.before_update_video_file_frame()
@@ -410,11 +415,15 @@ class FrameWidget(WidgetABC):
         self.update_video_frame()
 
     def play_camera_video(self, src_path=None, check_video_capture=True):
+        self.set_video_src_path(src_path)
         self.src_type = SRC_TYPE.CAMERA
+        self.video_scale_area_place_forget()
         self.play_video(src_path, check_video_capture)
 
     def play_file_video(self, src_path=None, check_video_capture=True):
-        self.src_type = SRC_TYPE.VIDEO
+        self.set_video_src_path(src_path)
+        self.video_scale_area_place()
+        self.src_type = SRC_TYPE.VIDEO_FILE
         self.play_video(src_path, check_video_capture)
 
     def play_video(self, src_path=None, check_video_capture=True):
@@ -523,15 +532,17 @@ class FrameWidget(WidgetABC):
         self.set_video_src_path(to_none=True)
         self.image_src_path = src_path
 
-    def set_video_frame_fps(self, fps=None, to_none=False):
+    def set_video_frame_fps(self, to_none=False):
         if to_none:
             self.video_frame_fps = None
             return
-        self.video_frame_fps = fps or int(
-            self.video_capture.get(cv2.CAP_PROP_FPS)
-        )
+        self.video_frame_fps = int(self.video_capture.get(cv2.CAP_PROP_FPS))
 
-    def get_video_frame_fps(self, fps=25):
+    def get_video_frame_fps(self, default=25):
+        if not self.video_capture:
+            return default
+        elif not self.video_capture.isOpened():
+            return default
         if not self.video_frame_fps:
             self.set_video_frame_fps()
         return self.video_frame_fps
@@ -578,7 +589,7 @@ class FrameWidget(WidgetABC):
 
     def get_video_frame_count(self):
         if not self.src_type == SRC_TYPE.VIDEO_FILE:
-            return
+            return 0
         if not self.video_frame_count:
             self.set_video_frame_count()
         return self.video_frame_count
@@ -628,8 +639,10 @@ class FrameWidget(WidgetABC):
     def get_video_scale_width(self):
         return self.get_width() - self.get_video_scale_label_width()
 
-    def get_video_scale_height(self):
-        return self.video_scale.winfo_reqheight()
+    def get_video_scale_height(self, reqheight=True):
+        if reqheight:
+            return self.video_scale.winfo_reqheight()
+        return self.video_scale.winfo_height()
 
     def set_x(self):
         pass
@@ -661,11 +674,15 @@ class FrameWidget(WidgetABC):
     def turnon_video_capture(self):
         self.set_video_capture()
 
-    def set_video_capture(self):
+    def set_video_capture(self, set_mjpg=True):
         src_path = self.get_video_src_path()
         self.video_capture = cv2.VideoCapture(src_path)
         if not self.video_capture.isOpened():
             self.set_msg(_("Unable to open video source %s.") % src_path)
+        if set_mjpg:
+            self.video_capture.set(
+                cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc("M", "J", "P", "G")
+            )
 
     def get_video_capture(self):
         if not self.video_capture:
@@ -678,6 +695,7 @@ class FrameWidget(WidgetABC):
     def set_image_fxfy(self, to_none=False):
         if to_none:
             self.image_fxfy = None
+            return
         if self.image is None:
             return
         image_label_width = self.get_image_label_width()
@@ -785,38 +803,68 @@ class FrameWidget(WidgetABC):
         self.stop_video_frame()
         self.src_type = SRC_TYPE.NONE
 
+    def set_video_capture_msec(self, to_none=False):
+        if to_none:
+            self.video_capture_mesc = None
+        if self.src_type != SRC_TYPE.VIDEO_FILE:
+            self.video_capture_mesc = 0
+            return
+        if not self.video_capture:
+            self.video_capture_mesc = 0
+            return
+        self.video_capture_mesc = self.video_capture.get(cv2.CAP_PROP_POS_MSEC)
+
+    def get_video_capture_msec(self, reset=True):
+        if not self.video_capture_mesc:
+            self.set_video_capture_msec()
+        if reset:
+            self.set_video_capture_msec()
+        return self.video_capture_mesc
+
     def set_video_file_frame_duration(self, to_none=False):
         if to_none:
             self.video_file_frame_duration = None
+            return
         self.video_file_frame_duration = (
             self.get_video_frame_count() / self.get_video_frame_fps()
         )
 
-    def get_video_file_frame_duration(self, return_str=False):
+    def get_video_file_frame_duration(self, return_str=False, default=0):
+        duration = default
         if not self.video_capture:
-            return 0
-        if not self.video_file_frame_duration:
+            pass
+        elif self.src_type != SRC_TYPE.VIDEO_FILE:
+            pass
+        elif not self.video_file_frame_duration:
             self.set_video_file_frame_duration()
+        else:
+            duration = self.video_file_frame_duration
         if return_str:
-            return ("%s:%s") % divmod(
-                self.video_file_frame_duration, 60 * 1000
-            )
-        return self.video_file_frame_duration
+            duration = time.localtime(duration)
+            duration = time.strftime("%M:%S", duration)
+            return duration
+        return duration
 
-    def set_video_scale_area(self):
+    def set_video_scale_area(self, set_video_scale=True):
         video_scale_get = self.video_scale.get() + 1
-        self.video_scale.set(video_scale_get)
-        progress = video_scale_get / self.get_video_frame_fps()
-        progress = ("%s:%s") % divmod(progress, 60 * 1000)
+        progress = self.get_video_capture_msec()
+        progress = time.localtime(progress / 1000)
+        progress = time.strftime("%M:%S", progress)
+        if set_video_scale:
+            self.video_scale.set(video_scale_get)
         self.video_scale_label.configure(
             text=progress
             + "/"
             + self.get_video_file_frame_duration(return_str=True)
         )
 
+    def set_video_frame(self, frame=None):
+        self.video_frame = frame
+
     def update_video_frame(self):
+        delay_time = datetime.now()
         video_capture = self.get_video_capture()
-        video_refresh_time = self.get_video_refresh_time()
+        video_refresh_mspf = self.get_video_refresh_mspf()
         if self.video_signal == VIDEO_SIGNAL.REFRESH:
             _, frame = video_capture.read()
             if frame is None:
@@ -824,10 +872,23 @@ class FrameWidget(WidgetABC):
                 return
             if self.src_type == SRC_TYPE.VIDEO_FILE:
                 self.set_video_scale_area()
-            self.video_frame = frame
+                pass
+            self.set_video_frame(frame)
             self.show_video_frame()
+            delay_time = datetime.now() - delay_time
+            delay_msec = delay_time.microseconds / 1000
+            print("delay_msec", delay_msec)
+            video_refresh_mspf_new = video_refresh_mspf - delay_msec
+            video_refresh_mspf = (
+                video_refresh_mspf_new > 0
+                and video_refresh_mspf_new
+                or video_refresh_mspf
+            )
+            print("video_refresh_mspf", video_refresh_mspf)
+            print("get_video_capture_msec", self.get_video_capture_msec())
             self.video_update_identifier = self.root.after(
-                video_refresh_time, self.update_video_frame
+                5,
+                self.update_video_frame,
             )
 
     def filepath_is_video_type(self, path):
@@ -988,7 +1049,7 @@ class FrameWidget(WidgetABC):
         return (
             self.get_video_frame_label_height()
             + self.get_oper_widgets_margin()
-            + self.get_video_scale_height()
+            + self.get_video_scale_height(reqheight=False)
         )
 
     def oper_widgets_place(self):
@@ -1025,6 +1086,10 @@ class FrameWidget(WidgetABC):
     def get_video_scale_label_height(self):
         return self.video_scale_label.winfo_reqheight()
 
+    def video_scale_area_place_forget(self):
+        self.video_scale.place_forget()
+        self.video_scale_label.place_forget()
+
     def video_scale_area_place(self):
         self.video_scale.place(
             x=self.get_video_scale_x(),
@@ -1046,7 +1111,8 @@ class FrameWidget(WidgetABC):
             width=self.get_video_frame_label_width(),
             height=self.get_video_frame_label_height(),
         )
-        self.video_scale_area_place()
+        if self.src_type == SRC_TYPE.VIDEO_FILE:
+            self.video_scale_area_place()
         self.oper_widgets_place()
         self.set_video_frame_fxfy()
 
