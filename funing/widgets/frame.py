@@ -1,6 +1,7 @@
 import asyncio
 import getopt
 import importlib
+import math
 import os
 import pickle
 import queue
@@ -122,7 +123,6 @@ class FrameWidget(WidgetABC):
             self.video_refresh_mspf = None
             return
         self.video_refresh_mspf = int(1000 / self.get_video_frame_fps())
-        print("self.video_refresh_mspf", self.video_refresh_mspf)
 
     def get_video_refresh_mspf(
         self,
@@ -362,8 +362,7 @@ class FrameWidget(WidgetABC):
         return self.oper_widgets_width
 
     def get_oper_widgets_height(self):
-        self.get_oper_widgets()
-        return self.oper_widgets[0].winfo_reqheight()
+        return self.get_widgets_list_height(self.get_oper_widgets())
 
     def set_oper_widgets(self):
         self.oper_widgets = [
@@ -421,11 +420,17 @@ class FrameWidget(WidgetABC):
         self.set_video_src_path(src_path)
         self.src_type = SRC_TYPE.CAMERA
         self.video_scale_area_place_forget()
+        self.video_file_play_mode_radiobuttons_place_forget()
         self.play_video(src_path, check_video_capture)
+
+    def video_file_play_mode_radiobuttons_place_forget(self):
+        for w in self.get_video_file_play_mode_radiobuttons():
+            w.place_forget()
 
     def play_file_video(self, src_path=None, check_video_capture=True):
         self.set_video_src_path(src_path)
         self.video_scale_area_place()
+        self.video_file_play_mode_radiobuttons_place()
         self.src_type = SRC_TYPE.VIDEO_FILE
         self.play_video(src_path, check_video_capture)
 
@@ -637,7 +642,10 @@ class FrameWidget(WidgetABC):
         return 0
 
     def get_video_scale_y(self):
-        return self.get_video_frame_label_height()
+        return (
+            self.get_video_frame_label_height()
+            + self.get_video_file_play_mode_radiobuttons_height()
+        )
 
     def get_video_scale_width(self):
         return self.get_width() - self.get_video_scale_label_width()
@@ -880,15 +888,12 @@ class FrameWidget(WidgetABC):
             self.show_video_frame()
             delay_time = datetime.now() - delay_time
             delay_msec = delay_time.microseconds / 1000
-            print("delay_msec", delay_msec)
             video_refresh_mspf_new = video_refresh_mspf - delay_msec
             video_refresh_mspf = (
                 video_refresh_mspf_new > 0
                 and video_refresh_mspf_new
                 or video_refresh_mspf
             )
-            print("video_refresh_mspf", video_refresh_mspf)
-            print("get_video_capture_msec", self.get_video_capture_msec())
             self.video_update_identifier = self.root.after(
                 5,
                 self.update_video_frame,
@@ -1020,20 +1025,37 @@ class FrameWidget(WidgetABC):
         return self.video_file_play_mode_radiobuttons_width_list
 
     def get_video_file_play_mode_radiobuttons_x0(self):
-        width_list = self.get_video_file_play_mode_radiobuttons_width_list()
+        return self.get_x()
 
-        return int(self.get_x() + (self.get_width() - self.width_list[0]))
+    def get_video_file_play_mode_radiobuttons_height(self, reqheight=False):
+        return self.get_widgets_list_height(
+            self.get_video_file_play_mode_radiobuttons(), reqheight
+        )
+
+    def get_widgets_list_height(
+        self, widgets, parent_width=None, reqheight=False
+    ):
+        height = 0
+        widgets = widgets
+        parent_width = parent_width or self.get_width()
+        width = sum([w.winfo_reqwidth() for w in widgets])
+        if reqheight:
+            return max([w.winfo_reqheight() for w in widgets]) * math.ceil(
+                width / parent_width
+            )
+        return max([w.winfo_height() for w in widgets]) * math.ceil(
+            width / parent_width
+        )
 
     def get_video_file_play_mode_radiobuttons_y0(self):
-        pass
+        return int(self.get_y() + self.get_video_frame_label_height())
 
     def video_file_play_mode_radiobuttons_place(self):
-
-        width_list = self.get_video_file_play_mode_radiobuttons_width_list()
-
-        for radiobutton in radiobuttons:
-            pass
-        pass
+        self.widgets_place_center_break(
+            self.get_video_file_play_mode_radiobuttons(),
+            x0=self.get_video_file_play_mode_radiobuttons_x0(),
+            y0=self.get_video_file_play_mode_radiobuttons_y0(),
+        )
 
     def set_widgets(self):
         label = ttk.Label(
@@ -1057,6 +1079,7 @@ class FrameWidget(WidgetABC):
             variable=self.video_file_play_mode_var,
             value=PLAY_MODE.IN_TIME,
         )
+        self.video_file_play_mode_var.set(PLAY_MODE.IN_TIME)
         self.set_video_file_play_mode_radiobuttons(
             video_file_play_everyframe_mode,
             video_file_play_intime_mode,
@@ -1111,6 +1134,9 @@ class FrameWidget(WidgetABC):
             self.get_video_frame_label_height()
             + self.get_oper_widgets_margin()
             + self.get_video_scale_height(reqheight=False)
+            + self.get_video_file_play_mode_radiobuttons_height(
+                reqheight=False
+            )
         )
 
     def widgets_place_center_break(
@@ -1129,7 +1155,6 @@ class FrameWidget(WidgetABC):
                 width = w.winfo_reqwidth()
         if width > 0:
             width_list.append(width)
-        print("width_list", width_list)
         width_index = 0
         x = x0
         y = y0
@@ -1154,22 +1179,6 @@ class FrameWidget(WidgetABC):
             x0=self.get_oper_widgets_x0(),
             y0=self.get_oper_widgets_y0(),
         )
-        # widgets = self.get_oper_widgets()
-        # width_list = self.get_oper_widgets_width_list()
-        # width_index = 0
-        # x = self.get_oper_widgets_x0()
-        # y = self.get_oper_widgets_y0()
-        # min_y = self.get_oper_widget_min_height()
-        # prev_widget = widgets[0]
-        # prev_widget.place(x=x, y=y)
-        # for w in widgets[1:]:
-        #     x += prev_widget.winfo_reqwidth() + self.get_oper_widgets_margin()
-        #     if (x + w.winfo_reqwidth()) > self.get_width():
-        #         width_index += 1
-        #         x = int((self.get_width() - width_list[width_index]) / 2)
-        #         y += min_y
-        #     w.place(x=x, y=y)
-        #     prev_widget = w
 
     def get_video_scale_label_x(self):
         return (
@@ -1179,7 +1188,10 @@ class FrameWidget(WidgetABC):
         )
 
     def get_video_scale_label_y(self):
-        return self.get_video_frame_label_height()
+        return (
+            self.get_video_frame_label_height()
+            + self.get_video_file_play_mode_radiobuttons_height()
+        )
 
     def get_video_scale_label_width(self):
         return self.video_scale_label.winfo_reqwidth()
@@ -1214,6 +1226,7 @@ class FrameWidget(WidgetABC):
         )
         if self.src_type == SRC_TYPE.VIDEO_FILE:
             self.video_scale_area_place()
+            self.video_file_play_mode_radiobuttons_place()
         self.oper_widgets_place()
         self.set_video_frame_fxfy()
 
