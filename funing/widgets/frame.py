@@ -64,6 +64,8 @@ class FrameWidget(WidgetABC):
         self.video_scale = None
         self.video_scale_label = None
         self.video_file_frame_duration = None
+        self.video_file_play_mode_var = IntVar()
+        self.video_file_play_mode_radiobuttons = None
         self.video_capture_mesc = None
         self.image_src_path = None
         self.image_exts = ["jpg", "png", "jpeg", "webp"]
@@ -87,6 +89,7 @@ class FrameWidget(WidgetABC):
         self.action = None
         self.oper_widgets_x_list = None
         self.oper_widgets_width_list = None
+        self.video_file_play_mode_radiobuttons_width_list = None
         self.oper_widgets_width = None
         self.oper_widgets_height = None
         self.oper_widgets_margin = 2
@@ -991,6 +994,47 @@ class FrameWidget(WidgetABC):
         self.set_video_file_position(self.video_scale.get())
         pass
 
+    def set_video_file_play_mode_radiobuttons(self, *buttons):
+        self.video_file_play_mode_radiobuttons = buttons
+
+    def get_video_file_play_mode_radiobuttons(self, *buttons):
+        return self.video_file_play_mode_radiobuttons
+
+    def set_video_file_play_mode_radiobuttons_width_list(self):
+        width = 0
+        width_list = []
+        for radiobutton in radiobuttons:
+            pre_width = width + radiobutton.winfo_reqwidth()
+            if pre_width > self.get_width():
+                width_list.append(width)
+                width = 0
+            else:
+                width = pre_width
+        if width != 0:
+            width_list.append(width)
+        self.video_file_play_mode_radiobuttons_width_list = width_list
+
+    def get_video_file_play_mode_radiobuttons_width_list(self):
+        if not self.video_file_play_mode_radiobuttons_width_list:
+            self.set_video_file_play_mode_radiobuttons_width_list()
+        return self.video_file_play_mode_radiobuttons_width_list
+
+    def get_video_file_play_mode_radiobuttons_x0(self):
+        width_list = self.get_video_file_play_mode_radiobuttons_width_list()
+
+        return int(self.get_x() + (self.get_width() - self.width_list[0]))
+
+    def get_video_file_play_mode_radiobuttons_y0(self):
+        pass
+
+    def video_file_play_mode_radiobuttons_place(self):
+
+        width_list = self.get_video_file_play_mode_radiobuttons_width_list()
+
+        for radiobutton in radiobuttons:
+            pass
+        pass
+
     def set_widgets(self):
         label = ttk.Label(
             self.root,
@@ -999,6 +1043,24 @@ class FrameWidget(WidgetABC):
             anchor="center",
         )
         self.set_video_image_label(label)
+
+        video_file_play_everyframe_mode = ttk.Radiobutton(
+            self.root,
+            text=_("Every Frame"),
+            variable=self.video_file_play_mode_var,
+            value=PLAY_MODE.EVERY_FRAME,
+        )
+
+        video_file_play_intime_mode = ttk.Radiobutton(
+            self.root,
+            text=_("In Time"),
+            variable=self.video_file_play_mode_var,
+            value=PLAY_MODE.IN_TIME,
+        )
+        self.set_video_file_play_mode_radiobuttons(
+            video_file_play_everyframe_mode,
+            video_file_play_intime_mode,
+        )
 
         self.openfrom_combobox = ttk.Combobox(
             self.root,
@@ -1042,8 +1104,7 @@ class FrameWidget(WidgetABC):
         return self.oper_widget_min_height
 
     def get_oper_widgets_x0(self):
-        width_list = self.get_oper_widgets_width_list()
-        return int((self.get_width() - width_list[0]) / 2)
+        return self.get_x()
 
     def get_oper_widgets_y0(self):
         return (
@@ -1052,23 +1113,63 @@ class FrameWidget(WidgetABC):
             + self.get_video_scale_height(reqheight=False)
         )
 
+    def widgets_place_center_break(
+        self, widgets, x0=0, y0=0, parent_width=None
+    ):
+        widgets = widgets
+        width = 0
+        width_list = []
+        parent_width = parent_width or self.get_width()
+        for w in widgets:
+            pre_width = width + w.winfo_reqwidth()
+            if pre_width <= parent_width:
+                width = pre_width
+            else:
+                width_list.append(width)
+                width = w.winfo_reqwidth()
+        if width > 0:
+            width_list.append(width)
+        print("width_list", width_list)
+        width_index = 0
+        x = x0
+        y = y0
+        min_height = max([w.winfo_reqheight() for w in widgets])
+        for w in widgets:
+            if x == x0:
+                x = x0 + int((parent_width - width_list[width_index]) / 2)
+            new_x = x + w.winfo_reqwidth()
+            if new_x > parent_width:
+                width_index += 1
+                x = x0 + int((parent_width - width_list[width_index]) / 2)
+                y += min_height
+                w.place(x=x, y=y)
+            else:
+                w.place(x=x, y=y)
+                x = new_x
+
     def oper_widgets_place(self):
         widgets = self.get_oper_widgets()
-        width_list = self.get_oper_widgets_width_list()
-        width_index = 0
-        x = self.get_oper_widgets_x0()
-        y = self.get_oper_widgets_y0()
-        min_y = self.get_oper_widget_min_height()
-        prev_widget = widgets[0]
-        prev_widget.place(x=x, y=y)
-        for w in widgets[1:]:
-            x += prev_widget.winfo_reqwidth() + self.get_oper_widgets_margin()
-            if (x + w.winfo_reqwidth()) > self.get_width():
-                width_index += 1
-                x = int((self.get_width() - width_list[width_index]) / 2)
-                y += min_y
-            w.place(x=x, y=y)
-            prev_widget = w
+        self.widgets_place_center_break(
+            widgets,
+            x0=self.get_oper_widgets_x0(),
+            y0=self.get_oper_widgets_y0(),
+        )
+        # widgets = self.get_oper_widgets()
+        # width_list = self.get_oper_widgets_width_list()
+        # width_index = 0
+        # x = self.get_oper_widgets_x0()
+        # y = self.get_oper_widgets_y0()
+        # min_y = self.get_oper_widget_min_height()
+        # prev_widget = widgets[0]
+        # prev_widget.place(x=x, y=y)
+        # for w in widgets[1:]:
+        #     x += prev_widget.winfo_reqwidth() + self.get_oper_widgets_margin()
+        #     if (x + w.winfo_reqwidth()) > self.get_width():
+        #         width_index += 1
+        #         x = int((self.get_width() - width_list[width_index]) / 2)
+        #         y += min_y
+        #     w.place(x=x, y=y)
+        #     prev_widget = w
 
     def get_video_scale_label_x(self):
         return (

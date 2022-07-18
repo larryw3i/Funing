@@ -54,3 +54,8 @@ class VIDEO_SIGNAL(Enum):
     REFRESH = UPDATE = 0
     PAUSE = 1
     NONE = 2
+
+
+class PLAY_MODE(Enum):
+    EVERY_FRAME = 0
+    IN_TIME = 1
