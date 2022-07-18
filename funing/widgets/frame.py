@@ -70,6 +70,8 @@ class FrameWidget(WidgetABC):
         self.video_capture_mesc = None
         self.video_file_play_mode_radiobuttons_width_list = None
         self.video_file_play_start_time = None
+        self.video_file_frame_diff = None
+        self.video_scale_passive = True
         self.image_src_path = None
         self.image_exts = ["jpg", "png", "jpeg", "webp"]
         self.image_size = None
@@ -431,7 +433,7 @@ class FrameWidget(WidgetABC):
     def get_video_file_play_mode(self):
         return self.video_file_play_mode_var.get()
 
-    def set_video_file_play_start_time(self, time):
+    def set_video_file_play_start_time(self, time=datetime.now()):
         self.video_file_play_start_time = time
 
     def get_video_file_play_start_time(self):
@@ -537,7 +539,7 @@ class FrameWidget(WidgetABC):
         self.image_src_path = None
 
     def set_video_frame_index(self, index):
-        self.video_scale.set(index)
+        self.set_video_scale(index)
         self.set_video_file_position(index)
 
     def get_video_frame_index(self):
@@ -568,6 +570,9 @@ class FrameWidget(WidgetABC):
         if not self.video_frame_fps:
             self.set_video_frame_fps()
         return self.video_frame_fps
+
+    def get_video_frame_fpms(self):
+        return self.get_video_frame_fps() / 1000
 
     def set_video_frame_width(self, to_none=False):
         if to_none:
@@ -876,7 +881,7 @@ class FrameWidget(WidgetABC):
         progress = time.localtime(progress / 1000)
         progress = time.strftime("%M:%S", progress)
         if set_video_scale:
-            self.video_scale.set(video_scale_get)
+            self.set_video_scale(video_scale_get)
         self.video_scale_label.configure(
             text=progress
             + "/"
@@ -888,22 +893,36 @@ class FrameWidget(WidgetABC):
 
     def get_video_file_frame_position_intime(self):
         timediff = datetime.now() - self.get_video_file_play_start_time()
-        msec = timediff.microseconds / 1000
-        position = self.get_video_frame_fps() / msec
+        msec = timediff.total_seconds() * 1000
+        position = (
+            self.get_video_frame_fpms() * msec
+            + self.get_video_file_frame_diff()
+        )
         return position
+
+    def set_video_file_frame_diff(self, frame_diff=0):
+        self.video_file_frame_diff = frame_diff
+
+    def get_video_file_frame_diff(self):
+        if not self.video_file_frame_diff:
+            self.set_video_file_frame_diff()
+        return self.video_file_frame_diff
+
+    def set_video_scale_passive(self, *args):
+        self.video_scale_passive = True
 
     def update_video_frame(self):
         delay_time = datetime.now()
         video_capture = self.get_video_capture()
         video_refresh_mspf = self.get_video_refresh_mspf()
         if self.video_signal == VIDEO_SIGNAL.REFRESH:
-            # if (
-            #     self.src_type == SRC_TYPE.VIDEO_FILE
-            #     and self.get_video_file_play_mode() == PLAY_MODE.IN_TIME.value
-            # ):
-            #     self.set_video_file_frame_position(
-            #         self.get_video_file_frame_position_intime()
-            #     )
+            if (
+                self.src_type == SRC_TYPE.VIDEO_FILE
+                and self.get_video_file_play_mode() == PLAY_MODE.IN_TIME.value
+            ):
+                self.set_video_file_frame_position(
+                    self.get_video_file_frame_position_intime()
+                )
             _, frame = video_capture.read()
             if frame is None:
                 self.finished_video_reading_listener()
@@ -1004,7 +1023,12 @@ class FrameWidget(WidgetABC):
             return
         self.set_video_position(pos)
 
-    def set_video_position(self, pos=0):
+    def get_video_position(self):
+        if not self.video_capture:
+            return 0
+        return self.video_capture.get(cv2.CAP_PROP_POS_FRAMES)
+
+    def set_video_position(self, pos=0, set_video_scale=False):
         if not self.src_type == SRC_TYPE.VIDEO_FILE:
             return
         if not self.video_capture:
@@ -1013,6 +1037,8 @@ class FrameWidget(WidgetABC):
             return
         pos = int(pos)
         self.video_capture.set(cv2.CAP_PROP_POS_FRAMES, pos)
+        if set_video_scale:
+            self.set_video_scale(pos)
 
     def video_scale_bind_buttonrelease_1(self, *args):
         self.set_video_file_position(self.video_scale.get())
@@ -1023,8 +1049,14 @@ class FrameWidget(WidgetABC):
         pass
 
     def video_scale_command(self, *args):
-        self.set_video_file_position(self.video_scale.get())
-        pass
+        if self.video_scale_passive:
+            self.video_scale_passive = not self.video_scale_passive
+            return
+        video_scale_get = self.video_scale.get()
+        self.set_video_file_frame_diff(
+            video_scale_get - self.get_video_file_frame_position_intime()
+        )
+        self.set_video_file_position(video_scale_get)
 
     def set_video_file_play_mode_radiobuttons(self, *buttons):
         self.video_file_play_mode_radiobuttons = buttons
@@ -1272,13 +1304,17 @@ class FrameWidget(WidgetABC):
     def close_video_capture(self):
         self.release_video_capture()
 
+    def set_video_scale(self, value=0):
+        self.video_scale_passive = True
+        self.video_scale.set(value)
+
     def stop_video_frame(self):
         if self.video_update_identifier:
             self.root.after_cancel(self.video_update_identifier)
             self.video_update_identifier = None
         self.release_video_capture()
         self.video_signal = VIDEO_SIGNAL.PAUSE
-        self.video_scale.set(0)
+        self.set_video_scale(0)
 
     def release_video_capture(self):
         if not self.video_capture:
