@@ -834,6 +834,22 @@ class FrameWidget(WidgetABC):
         self.src_type = SRC_TYPE.NONE
 
     def set_video_capture_msec(self, to_none=False):
+        self.set_video_capture_msec_by_frame_index(to_none)
+
+    def set_video_capture_msec_by_frame_index(self, to_none=False):
+
+        if to_none:
+            self.video_capture_mesc = None
+        if self.src_type != SRC_TYPE.VIDEO_FILE:
+            self.video_capture_mesc = 0
+            return
+        if not self.video_capture:
+            self.video_capture_mesc = 0
+            return
+        pos = self.get_video_position()
+        self.video_capture_mesc = pos * 1000 / self.get_video_frame_fps()
+
+    def set_video_capture_msec_by_cv2(self, to_none=False):
         if to_none:
             self.video_capture_mesc = None
         if self.src_type != SRC_TYPE.VIDEO_FILE:
