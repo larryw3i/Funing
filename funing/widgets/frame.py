@@ -68,6 +68,8 @@ class FrameWidget(WidgetABC):
         self.video_file_play_mode_var = IntVar()
         self.video_file_play_mode_radiobuttons = None
         self.video_capture_mesc = None
+        self.video_file_play_mode_radiobuttons_width_list = None
+        self.video_file_play_start_time = None
         self.image_src_path = None
         self.image_exts = ["jpg", "png", "jpeg", "webp"]
         self.image_size = None
@@ -90,7 +92,6 @@ class FrameWidget(WidgetABC):
         self.action = None
         self.oper_widgets_x_list = None
         self.oper_widgets_width_list = None
-        self.video_file_play_mode_radiobuttons_width_list = None
         self.oper_widgets_width = None
         self.oper_widgets_height = None
         self.oper_widgets_margin = 2
@@ -427,11 +428,24 @@ class FrameWidget(WidgetABC):
         for w in self.get_video_file_play_mode_radiobuttons():
             w.place_forget()
 
+    def get_video_file_play_mode(self):
+        return self.video_file_play_mode_var.get()
+
+    def set_video_file_play_start_time(self, time):
+        self.video_file_play_start_time = time
+
+    def get_video_file_play_start_time(self):
+        if not self.video_file_play_start_time:
+            return datetime.now()
+        return self.video_file_play_start_time
+
     def play_file_video(self, src_path=None, check_video_capture=True):
         self.set_video_src_path(src_path)
         self.video_scale_area_place()
         self.video_file_play_mode_radiobuttons_place()
         self.src_type = SRC_TYPE.VIDEO_FILE
+        if self.get_video_file_play_mode() == PLAY_MODE.IN_TIME.value:
+            self.set_video_file_play_start_time(datetime.now())
         self.play_video(src_path, check_video_capture)
 
     def play_video(self, src_path=None, check_video_capture=True):
@@ -872,11 +886,24 @@ class FrameWidget(WidgetABC):
     def set_video_frame(self, frame=None):
         self.video_frame = frame
 
+    def get_video_file_frame_position_intime(self):
+        timediff = datetime.now() - self.get_video_file_play_start_time()
+        msec = timediff.microseconds / 1000
+        position = self.get_video_frame_fps() / msec
+        return position
+
     def update_video_frame(self):
         delay_time = datetime.now()
         video_capture = self.get_video_capture()
         video_refresh_mspf = self.get_video_refresh_mspf()
         if self.video_signal == VIDEO_SIGNAL.REFRESH:
+            # if (
+            #     self.src_type == SRC_TYPE.VIDEO_FILE
+            #     and self.get_video_file_play_mode() == PLAY_MODE.IN_TIME.value
+            # ):
+            #     self.set_video_file_frame_position(
+            #         self.get_video_file_frame_position_intime()
+            #     )
             _, frame = video_capture.read()
             if frame is None:
                 self.finished_video_reading_listener()
@@ -966,11 +993,11 @@ class FrameWidget(WidgetABC):
             return
         self.image_label = self.video_frame_label = label
 
-    def set_video_file_frame_position(self):
-        self.set_video_position()
+    def set_video_file_frame_position(self, pos=0):
+        self.set_video_position(pos)
 
-    def set_video_frame_position(self):
-        self.set_video_position()
+    def set_video_frame_position(self, pos=0):
+        self.set_video_position(pos)
 
     def set_video_file_position(self, pos=0):
         if self.src_type != SRC_TYPE.VIDEO_FILE:
@@ -1070,16 +1097,16 @@ class FrameWidget(WidgetABC):
             self.root,
             text=_("Every Frame"),
             variable=self.video_file_play_mode_var,
-            value=PLAY_MODE.EVERY_FRAME,
+            value=PLAY_MODE.EVERY_FRAME.value,
         )
 
         video_file_play_intime_mode = ttk.Radiobutton(
             self.root,
             text=_("In Time"),
             variable=self.video_file_play_mode_var,
-            value=PLAY_MODE.IN_TIME,
+            value=PLAY_MODE.IN_TIME.value,
         )
-        self.video_file_play_mode_var.set(PLAY_MODE.IN_TIME)
+        self.video_file_play_mode_var.set(PLAY_MODE.IN_TIME.value)
         self.set_video_file_play_mode_radiobuttons(
             video_file_play_everyframe_mode,
             video_file_play_intime_mode,
