@@ -1310,11 +1310,11 @@ class FrameWidget(WidgetABC):
         parent_width = parent_width or self.get_width()
         for w in widgets:
             pre_width = width + w.winfo_reqwidth()
-            if pre_width <= parent_width:
-                width = pre_width
-            else:
+            if pre_width > parent_width:
                 width_list.append(width)
                 width = w.winfo_reqwidth()
+            else:
+                width = pre_width
         if width > 0:
             width_list.append(width)
         x = x0
@@ -1330,6 +1330,7 @@ class FrameWidget(WidgetABC):
                 x = x0 + int((parent_width - width_list[width_index]) / 2)
                 y += min_height
                 w.place(x=x, y=y)
+                x += w.winfo_reqwidth()
             else:
                 w.place(x=x, y=y)
                 x = new_x
