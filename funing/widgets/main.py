@@ -153,6 +153,11 @@ class MainWidget:
     def get_screenwidth(self, times=1, of=1):
         return int(self.root.winfo_screenwidth() * times / of)
 
+    def restart_funing(self):
+        os.execv(sys.argv[0], sys.argv)
+        sys.exit()
+        pass
+
     def get_copy(self, key=None, default=None):
         if self._copy == {}:
             with open(copy_path, "rb") as f:

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-10 19:02+0800\n"
+"POT-Creation-Date: 2022-07-20 00:00+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -41,17 +41,18 @@ msgid "GO"
 msgstr ""
 
 #: funing/.lwcp/fui/main_ui.py:49 funing/.lwcp/ui/c_ui.py:21
-#: funing/.lwcp/ui/main_ui.py:78
+#: funing/.lwcp/ui/main_ui.py:78 funing/widgets/frame.py:87
 msgid "File"
 msgstr ""
 
 #: funing/.lwcp/fui/main_ui.py:49 funing/.lwcp/ui/c_ui.py:21
-#: funing/.lwcp/ui/main_ui.py:78
+#: funing/.lwcp/ui/main_ui.py:78 funing/widgets/frame.py:88
 msgid "Camera"
 msgstr ""
 
 #: funing/.lwcp/fui/main_ui.py:50 funing/.lwcp/ui/c_ui.py:22
 #: funing/.lwcp/ui/main_ui.py:79 funing/widgets/frame.py:239
+#: funing/widgets/frame.py:1256
 msgid "Open"
 msgstr ""
 
@@ -62,16 +63,18 @@ msgstr ""
 
 #: funing/.lwcp/fui/main_ui.py:63 funing/.lwcp/_fui/_main_ui.py:189
 #: funing/.lwcp/ui/c_ui.py:37 funing/.lwcp/ui/main_ui.py:92
-#: funing/widgets/frame.py:241
+#: funing/widgets/frame.py:241 funing/widgets/frame.py:1262
 msgid "Pause"
 msgstr ""
 
 #: funing/.lwcp/fui/main_ui.py:66 funing/widgets/frame.py:243
+#: funing/widgets/frame.py:1268
 msgid "Recognize"
 msgstr ""
 
 #: funing/.lwcp/fui/main_ui.py:69 funing/.lwcp/ui/c_ui.py:40
 #: funing/.lwcp/ui/main_ui.py:95 funing/widgets/frame.py:242
+#: funing/widgets/frame.py:1265
 msgid "Pick"
 msgstr ""
 
@@ -98,6 +101,7 @@ msgid "Licensed under the MIT license"
 msgstr ""
 
 #: funing/.lwcp/_fui/_main_ui.py:195 funing/widgets/frame.py:240
+#: funing/widgets/frame.py:1259
 msgid "Play"
 msgstr ""
 
@@ -154,6 +158,7 @@ msgid "About"
 msgstr ""
 
 #: funing/widgets/main.py:165 funing/widgets/main.py:175
+#: funing/widgets/main.py:173
 msgid "Copy Saved!"
 msgstr ""
 
@@ -161,7 +166,7 @@ msgstr ""
 msgid "Hello, Welcome to Funing."
 msgstr ""
 
-#: funing/widgets/bottom.py:75
+#: funing/widgets/bottom.py:75 funing/widgets/bottom.py:74
 msgid "Hello!"
 msgstr ""
 
@@ -177,6 +182,48 @@ msgstr ""
 msgid "Contributors:"
 msgstr ""
 
-#: funing/widgets/frame.py:230
+#: funing/widgets/frame.py:230 funing/widgets/frame.py:1210
 msgid "Video frame."
+msgstr ""
+
+#: funing/widgets/frame.py:205
+#, python-format
+msgid "Information of %s doesn't exist."
+msgstr ""
+
+#: funing/widgets/frame.py:247
+msgid "Label is None."
+msgstr ""
+
+#: funing/widgets/frame.py:278
+msgid "Train face recognizer."
+msgstr ""
+
+#: funing/widgets/frame.py:285
+msgid "Finish Training."
+msgstr ""
+
+#: funing/widgets/frame.py:296
+msgid "haarcascades data doesn't exist."
+msgstr ""
+
+#: funing/widgets/frame.py:482
+msgid "Video not opened."
+msgstr ""
+
+#: funing/widgets/frame.py:731
+#, python-format
+msgid "Unable to open video source %s."
+msgstr ""
+
+#: funing/widgets/frame.py:1033
+msgid "Select video or image file"
+msgstr ""
+
+#: funing/widgets/frame.py:1218
+msgid "Every Frame"
+msgstr ""
+
+#: funing/widgets/frame.py:1225
+msgid "In Time"
 msgstr ""

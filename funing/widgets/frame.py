@@ -24,7 +24,7 @@ from pathlib import Path
 from queue import Queue
 from threading import Thread
 from tkinter import *
-from tkinter import filedialog, ttk
+from tkinter import filedialog, messagebox, ttk
 
 import cv2
 import numpy
@@ -211,6 +211,7 @@ class FrameWidget(WidgetABC):
 
     def get_infos_dataset(self):
         """
+        Get informations dataset.
         recog_datas_dir:
             id
                 face_image
@@ -294,7 +295,24 @@ class FrameWidget(WidgetABC):
         )
         if not os.path.exists(hff_xml_path):
             self.mw.set_msg(_("haarcascades data doesn't exist."))
+            if messagebox.askyesno(
+                _("haarcascades data doesn't exist."),
+                _("Do you want to try to reinstall 'opencv-contrib-python'?"),
+            ):
+                os.system(
+                    "pip3 uninstall -y "
+                    + "opencv-contrib-python opencv-python; "
+                    + "pip3 install "
+                    + "opencv-contrib-python;"
+                )
+                if messagebox.askyesno(
+                    _("Restart Funing?"), _("Do you want to restart Funing?")
+                ):
+                    self.mw.restart_funing()
+                    pass
+                pass
             self.release_video_capture()
+            self.face_casecade = None
             return
         self.face_casecade = cv2.CascadeClassifier(hff_xml_path)
 
@@ -477,11 +495,20 @@ class FrameWidget(WidgetABC):
         pass
 
     def get_frame(self):
-        return self.video_frame or self.image or None
+        frame = self.video_frame or self.image or None
+        if frame is None:
+            self.set_msg(_("Video not opened."))
+        return frame
+
+    def update_widgets_place4show_image(self):
+        self.oper_widgets_place()
+        self.video_scale_area_place_forget()
+        self.video_file_play_mode_radiobuttons_place_forget()
 
     def show_image(self, src_path=None, resize=True, draw_face_rect=True):
         if src_path:
             self.set_image_src_path(src_path)
+            self.update_widgets_place4show_image()
             self.image = cv2.imread(self.image_src_path)
             image = self.image.copy()
             if draw_face_rect:
@@ -805,6 +832,8 @@ class FrameWidget(WidgetABC):
     def draw_rect(self, frame):
         gray_img = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         face_casecade = self.get_face_casecade()
+        if face_casecade is None:
+            return
         rects = face_casecade.detectMultiScale(gray_img, 1.3, 5)
         for (x, y, w, h) in rects:
             frame = cv2.rectangle(
