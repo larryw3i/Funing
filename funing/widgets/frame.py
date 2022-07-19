@@ -74,6 +74,7 @@ class FrameWidget(WidgetABC):
         self.video_file_play_start_time = None
         self.video_file_frame_diff = None
         self.video_scale_passive = True
+        self.video_file_play_mode_str = "video_file_play_mode"
         self.image_src_path = None
         self.image_exts = ["jpg", "png", "jpeg", "webp"]
         self.image_size = None
@@ -427,11 +428,20 @@ class FrameWidget(WidgetABC):
             self.before_update_camera_video_frame()
             self.update_video_frame()
 
+    def update_widgets_place4file_video(self):
+        self.video_scale_area_place()
+        self.video_file_play_mode_radiobuttons_place()
+        self.oper_widgets_place()
+
+    def update_widgets_place4camera_video(self):
+        self.video_scale_area_place_forget()
+        self.video_file_play_mode_radiobuttons_place_forget()
+        self.oper_widgets_place()
+
     def play_camera_video(self, src_path=None, check_video_capture=True):
         self.set_video_src_path(src_path)
         self.src_type = SRC_TYPE.CAMERA
-        self.video_scale_area_place_forget()
-        self.video_file_play_mode_radiobuttons_place_forget()
+        self.update_widgets_place4camera_video()
         self.play_video(src_path, check_video_capture)
 
     def video_file_play_mode_radiobuttons_place_forget(self):
@@ -451,8 +461,7 @@ class FrameWidget(WidgetABC):
 
     def play_file_video(self, src_path=None, check_video_capture=True):
         self.set_video_src_path(src_path)
-        self.video_scale_area_place()
-        self.video_file_play_mode_radiobuttons_place()
+        self.update_widgets_place4file_video()
         self.src_type = SRC_TYPE.VIDEO_FILE
         if self.get_video_file_play_mode() == PLAY_MODE.IN_TIME.value:
             pass
@@ -957,11 +966,20 @@ class FrameWidget(WidgetABC):
             return 0
         return self.video_file_play_pause_frame_index
 
+    def is_play_file_video_everyframe(self):
+        return self.get_play_file_video_everyframe()
+
+    def get_play_file_video_everyframe(self):
+        return (
+            self.src_type == SRC_TYPE.VIDEO_FILE
+            and self.get_video_file_play_mode() == PLAY_MODE.EVERY_FRAME.value
+        )
+
     def update_video_frame(self, frame_index=0):
         time0 = datetime.now()
         video_capture = self.get_video_capture()
         if self.video_signal == VIDEO_SIGNAL.REFRESH:
-            if frame_index > 0:
+            if frame_index > 0:  # For video file pausing.
                 self.set_video_file_frame_position(frame_index)
             _, frame = video_capture.read()
             if frame is None:
@@ -975,6 +993,10 @@ class FrameWidget(WidgetABC):
 
             if self.is_play_file_video_intime():
                 self.set_video_file_frame_position_skip(time0)
+            elif self.is_play_file_video_everyframe():
+                pass
+            else:
+                pass
 
             self.video_update_identifier = self.root.after(
                 self.get_root_after_ms(),
@@ -1038,6 +1060,9 @@ class FrameWidget(WidgetABC):
             self.play_video()
 
     def is_play_file_video(self):
+        return self.get_play_file_video()
+
+    def get_play_file_video(self):
         return self.src_type == SRC_TYPE.VIDEO_FILE
 
     def pause_button_command(self):
@@ -1167,6 +1192,12 @@ class FrameWidget(WidgetABC):
             y0=self.get_video_file_play_mode_radiobuttons_y0(),
         )
 
+    def video_file_play_mode_var_trace_w(self, *args):
+        video_file_play_mode_var_get = self.video_file_play_mode_var.get()
+        self.set_copy(
+            self.video_file_play_mode_str, video_file_play_mode_var_get
+        )
+
     def set_widgets(self):
         label = ttk.Label(
             self.root,
@@ -1189,7 +1220,13 @@ class FrameWidget(WidgetABC):
             variable=self.video_file_play_mode_var,
             value=PLAY_MODE.IN_TIME.value,
         )
-        self.video_file_play_mode_var.set(PLAY_MODE.IN_TIME.value)
+        mode_copy = self.get_copy(self.video_file_play_mode_str)
+        self.video_file_play_mode_var.set(
+            PLAY_MODE.IN_TIME.value if mode_copy == None else mode_copy
+        )
+        self.video_file_play_mode_var.trace(
+            "w", self.video_file_play_mode_var_trace_w
+        )
         self.set_video_file_play_mode_radiobuttons(
             video_file_play_everyframe_mode,
             video_file_play_intime_mode,
@@ -1239,13 +1276,25 @@ class FrameWidget(WidgetABC):
     def get_oper_widgets_x0(self):
         return self.get_x()
 
+    def is_play_camera_video(self):
+        return self.get_play_camera_video()
+
+    def get_play_camera_video(self):
+        return self.src_type == SRC_TYPE.CAMERA
+
     def get_oper_widgets_y0(self):
         return (
             self.get_video_frame_label_height()
             + self.get_oper_widgets_margin()
-            + self.get_video_scale_height(reqheight=False)
-            + self.get_video_file_play_mode_radiobuttons_height(
-                reqheight=False
+            + (
+                0
+                if self.is_play_camera_video()
+                else (
+                    self.get_video_scale_height(reqheight=False)
+                    + self.get_video_file_play_mode_radiobuttons_height(
+                        reqheight=False
+                    )
+                )
             )
         )
 
