@@ -51,3 +51,13 @@ class InfoWidget(WidgetABC):
 
     def get_info_widget(self):
         return self.fw
+    
+    def set_widgets(self):
+        super().set_widgets()
+        self.set_info_widget()
+
+    
+    def place(self):
+        super().place()
+        
+

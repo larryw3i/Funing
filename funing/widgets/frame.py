@@ -840,7 +840,7 @@ class FrameWidget(WidgetABC):
         self.video_frame_label.imgtk = imgtk
         self.video_frame_label.configure(image=imgtk)
 
-    def update_image_label(self):
+    def update_image_label(self, image):
         self.update_video_image_label(image)
 
     def set_msg(self, msg=None):
@@ -1004,6 +1004,9 @@ class FrameWidget(WidgetABC):
             )
 
     def set_video_file_frame_position_skip(self, time0):
+        self.set_video_file_frame_position_skip_by_default(time0)
+
+    def set_video_file_frame_position_skip_by_default(self, time0):
         pos = self.get_video_position()
         video_refresh_mspf = self.get_video_refresh_mspf()
         delay_timedelta = datetime.now() - time0
