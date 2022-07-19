@@ -1,3 +1,4 @@
+# Video Frame & Operation Area.
 import asyncio
 import getopt
 import importlib
@@ -66,6 +67,7 @@ class FrameWidget(WidgetABC):
         self.video_scale_label = None
         self.video_file_frame_duration = None
         self.video_file_play_mode_var = IntVar()
+        self.video_file_play_pause_frame_index = None
         self.video_file_play_mode_radiobuttons = None
         self.video_capture_mesc = None
         self.video_file_play_mode_radiobuttons_width_list = None
@@ -125,7 +127,7 @@ class FrameWidget(WidgetABC):
         if to_none:
             self.video_refresh_mspf = None
             return
-        self.video_refresh_mspf = int(1000 / self.get_video_frame_fps())
+        self.video_refresh_mspf = 1000 / self.get_video_frame_fps()
 
     def get_video_refresh_mspf(
         self,
@@ -365,7 +367,9 @@ class FrameWidget(WidgetABC):
         return self.oper_widgets_width
 
     def get_oper_widgets_height(self):
-        return self.get_widgets_list_height(self.get_oper_widgets())
+        return self.get_widgets_list_height_center_break(
+            self.get_oper_widgets()
+        )
 
     def set_oper_widgets(self):
         self.oper_widgets = [
@@ -394,6 +398,9 @@ class FrameWidget(WidgetABC):
         self.set_video_frame_height(to_none=True)
         self.set_video_capture_msec(to_none=True)
         self.set_video_file_frame_duration(to_none=True)
+        self.set_video_frame_fps(to_none=True)
+        self.set_video_refresh_mspf(to_none=True)
+        self.set_video_frame_count(to_none=True)
 
     def before_update_camera_video_frame(self):
         pass
@@ -413,11 +420,12 @@ class FrameWidget(WidgetABC):
         self.video_signal = VIDEO_SIGNAL.REFRESH
         if self.src_type == SRC_TYPE.VIDEO_FILE:
             self.before_update_video_file_frame()
-            pass
+            self.update_video_frame(
+                frame_index=self.get_video_file_play_pause_frame_index()
+            )
         if self.src_type == SRC_TYPE.CAMERA:
             self.before_update_camera_video_frame()
-            pass
-        self.update_video_frame()
+            self.update_video_frame()
 
     def play_camera_video(self, src_path=None, check_video_capture=True):
         self.set_video_src_path(src_path)
@@ -438,7 +446,7 @@ class FrameWidget(WidgetABC):
 
     def get_video_file_play_start_time(self):
         if not self.video_file_play_start_time:
-            return datetime.now()
+            self.set_video_file_play_start_time()
         return self.video_file_play_start_time
 
     def play_file_video(self, src_path=None, check_video_capture=True):
@@ -447,7 +455,7 @@ class FrameWidget(WidgetABC):
         self.video_file_play_mode_radiobuttons_place()
         self.src_type = SRC_TYPE.VIDEO_FILE
         if self.get_video_file_play_mode() == PLAY_MODE.IN_TIME.value:
-            self.set_video_file_play_start_time(datetime.now())
+            pass
         self.play_video(src_path, check_video_capture)
 
     def play_video(self, src_path=None, check_video_capture=True):
@@ -837,7 +845,6 @@ class FrameWidget(WidgetABC):
         self.set_video_capture_msec_by_frame_index(to_none)
 
     def set_video_capture_msec_by_frame_index(self, to_none=False):
-
         if to_none:
             self.video_capture_mesc = None
         if self.src_type != SRC_TYPE.VIDEO_FILE:
@@ -908,12 +915,13 @@ class FrameWidget(WidgetABC):
         self.video_frame = frame
 
     def get_video_file_frame_position_intime(self):
+        start_time = self.get_video_file_play_start_time()
         timediff = datetime.now() - self.get_video_file_play_start_time()
         msec = timediff.total_seconds() * 1000
         position = (
-            self.get_video_frame_fpms() * msec
-            + self.get_video_file_frame_diff()
+            self.get_video_position() + self.get_video_frame_fpms() * msec
         )
+
         return position
 
     def set_video_file_frame_diff(self, frame_diff=0):
@@ -927,18 +935,34 @@ class FrameWidget(WidgetABC):
     def set_video_scale_passive(self, *args):
         self.video_scale_passive = True
 
-    def update_video_frame(self):
-        delay_time = datetime.now()
+    def is_play_file_video_intime(self):
+        return self.get_play_file_video_intime()
+
+    def get_play_file_video_intime(self):
+        return (
+            self.src_type == SRC_TYPE.VIDEO_FILE
+            and self.get_video_file_play_mode() == PLAY_MODE.IN_TIME.value
+        )
+
+    def get_root_after_ms(self):
+        return int(self.get_video_refresh_mspf() / 2)
+
+    def set_video_file_play_pause_frame_index(self, position=None):
+        self.video_file_play_pause_frame_index = (
+            position or self.get_video_position()
+        )
+
+    def get_video_file_play_pause_frame_index(self):
+        if not self.video_file_play_pause_frame_index:
+            return 0
+        return self.video_file_play_pause_frame_index
+
+    def update_video_frame(self, frame_index=0):
+        time0 = datetime.now()
         video_capture = self.get_video_capture()
-        video_refresh_mspf = self.get_video_refresh_mspf()
         if self.video_signal == VIDEO_SIGNAL.REFRESH:
-            if (
-                self.src_type == SRC_TYPE.VIDEO_FILE
-                and self.get_video_file_play_mode() == PLAY_MODE.IN_TIME.value
-            ):
-                self.set_video_file_frame_position(
-                    self.get_video_file_frame_position_intime()
-                )
+            if frame_index > 0:
+                self.set_video_file_frame_position(frame_index)
             _, frame = video_capture.read()
             if frame is None:
                 self.finished_video_reading_listener()
@@ -948,18 +972,24 @@ class FrameWidget(WidgetABC):
                 pass
             self.set_video_frame(frame)
             self.show_video_frame()
-            delay_time = datetime.now() - delay_time
-            delay_msec = delay_time.microseconds / 1000
-            video_refresh_mspf_new = video_refresh_mspf - delay_msec
-            video_refresh_mspf = (
-                video_refresh_mspf_new > 0
-                and video_refresh_mspf_new
-                or video_refresh_mspf
-            )
+
+            if self.is_play_file_video_intime():
+                self.set_video_file_frame_position_skip(time0)
+
             self.video_update_identifier = self.root.after(
-                5,
+                self.get_root_after_ms(),
                 self.update_video_frame,
             )
+
+    def set_video_file_frame_position_skip(self, time0):
+        pos = self.get_video_position()
+        video_refresh_mspf = self.get_video_refresh_mspf()
+        delay_timedelta = datetime.now() - time0
+        delay_msec = (
+            delay_timedelta.total_seconds() * 1000 + self.get_root_after_ms()
+        )
+        skip_frame_count = int(delay_msec / video_refresh_mspf)
+        self.set_video_file_frame_position(skip_frame_count + pos)
 
     def filepath_is_video_type(self, path):
         return any(path.endswith(ext) for ext in self.video_exts)
@@ -1007,7 +1037,12 @@ class FrameWidget(WidgetABC):
         if self.video_signal != VIDEO_SIGNAL.REFRESH:
             self.play_video()
 
+    def is_play_file_video(self):
+        return self.src_type == SRC_TYPE.VIDEO_FILE
+
     def pause_button_command(self):
+        if self.is_play_file_video():
+            self.set_video_file_play_pause_frame_index()
         if self.video_signal == VIDEO_SIGNAL.REFRESH:
             self.stop_video_frame()
 
@@ -1103,11 +1138,11 @@ class FrameWidget(WidgetABC):
         return self.get_x()
 
     def get_video_file_play_mode_radiobuttons_height(self, reqheight=False):
-        return self.get_widgets_list_height(
+        return self.get_widgets_list_height_center_break(
             self.get_video_file_play_mode_radiobuttons(), reqheight
         )
 
-    def get_widgets_list_height(
+    def get_widgets_list_height_center_break(
         self, widgets, parent_width=None, reqheight=False
     ):
         height = 0
@@ -1230,9 +1265,9 @@ class FrameWidget(WidgetABC):
                 width = w.winfo_reqwidth()
         if width > 0:
             width_list.append(width)
-        width_index = 0
         x = x0
         y = y0
+        width_index = 0
         min_height = max([w.winfo_reqheight() for w in widgets])
         for w in widgets:
             if x == x0:
