@@ -96,6 +96,9 @@ class MainWidget:
     def get_seperator_x(self):
         return int(self.sep_widget.get_x())
 
+    def get_sep_width(self):
+        return self.get_seperator_width()
+
     def get_seperator_width(self):
         return int(self.sep_widget.get_width())
 
@@ -162,7 +165,6 @@ class MainWidget:
         if self._copy == {}:
             with open(copy_path, "rb") as f:
                 self._copy = pickle.load(f, encoding="utf-8")
-
         return (
             self._copy.get(key, None)
             if key

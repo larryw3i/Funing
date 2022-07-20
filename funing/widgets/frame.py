@@ -494,10 +494,18 @@ class FrameWidget(WidgetABC):
         self.stop_video_frame()
         pass
 
-    def get_frame(self):
-        frame = self.video_frame or self.image or None
+    def get_frame(self, copy=False):
+        frame = (
+            self.video_frame
+            if not self.video_frame is None
+            else self.image
+            if not self.image is None
+            else None
+        )
         if frame is None:
             self.set_msg(_("Video not opened."))
+        if copy:
+            return frame.copy()
         return frame
 
     def update_widgets_place4show_image(self):
@@ -850,7 +858,9 @@ class FrameWidget(WidgetABC):
         image_fxfy = self.get_image_fxfy()
         return self.resize_by_frame_label_size(frame, image_fxfy)
 
-    def resize_by_frame_label_size(self, frame, fxfy):
+    def resize_by_frame_label_size(self, frame, fxfy=None):
+        if not fxfy:
+            fxfy = self.get_image_fxfy()
         vid_img = cv2.resize(
             frame,
             (0, 0),
@@ -859,15 +869,22 @@ class FrameWidget(WidgetABC):
         )
         return vid_img
 
-    def update_video_frame_label(self, image):
-        self.update_video_image_label(image)
+    def update_video_frame_label(self, frame):
+        self.update_video_image_label(frame)
 
     def update_video_image_label(self, image):
+        label = self.video_frame_label
+        self.set_label_image(image, label)
+
+    def set_label_image(self, frame, label):
+        self.set_label_image(frame, label)
+
+    def set_label_image(self, image, label):
         vid_img = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         vid_img = pil_image_fromarray(vid_img)
         imgtk = ImageTk.PhotoImage(image=vid_img)
-        self.video_frame_label.imgtk = imgtk
-        self.video_frame_label.configure(image=imgtk)
+        label.imgtk = imgtk
+        label.configure(image=imgtk)
 
     def update_image_label(self, image):
         self.update_video_image_label(image)
@@ -1103,7 +1120,16 @@ class FrameWidget(WidgetABC):
         if self.video_signal == VIDEO_SIGNAL.REFRESH:
             self.stop_video_frame()
 
+    def pick_frame(self):
+        self.pick_frame_by_default()
+        pass
+
+    def pick_frame_by_default(self):
+        self.iw.pick_frame_by_default()
+        pass
+
     def pick_button_command(self):
+        self.pick_frame()
         pass
 
     def recog_button_command(self):
@@ -1231,6 +1257,7 @@ class FrameWidget(WidgetABC):
         )
 
     def set_widgets(self):
+        self.set_info_widget()
         label = ttk.Label(
             self.root,
             text=_("Video frame."),

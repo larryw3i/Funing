@@ -32,9 +32,15 @@ def get_dep_requirements_full():
         ),
         (
             "appdirs >= 1.4.4",
-            "github.com/ActiveState/appdirs",
+            "http://github.com/ActiveState/appdirs",
             "MIT License",
             "https://github.com/ActiveState/appdirs/blob/master/LICENSE.txt",
+        ),
+        (
+            "pygubu >= 0.23.1",
+            "https://github.com/alejandroautalan/pygubu",
+            "MIT License",
+            "https://github.com/alejandroautalan/pygubu/blob/master/LICENSE",
         ),
     ]
 
