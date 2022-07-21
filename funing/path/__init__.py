@@ -40,3 +40,25 @@ for f in [copy_path]:
     if not os.path.exists(f):
         with open(f, "wb") as f:
             pickle.dump({}, f)
+
+
+def get_info_path(info_id):
+    return os.path.join(infos_dir_path, info_id + ".txt")
+
+
+def get_basic_info_path(info_id):
+    return os.path.join(infos_dir_path, info_id + ".basic.txt")
+
+
+def get_new_random_face_image_path(info_id):
+    return os.path.join(faces_dir_path, info_id, str(uuid.uuid4()) + ".jpg")
+
+
+def get_face_image_path_list(info_id):
+    face_image_dir_path = os.path.join(faces_dir_path, info_id)
+    if not os.path.exists(face_image_dir_path):
+        os.makedirs(face_image_dir_path, exist_ok=True)
+    return [
+        os.path.join(face_image_dir_path, f)
+        for f in os.listdir(face_image_dir_path)
+    ]

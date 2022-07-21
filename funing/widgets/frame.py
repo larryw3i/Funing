@@ -102,11 +102,22 @@ class FrameWidget(WidgetABC):
         self.oper_widgets_margin = 2
         self.oper_widget_min_height = None
         self.info = None
+        self.info_id = None
         self.info_ids = []
         self.face_recognizer = self.recognizer = None
         self.iw = self.info_widget = None
         self.resize_width = 112
         self.resize_height = self.resize_width
+
+    def set_info_id(self, _id=None):
+        if not _id:
+            return
+        self.info_id = _id
+
+    def get_info_id(self):
+        if not self.info_id:
+            return None
+        return self.info_id
 
     def get_resize_width(self):
         return self.resize_width
@@ -292,13 +303,14 @@ class FrameWidget(WidgetABC):
         """
         infos_dataset = self.get_infos_dataset()
         if not infos_dataset:
-            return
+            self.set_msg(_("Dateset doesn't exist."))
+            return False
         self.set_msg(_("Train face recognizer."))
         images, labels, ids = infos_dataset
         self.set_info_ids(ids)
         self.face_recognizer.train(images, labels)
         self.set_msg(_("Finish Training."))
-        pass
+        return True
 
     def set_face_casecade(self):
         self.set_face_casecade_by_default()

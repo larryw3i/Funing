@@ -44,6 +44,7 @@ class InfoWidget(WidgetABC):
         self.set_msg = self.mw.set_msg
         self.info = None
         self.info_ids = None
+        self.info_id = None
         self.face_casecade = None
         self.picked_frames = []
         self.picked_frame_labels = []
@@ -55,6 +56,15 @@ class InfoWidget(WidgetABC):
         self.save_button = None
         self.pick_scrolledframe = None
         self.pick_scrolledframe_innerframe = None
+
+    def get_info_id(self):
+        return self.fw.get_info_id()
+
+    def set_info_id(self, _id):
+        self.info_id = self.fw.set_info_id(_id)
+
+    def get_info_ids(self):
+        return self.fw.get_info_ids()
 
     def set_resize_width(self):
         self.resize_width = self.fw.get_resize_width()
@@ -109,6 +119,43 @@ class InfoWidget(WidgetABC):
     def get_pick_scrolledframe_innerframe_height(self):
         return self.get_resize_height() + self.picked_frame_label_margin
 
+    def get_basic_info_entry_content(self):
+        return self.basic_info_entry.get()
+
+    def get_info_text_content(self):
+        return self.info_text.get(1.0, "end-1c")
+
+    def save_information(
+        self,
+        info_id=None,
+        save_basic_info=True,
+        save_info=True,
+        save_image=True,
+    ):
+        if len(self.picked_frames) < 1:
+            self.set_msg(_("Nothing picked."))
+            return
+        basic_info_entry_get = self.get_basic_info_entry_content()
+        info_text_get = self.get_info_text_content()
+        info_id = info_id or str(uuid.uuid4())
+        if save_basic_info:
+            with open(get_basic_info_path(info_id), "w") as f:
+                f.write(basic_info_entry_get)
+        if save_info:
+            with open(get_info_path(info_id), "w") as f:
+                f.write(info_text_get)
+        if save_image:
+            for f in self.picked_frames:
+                cv2.imwrite(get_new_random_face_image_path(info_id), f)
+        pass
+
+    def set_msg(self, text=""):
+        self.fw.set_msg(text)
+
+    def save_button_command(self):
+        self.save_information()
+        pass
+
     def set_widgets(self):
         super().set_widgets()
         self.set_frame_widget()
@@ -122,8 +169,17 @@ class InfoWidget(WidgetABC):
         self.info_tip_label = ttk.Label(
             self.root, text=_("Write information in your strict format.")
         )
+        self.basic_info_entry = tk.Entry(self.root, justify="center")
+        simpletooltip.create(
+            self.basic_info_entry, _("Write basic information here.")
+        )
         self.info_text = tk.Text(self.root)
-        self.save_button = ttk.Button(self.root, text=_("Save"))
+        simpletooltip.create(
+            self.info_text, _("Write additional information here.")
+        )
+        self.save_button = ttk.Button(
+            self.root, text=_("Save"), command=self.save_button_command
+        )
 
     def get_frame(self, copy=False):
         return self.fw.get_frame(copy)
@@ -152,6 +208,7 @@ class InfoWidget(WidgetABC):
         return (
             self.get_pick_scrolledframe_height()
             + self.get_info_tip_label_height()
+            + self.get_basic_info_entry_height()
         )
 
     def get_info_text_width(self):
@@ -190,6 +247,18 @@ class InfoWidget(WidgetABC):
     def get_save_button_height(self):
         return self.save_button.winfo_reqheight()
 
+    def get_basic_info_entry_x(self):
+        return self.get_x()
+
+    def get_basic_info_entry_y(self):
+        return self.get_info_tip_label_y() + self.get_info_tip_label_height()
+
+    def get_basic_info_entry_width(self):
+        return self.get_width()
+
+    def get_basic_info_entry_height(self):
+        return self.basic_info_entry.winfo_reqheight()
+
     def place(self):
         super().place()
         self.pick_scrolledframe.place(
@@ -204,6 +273,12 @@ class InfoWidget(WidgetABC):
             y=self.get_info_tip_label_y(),
             width=self.get_info_tip_label_width(),
             height=self.get_info_tip_label_height(),
+        )
+        self.basic_info_entry.place(
+            x=self.get_basic_info_entry_x(),
+            y=self.get_basic_info_entry_y(),
+            width=self.get_basic_info_entry_width(),
+            height=self.get_basic_info_entry_height(),
         )
         self.info_text.place(
             x=self.get_info_text_x(),
