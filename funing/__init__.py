@@ -42,6 +42,12 @@ def get_dep_requirements_full():
             "MIT License",
             "https://github.com/alejandroautalan/pygubu/blob/master/LICENSE",
         ),
+        (
+            "isort >= 5.10.1",
+            "https://github.com/pycqa/isort",
+            "MIT License",
+            "https://github.com/PyCQA/isort/blob/main/LICENSE",
+        ),
     ]
 
 

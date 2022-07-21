@@ -91,6 +91,10 @@ def settings4xget():
         f.write(settings4t)
 
 
+def print_version():
+    print(app_version)
+
+
 if __name__ == "__main__":
     sys_argv = sys.argv[1:]
     optlist, args = getopt.getopt(sys_argv, "")
@@ -105,5 +109,7 @@ if __name__ == "__main__":
             install_dev_dep_requirements()
         if a in ["depu"]:
             install_dev_dep_requirements_u()
+        if a in ["ver"]:
+            print_version()
         if a in ["pass"]:
             break

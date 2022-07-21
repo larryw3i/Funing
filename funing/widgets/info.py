@@ -96,6 +96,9 @@ class InfoWidget(WidgetABC):
     def get_height(self):
         return self.mw.get_height() - self.mw.get_bottom_height()
 
+    def get_pick_scrolledframe_innerframe_height(self):
+        return self.get_resize_height() + self.picked_frame_label_margin
+
     def set_widgets(self):
         super().set_widgets()
         self.set_frame_widget()
@@ -103,6 +106,9 @@ class InfoWidget(WidgetABC):
             self.root, scrolltype="horizontal"
         )
         self.pick_scrolledframe_innerframe = self.pick_scrolledframe.innerframe
+        self.pick_scrolledframe_innerframe.configure(
+            height=self.get_pick_scrolledframe_innerframe_height()
+        )
         self.info_scrolledframe = ScrolledFrame(
             self.root, scrolltype="vertical"
         )
@@ -121,7 +127,11 @@ class InfoWidget(WidgetABC):
         return self.get_width()
 
     def get_pick_scrolledframe_height(self):
-        return int(self.get_height() / 2)
+        return (
+            self.get_resize_height()
+            + self.pick_scrolledframe.hsb.winfo_reqheight()
+            + self.picked_frame_label_margin
+        )
 
     def get_info_scrolledframe_x(self):
         return self.get_x()
@@ -154,26 +164,34 @@ class InfoWidget(WidgetABC):
 
     def del_picked_frame(self, index, del_label=True):
         if del_label:
-            self.picked_frame_labels[index].place_forget()
+            self.picked_frame_labels[index].destroy()
             del self.picked_frame_labels[index]
         del self.picked_frames[index]
+        self.add_pick_frames()
 
-    def add_pick_frames(self, frames, update_label=True):
+    def clear_picked_frame_labels(self):
+        for l in self.picked_frame_labels:
+            l.destroy()
+        self.picked_frame_labels = []
+
+    def add_pick_frames(self, frames=None, update_label=True):
         if not isinstance(frames, list):
             frames = [frames]
-        self.picked_frames += frames
-        self.picked_frame_labels = []
+            self.picked_frames += frames
+        else:
+            pass
+        self.clear_picked_frame_labels()
         for f in self.picked_frames:
             label = ttk.Label(self.pick_scrolledframe_innerframe)
             index = len(self.picked_frame_labels)
             label.bind(
-                "<Button-1>", lambda event, index: del_picked_frame(index)
+                "<Button-1>",
+                lambda event, index=index: self.del_picked_frame(index),
             )
-            label.place(
-                x=self.picked_frame_label_margin
-                + index * self.get_resize_width(),
-                y=self.get_pick_scrolledframe_y(),
+            label.pack(
+                side="left", anchor="nw", padx=self.picked_frame_label_margin
             )
+            innerframe_width += label.winfo_reqwidth()
             self.set_label_image(f, label)
             self.picked_frame_labels.append(label)
 
