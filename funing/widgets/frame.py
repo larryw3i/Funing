@@ -203,19 +203,19 @@ class FrameWidget(WidgetABC):
                 pickle.dump(cleared_data, f)
         pass
 
-    def get_info(self, id: uuid.UUID = None):
+    def get_info(self, id=None):
         """
         Get information by id.
 
         Args:
-            id (uuid.UUID): The ID of information.
+            id (str): The ID of information.
 
         Returns:
             dict: the keys and values of information.
         """
         return self.get_info_by_default(id)
 
-    def get_info_by_default(self, id: uuid.UUID = None):
+    def get_info_by_default(self, id=None):
         """
         The default method for getting information.
         """
@@ -248,25 +248,27 @@ class FrameWidget(WidgetABC):
                 ...
             ...
         """
-        images = ids = labels = []
+        images = []
+        info_ids = []
+        labels = []
         label = 0
         subdirs = os.listdir(faces_dir_path)
         for subdir in subdirs:
+            info_id = subdir
             subpath = os.path.join(faces_dir_path, subdir)
             if os.path.isdir(subpath):
-                ids.append(subdir)
-                for filename in os.listdir(subpath):
-                    imgpath = os.path.join(subpath, filename)
+                info_ids.append(info_id)
+                for imgpath in get_face_image_path_list(info_id):
                     img = cv2.imread(imgpath, cv2.IMREAD_COLOR)
-                    gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-                    images.append(gray_img)
+                    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+                    images.append(img)
                     labels.append(label)
                 label += 1
         if images == []:
-            return None
+            return (None, None, None)
         images = np.asarray(images)
         labels = np.asarray(labels)
-        return images, labels, ids
+        return (images, labels, info_ids)
 
     def get_id_by_label(self, label=None):
         if not label:
@@ -279,20 +281,21 @@ class FrameWidget(WidgetABC):
 
     def get_recognizer(self):
         if not self.face_recognizer:
-            self.set_face_recognizer()
-            self.train_face_recognizer()
+            self.set_face_recognizer(train_face_recognizer=False)
         return self.face_recognizer
 
-    def set_face_recognizer(self):
-        self.set_recognizer()
+    def set_face_recognizer(self, train_face_recognizer=False):
+        self.set_recognizer(train_face_recognizer)
 
-    def set_recognizer(self):
+    def set_recognizer(self, train_face_recognizer=False):
         """
         Set face recognizer
         """
         self.face_recognizer = (
             self.recognizer
         ) = cv2.face.EigenFaceRecognizer_create()
+        if train_face_recognizer:
+            self.train_face_recognizer()
 
     def train_face_recognizer(self):
         self.train_recognizer()
@@ -301,14 +304,14 @@ class FrameWidget(WidgetABC):
         """
         Train face recognizer.
         """
-        infos_dataset = self.get_infos_dataset()
-        if not infos_dataset:
+        (images, labels, info_ids) = self.get_infos_dataset()
+        if images is None:
             self.set_msg(_("Dateset doesn't exist."))
             return False
         self.set_msg(_("Train face recognizer."))
-        images, labels, ids = infos_dataset
-        self.set_info_ids(ids)
-        self.face_recognizer.train(images, labels)
+        face_recognizer = self.get_face_recognizer()
+        self.set_info_ids(info_ids)
+        face_recognizer.train(images, labels)
         self.set_msg(_("Finish Training."))
         return True
 
@@ -922,7 +925,7 @@ class FrameWidget(WidgetABC):
         self.update_video_image_label(image)
 
     def set_msg(self, msg=None):
-        self.mw.set_msg(msg, Label=None)
+        self.mw.set_msg(msg, label=None)
 
     def finished_video_reading_listener(self):
         self.stop_video_frame()
@@ -1482,6 +1485,9 @@ class FrameWidget(WidgetABC):
         self.set_video_frame_fxfy()
 
         self.show_video_frame4widgets_size_changed()
+
+        if self.face_recognizer is None:
+            self.train_recognizer()
 
     def show_video_frame4widgets_size_changed(self):
         if self.video_signal == VIDEO_SIGNAL.PAUSE:
