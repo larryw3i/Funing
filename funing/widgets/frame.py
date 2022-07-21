@@ -105,6 +105,20 @@ class FrameWidget(WidgetABC):
         self.info_ids = []
         self.face_recognizer = self.recognizer = None
         self.iw = self.info_widget = None
+        self.resize_width = 112
+        self.resize_height = self.resize_width
+
+    def get_resize_width(self):
+        return self.resize_width
+
+    def set_resize_height(self, height):
+        self.resize_height = height
+
+    def get_resize_height(self):
+        return self.resize_height
+
+    def set_resize_width(self, width):
+        self.resize_width = width
 
     def set_info_ids(self, info_ids=None):
         if not info_ids:
@@ -237,7 +251,7 @@ class FrameWidget(WidgetABC):
                     images.append(gray_img)
                     labels.append(label)
                 label += 1
-        if images is None:
+        if images == []:
             return None
         images = np.asarray(images)
         labels = np.asarray(labels)
@@ -276,10 +290,10 @@ class FrameWidget(WidgetABC):
         """
         Train face recognizer.
         """
-        self.set_msg(_("Train face recognizer."))
         infos_dataset = self.get_infos_dataset()
         if not infos_dataset:
             return
+        self.set_msg(_("Train face recognizer."))
         images, labels, ids = infos_dataset
         self.set_info_ids(ids)
         self.face_recognizer.train(images, labels)
@@ -297,7 +311,11 @@ class FrameWidget(WidgetABC):
             self.mw.set_msg(_("haarcascades data doesn't exist."))
             if messagebox.askyesno(
                 _("haarcascades data doesn't exist."),
-                _("Do you want to try to reinstall 'opencv-contrib-python'?"),
+                _("haarcascades data doesn't exist.")
+                + " "
+                + _(
+                    "Do you want to try to reinstall 'opencv-contrib-python'?"
+                ),
             ):
                 os.system(
                     "pip3 uninstall -y "
@@ -549,7 +567,9 @@ class FrameWidget(WidgetABC):
         for (x, y, w, h) in face_rects:
             gray_img_0 = gray_img[y : y + h, x : x + w]
             gray_img_0 = cv2.resize(
-                gray_img_0, (92, 112), interpolation=cv2.INTER_LINEAR
+                gray_img_0,
+                (self.resize_width, self.resize_height),
+                interpolation=cv2.INTER_LINEAR,
             )
             labels.append(self.recognizer.predict(gray_img_0))
         return labels

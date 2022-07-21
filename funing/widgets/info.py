@@ -26,6 +26,7 @@ import cv2
 from appdirs import user_data_dir
 from cv2.data import haarcascades
 from cv2.face import EigenFaceRecognizer_create
+from pygubu.widgets import simpletooltip
 from pygubu.widgets.scrolledframe import ScrolledFrame
 
 from funing.abc import *
@@ -47,8 +48,25 @@ class InfoWidget(WidgetABC):
         self.picked_frames = []
         self.picked_frame_labels = []
         self.picked_frame_label_margin = 10
-        self.resize_width = 92
-        self.resize_height = 112
+        self.resize_width = None
+        self.resize_height = None
+        self.info_frames = None
+
+    def set_resize_width(self):
+        self.resize_width = self.fw.get_resize_width()
+
+    def get_resize_width(self):
+        if not self.resize_width:
+            self.set_resize_width()
+        return self.resize_width
+
+    def set_resize_height(self):
+        self.resize_height = self.fw.get_resize_height()
+
+    def get_resize_height(self):
+        if not self.resize_height:
+            self.set_resize_height()
+        return self.resize_height
 
     def set_face_casecade(self):
         self.face_casecade = self.fw.get_face_casecade()
@@ -57,18 +75,6 @@ class InfoWidget(WidgetABC):
         if not self.face_casecade:
             self.set_face_casecade()
         return self.face_casecade
-
-    def set_resize_width(self, width):
-        self.resize_width = width
-
-    def set_resize_height(self, height):
-        self.resize_height = height
-
-    def get_resize_width(self):
-        return self.resize_width
-
-    def get_resize_height(self):
-        return self.resize_height
 
     def get_info(self, id: uuid.UUID = None):
         return self.fw.get_info(id)
@@ -167,22 +173,37 @@ class InfoWidget(WidgetABC):
             self.picked_frame_labels[index].destroy()
             del self.picked_frame_labels[index]
         del self.picked_frames[index]
-        self.add_pick_frames()
+        self.set_picked_frame_labels_image()
 
     def clear_picked_frame_labels(self):
         for l in self.picked_frame_labels:
             l.destroy()
         self.picked_frame_labels = []
 
-    def add_pick_frames(self, frames=None, update_label=True):
+    def add_pick_frames(self, frames=None, update_label=True,set_info_area=True):
         if not isinstance(frames, list):
             frames = [frames]
-            self.picked_frames += frames
-        else:
-            pass
+        self.picked_frames = frames + self.picked_frames
+        if update_label:
+            self.set_picked_frame_labels_image(self.picked_frames)
+        if set_info_area:
+            self.set_info_area()
+    
+    def get_info_frame(self):
+        frame = ttk.Frame(self.info_scrolledframe_innerframe)
+        return frame
+
+    def set_info_area(self):
+        pass
+
+    def set_picked_frame_labels_image(self, frames=None):
         self.clear_picked_frame_labels()
-        for f in self.picked_frames:
-            label = ttk.Label(self.pick_scrolledframe_innerframe)
+        if frames is None:
+            frames = self.picked_frames
+        for f in frames:
+            label = ttk.Label(
+                self.pick_scrolledframe_innerframe, state="active"
+            )
             index = len(self.picked_frame_labels)
             label.bind(
                 "<Button-1>",
@@ -191,7 +212,7 @@ class InfoWidget(WidgetABC):
             label.pack(
                 side="left", anchor="nw", padx=self.picked_frame_label_margin
             )
-            innerframe_width += label.winfo_reqwidth()
+            simpletooltip.create(label, _("Click to delete."))
             self.set_label_image(f, label)
             self.picked_frame_labels.append(label)
 

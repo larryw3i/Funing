@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-20 00:00+0800\n"
+"POT-Creation-Date: 2022-07-21 20:38+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -52,7 +52,8 @@ msgstr ""
 
 #: funing/.lwcp/fui/main_ui.py:50 funing/.lwcp/ui/c_ui.py:22
 #: funing/.lwcp/ui/main_ui.py:79 funing/widgets/frame.py:239
-#: funing/widgets/frame.py:1256
+#: funing/widgets/frame.py:1256 funing/widgets/frame.py:1309
+#: funing/widgets/frame.py:1310
 msgid "Open"
 msgstr ""
 
@@ -64,17 +65,20 @@ msgstr ""
 #: funing/.lwcp/fui/main_ui.py:63 funing/.lwcp/_fui/_main_ui.py:189
 #: funing/.lwcp/ui/c_ui.py:37 funing/.lwcp/ui/main_ui.py:92
 #: funing/widgets/frame.py:241 funing/widgets/frame.py:1262
+#: funing/widgets/frame.py:1315 funing/widgets/frame.py:1316
 msgid "Pause"
 msgstr ""
 
 #: funing/.lwcp/fui/main_ui.py:66 funing/widgets/frame.py:243
-#: funing/widgets/frame.py:1268
+#: funing/widgets/frame.py:1268 funing/widgets/frame.py:1321
+#: funing/widgets/frame.py:1322
 msgid "Recognize"
 msgstr ""
 
 #: funing/.lwcp/fui/main_ui.py:69 funing/.lwcp/ui/c_ui.py:40
 #: funing/.lwcp/ui/main_ui.py:95 funing/widgets/frame.py:242
-#: funing/widgets/frame.py:1265
+#: funing/widgets/frame.py:1265 funing/widgets/frame.py:1318
+#: funing/widgets/frame.py:1319
 msgid "Pick"
 msgstr ""
 
@@ -101,7 +105,8 @@ msgid "Licensed under the MIT license"
 msgstr ""
 
 #: funing/.lwcp/_fui/_main_ui.py:195 funing/widgets/frame.py:240
-#: funing/widgets/frame.py:1259
+#: funing/widgets/frame.py:1259 funing/widgets/frame.py:1312
+#: funing/widgets/frame.py:1313
 msgid "Play"
 msgstr ""
 
@@ -149,7 +154,7 @@ msgstr ""
 msgid "@app_description"
 msgstr ""
 
-#: funing/__init__.py:55 funing/__init__.py:81
+#: funing/__init__.py:55 funing/__init__.py:81 funing/__init__.py:93
 msgid "Hello, Funing!"
 msgstr ""
 
@@ -158,7 +163,7 @@ msgid "About"
 msgstr ""
 
 #: funing/widgets/main.py:165 funing/widgets/main.py:175
-#: funing/widgets/main.py:173
+#: funing/widgets/main.py:173 funing/widgets/main.py:180
 msgid "Copy Saved!"
 msgstr ""
 
@@ -183,6 +188,7 @@ msgid "Contributors:"
 msgstr ""
 
 #: funing/widgets/frame.py:230 funing/widgets/frame.py:1210
+#: funing/widgets/frame.py:1263 funing/widgets/frame.py:1264
 msgid "Video frame."
 msgstr ""
 
@@ -191,39 +197,61 @@ msgstr ""
 msgid "Information of %s doesn't exist."
 msgstr ""
 
-#: funing/widgets/frame.py:247
+#: funing/widgets/frame.py:247 funing/widgets/frame.py:248
 msgid "Label is None."
 msgstr ""
 
-#: funing/widgets/frame.py:278
+#: funing/widgets/frame.py:278 funing/widgets/frame.py:279
 msgid "Train face recognizer."
 msgstr ""
 
-#: funing/widgets/frame.py:285
+#: funing/widgets/frame.py:285 funing/widgets/frame.py:286
 msgid "Finish Training."
 msgstr ""
 
-#: funing/widgets/frame.py:296
+#: funing/widgets/frame.py:296 funing/widgets/frame.py:297
+#: funing/widgets/frame.py:299 funing/widgets/frame.py:300
 msgid "haarcascades data doesn't exist."
 msgstr ""
 
-#: funing/widgets/frame.py:482
+#: funing/widgets/frame.py:482 funing/widgets/frame.py:506
+#: funing/widgets/frame.py:507
 msgid "Video not opened."
 msgstr ""
 
-#: funing/widgets/frame.py:731
+#: funing/widgets/frame.py:731 funing/widgets/frame.py:763
+#: funing/widgets/frame.py:764
 #, python-format
 msgid "Unable to open video source %s."
 msgstr ""
 
-#: funing/widgets/frame.py:1033
+#: funing/widgets/frame.py:1033 funing/widgets/frame.py:1076
+#: funing/widgets/frame.py:1077
 msgid "Select video or image file"
 msgstr ""
 
-#: funing/widgets/frame.py:1218
+#: funing/widgets/frame.py:1218 funing/widgets/frame.py:1271
+#: funing/widgets/frame.py:1272
 msgid "Every Frame"
 msgstr ""
 
-#: funing/widgets/frame.py:1225
+#: funing/widgets/frame.py:1225 funing/widgets/frame.py:1278
+#: funing/widgets/frame.py:1279
 msgid "In Time"
+msgstr ""
+
+#: funing/widgets/info.py:201
+msgid "Click to delete."
+msgstr ""
+
+#: funing/widgets/frame.py:300 funing/widgets/frame.py:301
+msgid "Do you want to try to reinstall 'opencv-contrib-python'?"
+msgstr ""
+
+#: funing/widgets/frame.py:309 funing/widgets/frame.py:310
+msgid "Restart Funing?"
+msgstr ""
+
+#: funing/widgets/frame.py:309 funing/widgets/frame.py:310
+msgid "Do you want to restart Funing?"
 msgstr ""
