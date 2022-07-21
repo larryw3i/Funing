@@ -51,6 +51,10 @@ class InfoWidget(WidgetABC):
         self.resize_width = None
         self.resize_height = None
         self.info_frames = None
+        self.info_text = None
+        self.save_button = None
+        self.pick_scrolledframe = None
+        self.pick_scrolledframe_innerframe = None
 
     def set_resize_width(self):
         self.resize_width = self.fw.get_resize_width()
@@ -115,10 +119,11 @@ class InfoWidget(WidgetABC):
         self.pick_scrolledframe_innerframe.configure(
             height=self.get_pick_scrolledframe_innerframe_height()
         )
-        self.info_scrolledframe = ScrolledFrame(
-            self.root, scrolltype="vertical"
+        self.info_tip_label = ttk.Label(
+            self.root, text=_("Write information in your strict format.")
         )
-        self.info_scrolledframe_innerframe = self.info_scrolledframe.innerframe
+        self.info_text = tk.Text(self.root)
+        self.save_button = ttk.Button(self.root, text=_("Save"))
 
     def get_frame(self, copy=False):
         return self.fw.get_frame(copy)
@@ -134,22 +139,56 @@ class InfoWidget(WidgetABC):
 
     def get_pick_scrolledframe_height(self):
         return (
-            self.get_resize_height()
+            self.get_y()
+            + self.get_resize_height()
             + self.pick_scrolledframe.hsb.winfo_reqheight()
             + self.picked_frame_label_margin
         )
 
-    def get_info_scrolledframe_x(self):
+    def get_info_text_x(self):
         return self.get_x()
 
-    def get_info_scrolledframe_y(self):
-        return self.get_pick_scrolledframe_height()
+    def get_info_text_y(self):
+        return (
+            self.get_pick_scrolledframe_height()
+            + self.get_info_tip_label_height()
+        )
 
-    def get_info_scrolledframe_width(self):
+    def get_info_text_width(self):
         return self.get_width()
 
-    def get_info_scrolledframe_height(self):
-        return self.get_height() - self.get_info_scrolledframe_y()
+    def get_info_text_height(self):
+        return (
+            self.get_height()
+            - self.get_info_text_y()
+            - self.get_save_button_height()
+        )
+
+    def get_info_tip_label_x(self):
+        return self.get_x()
+
+    def get_info_tip_label_y(self):
+        return self.get_pick_scrolledframe_height()
+
+    def get_info_tip_label_width(self):
+        return self.get_width()
+
+    def get_info_tip_label_height(self):
+        return self.info_tip_label.winfo_reqheight()
+
+    def get_save_button_x(self):
+        return self.get_x() + int(
+            (self.get_width() - self.get_save_button_width()) / 2
+        )
+
+    def get_save_button_y(self):
+        return self.get_height() - self.get_save_button_height()
+
+    def get_save_button_width(self):
+        return self.save_button.winfo_reqwidth()
+
+    def get_save_button_height(self):
+        return self.save_button.winfo_reqheight()
 
     def place(self):
         super().place()
@@ -160,12 +199,23 @@ class InfoWidget(WidgetABC):
             height=self.get_pick_scrolledframe_height(),
             anchor="nw",
         )
-        self.info_scrolledframe.place(
-            x=self.get_info_scrolledframe_x(),
-            y=self.get_info_scrolledframe_y(),
-            width=self.get_info_scrolledframe_width(),
-            height=self.get_info_scrolledframe_height(),
-            anchor="nw",
+        self.info_tip_label.place(
+            x=self.get_info_tip_label_x(),
+            y=self.get_info_tip_label_y(),
+            width=self.get_info_tip_label_width(),
+            height=self.get_info_tip_label_height(),
+        )
+        self.info_text.place(
+            x=self.get_info_text_x(),
+            y=self.get_info_text_y(),
+            width=self.get_info_text_width(),
+            height=self.get_info_text_height(),
+        )
+        self.save_button.place(
+            x=self.get_save_button_x(),
+            y=self.get_save_button_y(),
+            width=self.get_save_button_width(),
+            height=self.get_save_button_height(),
         )
 
     def del_picked_frame(self, index, del_label=True):
@@ -180,20 +230,20 @@ class InfoWidget(WidgetABC):
             l.destroy()
         self.picked_frame_labels = []
 
-    def add_pick_frames(self, frames=None, update_label=True,set_info_area=True):
+    def add_pick_frames(
+        self, frames=None, update_label=True, set_info_text=True
+    ):
         if not isinstance(frames, list):
             frames = [frames]
         self.picked_frames = frames + self.picked_frames
         if update_label:
             self.set_picked_frame_labels_image(self.picked_frames)
-        if set_info_area:
-            self.set_info_area()
-    
+
     def get_info_frame(self):
         frame = ttk.Frame(self.info_scrolledframe_innerframe)
         return frame
 
-    def set_info_area(self):
+    def set_info_text(self):
         pass
 
     def set_picked_frame_labels_image(self, frames=None):
@@ -210,7 +260,9 @@ class InfoWidget(WidgetABC):
                 lambda event, index=index: self.del_picked_frame(index),
             )
             label.pack(
-                side="left", anchor="nw", padx=self.picked_frame_label_margin
+                side="left",
+                anchor="nw",
+                padx=self.picked_frame_label_margin / 2,
             )
             simpletooltip.create(label, _("Click to delete."))
             self.set_label_image(f, label)
