@@ -1,5 +1,4 @@
 import platform
-
 system = platform.system()
 
 import webbrowser
