@@ -6,6 +6,10 @@ from funing import *
 from funing.settings import *
 
 long_description = open("README.md", "r", encoding="utf-8").read()
+
+appmaintainer = appauthor
+appmaintainer_email = appauthor_email
+
 setuptools.setup(
     name=app_name,
     version=app_version,

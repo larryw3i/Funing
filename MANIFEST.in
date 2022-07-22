@@ -1,13 +1,9 @@
 
-include LICENSE
-include README.md
-include setup.py
-include requirements.txt
-include setup.cfg
+global-include * *.mo
 
 recursive-include funing config.example.yml
-recursive-include docs *.rst conf.py Makefile make.bat *.jpg *.png *.gif
-recursive-include * *.po
+recursive-include docs *
+recursive-include requirements product.txt
 
 recursive-exclude * __pycache__
 recursive-exclude * *.py[co]

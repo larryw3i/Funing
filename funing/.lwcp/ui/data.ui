@@ -1,0 +1,203 @@
+<?xml version='1.0' encoding='utf-8'?>
+<interface version="1.1">
+  <object class="ttk.Frame" id="data_frame">
+    <property name="height">200</property>
+    <property name="width">200</property>
+    <layout manager="grid" />
+    <child>
+      <object class="tk.Frame" id="left_frame">
+        <property name="height">200</property>
+        <property name="width">200</property>
+        <layout manager="pack">
+          <property name="expand">true</property>
+          <property name="fill">both</property>
+          <property name="propagate">True</property>
+          <property name="side">left</property>
+        </layout>
+        <child>
+          <object class="tk.Frame" id="left_top_frame">
+            <property name="height">200</property>
+            <property name="width">200</property>
+            <layout manager="pack">
+              <property name="propagate">True</property>
+              <property name="side">top</property>
+            </layout>
+            <child>
+              <object class="tk.Frame" id="name_frame">
+                <property name="height">200</property>
+                <property name="width">200</property>
+                <layout manager="pack">
+                  <property name="anchor">w</property>
+                  <property name="expand">true</property>
+                  <property name="fill">both</property>
+                  <property name="propagate">True</property>
+                  <property name="side">top</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="tk.Label" id="page_num_label">
+                <property name="text" translatable="yes">%page_num%</property>
+                <layout manager="pack">
+                  <property name="propagate">True</property>
+                  <property name="side">top</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Frame" id="page_frame">
+                <property name="height">200</property>
+                <property name="width">200</property>
+                <layout manager="pack">
+                  <property name="anchor">center</property>
+                  <property name="propagate">True</property>
+                  <property name="side">bottom</property>
+                </layout>
+                <child>
+                  <object class="tk.Button" id="prev_btn">
+                    <property name="command" type="command" cbtype="simple">on_prev_btn_clicked</property>
+                    <property name="text" translatable="yes">prev_str</property>
+                    <layout manager="pack">
+                      <property name="propagate">True</property>
+                      <property name="side">left</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="tk.Label" id="show_per_page_str0">
+                    <property name="text" translatable="yes">show_per_page_str0</property>
+                    <layout manager="pack">
+                      <property name="propagate">True</property>
+                      <property name="side">left</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="tk.Entry" id="show_per_page_entry">
+                    <property name="justify">center</property>
+                    <property name="text" translatable="yes">10</property>
+                    <property name="validate">all</property>
+                    <property name="validatecommand" type="command" cbtype="entry_validate" args="%P">show_per_page_entry_validatecommand</property>
+                    <property name="width">6</property>
+                    <layout manager="pack">
+                      <property name="propagate">True</property>
+                      <property name="side">left</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="tk.Label" id="show_per_page_str1">
+                    <property name="text" translatable="yes">show_per_page_str1</property>
+                    <layout manager="pack">
+                      <property name="propagate">True</property>
+                      <property name="side">left</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="tk.Button" id="next_btn">
+                    <property name="command" type="command" cbtype="simple">on_next_btn_clicked</property>
+                    <property name="text" translatable="yes">next_str</property>
+                    <layout manager="pack">
+                      <property name="propagate">True</property>
+                      <property name="side">left</property>
+                    </layout>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="tk.Label" id="msg_label">
+            <property name="text" translatable="yes">Funing data.</property>
+            <layout manager="pack">
+              <property name="anchor">sw</property>
+              <property name="propagate">True</property>
+              <property name="side">bottom</property>
+            </layout>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="tk.Frame" id="info_frame">
+        <property name="height">200</property>
+        <property name="width">200</property>
+        <layout manager="pack">
+          <property name="propagate">True</property>
+          <property name="side">left</property>
+        </layout>
+        <child>
+          <object class="pygubu.builder.widgets.tkscrolledframe" id="face_pic_tkscrolledframe">
+            <property name="scrolltype">both</property>
+            <property name="usemousewheel">true</property>
+            <layout manager="pack">
+              <property name="expand">true</property>
+              <property name="fill">both</property>
+              <property name="propagate">True</property>
+              <property name="side">top</property>
+            </layout>
+            <child>
+              <object class="tk.Frame" id="face_pic_frame">
+                <property name="height">200</property>
+                <property name="width">200</property>
+                <layout manager="pack">
+                  <property name="expand">true</property>
+                  <property name="fill">both</property>
+                  <property name="propagate">True</property>
+                  <property name="side">top</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="tk.Text" id="info_text">
+            <property name="height">10</property>
+            <property name="width">50</property>
+            <layout manager="pack">
+              <property name="propagate">True</property>
+              <property name="side">top</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Frame" id="curd_frame">
+            <property name="height">200</property>
+            <property name="width">200</property>
+            <layout manager="pack">
+              <property name="expand">true</property>
+              <property name="fill">both</property>
+              <property name="propagate">True</property>
+              <property name="side">top</property>
+            </layout>
+            <child>
+              <object class="tk.Button" id="save_btn">
+                <property name="command" type="command" cbtype="simple">on_save_btn_clicked</property>
+                <property name="foreground">#4044d9</property>
+                <property name="text" translatable="yes">Save</property>
+                <layout manager="pack">
+                  <property name="propagate">True</property>
+                  <property name="side">right</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="tk.Button" id="del_btn">
+                <property name="activebackground">#d9791e</property>
+                <property name="background">#d9401b</property>
+                <property name="command" type="command" cbtype="simple">on_del_btn_clicked</property>
+                <property name="text" translatable="yes">Delete</property>
+                <layout manager="pack">
+                  <property name="propagate">True</property>
+                  <property name="side">left</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

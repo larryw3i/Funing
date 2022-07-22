@@ -23,6 +23,8 @@ deactivate(){
     deactivate
 }
 
+_args=("$@") # All parameters from terminal.
+
 update_gitignore(){
     git rm -r --cached . && git add .
     read -p "commit now?(y/N)" commit_now

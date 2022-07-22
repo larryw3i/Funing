@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='utf-8'?>
+<interface version="1.1">
+  <object class="tk.Toplevel" id="about_toplevel">
+    <property name="resizable">none</property>
+    <child>
+      <object class="ttk.Frame" id="about_frame">
+        <property name="borderwidth">10</property>
+        <property name="height">200</property>
+        <property name="width">200</property>
+        <layout manager="pack">
+          <property name="propagate">True</property>
+          <property name="side">top</property>
+        </layout>
+        <child>
+          <object class="ttk.Label" id="app_name_label">
+            <property name="font">{NONE} 29 {}</property>
+            <property name="text" translatable="yes">Funing</property>
+            <layout manager="pack">
+              <property name="propagate">True</property>
+              <property name="side">top</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="version_label">
+            <property name="text" translatable="yes">%version%</property>
+            <layout manager="pack">
+              <property name="propagate">True</property>
+              <property name="side">top</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="license_label">
+            <property name="text" translatable="yes">Licensed under the MIT license.</property>
+            <layout manager="pack">
+              <property name="propagate">True</property>
+              <property name="side">top</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="warranty_label">
+            <property name="text" translatable="yes">This program comes with ABSOLUTELY NO WARRANTY.</property>
+            <layout manager="pack">
+              <property name="propagate">True</property>
+              <property name="side">top</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="author_label">
+            <property name="font">{NONE} 12 {}</property>
+            <property name="text" translatable="yes">From larryw3i &amp; contributors.</property>
+            <layout manager="pack">
+              <property name="propagate">True</property>
+              <property name="side">top</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Button" id="about_ok_btn">
+            <property name="command" type="command" cbtype="simple">on_about_ok_btn_clicked</property>
+            <property name="text" translatable="yes">OK</property>
+            <layout manager="pack">
+              <property name="propagate">True</property>
+              <property name="side">bottom</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="source_label">
+            <property name="cursor">hand2</property>
+            <property name="foreground">#0000d9</property>
+            <property name="text" translatable="yes">source code</property>
+            <bind sequence="&lt;Button-1&gt;" handler="view_source_code" add="" />
+            <layout manager="pack">
+              <property name="propagate">True</property>
+              <property name="side">right</property>
+            </layout>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
