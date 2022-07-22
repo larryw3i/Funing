@@ -35,6 +35,7 @@ from funing.path import *
 from funing.settings import *
 from funing.settings4t import *
 from funing.widgets.abc import *
+from funing.widgets.enum import *
 
 
 class InfoWidget(WidgetABC):
@@ -57,9 +58,12 @@ class InfoWidget(WidgetABC):
         self.pick_scrolledframe = None
         self.pick_scrolledframe_innerframe = None
         self.action = None
+        self.saved_info_combobox = None
+        self.saved_info_combobox_var = StringVar()
+        self.basic_infos = None
 
-    def set_action(self, action=ACTION.NONE,to_none=False):
-        self.fw.set_action(action,to_none)
+    def set_action(self, action=ACTION.NONE, to_none=False):
+        self.fw.set_action(action, to_none)
 
     def get_action(self):
         return self.fw.get_action()
@@ -70,8 +74,11 @@ class InfoWidget(WidgetABC):
     def set_info_id(self, _id):
         self.info_id = self.fw.set_info_id(_id)
 
-    def get_info_ids(self):
-        return self.fw.get_info_ids()
+    def set_info_ids(self, info_ids=None, to_none=False, refresh=False):
+        return self.fw.set_info_ids(info_ids, to_none, refresh)
+
+    def get_info_ids(self, refresh=False):
+        return self.fw.get_info_ids(refresh)
 
     def set_resize_width(self):
         self.resize_width = self.fw.get_resize_width()
@@ -99,9 +106,6 @@ class InfoWidget(WidgetABC):
 
     def get_info(self, id: uuid.UUID = None):
         return self.fw.get_info(id)
-
-    def get_info_ids(self):
-        return self.fw.get_info_ids()
 
     def set_frame_widget(self):
         if not self.mw.frame_widget:
@@ -138,6 +142,7 @@ class InfoWidget(WidgetABC):
         save_basic_info=True,
         save_info=True,
         save_image=True,
+        refresh=True,
     ):
         if len(self.picked_frames) < 1:
             self.set_msg(_("Nothing picked."))
@@ -154,6 +159,9 @@ class InfoWidget(WidgetABC):
         if save_image:
             for f in self.picked_frames:
                 cv2.imwrite(get_new_random_face_image_path(info_id), f)
+        if refresh:
+            self.set_info_ids(refresh=True)
+            self.update_saved_info_combobox_values()
         self.set_msg(_("Information saved."))
         pass
 
@@ -164,9 +172,59 @@ class InfoWidget(WidgetABC):
         self.save_information()
         pass
 
+    def saved_info_combobox_var_trace_w(self, *args):
+        var_get = self.saved_info_combobox_var.get()
+        print(var_get)
+        pass
+
+    def set_basic_infos(self, refresh=False, to_none=False):
+        if to_none:
+            self.basic_infos = None
+            return
+        info_ids = self.get_info_ids()
+        if info_ids is None:
+            self.set_msg(_("Information IDs is None."))
+            return
+        basic_infos = []
+        for i in info_ids:
+            if os.path.exists(get_basic_info_path(i)):
+                with open(get_basic_info_path(i), "r") as f:
+                    basic_infos.append((i, f.read()))
+        self.basic_infos = basic_infos
+
+    def get_basic_infos(self):
+        """
+        Returns:
+            list: [(id, info),(id0, info0),...]
+        """
+        if self.basic_infos is None:
+            self.set_basic_infos()
+        return self.basic_infos
+
+    def get_saved_info_combobox_values(self):
+        basic_infos = self.get_basic_infos()
+        return [info + "(" + _id + ")" for _id, info in basic_infos]
+
+    def update_saved_info_combobox_values(self):
+        self.set_basic_infos()
+        self.saved_info_combobox.configure(
+            values=self.get_saved_info_combobox_values()
+        )
+
     def set_widgets(self):
         super().set_widgets()
         self.set_frame_widget()
+
+        self.saved_info_combobox = ttk.Combobox(
+            self.root,
+            textvariable=self.saved_info_combobox_var,
+            values=self.get_saved_info_combobox_values(),
+            justify="center",
+        )
+        self.saved_info_combobox_var.trace(
+            "w", self.saved_info_combobox_var_trace_w
+        )
+
         self.pick_scrolledframe = ScrolledFrame(
             self.root, scrolltype="horizontal"
         )
@@ -196,15 +254,17 @@ class InfoWidget(WidgetABC):
         return self.get_x()
 
     def get_pick_scrolledframe_y(self):
-        return 0
+        return (
+            self.get_saved_info_combobox_y()
+            + self.get_saved_info_combobox_height()
+        )
 
     def get_pick_scrolledframe_width(self):
         return self.get_width()
 
     def get_pick_scrolledframe_height(self):
         return (
-            self.get_y()
-            + self.get_resize_height()
+            self.get_resize_height()
             + self.pick_scrolledframe.hsb.winfo_reqheight()
             + self.picked_frame_label_margin
         )
@@ -214,9 +274,7 @@ class InfoWidget(WidgetABC):
 
     def get_info_text_y(self):
         return (
-            self.get_pick_scrolledframe_height()
-            + self.get_info_tip_label_height()
-            + self.get_basic_info_entry_height()
+            self.get_basic_info_entry_y() + self.get_basic_info_entry_height()
         )
 
     def get_info_text_width(self):
@@ -233,7 +291,10 @@ class InfoWidget(WidgetABC):
         return self.get_x()
 
     def get_info_tip_label_y(self):
-        return self.get_pick_scrolledframe_height()
+        return (
+            self.get_pick_scrolledframe_y()
+            + self.get_pick_scrolledframe_height()
+        )
 
     def get_info_tip_label_width(self):
         return self.get_width()
@@ -267,8 +328,27 @@ class InfoWidget(WidgetABC):
     def get_basic_info_entry_height(self):
         return self.basic_info_entry.winfo_reqheight()
 
+    def get_saved_info_combobox_x(self):
+        return self.get_x()
+
+    def get_saved_info_combobox_y(self):
+        return self.get_y()
+
+    def get_saved_info_combobox_width(self):
+        return self.get_width()
+
+    def get_saved_info_combobox_height(self):
+        return self.saved_info_combobox.winfo_reqheight()
+
     def place(self):
         super().place()
+
+        self.saved_info_combobox.place(
+            x=self.get_saved_info_combobox_x(),
+            y=self.get_saved_info_combobox_y(),
+            width=self.get_saved_info_combobox_width(),
+            height=self.get_saved_info_combobox_height(),
+        )
         self.pick_scrolledframe.place(
             x=self.get_pick_scrolledframe_x(),
             y=self.get_pick_scrolledframe_y(),

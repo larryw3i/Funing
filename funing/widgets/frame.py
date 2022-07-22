@@ -131,14 +131,22 @@ class FrameWidget(WidgetABC):
     def set_resize_width(self, width):
         self.resize_width = width
 
-    def set_info_ids(self, info_ids=None):
+    def set_info_ids(self, info_ids=None, to_none=False, refresh=False):
+        if to_none:
+            self.info_ids = None
+        if refresh:
+            self.train_face_recognizer()
         if not info_ids:
             return
         self.info_ids = info_ids
 
-    def get_info_ids(self):
+    def get_info_ids(self, refresh=False):
         if not self.info_ids:
-            return []
+            self.train_face_recognizer()
+        if refresh:
+            self.train_face_recognizer()
+        if not self.info_ids:
+            return None
         return self.info_ids
 
     def set_info_widget(self):
@@ -357,9 +365,9 @@ class FrameWidget(WidgetABC):
             self.set_src_type()
         return self.src_type
 
-    def set_action(self, action=ACTION.NONE,to_none=False):
+    def set_action(self, action=ACTION.NONE, to_none=False):
         if to_none:
-            self.action=ACTION.NONE
+            self.action = ACTION.NONE
             return
         self.action = action
 
