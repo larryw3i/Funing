@@ -1,4 +1,27 @@
-#!/usr/bin/bash
+#!/bin/bash
+
+args=$*
+app_name='funing'
+[[ -d "venv/local" ]] && bin_dir='venv/local/bin' || bin_dir='venv/bin'
+local_dir="${app_name}/locale"
+pot_path="${local_dir}/${app_name}.pot"
+mo0_path="${local_dir}/en_US/LC_MESSAGES/${app_name}.mo"
+po0_path="${local_dir}/en_US/LC_MESSAGES/${app_name}.po"
+
+activate_venv(){
+    # Use virtualenv 'venv' if exists
+    echo "virtualenv is used, enter 'deactivate' to exit."
+    for v in \
+        "./venv/bin/activate" \
+        "./venv/local/bin/activate" # python 3.10
+    do
+        [[ -f $v ]] && . $v
+    done
+}
+
+deactivate(){
+    deactivate
+}
 
 _args=("$@") # All parameters from terminal.
 
@@ -10,38 +33,54 @@ update_gitignore(){
 }
 
 _xgettext(){
-    xgettext -v -j -L Python --output=funing/locale/funing.pot \
-    $(find ./funing/ -name "*.py")
-    xgettext -v -j -L glade --output=funing/locale/funing.pot \
-    $(find ./funing/ui -name "*.ui")
+    [[ -f $pot_path ]] || touch $pot_path
 
-    for _po in $(find ./funing/locale/ -name "*.po"); do
-        msgmerge -U -v $_po ./funing/locale/funing.pot
+    xgettext -v -j -L Python --output=${pot_path} \
+    $(find ${app_name}/ -name "*.py")
+
+    [[ -f $po0_path ]] || touch $po0_path
+
+    for _po in $(find ${local_dir}/ -name "*.po"); do
+        msgmerge -U -v $_po ${pot_path}
     done
 }
 
 _msgfmt(){
-    for _po in $(find ./funing/locale -name "*.po"); do
-        echo -e "$_po ${_po/.po/.mo}"
-        msgfmt -v -o ${_po/.po/.mo}  $_po
+    for _po in $(find ${local_dir} -name "*.po"); do
+        echo -e "$_po --> ${_po/.po/.mo}"
+        msgfmt -v -o ${_po/.po/.mo} $_po
     done
 }
 
 p8(){
-    isort ./funing/
-    autopep8 -i -a -a -r -v ./funing/
-    isort ./funing.py
-    autopep8 -i -a -a -r -v ./funing.py
+    isort ${app_name}/
+    autopep8 -i -a -a -r -v ${app_name}/
+    isort ${app_name}.py
+    autopep8 -i -a -a -r -v ${app_name}.py
     isort ./setup.py
     autopep8 -i -a -a -r -v ./setup.py
 }
 
+_black(){
+    isort ${app_name}/
+    isort ${app_name}.py
+    isort setup.py
+    python3 -m black -l 79 ${app_name}/;
+    python3 -m black -l 79 ${app_name}.py;
+    python3 -m black -l 79 setup.py;
+}
+
 git_add(){
-    p8; git add .
+    _black;
+    git add .;
 }
 
 _pip3(){
-    python3 funing.py p3
+    ${bin_dir}/python3 ${app_name}.py dep
+}
+
+_pip3_u(){
+    ${bin_dir}/python3 ${app_name}.py depu
 }
 
 twine_upload(){
@@ -50,82 +89,92 @@ twine_upload(){
 
 bdist(){
     _msgfmt
-    rm -rf dist/ build/ funing.egg-info/
-    python3 setup.py sdist bdist_wheel
+    rm -rf dist/ build/ ${app_name}.egg-info/
+    ${bin_dir}/python3 setup.py sdist bdist_wheel
 }
 
 bdist_deb(){
-    rm -rf deb_dist/  dist/  funing.egg-info/ funing-0.2.48.tar.gz
-    python3 setup.py --command-packages=stdeb.command bdist_deb
+    rm -rf deb_dist/  dist/  ${app_name}.egg-info/ ${app_name}*.tar.gz
+    ${bin_dir}/python3 setup.py --command-packages=stdeb.command bdist_deb
 }
 
 _i_test(){
     bdist
-    pip3 uninstall funing -y
-    pip3 install dist/*.whl
-    funing
-}
-
-generate_po(){
-    locale_path="./funing/locale"
-    new_po_dir_path="${locale_path}/${_args[1]}/LC_MESSAGES"
-    new_po_path="${new_po_dir_path}/funing.po"
-    [[ -f ${new_po_path} ]] && echo "${new_po_path} exists." && return
-    mkdir -p ${new_po_dir_path}
-    cp ${locale_path}/funing.pot ${new_po_path}
-}
-
-keep_code(){
-    _uuid=$(uuid)
-    cp_dir_path="./.cp"
-    uuid_dir_path="${cp_dir_path}/${_uuid//-/_}"
-    [[ -d "${uuid_dir_path}" ]] || mkdir -p ${uuid_dir_path}
-    mv build/ dist/ funing.build/ funing.egg-info/ ${uuid_dir_path}
+    ${bin_dir}/pip3 uninstall ${app_name} -y
+    ${bin_dir}/pip3 install dist/*.whl
+    ${app_name}
 }
 
 _start(){
-    [[ -f "./funing/locale/en_US/LC_MESSAGES/funing.mo" ]] || _msgfmt
-    python3 funing.py t
+    _black
+    [[ -f "${mo0_path}" ]] || _msgfmt
+    ${bin_dir}/python3 ${app_name}.py $args
 }
 
-active_venv(){
-    [[ -f "./venv/bin/activate" ]] || \
-    [[ -f $(which virtualenv) ]] && virtualenv venv || \
-    echo "Installing virtualenv..." && pip3 install -U virtualenv
-    source venv/bin/activate
+gen4xget(){
+    ${bin_dir}/python3 ${app_name}.py 4xget
 }
 
 cat_bt(){
-    echo funing.sh; cat -bt funing.sh
-    echo funing.py; cat -bt funing.py
+    echo ${app_name}.sh; cat -bt ${app_name}.sh
+    echo ${app_name}.py; cat -bt ${app_name}.py
     echo setup.py;  cat -bt setup.py
-    for f in $(find ./funing/ -name "*.py" -o -name "*.ui")
+    for f in $(find ${app_name}/ -name "*.py" -o -name "*.po" -o -name "*.pot")
     do
         echo $f
         cat -bt $f
     done
 }
 
+test(){
+    ${bin_dir}/python3 ${app_name}.py test
+}
+
+if [[ \
+    $PATH != *"${PWD}/venv/local/bin"* && \
+    $PATH != *"${PWD}/venv/bin"* ]]
+then
+    if [[ -d "${PWD}/venv" ]];then
+        activate_venv
+    elif [[ -x $(which virtualenv) ]]
+    then 
+        virtualenv venv
+        activate_venv
+    else
+        echo "virtualenv is not installed, cancel virtual environment."
+    fi
+
+fi
+
 tu(){       twine_upload;       }
 ugi(){      update_gitignore;   }
-gpo(){      generate_po;        }
+tst(){      test;               }
 
 gita(){     git_add;            }
 bd(){       bdist;              }
 kc(){       keep_code;          }
 
-p3(){       active_venv;_pip3;  }
+venv(){     activate_venv;        }
 msgf(){     _msgfmt;            }
 xget(){     _xgettext;          }
 
 its(){       _i_test;           }
 bdup(){     bd; tu;             }
-_s(){       _start;             }
+s(){       _start;              }
 
-venv(){     active_venv;        }
+p3(){       venv;_pip3;         }
 _cat(){     cat_bt;             }
 _cat_(){    _cat | tr -s '\n';  }
 
 bdeb(){     bdist_deb;          }
+wcl(){      _cat_ | wc -l;      }
+blk(){      _black;             }
 
-${_args[0]}
+4xget(){    gen4xget;           }
+style(){    blk;                }
+dep(){      p3;                 }
+
+depu(){     _pip3_u;            }
+
+$*
+

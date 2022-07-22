@@ -1,22 +1,9 @@
-import os
 import re
 
-import pkg_resources
 import setuptools
 
 from funing import *
-
-if "opencv-python" in [i.key for i in pkg_resources.working_set]:
-    print(
-        "'opencv-python' and 'opencv-contrib-python' "
-        + "are conflicting, Funing will uninstall 'opencv-python' "
-        + "and install 'opencv-contrib-python'. . ."
-    )
-    os.system(
-        "pip3 uninstall opencv-contrib-python opencv-python -v -y;"
-        + "pip3 install opencv-contrib-python -v"
-    )
-
+from funing.settings import *
 
 long_description = open("README.md", "r", encoding="utf-8").read()
 
@@ -24,16 +11,14 @@ appmaintainer = appauthor
 appmaintainer_email = appauthor_email
 
 setuptools.setup(
-    name="funing",
-    version=version,
-    author=appauthor,
-    author_email=appauthor_email,
-    maintainer=appmaintainer,
-    maintainer_email=appmaintainer_email,
-    description="A face recognition gui",
+    name=app_name,
+    version=app_version,
+    author=app_author[0],
+    author_email=app_author[1],
+    description=app_description,
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/larryw3i/Funing",
+    url=app_url,
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
@@ -42,10 +27,10 @@ setuptools.setup(
     ],
     entry_points={
         "console_scripts": [
-            "funing=funing:simple",
+            "funing=funing:run",
         ]
     },
     python_requires=">=3.6",
-    install_requires=get_product_req(),
+    install_requires=get_dep_requirements(),
     include_package_data=True,
 )

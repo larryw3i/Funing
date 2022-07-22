@@ -1,0 +1,328 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# larry <larryw3i@163.com>, 2021.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Funing 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-07-22 15:06+0800\n"
+"PO-Revision-Date: 2021-12-06 23:35+0800\n"
+"Last-Translator: larry <larryw3i@163.com>\n"
+"Language-Team: Chinese (Simplified) <larryw3i@163.com>\n"
+"Language: zh_CHS\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"X-Generator: Gtranslator 40.0\n"
+
+#: funing/settings4t.py:10
+msgid "funing"
+msgstr ""
+
+#: funing/settings4t.py:11
+msgid "0.2.35"
+msgstr ""
+
+#: funing/settings4t.py:12 funing/settings4t.py:11
+msgid "A face recognition gui"
+msgstr ""
+
+#: funing/.lwcp/fui/main_ui.py:20 funing/.lwcp/_fui/_main_ui.py:121
+#: funing/.lwcp/ui/main_ui.py:20 funing/settings4t.py:10
+#: funing/widgets/main.py:47 funing/widgets/main.py:49
+msgid "Funing"
+msgstr ""
+
+#: funing/.lwcp/fui/main_ui.py:47 funing/.lwcp/ui/c_ui.py:19
+#: funing/.lwcp/ui/main_ui.py:76
+msgid "GO"
+msgstr ""
+
+#: funing/.lwcp/fui/main_ui.py:49 funing/.lwcp/ui/c_ui.py:21
+#: funing/.lwcp/ui/main_ui.py:78 funing/widgets/frame.py:87
+msgid "File"
+msgstr ""
+
+#: funing/.lwcp/fui/main_ui.py:49 funing/.lwcp/ui/c_ui.py:21
+#: funing/.lwcp/ui/main_ui.py:78 funing/widgets/frame.py:88
+msgid "Camera"
+msgstr ""
+
+#: funing/.lwcp/fui/main_ui.py:50 funing/.lwcp/ui/c_ui.py:22
+#: funing/.lwcp/ui/main_ui.py:79 funing/widgets/frame.py:239
+#: funing/widgets/frame.py:1256 funing/widgets/frame.py:1309
+#: funing/widgets/frame.py:1310 funing/widgets/frame.py:1329
+#: funing/widgets/frame.py:1341
+msgid "Open"
+msgstr ""
+
+#: funing/.lwcp/fui/main_ui.py:56 funing/.lwcp/ui/c_ui.py:30
+#: funing/.lwcp/ui/main_ui.py:85
+msgid "tolerance"
+msgstr "tolerance(0.1-0.6)"
+
+#: funing/.lwcp/fui/main_ui.py:63 funing/.lwcp/_fui/_main_ui.py:189
+#: funing/.lwcp/ui/c_ui.py:37 funing/.lwcp/ui/main_ui.py:92
+#: funing/widgets/frame.py:241 funing/widgets/frame.py:1262
+#: funing/widgets/frame.py:1315 funing/widgets/frame.py:1316
+#: funing/widgets/frame.py:1335 funing/widgets/frame.py:1347
+msgid "Pause"
+msgstr ""
+
+#: funing/.lwcp/fui/main_ui.py:66 funing/widgets/frame.py:243
+#: funing/widgets/frame.py:1268 funing/widgets/frame.py:1321
+#: funing/widgets/frame.py:1322 funing/widgets/frame.py:1341
+#: funing/widgets/frame.py:1353
+msgid "Recognize"
+msgstr ""
+
+#: funing/.lwcp/fui/main_ui.py:69 funing/.lwcp/ui/c_ui.py:40
+#: funing/.lwcp/ui/main_ui.py:95 funing/widgets/frame.py:242
+#: funing/widgets/frame.py:1265 funing/widgets/frame.py:1318
+#: funing/widgets/frame.py:1319 funing/widgets/frame.py:1338
+#: funing/widgets/frame.py:1350
+msgid "Pick"
+msgstr "Pick"
+
+#: funing/.lwcp/fui/main_ui.py:110
+msgid "Write it with certain rules so that you can analyze it later"
+msgstr ""
+"Write it in toml or yaml format, so it's a lot easier for you to analyze it."
+
+#: funing/.lwcp/fui/main_ui.py:114 funing/.lwcp/ui/c_ui.py:55
+#: funing/.lwcp/ui/main_ui.py:126 funing/widgets/info.py:147
+#: funing/widgets/info.py:182
+msgid "Save"
+msgstr ""
+
+#: funing/.lwcp/fui/main_ui.py:137 funing/.lwcp/_fui/_main_ui.py:119
+#: funing/widgets/top.py:54 funing/widgets/about.py:85
+msgid "About Funing"
+msgstr ""
+
+#: funing/.lwcp/_fui/_main_ui.py:85
+msgid "No desktop environment is detected! (^_^)"
+msgstr ""
+
+#: funing/.lwcp/_fui/_main_ui.py:135
+msgid "Licensed under the MIT license"
+msgstr ""
+
+#: funing/.lwcp/_fui/_main_ui.py:195 funing/widgets/frame.py:240
+#: funing/widgets/frame.py:1259 funing/widgets/frame.py:1312
+#: funing/widgets/frame.py:1313 funing/widgets/frame.py:1332
+#: funing/widgets/frame.py:1344
+msgid "Play"
+msgstr "Play"
+
+#: funing/.lwcp/_fui/_main_ui.py:319
+msgid "Select a file"
+msgstr ""
+
+#: funing/.lwcp/_fui/_main_ui.py:322
+msgid "Image or video"
+msgstr ""
+
+#: funing/.lwcp/_fui/_main_ui.py:465 funing/.lwcp/_fui/_main_ui.py:722
+msgid "Unable to open video source"
+msgstr ""
+
+#: funing/.lwcp/_fui/_main_ui.py:614
+msgid "No informations found"
+msgstr ""
+
+#: funing/.lwcp/_fui/_main_ui.py:713
+msgid "Restart Funing Now?"
+msgstr ""
+
+#: funing/.lwcp/_fui/_main_ui.py:728
+msgid "Nothing enter"
+msgstr "Nothing enter"
+
+#: funing/.lwcp/_fui/_main_ui.py:729
+#, fuzzy
+msgid "You haven't entered anything yet! "
+msgstr "You haven't entered data yet! Open a source and click 'Pick' to enter"
+
+#: funing/.lwcp/ui/c_ui.py:48 funing/.lwcp/ui/main_ui.py:119
+#, fuzzy
+msgid "prev_symb"
+msgstr "prev"
+
+#: funing/.lwcp/ui/c_ui.py:50 funing/.lwcp/ui/main_ui.py:121
+#, fuzzy
+msgid "next_symb"
+msgstr "next"
+
+#: funing/settings4t.txt.py:10
+msgid "@app_name"
+msgstr ""
+
+#: funing/settings4t.txt.py:11
+msgid "@app_description"
+msgstr ""
+
+#: funing/__init__.py:55 funing/__init__.py:81 funing/__init__.py:93
+msgid "Hello, Funing!"
+msgstr ""
+
+#: funing/widgets/top.py:57
+msgid "About"
+msgstr ""
+
+#: funing/widgets/main.py:165 funing/widgets/main.py:175
+#: funing/widgets/main.py:173 funing/widgets/main.py:180
+msgid "Copy Saved!"
+msgstr ""
+
+#: funing/widgets/bottom.py:46
+msgid "Hello, Welcome to Funing."
+msgstr ""
+
+#: funing/widgets/bottom.py:75 funing/widgets/bottom.py:74
+msgid "Hello!"
+msgstr ""
+
+#: funing/widgets/about.py:71
+msgid "OK"
+msgstr ""
+
+#: funing/widgets/about.py:170
+msgid "Author:"
+msgstr ""
+
+#: funing/widgets/about.py:178
+msgid "Contributors:"
+msgstr ""
+
+#: funing/widgets/frame.py:230 funing/widgets/frame.py:1210
+#: funing/widgets/frame.py:1263 funing/widgets/frame.py:1264
+#: funing/widgets/frame.py:1283 funing/widgets/frame.py:1295
+msgid "Video frame."
+msgstr ""
+
+#: funing/widgets/frame.py:205 funing/widgets/frame.py:219
+#: funing/widgets/frame.py:230
+#, python-format
+msgid "Information of %s doesn't exist."
+msgstr ""
+
+#: funing/widgets/frame.py:247 funing/widgets/frame.py:248
+#: funing/widgets/frame.py:262 funing/widgets/frame.py:273
+msgid "Label is None."
+msgstr ""
+
+#: funing/widgets/frame.py:278 funing/widgets/frame.py:279
+#: funing/widgets/frame.py:296 funing/widgets/frame.py:308
+msgid "Train face recognizer."
+msgstr ""
+
+#: funing/widgets/frame.py:285 funing/widgets/frame.py:286
+#: funing/widgets/frame.py:300 funing/widgets/frame.py:312
+msgid "Finish Training."
+msgstr ""
+
+#: funing/widgets/frame.py:296 funing/widgets/frame.py:297
+#: funing/widgets/frame.py:299 funing/widgets/frame.py:300
+#: funing/widgets/frame.py:311 funing/widgets/frame.py:313
+#: funing/widgets/frame.py:314 funing/widgets/frame.py:323
+#: funing/widgets/frame.py:325 funing/widgets/frame.py:326
+msgid "haarcascades data doesn't exist."
+msgstr ""
+
+#: funing/widgets/frame.py:482 funing/widgets/frame.py:506
+#: funing/widgets/frame.py:507 funing/widgets/frame.py:524
+#: funing/widgets/frame.py:536
+msgid "Video not opened."
+msgstr ""
+
+#: funing/widgets/frame.py:731 funing/widgets/frame.py:763
+#: funing/widgets/frame.py:764 funing/widgets/frame.py:783
+#: funing/widgets/frame.py:795
+#, python-format
+msgid "Unable to open video source %s."
+msgstr ""
+
+#: funing/widgets/frame.py:1033 funing/widgets/frame.py:1076
+#: funing/widgets/frame.py:1077 funing/widgets/frame.py:1096
+#: funing/widgets/frame.py:1108
+msgid "Select video or image file"
+msgstr ""
+
+#: funing/widgets/frame.py:1218 funing/widgets/frame.py:1271
+#: funing/widgets/frame.py:1272 funing/widgets/frame.py:1291
+#: funing/widgets/frame.py:1303
+msgid "Every Frame"
+msgstr ""
+
+#: funing/widgets/frame.py:1225 funing/widgets/frame.py:1278
+#: funing/widgets/frame.py:1279 funing/widgets/frame.py:1298
+#: funing/widgets/frame.py:1310
+msgid "In Time"
+msgstr ""
+
+#: funing/widgets/info.py:201 funing/widgets/info.py:309
+#: funing/widgets/info.py:343
+msgid "Click to delete."
+msgstr ""
+
+#: funing/widgets/frame.py:300 funing/widgets/frame.py:301
+#: funing/widgets/frame.py:317 funing/widgets/frame.py:329
+msgid "Do you want to try to reinstall 'opencv-contrib-python'?"
+msgstr ""
+
+#: funing/widgets/frame.py:309 funing/widgets/frame.py:310
+#: funing/widgets/frame.py:327 funing/widgets/frame.py:339
+msgid "Restart Funing?"
+msgstr ""
+
+#: funing/widgets/frame.py:309 funing/widgets/frame.py:310
+#: funing/widgets/frame.py:327 funing/widgets/frame.py:339
+msgid "Do you want to restart Funing?"
+msgstr ""
+
+#: funing/widgets/info.py:114 funing/widgets/info.py:136
+#, fuzzy
+msgid "Nothing picked."
+msgstr "Nothing enter"
+
+#: funing/widgets/info.py:136 funing/widgets/info.py:171
+msgid "Write information in your strict format."
+msgstr ""
+
+#: funing/widgets/info.py:140 funing/widgets/info.py:175
+msgid "Write basic information here."
+msgstr ""
+
+#: funing/widgets/info.py:144 funing/widgets/info.py:179
+msgid "Write additional information here."
+msgstr ""
+
+#: funing/widgets/info.py:150
+msgid "Information saved."
+msgstr ""
+
+#: funing/widgets/frame.py:306
+msgid "Dateset doesn't exist."
+msgstr ""
+
+#~ msgid "show_per_page_str0"
+#~ msgstr "show"
+
+#~ msgid "10"
+#~ msgstr "10"
+
+#~ msgid "show_per_page_str1"
+#~ msgstr "/page"
+
+#, fuzzy
+#~ msgid ""
+#~ "Write it with certain rules sddddddddddddddddddddddddddddddddddddddddddo "
+#~ "that you can analyze it later"
+#~ msgstr ""
+#~ "Write it in toml or yaml format, so it's a lot easier for you to analyze "
+#~ "it."

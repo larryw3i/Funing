@@ -156,20 +156,16 @@ output/
 # funing/locale/funing.po
 funing/locale/funing.po
 
-# ~
-*~
+# *.po~
+*.po~
 
-# .save
-*.save*
+##
 
-# funing.build
-funing.build/
+# deb_dist
+deb_dist/
 
-# .cp
-.cp/
+# funing*.tar.gz
+funing*.tar.gz
 
-# dist
-*dist/
-
-# Funing*tar.gz
-funing-*.tar.gz
+# *.autosave
+*.autosave

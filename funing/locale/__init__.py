@@ -7,6 +7,7 @@ from funing.settings import *
 
 sys_lang_code = locale.getdefaultlocale()[0]
 locale_path = locale_dir_path = os.path.abspath(os.path.dirname(__file__))
+
 locale_langcodes = [
     d
     for d in os.listdir(locale_path)
