@@ -48,6 +48,7 @@ class ACTION(Enum):
     PICK = 0
     RECOG = 1
     NONE = 2
+    READ = 3
 
 
 class VIDEO_SIGNAL(Enum):

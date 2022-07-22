@@ -298,7 +298,7 @@ class FrameWidget(WidgetABC):
             self.train_face_recognizer()
 
     def train_face_recognizer(self):
-        self.train_recognizer()
+        return self.train_recognizer()
 
     def train_recognizer(self):
         """
@@ -357,7 +357,10 @@ class FrameWidget(WidgetABC):
             self.set_src_type()
         return self.src_type
 
-    def set_action(self, action=ACTION.NONE):
+    def set_action(self, action=ACTION.NONE,to_none=False):
+        if to_none:
+            self.action=ACTION.NONE
+            return
         self.action = action
 
     def get_action(self):
@@ -1164,10 +1167,12 @@ class FrameWidget(WidgetABC):
         pass
 
     def pick_button_command(self):
+        self.set_action(ACTION.PICK)
         self.pick_frame()
         pass
 
     def recog_button_command(self):
+        self.set_action(ACTION.RECOG)
         pass
 
     def get_openfrom_combobox_values(self):

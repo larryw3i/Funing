@@ -56,6 +56,13 @@ class InfoWidget(WidgetABC):
         self.save_button = None
         self.pick_scrolledframe = None
         self.pick_scrolledframe_innerframe = None
+        self.action = None
+
+    def set_action(self, action=ACTION.NONE,to_none=False):
+        self.fw.set_action(action,to_none)
+
+    def get_action(self):
+        return self.fw.get_action()
 
     def get_info_id(self):
         return self.fw.get_info_id()
@@ -147,6 +154,7 @@ class InfoWidget(WidgetABC):
         if save_image:
             for f in self.picked_frames:
                 cv2.imwrite(get_new_random_face_image_path(info_id), f)
+        self.set_msg(_("Information saved."))
         pass
 
     def set_msg(self, text=""):
