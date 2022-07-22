@@ -119,7 +119,12 @@ cat_bt(){
     echo ${app_name}.sh; cat -bt ${app_name}.sh
     echo ${app_name}.py; cat -bt ${app_name}.py
     echo setup.py;  cat -bt setup.py
-    for f in $(find ${app_name}/ -name "*.py" -o -name "*.po" -o -name "*.pot")
+    for f in $(\
+        find ${app_name}/ \
+        -type f \
+        -name "*.py" \
+        -o -name "*.po" \
+        -o -name "*.pot")
     do
         [[ -f $f ]] || continue
         echo $f
