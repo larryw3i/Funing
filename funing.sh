@@ -121,6 +121,7 @@ cat_bt(){
     echo setup.py;  cat -bt setup.py
     for f in $(find ${app_name}/ -name "*.py" -o -name "*.po" -o -name "*.pot")
     do
+        [[ -f $f ]] || continue
         echo $f
         cat -bt $f
     done
