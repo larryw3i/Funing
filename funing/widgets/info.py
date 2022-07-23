@@ -171,10 +171,23 @@ class InfoWidget(WidgetABC):
     def save_button_command(self):
         self.save_information()
         pass
+    
+    def is_action_read(self):
+        return self.fw.is_action_read()
+
+    def is_action_recog(self):
+        return self.fw.is_action_recog()
+
+    def is_action_pick(self):
+        return self.fw.is_action_none()
+    
+    def is_action_none(self):
+        return self.fw.is_action_none()
 
     def saved_info_combobox_var_trace_w(self, *args):
+        self.set_action(ACTION.READ)
         var_get = self.saved_info_combobox_var.get()
-        print(var_get)
+
         pass
 
     def set_basic_infos(self, refresh=False, to_none=False):

@@ -1066,6 +1066,18 @@ class FrameWidget(WidgetABC):
             self.src_type == SRC_TYPE.VIDEO_FILE
             and self.get_video_file_play_mode() == PLAY_MODE.EVERY_FRAME.value
         )
+    
+    def is_action_read(self):
+        return self.action == ACTION.READ
+
+    def is_action_recog(self):
+        return self.action == ACTION.RECOG
+
+    def is_action_pick(self):
+        return self.action == ACTION.PICK
+    
+    def is_action_none(self):
+        return self.action == ACTION.NONE    
 
     def update_video_frame(self, frame_index=0):
         time0 = datetime.now()
