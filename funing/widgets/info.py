@@ -69,10 +69,11 @@ class InfoWidget(WidgetABC):
         return self.fw.get_action()
 
     def get_info_id(self):
-        return self.fw.get_info_id()
+        self.info_id = self.fw.get_info_id()
+        return self.info_id
 
     def set_info_id(self, _id):
-        self.info_id = self.fw.set_info_id(_id)
+        self.info_id = self.fw.set_info_id(_id, return_id=True)
 
     def set_info_ids(self, info_ids=None, to_none=False, refresh=False):
         return self.fw.set_info_ids(info_ids, to_none, refresh)
@@ -171,7 +172,7 @@ class InfoWidget(WidgetABC):
     def save_button_command(self):
         self.save_information()
         pass
-    
+
     def is_action_read(self):
         return self.fw.is_action_read()
 
@@ -180,13 +181,93 @@ class InfoWidget(WidgetABC):
 
     def is_action_pick(self):
         return self.fw.is_action_none()
-    
+
     def is_action_none(self):
         return self.fw.is_action_none()
+
+    def get_picked_frames(self, from_frame=False, info_id=None):
+        if from_frame:
+            return self.get_picked_frames_from_frame()
+        if info_id is not None:
+            return self.get_infos_and_images_by_id(
+                info_id, update_widgets=False
+            )
+        if self.picked_frames == []:
+            return None
+        return self.picked_frames
+
+    def set_picked_frames(self, frames=None, to_none=False, update_label=True):
+        if to_none:
+            self.picked_frames = []
+            return
+        if frames is None:
+            self.picked_frames = []
+            return
+        if not isinstance(frames, list):
+            frames = [frames]
+        self.picked_frames = frames
+        if update_label:
+            self.update_picked_frame_labels()
+
+    def set_infos_and_images_by_id(
+        self, info_id=None, set_picked_frames=True, update_widgets=True
+    ):
+        if info_id is None:
+            return
+        image_path_list = get_face_image_path_list(info_id)
+        basic_info_path = get_basic_info_path(info_id)
+        info_path = get_info_path(info_id)
+        picked_frames = []
+        for p in image_path_list:
+            image = cv2.imread(p, cv2.IMREAD_COLOR)
+            picked_frames.append(image)
+        if set_picked_frames:
+            self.set_picked_frames(picked_frames)
+        basic_info = None
+        info = None
+        with open(basic_info_path, "r") as f:
+            basic_info = f.read()
+        with open(info_path, "r") as f:
+            info = f.read()
+
+        if update_widgets:
+            self.set_picked_frame_labels_image()
+            self.set_basic_info_entry_content(basic_info)
+            self.set_info_text_content(info)
+            pass
+
+    def set_basic_info_entry_content(self, content=None):
+        if content is None:
+            return
+        self.basic_info_entry.delete("0", "end")
+        self.basic_info_entry.insert("end", content)
+
+    def set_info_text_content(self, content=None):
+        if content is None:
+            return
+        self.info_text.delete("1.0", "end")
+        self.info_text.insert("end", content)
+
+    def get_id_by_saved_info_combobox_var(self, var_get=None):
+        if var_get is None:
+            return None
+        if "(" not in var_get:
+            return None
+        if ")" not in var_get:
+            return None
+        split0 = var_get.split("(")[-1]
+        info_id = split0.split(")")[0]
+        return info_id
 
     def saved_info_combobox_var_trace_w(self, *args):
         self.set_action(ACTION.READ)
         var_get = self.saved_info_combobox_var.get()
+        info_id = self.get_id_by_saved_info_combobox_var(var_get)
+        if info_id is None:
+            print(var_get, info_id)
+            return
+        self.set_info_id(info_id)
+        self.set_infos_and_images_by_id(info_id)
 
         pass
 
@@ -406,9 +487,7 @@ class InfoWidget(WidgetABC):
             l.destroy()
         self.picked_frame_labels = []
 
-    def add_pick_frames(
-        self, frames=None, update_label=True, set_info_text=True
-    ):
+    def add_picked_frames(self, frames=None, update_label=True):
         if not isinstance(frames, list):
             frames = [frames]
         self.picked_frames = frames + self.picked_frames
@@ -421,6 +500,9 @@ class InfoWidget(WidgetABC):
 
     def set_info_text(self):
         pass
+
+    def update_picked_frame_labels(self, frames=None):
+        self.set_picked_frame_labels_image(frames)
 
     def set_picked_frame_labels_image(self, frames=None):
         self.clear_picked_frame_labels()
@@ -450,7 +532,7 @@ class InfoWidget(WidgetABC):
     def set_label_frame(self, frame, label):
         self.fw.set_label_image(frame, label)
 
-    def get_pick_frames(self, frame=None):
+    def get_picked_frames_from_frame(self, frame=None, set_self=False):
         face_casecade = self.get_face_casecade()
         frame = frame or self.get_frame(copy=True)
         gray_img = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -466,9 +548,11 @@ class InfoWidget(WidgetABC):
             frames.append(pick_frame)
         del frame
         del gray_img
+        if set_self:
+            self.set_picked_frames(frames)
         return frames
 
     def pick_frame_by_default(self):
-        frames = self.get_pick_frames()
-        self.add_pick_frames(frames)
+        frames = self.get_picked_frames_from_frame()
+        self.add_picked_frames(frames)
         pass

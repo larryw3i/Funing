@@ -109,10 +109,13 @@ class FrameWidget(WidgetABC):
         self.resize_width = 112
         self.resize_height = self.resize_width
 
-    def set_info_id(self, _id=None):
-        if not _id:
-            return
+    def set_info_id(self, _id=None, return_id=False):
+        if _id is None:
+            return False
         self.info_id = _id
+        if return_id:
+            return self.info_id
+        return True
 
     def get_info_id(self):
         if not self.info_id:
@@ -1066,7 +1069,7 @@ class FrameWidget(WidgetABC):
             self.src_type == SRC_TYPE.VIDEO_FILE
             and self.get_video_file_play_mode() == PLAY_MODE.EVERY_FRAME.value
         )
-    
+
     def is_action_read(self):
         return self.action == ACTION.READ
 
@@ -1075,9 +1078,9 @@ class FrameWidget(WidgetABC):
 
     def is_action_pick(self):
         return self.action == ACTION.PICK
-    
+
     def is_action_none(self):
-        return self.action == ACTION.NONE    
+        return self.action == ACTION.NONE
 
     def update_video_frame(self, frame_index=0):
         time0 = datetime.now()
