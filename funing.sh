@@ -32,6 +32,12 @@ update_gitignore(){
     echo "gitignore updated!"
 }
 
+just_backup(){
+    git add . && \
+    git commit -m "$(date -R -u) backup." && \
+    git push
+}
+
 _xgettext(){
     [[ -f $pot_path ]] || touch $pot_path
 
@@ -181,6 +187,7 @@ style(){    blk;                }
 dep(){      p3;                 }
 
 depu(){     _pip3_u;            }
+bk(){       just_backup;        }
 
 $*
 

@@ -236,14 +236,25 @@ class InfoWidget(WidgetABC):
             self.set_info_text_content(info)
             pass
 
-    def set_basic_info_entry_content(self, content=None):
-        if content is None:
+    def clear_info_widgets_content(self):
+        self.del_info_widgets_content()
+        pass
+
+    def del_info_widgets_content(self):
+        self.set_basic_info_entry_content(to_none=True)
+        self.set_info_text_content(to_none=True)
+        pass
+
+    def set_basic_info_entry_content(self, content=None, to_none=False):
+        if content is None or to_none:
+            self.basic_info_entry.delete("0", "end")
             return
         self.basic_info_entry.delete("0", "end")
         self.basic_info_entry.insert("end", content)
 
-    def set_info_text_content(self, content=None):
-        if content is None:
+    def set_info_text_content(self, content=None, to_none=False):
+        if content is None or to_none:
+            self.info_text.delete("1.0", "end")
             return
         self.info_text.delete("1.0", "end")
         self.info_text.insert("end", content)
@@ -305,6 +316,11 @@ class InfoWidget(WidgetABC):
             values=self.get_saved_info_combobox_values()
         )
 
+    def delete_button_command(self):
+        if not self.is_action_read():
+            return
+        pass
+
     def set_widgets(self):
         super().set_widgets()
         self.set_frame_widget()
@@ -339,6 +355,12 @@ class InfoWidget(WidgetABC):
         )
         self.save_button = ttk.Button(
             self.root, text=_("Save"), command=self.save_button_command
+        )
+        self.delete_button = ttk.Button(
+            self.root,
+            text=_("Delete"),
+            background="red",
+            command=self.delete_button_command(),
         )
 
     def get_frame(self, copy=False):
@@ -434,6 +456,31 @@ class InfoWidget(WidgetABC):
     def get_saved_info_combobox_height(self):
         return self.saved_info_combobox.winfo_reqheight()
 
+    def get_delete_button_x(self):
+        return self.get_x() + self.get_width() - self.get_delete_button_width()
+
+    def get_delete_button_y(self):
+        return self.get_save_button_y()
+
+    def get_delete_button_width(self):
+        return self.delete_button.winfo_reqwidth()
+
+    def get_delete_button_height(self):
+        return self.delete_button.winfo_reqheight()
+
+    def delete_button_place(self):
+        self.delete_button.place(
+            x=self.get_delete_button_x(),
+            y=self.get_delete_button_y(),
+            width=self.get_delete_button_width(),
+            height=self.get_delete_button_height(),
+        )
+        pass
+
+    def delete_button_place_forget(self):
+        self.delete_button.place_forget()
+        pass
+
     def place(self):
         super().place()
 
@@ -474,6 +521,9 @@ class InfoWidget(WidgetABC):
             width=self.get_save_button_width(),
             height=self.get_save_button_height(),
         )
+
+        if self.is_action_read():
+            self.delete_button_place()
 
     def del_picked_frame(self, index, del_label=True):
         if del_label:
