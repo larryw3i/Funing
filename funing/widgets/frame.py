@@ -368,6 +368,18 @@ class FrameWidget(WidgetABC):
             self.set_src_type()
         return self.src_type
 
+    def set_action_to_read(self):
+        self.set_action(ACTION.READ)
+
+    def set_action_to_pick(self):
+        self.set_action(ACTION.PICK)
+
+    def set_action_to_recog(self):
+        self.set_action(ACTION.RECOG)
+
+    def set_action_to_none(self):
+        self.set_action(ACTION.NONE)
+
     def set_action(self, action=ACTION.NONE, to_none=False):
         if to_none:
             self.action = ACTION.NONE
@@ -551,6 +563,7 @@ class FrameWidget(WidgetABC):
         )
         if frame is None:
             self.set_msg(_("Video not opened."))
+            return
         if copy:
             return frame.copy()
         return frame
@@ -1182,6 +1195,7 @@ class FrameWidget(WidgetABC):
             self.stop_video_frame()
 
     def pick_frame(self):
+        self.set_action(ACTION.PICK)
         self.pick_frame_by_default()
         pass
 

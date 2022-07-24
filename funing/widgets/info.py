@@ -65,6 +65,19 @@ class InfoWidget(WidgetABC):
     def set_action(self, action=ACTION.NONE, to_none=False):
         self.fw.set_action(action, to_none)
 
+    def set_action_to_none(self):
+        self.set_action(ACTION.NONE)
+
+    def set_action_to_read(self):
+        self.set_infos_and_images_by_id(self.info_id)
+        self.set_action(ACTION.READ)
+
+    def set_action_to_pick(self):
+        self.set_action(ACTION.PICK)
+
+    def set_action_to_recog(self):
+        self.set_action(ACTION.RECOG)
+
     def get_action(self):
         return self.fw.get_action()
 
@@ -271,15 +284,13 @@ class InfoWidget(WidgetABC):
         return info_id
 
     def saved_info_combobox_var_trace_w(self, *args):
-        self.set_action(ACTION.READ)
         var_get = self.saved_info_combobox_var.get()
         info_id = self.get_id_by_saved_info_combobox_var(var_get)
         if info_id is None:
             print(var_get, info_id)
             return
         self.set_info_id(info_id)
-        self.set_infos_and_images_by_id(info_id)
-
+        self.set_action_to_read()
         pass
 
     def set_basic_infos(self, refresh=False, to_none=False):
@@ -356,7 +367,7 @@ class InfoWidget(WidgetABC):
         self.save_button = ttk.Button(
             self.root, text=_("Save"), command=self.save_button_command
         )
-        self.delete_button = ttk.Button(
+        self.delete_button = tk.Button(
             self.root,
             text=_("Delete"),
             background="red",
@@ -585,6 +596,9 @@ class InfoWidget(WidgetABC):
     def get_picked_frames_from_frame(self, frame=None, set_self=False):
         face_casecade = self.get_face_casecade()
         frame = frame or self.get_frame(copy=True)
+        if frame is None:
+            self.set_msg(_("Frame is None."))
+            return None
         gray_img = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         face_rects = face_casecade.detectMultiScale(gray_img, 1.3, 5)
         frames = []
@@ -604,5 +618,7 @@ class InfoWidget(WidgetABC):
 
     def pick_frame_by_default(self):
         frames = self.get_picked_frames_from_frame()
+        if frames is None:
+            return
         self.add_picked_frames(frames)
         pass
