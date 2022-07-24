@@ -25,9 +25,13 @@ copy_path = os.path.join(user_data_dir_path, "copy.pkl")
 recog_datas_dir_path = os.path.join(user_data_dir_path, "recog_datas")
 faces_dir_path = os.path.join(recog_datas_dir_path, "face_images")
 infos_dir_path = os.path.join(recog_datas_dir_path, "infos")
+backup_dir_path = os.path.join(user_data_dir_path, "backup")
 
 default_image_ext = ".jpg"
 image_ext = default_image_ext
+info_ext = ".txt"
+basic_info_ext = ".basic.txt"
+backup_ext = ".bk"
 
 for d in [
     user_data_dir_path,
@@ -44,19 +48,32 @@ for f in [copy_path]:
             pickle.dump({}, f)
 
 
+def get_new_backup_file_path(file_id=None):
+    file_id = file_id or str(uuid.uuid4())
+    return os.path.join(backup_dir_path, file_id + backup_ext)
+
+
 def get_info_path(info_id):
-    return os.path.join(infos_dir_path, info_id + ".txt")
+    return os.path.join(infos_dir_path, info_id + info_ext)
 
 
 def get_basic_info_path(info_id):
-    return os.path.join(infos_dir_path, info_id + ".basic.txt")
+    return os.path.join(infos_dir_path, info_id + basic_info_ext)
 
 
 def get_new_random_face_image_path(info_id):
     face_image_dir_path = os.path.join(faces_dir_path, info_id)
     if not os.path.exists(face_image_dir_path):
         os.makedirs(face_image_dir_path, exist_ok=True)
-    return os.path.join(faces_dir_path, info_id, str(uuid.uuid4()) + ".jpg")
+    return os.path.join(faces_dir_path, info_id, str(uuid.uuid4()) + image_ext)
+
+
+def get_frame_path_by_ids(info_id, frame_id):
+    return os.path.join(faces_dir_path, info_id, frame_id + image_ext)
+
+
+def get_image_patg_by_ids(info_id, frame_id):
+    return get_frame_path_by_ids(info_id, frame_id)
 
 
 def get_face_image_path_list(info_id):

@@ -20,7 +20,7 @@ from pathlib import Path
 from queue import Queue
 from threading import Thread
 from tkinter import *
-from tkinter import ttk
+from tkinter import filedialog, messagebox, ttk
 
 import cv2
 from appdirs import user_data_dir
@@ -74,6 +74,9 @@ class InfoWidget(WidgetABC):
         return self.saved_frames
 
     def set_saved_frames_for_active_id(self, frames=None, to_none=False):
+        self.set_saved_frames(frames, to_none)
+
+    def set_saved_frames_with_frame_id(self, frames=None, to_none=False):
         self.set_saved_frames(frames, to_none)
 
     def set_saved_frames(self, frames=None, to_none=False):
@@ -249,6 +252,13 @@ class InfoWidget(WidgetABC):
     def get_saved_frames_by_info_id(self, info_id=None, set_self=True):
         return self.get_saved_frames_by_id(info_id, set_self)
 
+    def get_saved_frame_id_by_frame_path(self, frame_pth=None):
+        if frame_path is None:
+            return None
+        frame_id = frame_path.split(os.sep)[-1]
+        frame_id = frame_id.split(".")[0]
+        return frame_id
+
     def get_saved_frames_by_id(self, info_id=None, set_self=True):
         if info_id is None:
             return None
@@ -256,7 +266,9 @@ class InfoWidget(WidgetABC):
         saved_frames = []
         for p in image_path_list:
             image = cv2.imread(p, cv2.IMREAD_COLOR)
-            saved_frames.append(image)
+            saved_frames.append(
+                (self.get_saved_frame_id_by_frame_path(p), image)
+            )
         if set_self:
             self.set_saved_frames(saved_frames)
         return saved_frames
@@ -614,7 +626,25 @@ class InfoWidget(WidgetABC):
     def set_picked_frame_labels_image(self, frames=None):
         self.set_frame_labels_image(frames)
 
-    def del_saved_frame_by_index(self, index):
+    def del_saved_frame_by_index(self, frame_id=None, ask=True):
+        if frame_id is None:
+            return
+        if ask:
+            if not messagebox.askyesno(
+                _("Delete saved frame"),
+                _("Do you want to delete saved frame?"),
+            ):
+                return
+
+        image_path = get_frame_path_by_ids(self.get_info_id(), frame_id)
+        shutil.move(image_path, get_new_backup_file_path(frame_id))
+        index = 0
+        for _id, f in self.get_saved_frames():
+            if _id == frame_id:
+                del self.saved_frames[index]
+                break
+            index += 1
+            pass
         pass
 
     def set_frame_labels_image(self, frames=None):
@@ -645,16 +675,14 @@ class InfoWidget(WidgetABC):
             saved_frames = self.get_saved_frames()
             if saved_frames is None:
                 return
-
-            for f in saved_frames:
+            for _id, f in saved_frames:
                 label = ttk.Label(
                     self.pick_scrolledframe_innerframe, state="active"
                 )
-                index = len(self.saved_frame_labels)
                 label.bind(
                     "<Button-1>",
                     lambda event, index=index: self.del_saved_frame_by_index(
-                        index
+                        _id
                     ),
                 )
                 label.pack(
