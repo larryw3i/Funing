@@ -154,6 +154,7 @@ class FrameWidget(WidgetABC):
 
     def set_info_widget(self):
         if not self.mw.info_widget:
+            print(_("info_widget is None."))
             return
         self.iw = self.info_widget = self.mw.info_widget
 
@@ -368,17 +369,32 @@ class FrameWidget(WidgetABC):
             self.set_src_type()
         return self.src_type
 
+    def delete_button_place_forget(self):
+        self.iw.delete_button_place_forget()
+
+    def clear_saved_info_combobox_content(self):
+        self.iw.clear_saved_info_combobox_content()
+
+    def clear_info_widget_area_content(self):
+        self.iw.clear_info_widget_area_content()
+
     def set_action_to_read(self):
-        self.set_action(ACTION.READ)
+        if not self.is_action_read():
+            self.set_action(ACTION.READ)
 
     def set_action_to_pick(self):
-        self.set_action(ACTION.PICK)
+        if not self.is_action_pick():
+            self.delete_button_place_forget()
+            self.clear_info_widget_area_content()
+            self.set_action(ACTION.PICK)
 
     def set_action_to_recog(self):
-        self.set_action(ACTION.RECOG)
+        if not self.is_action_recog():
+            self.set_action(ACTION.RECOG)
 
     def set_action_to_none(self):
-        self.set_action(ACTION.NONE)
+        if not self.is_action_none():
+            self.set_action(ACTION.NONE)
 
     def set_action(self, action=ACTION.NONE, to_none=False):
         if to_none:
@@ -1084,16 +1100,16 @@ class FrameWidget(WidgetABC):
         )
 
     def is_action_read(self):
-        return self.action == ACTION.READ
+        return self.get_action() == ACTION.READ
 
     def is_action_recog(self):
-        return self.action == ACTION.RECOG
+        return self.get_action() == ACTION.RECOG
 
     def is_action_pick(self):
-        return self.action == ACTION.PICK
+        return self.get_action() == ACTION.PICK
 
     def is_action_none(self):
-        return self.action == ACTION.NONE
+        return self.get_action() == ACTION.NONE
 
     def update_video_frame(self, frame_index=0):
         time0 = datetime.now()
@@ -1195,7 +1211,6 @@ class FrameWidget(WidgetABC):
             self.stop_video_frame()
 
     def pick_frame(self):
-        self.set_action(ACTION.PICK)
         self.pick_frame_by_default()
         pass
 
@@ -1204,8 +1219,8 @@ class FrameWidget(WidgetABC):
         pass
 
     def pick_button_command(self):
-        self.set_action(ACTION.PICK)
         self.pick_frame()
+        self.set_action_to_pick()
         pass
 
     def recog_button_command(self):

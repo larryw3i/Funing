@@ -327,6 +327,19 @@ class InfoWidget(WidgetABC):
             values=self.get_saved_info_combobox_values()
         )
 
+    def clear_info_widget_area_content(self):
+        self.clear_saved_info_combobox_content()
+        self.clear_picked_frame_labels()
+        self.set_basic_info_entry_content("")
+        self.set_info_text_content("")
+
+    def clear_saved_info_combobox_content(self):
+        self.del_saved_info_combobox_content()
+
+    def del_saved_info_combobox_content(self):
+        self.saved_info_combobox.set("")
+        pass
+
     def delete_button_command(self):
         if not self.is_action_read():
             return
@@ -536,7 +549,7 @@ class InfoWidget(WidgetABC):
         if self.is_action_read():
             self.delete_button_place()
 
-    def del_picked_frame(self, index, del_label=True):
+    def del_picked_frame_by_index(self, index, del_label=True):
         if del_label:
             self.picked_frame_labels[index].destroy()
             del self.picked_frame_labels[index]
@@ -559,9 +572,6 @@ class InfoWidget(WidgetABC):
         frame = ttk.Frame(self.info_scrolledframe_innerframe)
         return frame
 
-    def set_info_text(self):
-        pass
-
     def update_picked_frame_labels(self, frames=None):
         self.set_picked_frame_labels_image(frames)
 
@@ -576,7 +586,9 @@ class InfoWidget(WidgetABC):
             index = len(self.picked_frame_labels)
             label.bind(
                 "<Button-1>",
-                lambda event, index=index: self.del_picked_frame(index),
+                lambda event, index=index: self.del_picked_frame_by_index(
+                    index
+                ),
             )
             label.pack(
                 side="left",
