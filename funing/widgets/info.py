@@ -49,7 +49,8 @@ class InfoWidget(WidgetABC):
         self.face_casecade = None
         self.picked_frames = []
         self.picked_frame_labels = []
-        self.picked_frame_label_margin = 10
+        self.frame_label_margin = 10
+        self.picked_frame_label_margin = self.frame_label_margin
         self.resize_width = None
         self.resize_height = None
         self.info_frames = None
@@ -60,7 +61,27 @@ class InfoWidget(WidgetABC):
         self.action = None
         self.saved_info_combobox = None
         self.saved_info_combobox_var = StringVar()
+        self.saved_frames_for_active_id = self.saved_frames = None
+        self.saved_frame_labels = None
         self.basic_infos = None
+
+    def get_saved_frames_for_active_id(self):
+        return self.get_saved_frames()
+
+    def get_saved_frames(self):
+        if self.saved_frames is None:
+            return None
+        return self.saved_frames
+
+    def set_saved_frames_for_active_id(self, frames=None, to_none=False):
+        self.set_saved_frames(frames, to_none)
+
+    def set_saved_frames(self, frames=None, to_none=False):
+        if to_none:
+            self.saved_frames = None
+        if frames is None:
+            return
+        self.saved_frames = self.saved_frames_for_active_id = frames
 
     def set_action(self, action=ACTION.NONE, to_none=False):
         self.fw.set_action(action, to_none)
@@ -69,6 +90,9 @@ class InfoWidget(WidgetABC):
         self.set_action(ACTION.NONE)
 
     def set_action_to_read(self):
+        if not self.is_action_read():
+            self.delete_button_place()
+            pass
         self.set_infos_and_images_by_id(self.info_id)
         self.set_action(ACTION.READ)
 
@@ -222,27 +246,35 @@ class InfoWidget(WidgetABC):
         if update_label:
             self.update_picked_frame_labels()
 
+    def get_saved_frames_by_info_id(self, info_id=None, set_self=True):
+        return self.get_saved_frames_by_id(info_id, set_self)
+
+    def get_saved_frames_by_id(self, info_id=None, set_self=True):
+        if info_id is None:
+            return None
+        image_path_list = get_face_image_path_list(info_id)
+        saved_frames = []
+        for p in image_path_list:
+            image = cv2.imread(p, cv2.IMREAD_COLOR)
+            saved_frames.append(image)
+        if set_self:
+            self.set_saved_frames(saved_frames)
+        return saved_frames
+
     def set_infos_and_images_by_id(
         self, info_id=None, set_picked_frames=True, update_widgets=True
     ):
         if info_id is None:
             return
-        image_path_list = get_face_image_path_list(info_id)
         basic_info_path = get_basic_info_path(info_id)
         info_path = get_info_path(info_id)
-        picked_frames = []
-        for p in image_path_list:
-            image = cv2.imread(p, cv2.IMREAD_COLOR)
-            picked_frames.append(image)
-        if set_picked_frames:
-            self.set_picked_frames(picked_frames)
         basic_info = None
         info = None
         with open(basic_info_path, "r") as f:
             basic_info = f.read()
         with open(info_path, "r") as f:
             info = f.read()
-
+        self.get_saved_frames_by_id(info_id)
         if update_widgets:
             self.set_picked_frame_labels_image()
             self.set_basic_info_entry_content(basic_info)
@@ -277,10 +309,10 @@ class InfoWidget(WidgetABC):
             return None
         if "(" not in var_get:
             return None
+        var_get = var_get.split("(")[-1]
         if ")" not in var_get:
             return None
-        split0 = var_get.split("(")[-1]
-        info_id = split0.split(")")[0]
+        info_id = var_get.split(")")[0]
         return info_id
 
     def saved_info_combobox_var_trace_w(self, *args):
@@ -384,6 +416,7 @@ class InfoWidget(WidgetABC):
             self.root,
             text=_("Delete"),
             background="red",
+            activebackground="red",
             command=self.delete_button_command(),
         )
 
@@ -566,6 +599,9 @@ class InfoWidget(WidgetABC):
             frames = [frames]
         self.picked_frames = frames + self.picked_frames
         if update_label:
+            new_added_frames = []
+            if self.is_action_read():
+                pass
             self.set_picked_frame_labels_image(self.picked_frames)
 
     def get_info_frame(self):
@@ -576,9 +612,15 @@ class InfoWidget(WidgetABC):
         self.set_picked_frame_labels_image(frames)
 
     def set_picked_frame_labels_image(self, frames=None):
+        self.set_frame_labels_image(frames)
+
+    def del_saved_frame_by_index(self, index):
+        pass
+
+    def set_frame_labels_image(self, frames=None):
         self.clear_picked_frame_labels()
         if frames is None:
-            frames = self.picked_frames
+            frames = self.get_picked_frames()
         for f in frames:
             label = ttk.Label(
                 self.pick_scrolledframe_innerframe, state="active"
@@ -598,6 +640,34 @@ class InfoWidget(WidgetABC):
             simpletooltip.create(label, _("Click to delete."))
             self.set_label_image(f, label)
             self.picked_frame_labels.append(label)
+
+        if self.is_action_read():
+            saved_frames = self.get_saved_frames()
+            if saved_frames is None:
+                return
+
+            for f in saved_frames:
+                label = ttk.Label(
+                    self.pick_scrolledframe_innerframe, state="active"
+                )
+                index = len(self.saved_frame_labels)
+                label.bind(
+                    "<Button-1>",
+                    lambda event, index=index: self.del_saved_frame_by_index(
+                        index
+                    ),
+                )
+                label.pack(
+                    side="left",
+                    anchor="nw",
+                    padx=self.frame_label_margin / 2,
+                )
+                simpletooltip.create(label, _("Saved frame, Click to delete."))
+                self.set_label_image(f, label)
+                self.saved_frame_labels.append(label)
+
+    def set_label_image(self, image, label):
+        self.set_label_frame(image, label)
 
     def set_label_image(self, image, label):
         self.set_label_frame(image, label)
