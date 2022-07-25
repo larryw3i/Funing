@@ -5,7 +5,6 @@ import shutil
 import sys
 from pathlib import Path
 
-import yaml
 
 app_name = "funing"
 app_version = "0.2.35"

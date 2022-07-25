@@ -11,7 +11,6 @@ from pathlib import Path
 
 from funing import *
 from funing import settings
-from funing.path import *
 from funing.settings import *
 
 
