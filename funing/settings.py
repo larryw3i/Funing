@@ -5,7 +5,6 @@ import shutil
 import sys
 from pathlib import Path
 
-
 app_name = "funing"
 app_version = "0.2.35"
 app_description = "A face recognition gui"

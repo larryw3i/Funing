@@ -29,7 +29,6 @@ from tkinter import filedialog, messagebox, ttk
 import cv2
 import numpy
 import numpy as np
-import yaml
 from appdirs import user_data_dir
 from cv2.data import haarcascades
 from cv2.face import EigenFaceRecognizer_create

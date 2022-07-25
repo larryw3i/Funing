@@ -359,10 +359,14 @@ class InfoWidget(WidgetABC):
         """
         if self.basic_infos is None:
             self.set_basic_infos()
+        if self.basic_infos == []:
+            return None
         return self.basic_infos
 
     def get_saved_info_combobox_values(self):
         basic_infos = self.get_basic_infos()
+        if basic_infos is None:
+            return []
         return [info + "(" + _id + ")" for _id, info in basic_infos]
 
     def update_saved_info_combobox_values(self):
