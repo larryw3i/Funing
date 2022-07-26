@@ -632,7 +632,9 @@ class InfoWidget(WidgetABC):
     def set_picked_frame_labels_image(self, frames=None):
         self.set_frame_labels_image(frames)
 
-    def del_saved_frame_by_id(self, frame_id=None, ask=True):
+    def del_saved_frame_by_id(
+        self, frame_id=None, ask=True, update_widgets=True
+    ):
         if frame_id is None:
             return
         if ask:
@@ -646,15 +648,19 @@ class InfoWidget(WidgetABC):
         backup_file_path = get_new_backup_file_path(frame_id)
         if not os.path.exists(backup_file_path):
             with open(backup_file_path, "wb") as f:
-                f.write(0)
+                f.write()
         shutil.move(image_path, backup_file_path)
         index = 0
         for _id, f in self.get_saved_frames():
             if _id == frame_id:
                 del self.saved_frames[index]
+                if update_widgets:
+                    self.saved_frame_labels[index].destroy()
+                    del self.saved_frame_labels[index]
                 break
             index += 1
             pass
+        self.set_frame_labels_image()
         pass
 
     def set_frame_labels_image_use_picked_frames(self, frames=None):
