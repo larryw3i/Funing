@@ -38,6 +38,7 @@ for d in [
     user_config_dir_path,
     infos_dir_path,
     faces_dir_path,
+    backup_dir_path,
 ]:
     if not os.path.exists(d):
         os.makedirs(d, exist_ok=True)

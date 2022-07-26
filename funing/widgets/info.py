@@ -70,7 +70,7 @@ class InfoWidget(WidgetABC):
 
     def get_saved_frames(self):
         if self.saved_frames is None:
-            self.get_saved_frames_by_id()
+            return self.get_saved_frames_by_id()
         return self.saved_frames
 
     def set_saved_frames_for_active_id(self, frames=None, to_none=False):
@@ -96,8 +96,8 @@ class InfoWidget(WidgetABC):
         if not self.is_action_read():
             self.delete_button_place()
             pass
-        self.set_infos_and_images_by_id(self.info_id)
         self.set_action(ACTION.READ)
+        self.set_infos_and_images_by_id(self.info_id)
 
     def set_action_to_pick(self):
         self.set_action(ACTION.PICK)
@@ -255,12 +255,14 @@ class InfoWidget(WidgetABC):
             return None
         frame_id = frame_path.split(os.sep)[-1]
         frame_id = frame_id.split(".")[0]
+        print("frame_id", frame_id)
         return frame_id
 
     def get_saved_frames_by_id(self, info_id=None, set_self=True):
         if info_id is None:
             info_id = self.get_info_id()
             if info_id is None:
+                print(_("info ID is None."))
                 return None
         image_path_list = get_face_image_path_list(info_id)
         saved_frames = []
@@ -641,7 +643,11 @@ class InfoWidget(WidgetABC):
                 return
 
         image_path = get_frame_path_by_ids(self.get_info_id(), frame_id)
-        shutil.move(image_path, get_new_backup_file_path(frame_id))
+        backup_file_path = get_new_backup_file_path(frame_id)
+        if not os.path.exists(backup_file_path):
+            with open(backup_file_path, "wb") as f:
+                f.write(0)
+        shutil.move(image_path, backup_file_path)
         index = 0
         for _id, f in self.get_saved_frames():
             if _id == frame_id:
@@ -685,7 +691,9 @@ class InfoWidget(WidgetABC):
                 return
         saved_frames = self.get_saved_frames()
         if saved_frames is None:
+            print(_("Saved frames is None."))
             return
+        print("saved_frames", len(saved_frames))
         for _id, f in saved_frames:
             label = ttk.Label(
                 self.pick_scrolledframe_innerframe, state="active"
