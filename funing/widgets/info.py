@@ -229,9 +229,7 @@ class InfoWidget(WidgetABC):
         if from_frame:
             return self.get_picked_frames_from_frame()
         if info_id is not None:
-            return self.get_infos_and_images_by_id(
-                info_id, update_widgets=False
-            )
+            return self.get_saved_frames_by_id(info_id)
         if self.picked_frames == []:
             return None
         return self.picked_frames
@@ -252,7 +250,7 @@ class InfoWidget(WidgetABC):
     def get_saved_frames_by_info_id(self, info_id=None, set_self=True):
         return self.get_saved_frames_by_id(info_id, set_self)
 
-    def get_saved_frame_id_by_frame_path(self, frame_pth=None):
+    def get_saved_frame_id_by_frame_path(self, frame_path=None):
         if frame_path is None:
             return None
         frame_id = frame_path.split(os.sep)[-1]
@@ -651,29 +649,79 @@ class InfoWidget(WidgetABC):
             pass
         pass
 
+    def set_frame_labels_image_use_picked_frames(self, frames=None):
+        if frames is None:
+            frames = self.get_picked_frames()
+        if frames is not None:
+            for f in frames:
+                label = ttk.Label(
+                    self.pick_scrolledframe_innerframe, state="active"
+                )
+                index = len(self.picked_frame_labels)
+                label.bind(
+                    "<Button-1>",
+                    lambda event, index=index: self.del_picked_frame_by_index(
+                        index
+                    ),
+                )
+                label.pack(
+                    side="left",
+                    anchor="nw",
+                    padx=self.picked_frame_label_margin / 2,
+                )
+                simpletooltip.create(label, _("Click to delete."))
+                self.set_label_image(f, label)
+                self.picked_frame_labels.append(label)
+
+    def set_frame_labels_image_use_saved_frames(self, frames=None):
+        if self.is_action_read():
+            saved_frames = self.get_saved_frames()
+            if saved_frames is None:
+                return
+            for _id, f in saved_frames:
+                label = ttk.Label(
+                    self.pick_scrolledframe_innerframe, state="active"
+                )
+                label.bind(
+                    "<Button-1>",
+                    lambda event, index=index: self.del_saved_frame_by_index(
+                        _id
+                    ),
+                )
+                label.pack(
+                    side="left",
+                    anchor="nw",
+                    padx=self.frame_label_margin / 2,
+                )
+                simpletooltip.create(label, _("Saved frame, Click to delete."))
+                self.set_label_image(f, label)
+                self.saved_frame_labels.append(label)
+        pass
+
     def set_frame_labels_image(self, frames=None):
         self.clear_picked_frame_labels()
         if frames is None:
             frames = self.get_picked_frames()
-        for f in frames:
-            label = ttk.Label(
-                self.pick_scrolledframe_innerframe, state="active"
-            )
-            index = len(self.picked_frame_labels)
-            label.bind(
-                "<Button-1>",
-                lambda event, index=index: self.del_picked_frame_by_index(
-                    index
-                ),
-            )
-            label.pack(
-                side="left",
-                anchor="nw",
-                padx=self.picked_frame_label_margin / 2,
-            )
-            simpletooltip.create(label, _("Click to delete."))
-            self.set_label_image(f, label)
-            self.picked_frame_labels.append(label)
+        if frames is not None:
+            for f in frames:
+                label = ttk.Label(
+                    self.pick_scrolledframe_innerframe, state="active"
+                )
+                index = len(self.picked_frame_labels)
+                label.bind(
+                    "<Button-1>",
+                    lambda event, index=index: self.del_picked_frame_by_index(
+                        index
+                    ),
+                )
+                label.pack(
+                    side="left",
+                    anchor="nw",
+                    padx=self.picked_frame_label_margin / 2,
+                )
+                simpletooltip.create(label, _("Click to delete."))
+                self.set_label_image(f, label)
+                self.picked_frame_labels.append(label)
 
         if self.is_action_read():
             saved_frames = self.get_saved_frames()
