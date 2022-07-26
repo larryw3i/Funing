@@ -648,7 +648,7 @@ class InfoWidget(WidgetABC):
         backup_file_path = get_new_backup_file_path(frame_id)
         if not os.path.exists(backup_file_path):
             with open(backup_file_path, "wb") as f:
-                f.write()
+                pass
         shutil.move(image_path, backup_file_path)
         index = 0
         for _id, f in self.get_saved_frames():
