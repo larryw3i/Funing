@@ -190,7 +190,7 @@ class InfoWidget(WidgetABC):
             return
         basic_info_entry_get = self.get_basic_info_entry_content()
         info_text_get = self.get_info_text_content()
-        info_id = info_id or str(uuid.uuid4())
+        info_id = info_id or self.get_info_id()  str(uuid.uuid4())
         if save_basic_info:
             with open(get_basic_info_path(info_id), "w") as f:
                 f.write(basic_info_entry_get)
