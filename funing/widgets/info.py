@@ -645,6 +645,11 @@ class InfoWidget(WidgetABC):
                 return
 
         image_path = get_frame_path_by_ids(self.get_info_id(), frame_id)
+
+        if not os.path.exists(image_path):
+            print(_("Image(%s) doesn't exist.") % image_path)
+            return
+
         backup_file_path = get_new_backup_file_path(frame_id)
         if not os.path.exists(backup_file_path):
             with open(backup_file_path, "wb") as f:
