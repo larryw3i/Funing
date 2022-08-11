@@ -190,7 +190,7 @@ class InfoWidget(WidgetABC):
             return
         basic_info_entry_get = self.get_basic_info_entry_content()
         info_text_get = self.get_info_text_content()
-        info_id = info_id or self.get_info_id()  str(uuid.uuid4())
+        info_id = info_id or self.get_info_id() or str(uuid.uuid4())
         if save_basic_info:
             with open(get_basic_info_path(info_id), "w") as f:
                 f.write(basic_info_entry_get)
@@ -607,6 +607,12 @@ class InfoWidget(WidgetABC):
         del self.picked_frames[index]
         self.set_picked_frame_labels_image()
 
+    def clear_saved_frame_labels(self):
+        for l in self.saved_frame_labels:
+            l.destroy()
+        self.saved_frame_labels = []
+        pass
+
     def clear_picked_frame_labels(self):
         for l in self.picked_frame_labels:
             l.destroy()
@@ -725,6 +731,7 @@ class InfoWidget(WidgetABC):
 
     def set_frame_labels_image(self, frames=None):
         self.clear_picked_frame_labels()
+        self.clear_saved_frame_labels()
         self.set_frame_labels_image_use_picked_frames()
         self.set_frame_labels_image_use_saved_frames()
 
