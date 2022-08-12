@@ -330,6 +330,10 @@ class InfoWidget(WidgetABC):
         return info_id
 
     def saved_info_combobox_var_trace_w(self, *args):
+        self.clear_picked_frame_labels()
+        self.clear_saved_frame_labels()
+        self.set_saved_frames(to_none=True)
+        self.set_picked_frames(to_none=True)
         var_get = self.saved_info_combobox_var.get()
         info_id = self.get_id_by_saved_info_combobox_var(var_get)
         if info_id is None:
@@ -609,10 +613,10 @@ class InfoWidget(WidgetABC):
 
         if self.is_action_read():
             self.delete_button_place()
-    
+
     def get_picked_frames_len(self):
         return len(self.picked_frames)
-    
+
     def del_picked_frame_by_index(self, index, del_label=True):
         if del_label:
             self.picked_frame_labels[index].destroy()
