@@ -340,6 +340,10 @@ class InfoWidget(WidgetABC):
         if info_id is None:
             print(var_get, info_id)
             return
+        if info_id == "Add":
+            self.set_action_to_pick()
+            self.clear_info_widget_area_content()
+            return
         self.set_info_id(info_id)
         self.set_action_to_read()
         pass
@@ -374,7 +378,9 @@ class InfoWidget(WidgetABC):
         basic_infos = self.get_basic_infos()
         if basic_infos is None:
             return []
-        return [info + "(" + _id + ")" for _id, info in basic_infos]
+        combobox_values = [info + "(" + _id + ")" for _id, info in basic_infos]
+        combobox_values += [_("New information(Add)")]
+        return combobox_values
 
     def update_saved_info_combobox_values(self):
         self.set_basic_infos()
@@ -399,8 +405,8 @@ class InfoWidget(WidgetABC):
         self.clear_info_widget_area_content()
         pass
 
-    def del_saved_info_by_info_id(self,info_id=None):
-        info_id = info_id or  self.get_info_id()
+    def del_saved_info_by_info_id(self, info_id=None):
+        info_id = info_id or self.get_info_id()
         if not info_id:
             return
         basic_info_path = get_basic_info_path(info_id)
