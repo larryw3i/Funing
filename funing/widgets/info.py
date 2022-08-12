@@ -609,12 +609,16 @@ class InfoWidget(WidgetABC):
 
         if self.is_action_read():
             self.delete_button_place()
-
+    
+    def get_picked_frames_len(self):
+        return len(self.picked_frames)
+    
     def del_picked_frame_by_index(self, index, del_label=True):
         if del_label:
             self.picked_frame_labels[index].destroy()
             del self.picked_frame_labels[index]
-        del self.picked_frames[index]
+        if index < self.get_picked_frames_len:
+            del self.picked_frames[index]
         self.set_picked_frame_labels_image()
 
     def clear_saved_frame_labels(self):
@@ -686,7 +690,9 @@ class InfoWidget(WidgetABC):
 
     def set_frame_labels_image_use_picked_frames(self, frames=None):
         if frames is None:
-            frames = self.get_picked_frames() or self.get_picked_frames_from_frame()
+            frames = (
+                self.get_picked_frames() or self.get_picked_frames_from_frame()
+            )
         if frames is not None:
             for f in frames:
                 label = ttk.Label(
