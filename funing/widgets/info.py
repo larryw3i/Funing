@@ -185,6 +185,7 @@ class InfoWidget(WidgetABC):
         save_image=True,
         refresh=True,
     ):
+
         if len(self.picked_frames) < 1:
             self.set_msg(_("Nothing picked."))
             return
@@ -398,15 +399,26 @@ class InfoWidget(WidgetABC):
         self.clear_info_widget_area_content()
         pass
 
-    def del_saved_info_by_frame_id(self):
-
+    def del_saved_info_by_info_id(self,info_id=None):
+        info_id = info_id or  self.get_info_id()
+        if not info_id:
+            return
+        basic_info_path = get_basic_info_path(info_id)
+        info_path = get_info_path(info_id)
+        image_dir_path = get_image_dir_path(info_id)
+        deleted_paths = [basic_info_path, info_path, image_dir_path]
+        for src in deleted_paths:
+            if os.path.exists(p):
+                shutil.move(src, get_new_backup_path())
+        self.set_basic_infos(to_none=True)
+        self.update_saved_info_combobox_values()
         self.del_showed_info()
         pass
 
     def delete_button_command(self):
         if not self.is_action_read():
             return
-        self.del_save_info_by_frame_id()
+        self.del_save_info_by_info_id()
         pass
 
     def set_widgets(self):

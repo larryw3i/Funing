@@ -49,9 +49,26 @@ for f in [copy_path]:
             pickle.dump({}, f)
 
 
-def get_new_backup_file_path(file_id=None):
+def get_new_backup_file_path(
+    file_id=None, create_now=False, is_file=False, mode="w"
+):
+    return get_new_backup_path(file_id, create_now, is_file, mode)
+
+
+def get_new_backup_path(
+    file_id=None, create_now=False, is_file=False, mode="w"
+):
     file_id = file_id or str(uuid.uuid4())
-    return os.path.join(backup_dir_path, file_id + backup_ext)
+    backup_path = os.path.join(backup_dir_path, file_id + backup_ext)
+    if create_now:
+        if is_file:
+            with open(backup_path, mode) as f:
+                f.write("")
+            pass
+        else:
+            os.makedirs(backup_path, exist_ok=True)
+            pass
+    return backup_path
 
 
 def get_info_path(info_id):
@@ -60,6 +77,11 @@ def get_info_path(info_id):
 
 def get_basic_info_path(info_id):
     return os.path.join(infos_dir_path, info_id + basic_info_ext)
+
+
+def get_image_dir_path(info_id):
+    image_dir_path = os.path.join(faces_dir_path, info_id)
+    return image_dir_path
 
 
 def get_new_random_face_image_path(info_id):
