@@ -1219,6 +1219,8 @@ class FrameWidget(WidgetABC):
 
     def pick_button_command(self):
         self.pick_frame()
+        if self.get_action() == ACTION.READ:
+            return
         self.set_action_to_pick()
         pass
 

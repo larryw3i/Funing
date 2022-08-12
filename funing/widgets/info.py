@@ -22,7 +22,6 @@ from threading import Thread
 from tkinter import *
 from tkinter import filedialog, messagebox, ttk
 
-
 import cv2
 from appdirs import user_data_dir
 from cv2.data import haarcascades
@@ -687,7 +686,7 @@ class InfoWidget(WidgetABC):
 
     def set_frame_labels_image_use_picked_frames(self, frames=None):
         if frames is None:
-            frames = self.get_picked_frames_from_frame()
+            frames = self.get_picked_frames() or self.get_picked_frames_from_frame()
         if frames is not None:
             for f in frames:
                 label = ttk.Label(
