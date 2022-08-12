@@ -22,6 +22,7 @@ from threading import Thread
 from tkinter import *
 from tkinter import filedialog, messagebox, ttk
 
+
 import cv2
 from appdirs import user_data_dir
 from cv2.data import haarcascades
@@ -390,9 +391,19 @@ class InfoWidget(WidgetABC):
         self.saved_info_combobox.set("")
         pass
 
+    def clear_showed_info(self):
+        self.clear_info_widget_area_content()
+        pass
+
+    def del_saved_info_by_frame_id(self):
+
+        self.del_showed_info()
+        pass
+
     def delete_button_command(self):
         if not self.is_action_read():
             return
+        self.del_save_info_by_frame_id()
         pass
 
     def set_widgets(self):
