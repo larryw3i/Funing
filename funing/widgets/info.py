@@ -405,13 +405,31 @@ class InfoWidget(WidgetABC):
         self.clear_info_widget_area_content()
         pass
 
+    def get_basic_info_by_info_id(self, info_id=None):
+        info_id = info_id or self.get_info_id()
+        basic_info = None
+        basic_info_path = get_basic_info_path(info_id)
+        with open(basic_info_path, "r") as f:
+            basic_info = f.read()
+        return basic_info
+
+    def get_info_by_info_id(self, info_id=None):
+        info_id = info_id or self.get_info_id()
+        info = None
+        info_path = get_info_path(info_id)
+        with open(info_path, "r") as f:
+            info = f.read()
+        return info
+
     def del_saved_info_by_info_id(self, info_id=None):
         info_id = info_id or self.get_info_id()
         if not info_id:
+            print(_("'info_id' is None."))
             return
         basic_info_path = get_basic_info_path(info_id)
         info_path = get_info_path(info_id)
         image_dir_path = get_image_dir_path(info_id)
+        basic_info = self.get_basic_info_by_info_id(info_id)
         deleted_paths = [basic_info_path, info_path, image_dir_path]
         for src in deleted_paths:
             if os.path.exists(p):
@@ -419,10 +437,14 @@ class InfoWidget(WidgetABC):
         self.set_basic_infos(to_none=True)
         self.update_saved_info_combobox_values()
         self.del_showed_info()
+        self.set_msg(
+            _("Information of %s(%s) is deleted." % (basic_info, info_id))
+        )
         pass
 
     def delete_button_command(self):
         if not self.is_action_read():
+            print(_("ACTION isn't 'READ'."))
             return
         self.del_save_info_by_info_id()
         pass
