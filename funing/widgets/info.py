@@ -184,6 +184,7 @@ class InfoWidget(WidgetABC):
         save_info=True,
         save_image=True,
         refresh=True,
+        update_widgets=True,
     ):
 
         if not self.is_action_read() and len(self.picked_frames) < 1:
@@ -204,6 +205,10 @@ class InfoWidget(WidgetABC):
         if refresh:
             self.set_info_ids(refresh=True)
             self.update_saved_info_combobox_values()
+        if update_widgets:
+            self.set_saved_info_combobox_content_by_info_id(info_id)
+            self.update_widgets_by_info_id()
+            pass
         self.set_msg(_("Information saved."))
         pass
 
@@ -333,12 +338,16 @@ class InfoWidget(WidgetABC):
         return info_id
 
     def saved_info_combobox_var_trace_w(self, *args):
+        self.update_widgets_by_info_id()
+        pass
+
+    def update_widgets_by_info_id(self, info_id=None):
         self.clear_picked_frame_labels()
         self.clear_saved_frame_labels()
         self.set_saved_frames(to_none=True)
         self.set_picked_frames(to_none=True)
         var_get = self.saved_info_combobox_var.get()
-        info_id = self.get_id_by_saved_info_combobox_var(var_get)
+        info_id = info_id or self.get_id_by_saved_info_combobox_var(var_get)
         if info_id is None:
             if self.is_test():
                 print(var_get, info_id)
@@ -402,6 +411,16 @@ class InfoWidget(WidgetABC):
 
     def del_saved_info_combobox_content(self):
         self.saved_info_combobox.set("")
+        pass
+
+    def set_saved_info_combobox_content_by_info_id(self, info_id=None):
+        info_id = info_id or self.get_info_id()
+        if not info_id:
+            return
+        values = self.get_saved_info_combobox_values()
+        id_str = f"({info_id})"
+        content = [c for c in values if c.endswith(id_str)][0]
+        self.saved_info_combobox.set(content)
         pass
 
     def clear_showed_info(self):
