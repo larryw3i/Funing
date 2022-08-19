@@ -7,14 +7,14 @@ from funing.settings import *
 
 long_description = open("README.md", "r", encoding="utf-8").read()
 
-appmaintainer = appauthor
-appmaintainer_email = appauthor_email
+app_author = appmaintainer = app_author[0]
+app_author_email = appmaintainer_email = app_author[1]
 
 setuptools.setup(
     name=app_name,
     version=app_version,
-    author=app_author[0],
-    author_email=app_author[1],
+    author=app_author,
+    author_email=app_author_email,
     description=app_description,
     long_description=long_description,
     long_description_content_type="text/markdown",

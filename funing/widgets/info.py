@@ -343,7 +343,7 @@ class InfoWidget(WidgetABC):
             if self.is_test():
                 print(var_get, info_id)
             return
-        if info_id == "Add":
+        if info_id == _("Add"):
             self.set_action_to_pick()
             self.clear_info_widget_area_content()
             return
@@ -382,7 +382,7 @@ class InfoWidget(WidgetABC):
         if basic_infos is None:
             return []
         combobox_values = [info + "(" + _id + ")" for _id, info in basic_infos]
-        combobox_values += [_("New information(Add)")]
+        combobox_values += [_("New information") + "(" + _("_Add") + ")"]
         return combobox_values
 
     def update_saved_info_combobox_values(self):
