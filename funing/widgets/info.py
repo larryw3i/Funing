@@ -186,7 +186,7 @@ class InfoWidget(WidgetABC):
         refresh=True,
     ):
 
-        if len(self.picked_frames) < 1:
+        if not self.is_action_read() and len(self.picked_frames) < 1:
             self.set_msg(_("Nothing picked."))
             return
         basic_info_entry_get = self.get_basic_info_entry_content()
@@ -256,14 +256,16 @@ class InfoWidget(WidgetABC):
             return None
         frame_id = frame_path.split(os.sep)[-1]
         frame_id = frame_id.split(".")[0]
-        print("frame_id", frame_id)
+        if self.is_test():
+            print("frame_id", frame_id)
         return frame_id
 
     def get_saved_frames_by_id(self, info_id=None, set_self=True):
         if info_id is None:
             info_id = self.get_info_id()
             if info_id is None:
-                print(_("info ID is None."))
+                if self.is_test():
+                    print(_("info ID is None."))
                 return None
         image_path_list = get_face_image_path_list(info_id)
         saved_frames = []
@@ -338,7 +340,8 @@ class InfoWidget(WidgetABC):
         var_get = self.saved_info_combobox_var.get()
         info_id = self.get_id_by_saved_info_combobox_var(var_get)
         if info_id is None:
-            print(var_get, info_id)
+            if self.is_test():
+                print(var_get, info_id)
             return
         if info_id == "Add":
             self.set_action_to_pick()
@@ -424,7 +427,8 @@ class InfoWidget(WidgetABC):
     def del_saved_info_by_info_id(self, info_id=None):
         info_id = info_id or self.get_info_id()
         if not info_id:
-            print(_("'info_id' is None."))
+            if self.is_test():
+                print(_("'info_id' is None."))
             return
         basic_info_path = get_basic_info_path(info_id)
         info_path = get_info_path(info_id)
@@ -444,7 +448,8 @@ class InfoWidget(WidgetABC):
 
     def delete_button_command(self):
         if not self.is_action_read():
-            print(_("ACTION isn't 'READ'."))
+            if self.is_test():
+                print(_("ACTION isn't 'READ'."))
             return
         self.del_save_info_by_info_id()
         pass
@@ -711,7 +716,8 @@ class InfoWidget(WidgetABC):
         image_path = get_frame_path_by_ids(self.get_info_id(), frame_id)
 
         if not os.path.exists(image_path):
-            print(_("Image(%s) doesn't exist.") % image_path)
+            if self.is_test():
+                print(_("Image(%s) doesn't exist.") % image_path)
             return
 
         backup_file_path = get_new_backup_file_path(frame_id)
@@ -758,7 +764,8 @@ class InfoWidget(WidgetABC):
                 self.set_label_image(f, label)
                 self.picked_frame_labels.append(label)
         else:
-            print(_("Picked frame is None."))
+            if self.is_test():
+                print(_("Picked frame is None."))
 
     def set_frame_labels_image_use_saved_frames(
         self, frames=None, for_read=True
@@ -768,9 +775,11 @@ class InfoWidget(WidgetABC):
                 return
         saved_frames = self.get_saved_frames()
         if saved_frames is None:
-            print(_("Saved frames is None."))
+            if self.is_test():
+                print(_("Saved frames is None."))
             return
-        print("saved_frames", len(saved_frames))
+        if self.is_test():
+            print("saved_frames", len(saved_frames))
         for _id, f in saved_frames:
             label = ttk.Label(
                 self.pick_scrolledframe_innerframe, state="active"

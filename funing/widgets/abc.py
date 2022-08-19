@@ -46,6 +46,12 @@ class WidgetABC(ABC):
     def set_widgets(self):
         pass
 
+    def is_test(self):
+        return self.get_test()
+
+    def get_test(self):
+        return self.test
+
     def set_x(self):
         pass
 
