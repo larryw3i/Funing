@@ -206,6 +206,7 @@ class InfoWidget(WidgetABC):
             self.set_info_ids(refresh=True)
             self.update_saved_info_combobox_values()
         if update_widgets:
+            self.set_picked_frames(to_none=True)
             self.set_saved_info_combobox_content_by_info_id(info_id)
             self.update_widgets_by_info_id()
             pass

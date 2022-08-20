@@ -42,7 +42,7 @@ _xgettext(){
     [[ -f $pot_path ]] || touch $pot_path
 
     xgettext -v -j -L Python --output=${pot_path} \
-    $(find ${app_name}/ -name "*.py")
+    $(find ${app_name} -name "*.py")
 
     [[ -f $po0_path ]] || touch $po0_path
 
