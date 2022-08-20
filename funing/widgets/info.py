@@ -685,7 +685,7 @@ class InfoWidget(WidgetABC):
         if del_label:
             self.picked_frame_labels[index].destroy()
             del self.picked_frame_labels[index]
-        if index < self.get_picked_frames_len:
+        if index < self.get_picked_frames_len():
             del self.picked_frames[index]
         self.set_picked_frame_labels_image()
 
