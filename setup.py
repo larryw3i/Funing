@@ -10,7 +10,7 @@ long_description = open("README.md", "r", encoding="utf-8").read()
 _app_author = app_author
 app_author = app_maintainer = _app_author[0]
 app_author_email = app_maintainer_email = _app_author[1]
-packages = setuptools.find_packages()
+packages = setuptools.find_namespace_packages(exclude=["venv", "tests"])
 
 setuptools.setup(
     name=app_name,
