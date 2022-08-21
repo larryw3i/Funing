@@ -790,9 +790,7 @@ class InfoWidget(WidgetABC):
         pass
 
     def set_frame_labels_image_use_picked_frames(
-        self,
-        frames=None,
-        from_new_frame = False
+        self, frames=None, from_new_frame=False
     ):
         """
         Set frame label images using picked_frames
@@ -805,8 +803,9 @@ class InfoWidget(WidgetABC):
             return
         if frames is None:
             frames = (
-                self.get_picked_frames() or \
-                from_new_frame and  self.get_picked_frames_from_frame()
+                self.get_picked_frames()
+                or from_new_frame
+                and self.get_picked_frames_from_frame()
             )
         if frames is not None:
             for f in frames:
