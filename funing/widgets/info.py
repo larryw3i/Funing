@@ -64,18 +64,31 @@ class InfoWidget(WidgetABC):
         self.saved_frames_for_active_id = self.saved_frames = None
         self.saved_frame_labels = []
         self.basic_infos = None
-        self.new_info_added_signal = self.new_info_signal = False
+        self.new_info_added_signal = (
+            self.new_info_signal
+        ) = NEW_INFO_SIGNAL.OTHER.value
 
-    def set_new_info_signal(self, signal=False):
+    def set_new_info_signal(self, signal=NEW_INFO_SIGNAL.OTHER.value):
         self.new_info_added_signal = self.new_info_signal = signal
 
     def get_new_info_signal(self):
         return self.new_info_signal
 
-    def switch_new_info_signal(self):
-        self.new_info_added_signal = (
-            self.new_info_signal
-        ) = not self.new_info_signal
+    def switch_new_info_signal_by_default(self):
+        if self.new_info_added_signal == NEW_INFO_SIGNAL.ADD.value:
+            self.new_info_added_signal = (
+                self.new_info_signal
+            ) = NEW_INFO_SIGNAL.OTHER.value
+        else:
+            self.new_info_added_signal = (
+                self.new_info_signal
+            ) = NEW_INFO_SIGNAL.ADD.value
+
+    def new_info_signal_is_add(self):
+        return self.new_info_signal == NEW_INFO_SIGNAL.ADD.value
+
+    def new_info_signal_is_other(self):
+        return self.new_info_signal == NEW_INFO_SIGNAL.OTHER.value
 
     def get_saved_frames_for_active_id(self):
         return self.get_saved_frames()
@@ -779,6 +792,7 @@ class InfoWidget(WidgetABC):
     def set_frame_labels_image_use_picked_frames(
         self,
         frames=None,
+        from_new_frame = False
     ):
         """
         Set frame label images using picked_frames
@@ -786,11 +800,13 @@ class InfoWidget(WidgetABC):
             frames (Unit[int, numpy.array]): The video or image frame or the
             the `return` signal if `frames` is 0.
         """
+
         if frames == 0:
             return
         if frames is None:
             frames = (
-                self.get_picked_frames() or self.get_picked_frames_from_frame()
+                self.get_picked_frames() or \
+                from_new_frame and  self.get_picked_frames_from_frame()
             )
         if frames is not None:
             for f in frames:

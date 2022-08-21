@@ -59,3 +59,8 @@ class VIDEO_SIGNAL(Enum):
 class PLAY_MODE(Enum):
     EVERY_FRAME = 0
     IN_TIME = 1
+
+
+class NEW_INFO_SIGNAL(Enum):
+    ADD = 0
+    OTHER = 1
