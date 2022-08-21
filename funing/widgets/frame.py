@@ -1238,14 +1238,13 @@ class FrameWidget(WidgetABC):
         pass
 
     def recog_frame(self):
+        self.recog_frame_by_default()
+        pass
+
+    def recog_frame_by_default(self):
         self.pause_video_frame()
-        labels = self.get_labels_by_frame()
-        if not labels:
-            if self.is_test():
-                print("`get_labels_by_frame` returns `None`.")
-            return
-        for l in labels:
-            info_ids = self.get_info_id_by_label(labels)
+        self.iw.recog_frame_by_default()
+        pass
 
     def recog_button_command(self):
         self.set_action_to_recog()

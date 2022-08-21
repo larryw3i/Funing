@@ -873,6 +873,75 @@ class InfoWidget(WidgetABC):
             self.saved_frame_labels.append(label)
         pass
 
+    def set_frame_labels_image_use_picked_frames_for_recog(
+        self, frames=None, from_new_frame=False
+    ):
+        """
+        Set frame label images for recognition using picked_frames
+        Args:
+            frames (Unit[int, numpy.array]): The video or image frame or the
+            the `return` signal if `frames` is 0.
+        """
+
+        if frames == 0:
+            return
+        if frames is None:
+            frames = (
+                self.get_picked_frames()
+                or (from_new_frame and self.get_picked_frames_from_frame())
+                or None
+            )
+        if frames is not None:
+            for f in frames:
+                label = ttk.Label(
+                    self.pick_scrolledframe_innerframe, state="active"
+                )
+                index = len(self.picked_frame_labels)
+                label.bind(
+                    "<Button-1>",
+                    lambda event, index=index: self.recog_pk_frame_by_index(
+                        index
+                    ),
+                )
+                label.pack(
+                    side="left",
+                    anchor="nw",
+                    padx=self.picked_frame_label_margin / 2,
+                )
+                simpletooltip.create(label, _("Click to recognize."))
+                self.set_label_image(f, label)
+                self.picked_frame_labels.append(label)
+        else:
+            if self.is_test():
+                print(_("Picked frame is None."))
+
+    def get_picked_frame_by_index(self, index=None):
+        if not index:
+            if self.is_test():
+                print("`get_picked_frame_by_index.index` is `None`.")
+            return
+        if index < len(self.picked_frames):
+            return self.picked_frames[index]
+        if self.is_test():
+            print("`get_picked_frame_by_index.index` out of range.")
+        return None
+
+    def recog_pk_frame_by_index(self, index=None):
+        self.recog_picked_frame_by_index(index)
+        pass
+
+    def recog_picked_frame_by_index(self, index=None):
+        if not index:
+            if self.is_test():
+                print("`recog_picked_frame_by_index.index` is `None`.")
+            return
+        frame = self.get_picked_frame_by_index(index)
+        if not frame:
+            self.mk_tmsg("`recog_picked_frame_by_index.frame` is `None`.")
+            return
+
+        pass
+
     def set_frame_labels_image(
         self, show_saved_frames=True, show_picked_frames=True
     ):
@@ -919,5 +988,15 @@ class InfoWidget(WidgetABC):
         frames = self.get_picked_frames_from_frame()
         if frames is None:
             return
+        if not self.is_action_pick():
+            self.set_saved_frames(to_none=True)
+            self.set_picked_frames(to_none=True)
         self.add_picked_frames(frames)
+        pass
+
+    def recog_frame_by_default(self):
+        self.clear_picked_frame_labels()
+        self.clear_saved_frame_labels()
+        frames = self.get_picked_frames_from_frame()
+        self.set_frame_labels_image_use_picked_frames_for_recog(frames)
         pass

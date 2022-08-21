@@ -41,6 +41,8 @@ class WidgetABC(ABC):
         self.set_copy = self.mw.set_copy
         self.copy = self.get_copy()
         self.test = self.mw.test
+        self.mk_test_msg = self.mw.mk_test_msg
+        self.mk_tmsg = self.mw.mk_tmsg
         self.width = self.height = self.y = self.x = self.mw.default_xywh
 
     def set_widgets(self):

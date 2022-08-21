@@ -186,6 +186,16 @@ class MainWidget:
         if save_now:
             self.save_copy()
 
+    def is_test(self):
+        return self.test
+
+    def mk_test_msg(self, msg):
+        if self.is_test():
+            print(msg)
+
+    def mk_tmsg(self, msg):
+        self.mk_test_msg(msg)
+
     def sys_exit(self):
         self.root.destroy()
         sys.exit(0)
