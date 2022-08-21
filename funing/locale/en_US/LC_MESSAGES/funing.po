@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Funing 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-20 23:52+0800\n"
+"POT-Creation-Date: 2022-08-21 20:35+0800\n"
 "PO-Revision-Date: 2022-08-20 23:59+0800\n"
 "Last-Translator: larry <larryw3i@163.com>\n"
 "Language-Team: Chinese (Simplified) <larryw3i@163.com>\n"
@@ -111,6 +111,7 @@ msgstr ""
 #: funing/.lwcp/ui/main_ui.py:126 funing/widgets/info.py:147
 #: funing/widgets/info.py:182 funing/widgets/info.py:509
 #: funing/.lwcp/ui_copy/c_ui.py:55 funing/.lwcp/ui_copy/main_ui.py:126
+#: funing/widgets/info.py:550
 msgid "Save"
 msgstr ""
 
@@ -297,6 +298,7 @@ msgstr ""
 
 #: funing/widgets/info.py:201 funing/widgets/info.py:309
 #: funing/widgets/info.py:343 funing/widgets/info.py:782
+#: funing/widgets/info.py:836
 msgid "Click to delete."
 msgstr ""
 
@@ -319,27 +321,28 @@ msgid "Do you want to restart Funing?"
 msgstr ""
 
 #: funing/widgets/info.py:114 funing/widgets/info.py:136
-#: funing/widgets/info.py:191
+#: funing/widgets/info.py:191 funing/widgets/info.py:218
 #, fuzzy
 msgid "Nothing picked."
 msgstr "Nothing enter"
 
 #: funing/widgets/info.py:136 funing/widgets/info.py:171
-#: funing/widgets/info.py:498
+#: funing/widgets/info.py:498 funing/widgets/info.py:539
 msgid "Write information in your strict format."
 msgstr ""
 
 #: funing/widgets/info.py:140 funing/widgets/info.py:175
-#: funing/widgets/info.py:502
+#: funing/widgets/info.py:502 funing/widgets/info.py:543
 msgid "Write basic information here."
 msgstr ""
 
 #: funing/widgets/info.py:144 funing/widgets/info.py:179
-#: funing/widgets/info.py:506
+#: funing/widgets/info.py:506 funing/widgets/info.py:547
 msgid "Write additional information here."
 msgstr ""
 
 #: funing/widgets/info.py:150 funing/widgets/info.py:212
+#: funing/widgets/info.py:248
 msgid "Information saved."
 msgstr ""
 
@@ -347,69 +350,69 @@ msgstr ""
 msgid "Dateset doesn't exist."
 msgstr ""
 
-#: funing/widgets/info.py:273
+#: funing/widgets/info.py:273 funing/widgets/info.py:309
 msgid "info ID is None."
 msgstr ""
 
-#: funing/widgets/info.py:355
+#: funing/widgets/info.py:355 funing/widgets/info.py:394
 msgid "Add"
 msgstr ""
 
-#: funing/widgets/info.py:369
+#: funing/widgets/info.py:369 funing/widgets/info.py:410
 msgid "Information IDs is None."
 msgstr ""
 
-#: funing/widgets/info.py:394
+#: funing/widgets/info.py:394 funing/widgets/info.py:435
 msgid "New information"
 msgstr ""
 
-#: funing/widgets/info.py:394
+#: funing/widgets/info.py:394 funing/widgets/info.py:435
 msgid "_Add"
 msgstr "Add"
 
-#: funing/widgets/info.py:450
+#: funing/widgets/info.py:450 funing/widgets/info.py:491
 msgid "'info_id' is None."
 msgstr ""
 
-#: funing/widgets/info.py:464
+#: funing/widgets/info.py:464 funing/widgets/info.py:505
 #, python-format
 msgid "Information of %s(%s) is deleted."
 msgstr ""
 
-#: funing/widgets/info.py:471
+#: funing/widgets/info.py:471 funing/widgets/info.py:512
 msgid "ACTION isn't 'READ'."
 msgstr ""
 
-#: funing/widgets/info.py:513
+#: funing/widgets/info.py:513 funing/widgets/info.py:554
 msgid "Delete"
 msgstr ""
 
-#: funing/widgets/info.py:730
+#: funing/widgets/info.py:730 funing/widgets/info.py:771
 msgid "Delete saved frame"
 msgstr ""
 
-#: funing/widgets/info.py:731
+#: funing/widgets/info.py:731 funing/widgets/info.py:772
 msgid "Do you want to delete saved frame?"
 msgstr ""
 
-#: funing/widgets/info.py:739
+#: funing/widgets/info.py:739 funing/widgets/info.py:780
 #, python-format
 msgid "Image(%s) doesn't exist."
 msgstr ""
 
-#: funing/widgets/info.py:787
+#: funing/widgets/info.py:787 funing/widgets/info.py:841
 msgid "Picked frame is None."
 msgstr ""
 
-#: funing/widgets/info.py:798
+#: funing/widgets/info.py:798 funing/widgets/info.py:856
 msgid "Saved frames is None."
 msgstr ""
 
-#: funing/widgets/info.py:815
+#: funing/widgets/info.py:815 funing/widgets/info.py:873
 msgid "Saved frame, Click to delete."
 msgstr ""
 
-#: funing/widgets/info.py:839
+#: funing/widgets/info.py:839 funing/widgets/info.py:901
 msgid "Frame is None."
 msgstr ""
 
@@ -504,6 +507,11 @@ msgstr ""
 
 #: funing/.lwcp/_ui/data.py:440
 msgid "Right click: pause or play, double click: delete."
+msgstr ""
+
+#: funing/widgets/info.py:505
+#, python-format
+msgid "Information of %s\\(%s\\) is deleted."
 msgstr ""
 
 #~ msgid "show_per_page_str0"
