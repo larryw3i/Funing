@@ -64,6 +64,18 @@ class InfoWidget(WidgetABC):
         self.saved_frames_for_active_id = self.saved_frames = None
         self.saved_frame_labels = []
         self.basic_infos = None
+        self.new_info_added_signal = self.new_info_signal = False
+
+    def set_new_info_signal(self, signal=False):
+        self.new_info_added_signal = self.new_info_signal = signal
+
+    def get_new_info_signal(self):
+        return self.new_info_signal
+
+    def switch_new_info_signal(self):
+        self.new_info_added_signal = (
+            self.new_info_signal
+        ) = not self.new_info_signal
 
     def get_saved_frames_for_active_id(self):
         return self.get_saved_frames()
@@ -92,12 +104,14 @@ class InfoWidget(WidgetABC):
     def set_action_to_none(self):
         self.set_action(ACTION.NONE)
 
-    def set_action_to_read(self):
+    def set_action_to_read(self, update_widgets=True):
         if not self.is_action_read():
             self.delete_button_place()
             pass
         self.set_action(ACTION.READ)
-        self.set_infos_and_images_by_id(self.info_id)
+
+        if update_widgets:
+            self.set_infos_and_images_by_id(self.info_id)
 
     def set_action_to_pick(self):
         self.set_action(ACTION.PICK)
@@ -211,7 +225,9 @@ class InfoWidget(WidgetABC):
             self.clear_saved_frame_labels()
             self.set_saved_info_combobox_content_by_info_id(info_id)
             self.update_widgets_by_info_id()
+            self.set_action_to_read()
             pass
+
         self.set_msg(_("Information saved."))
         pass
 
@@ -760,7 +776,18 @@ class InfoWidget(WidgetABC):
         self.set_frame_labels_image()
         pass
 
-    def set_frame_labels_image_use_picked_frames(self, frames=None):
+    def set_frame_labels_image_use_picked_frames(
+        self,
+        frames=None,
+    ):
+        """
+        Set frame label images using picked_frames
+        Args:
+            frames (Unit[int, numpy.array]): The video or image frame or the
+            the `return` signal if `frames` is 0.
+        """
+        if frames == 0:
+            return
         if frames is None:
             frames = (
                 self.get_picked_frames() or self.get_picked_frames_from_frame()
@@ -820,11 +847,15 @@ class InfoWidget(WidgetABC):
             self.saved_frame_labels.append(label)
         pass
 
-    def set_frame_labels_image(self, frames=None):
+    def set_frame_labels_image(
+        self, show_saved_frames=True, show_picked_frames=True
+    ):
         self.clear_picked_frame_labels()
         self.clear_saved_frame_labels()
-        self.set_frame_labels_image_use_picked_frames()
-        self.set_frame_labels_image_use_saved_frames()
+        if show_picked_frames:
+            self.set_frame_labels_image_use_picked_frames()
+        if show_saved_frames:
+            self.set_frame_labels_image_use_saved_frames()
 
     def set_label_image(self, image, label):
         self.set_label_frame(image, label)
