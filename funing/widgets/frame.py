@@ -281,10 +281,13 @@ class FrameWidget(WidgetABC):
         labels = np.asarray(labels)
         return (images, labels, info_ids)
 
+    def get_info_id_by_label(self, label=None):
+        return self.get_id_by_label(label)
+
     def get_id_by_label(self, label=None):
         if not label:
             print(_("Label is None."))
-            return
+            return None
         return self.info_ids[label] if label < len(self.info_ids) else None
 
     def get_face_recognizer(self):
@@ -389,6 +392,8 @@ class FrameWidget(WidgetABC):
 
     def set_action_to_recog(self):
         if not self.is_action_recog():
+            self.delete_button_place_forget()
+            self.clear_info_widget_area_content()
             self.set_action(ACTION.RECOG)
 
     def set_action_to_none(self):
@@ -578,7 +583,7 @@ class FrameWidget(WidgetABC):
         )
         if frame is None:
             self.set_msg(_("Video not opened."))
-            return
+            return None
         if copy:
             return frame.copy()
         return frame
@@ -617,7 +622,9 @@ class FrameWidget(WidgetABC):
         if not frame:
             frame = self.get_frame()
             if not frame:
-                return
+                if self.is_test():
+                    print("`get_labels_by_frame` gets `None`")
+                return None
         labels = []
         gray_img = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         face_rects = self.face_casecade.detectMultiScale(gray_img, 1.3, 5)
@@ -1204,6 +1211,12 @@ class FrameWidget(WidgetABC):
         return self.src_type == SRC_TYPE.VIDEO_FILE
 
     def pause_button_command(self):
+        self.pause_video_frame()
+
+    def pause_video(self):
+        self.pause_video_frame()
+
+    def pause_video_frame(self):
         if self.is_play_file_video():
             self.set_video_file_play_pause_frame_index()
         if self.video_signal == VIDEO_SIGNAL.REFRESH:
@@ -1218,14 +1231,25 @@ class FrameWidget(WidgetABC):
         pass
 
     def pick_button_command(self):
-        self.pick_frame()
         if self.get_action() == ACTION.READ:
             return
+        self.pick_frame()
         self.set_action_to_pick()
         pass
 
+    def recog_frame(self):
+        self.pause_video_frame()
+        labels = self.get_labels_by_frame()
+        if not labels:
+            if self.is_test():
+                print("`get_labels_by_frame` returns `None`.")
+            return
+        for l in labels:
+            info_ids = self.get_info_id_by_label(labels)
+
     def recog_button_command(self):
-        self.set_action(ACTION.RECOG)
+        self.set_action_to_recog()
+        self.recog_frame()
         pass
 
     def get_openfrom_combobox_values(self):

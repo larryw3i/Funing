@@ -843,8 +843,6 @@ class InfoWidget(WidgetABC):
     def set_frame_labels_image_use_saved_frames(
         self, frames=None, for_read=False
     ):
-        if self.is_test():
-            print("set_frame_labels_image_use_saved_frames")
         if for_read:
             if not self.is_action_read():
                 print("`NOT` is_action_read.")
