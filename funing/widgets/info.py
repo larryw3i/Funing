@@ -87,9 +87,7 @@ class InfoWidget(WidgetABC):
         self.update_picked_frame_labels_for_recog()
 
     def update_picked_frame_labels_for_recog(self):
-
         frames = self.get_picked_frames_from_frame()
-
         if frames is not None:
             for f in frames:
                 label = ttk.Label(
@@ -110,6 +108,8 @@ class InfoWidget(WidgetABC):
                 simpletooltip.create(label, _("Click to recognize."))
                 self.set_label_image(f, label)
                 self.add_picked_frame_label_for_recog(label)
+            self.set_picked_frames_without_update_widgets(frames)
+
         else:
             if self.is_test():
                 print(_("Picked frame is None."))
@@ -342,6 +342,9 @@ class InfoWidget(WidgetABC):
         if self.picked_frames == []:
             return None
         return self.picked_frames
+
+    def set_picked_frames_without_update_widgets(self, frames=None):
+        self.set_picked_frames(frames, update_label=False)
 
     def set_picked_frames(self, frames=None, to_none=False, update_label=True):
         if to_none:
@@ -997,6 +1000,9 @@ class InfoWidget(WidgetABC):
         self.recog_picked_frame_by_index(index)
         pass
 
+    def get_labels_by_frames(self, frame=None):
+        return self.fw.get_labels_by_frames(frame)
+
     def recog_picked_frame_by_index(self, index=None):
         if not index:
             if self.is_test():
@@ -1006,7 +1012,7 @@ class InfoWidget(WidgetABC):
         if not frame:
             self.mk_tmsg("`recog_picked_frame_by_index.frame` is `None`.")
             return
-
+        label = None
         pass
 
     def set_frame_labels_image(

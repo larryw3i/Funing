@@ -281,6 +281,13 @@ class FrameWidget(WidgetABC):
         labels = np.asarray(labels)
         return (images, labels, info_ids)
 
+    def get_info_id_by_frame(self, frame=None):
+        if frame is None:
+            if self.is_test():
+                print("`get_info_id_by_frame.frame` is `None`.")
+            return
+        labels = self.get_labels_by_frame(frame)
+
     def get_info_id_by_label(self, label=None):
         return self.get_id_by_label(label)
 
@@ -637,6 +644,28 @@ class FrameWidget(WidgetABC):
             )
             labels.append(self.recognizer.predict(gray_img_0))
         return labels
+
+    def get_label_by_frame(self, frame=None):
+        """
+        Get dataset label via frame.
+        Args:
+            frame (numpy.array): The video or image frame.
+        Returns:
+            int: The label of dataset.
+        """
+        if frame is None:
+            if self.is_test:
+                self.mk_tmsg("`get_label_by_frame.frame` is 'None'.")
+            return
+        recognizer = self.get_recognizer()
+        gray_img = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        gray_img = cv2.resize(
+            gray_img,
+            (self.resize_width, self.resize_height),
+            interpolation=cv2.INTER_LINEAR,
+        )
+        label = recognizer.predict(gray_img)
+        return label
 
     def get_image_size(self):
         if not self.image_size:
