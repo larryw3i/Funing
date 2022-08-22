@@ -49,6 +49,8 @@ class InfoWidget(WidgetABC):
         self.face_casecade = None
         self.picked_frames = []
         self.picked_frame_labels = []
+        self.picked_frames_for_recog = []
+        self.picked_frame_labels_for_recog = []
         self.frame_label_margin = 10
         self.picked_frame_label_margin = self.frame_label_margin
         self.resize_width = None
@@ -67,6 +69,71 @@ class InfoWidget(WidgetABC):
         self.new_info_added_signal = (
             self.new_info_signal
         ) = NEW_INFO_SIGNAL.OTHER.value
+
+    def get_picked_frame_labels_for_recog_len(self):
+        return len(self.picked_frame_labels_for_recog)
+
+    def add_picked_frame_label_for_recog(self, label):
+        self.picked_frame_labels_for_recog.append(label)
+        pass
+
+    def del_picked_frame_labels_for_recog(self, update_widgets=True):
+        if update_widgets:
+            for w in self.picked_frame_labels_for_recog:
+                w.destroy()
+        self.picked_frame_labels_for_recog = []
+
+    def update_picked_frame_labels_for_recog_widgets(self):
+        self.update_picked_frame_labels_for_recog()
+
+    def update_picked_frame_labels_for_recog(self):
+
+        frames = self.get_picked_frames_from_frame()
+
+        if frames is not None:
+            for f in frames:
+                label = ttk.Label(
+                    self.pick_scrolledframe_innerframe, state="active"
+                )
+                index = self.get_picked_frame_labels_for_recog_len()
+                label.bind(
+                    "<Button-1>",
+                    lambda event, index=index: self.recog_pk_frame_by_index(
+                        index
+                    ),
+                )
+                label.pack(
+                    side="left",
+                    anchor="nw",
+                    padx=self.picked_frame_label_margin / 2,
+                )
+                simpletooltip.create(label, _("Click to recognize."))
+                self.set_label_image(f, label)
+                self.add_picked_frame_label_for_recog(label)
+        else:
+            if self.is_test():
+                print(_("Picked frame is None."))
+        pass
+
+    def del_picked_frames_for_recog(
+        self, update_widgets=True, update_label_list=True
+    ):
+        self.picked_frames_for_recog = []
+        if update_label_list:
+            self.del_picked_frame_labels_for_recog(update_widgets)
+        pass
+
+    def add_picked_frame_for_recog(self, frame):
+        self.picked_frames_for_recog.append(frame)
+        pass
+
+    def add_picked_frames_for_recog(self, frames, del_prev=False):
+        if not isinstance(frames, list):
+            self.mk_tmsg("`add_picked_frames_for_recog.frames` is `None`.")
+            return
+        if del_prev:
+            self.del_picked_frames_for_recog()
+        self.picked_frames_for_recog += frames
 
     def set_new_info_signal(self, signal=NEW_INFO_SIGNAL.OTHER.value):
         self.new_info_added_signal = self.new_info_signal = signal

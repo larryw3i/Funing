@@ -9,6 +9,8 @@ from pathlib import Path
 from funing import settings
 from funing.locale import _
 
+app_version = settings.app_version
+
 
 def get_dep_requirements_full():
     return [
@@ -90,7 +92,8 @@ def install_dep_requirements(test=False, dep_requirements=None, upgrade=False):
 
 def run(test=False):
     if test:
-        print(_("Hello, Funing!"))
+        print(_("Hello, Welcome to Funing!"))
+    print(_("Version: %s") % (app_version))
     from funing.widgets import show
 
     show(test)
