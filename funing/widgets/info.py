@@ -998,7 +998,7 @@ class InfoWidget(WidgetABC):
         self.update_frame_labels_for_recog(frames)
 
     def get_picked_frame_by_index(self, index=None):
-        if not index:
+        if index is None:
             if self.is_test():
                 print("`get_picked_frame_by_index.index` is `None`.")
             return
@@ -1026,7 +1026,7 @@ class InfoWidget(WidgetABC):
         self.fw.get_info_id_by_frame(frame)
 
     def recog_picked_frame_by_index(self, index=None):
-        if not index:
+        if index is None:
             if self.is_test():
                 print("`recog_picked_frame_by_index.index` is `None`.")
             return

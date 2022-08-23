@@ -409,15 +409,15 @@ class FrameWidget(WidgetABC):
 
     def set_action_to_pick(self):
         if not self.is_action_pick():
+            self.set_action(ACTION.PICK)
             self.delete_button_place_forget()
             self.clear_info_widget_area_content()
-            self.set_action(ACTION.PICK)
 
     def set_action_to_recog(self):
         if not self.is_action_recog():
+            self.set_action(ACTION.RECOG)
             self.delete_button_place_forget()
             self.clear_info_widget_area_content()
-            self.set_action(ACTION.RECOG)
 
     def set_action_to_none(self):
         if not self.is_action_none():
