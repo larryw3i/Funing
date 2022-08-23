@@ -1031,7 +1031,7 @@ class InfoWidget(WidgetABC):
                 print("`recog_picked_frame_by_index.index` is `None`.")
             return
         frame = self.get_picked_frame_by_index(index)
-        if not frame:
+        if frame is None:
             self.mk_tmsg("`recog_picked_frame_by_index.frame` is `None`.")
             return
         info_id = self.get_info_id_by_frame(frame)

@@ -306,9 +306,10 @@ class FrameWidget(WidgetABC):
         return self.get_info_id_by_label(label)
 
     def get_info_id_by_label(self, label=None):
-        if not label:
+        if label is None:
             print(_("Label is None."))
             return None
+        label = label[0]
         return (
             self.info_ids[label] if label < self.get_info_ids_len() else None
         )
