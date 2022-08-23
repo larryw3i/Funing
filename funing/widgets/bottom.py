@@ -33,6 +33,7 @@ from funing.path import *
 from funing.settings import *
 from funing.settings4t import *
 from funing.widgets.abc import *
+from funing.widgets.color_common import *
 
 
 class BottomWidget(WidgetABC):
@@ -69,10 +70,12 @@ class BottomWidget(WidgetABC):
     def get_height(self):
         return self.main_msg_label.winfo_reqheight()
 
-    def set_msg(self, msg=None, label=None, fg="green"):
+    def set_msg(self, msg=None, label=None, fg=MSG_COLOR.INFO, bg=None):
         msg = msg or _("Hello!")
         label = label or self.main_msg_label
-        label.configure(text=msg, foreground=fg)
+        fg = fg.value
+        bg = bg and bg.value or None
+        label.configure(text=msg, foreground=fg, background=bg)
 
     def place(self):
         self.main_msg_label.place(
