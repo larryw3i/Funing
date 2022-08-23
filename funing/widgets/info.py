@@ -132,6 +132,8 @@ class InfoWidget(WidgetABC):
         pass
 
     def add_picked_frames_for_recog(self, frames, del_prev=False):
+
+        assert isinstance(frames, list)
         if not isinstance(frames, list):
             self.mk_tmsg("`add_picked_frames_for_recog.frames` is `None`.")
             return
@@ -377,6 +379,7 @@ class InfoWidget(WidgetABC):
 
     def set_saved_frames_by_info_id(self, info_id=None):
         info_id = info_id or self.get_info_id()
+        assert info_id is not None
         if info_id is None:
             self.mk_tmsg("`set_saved_frames_by_info_id.info_id` is None.")
             return
@@ -431,6 +434,7 @@ class InfoWidget(WidgetABC):
             pass
 
     def update_infos_widgets_by_info_id(self, info_id=None):
+        assert info_id is not None
         if info_id is None:
             self.mk_tmsg("`update_infos_widgets_by_info_id.info_id` is None.")
             return
@@ -1026,15 +1030,18 @@ class InfoWidget(WidgetABC):
         return self.fw.get_info_id_by_frame(frame)
 
     def recog_picked_frame_by_index(self, index=None):
+        assert index is not None
         if index is None:
             if self.is_test():
                 print("`recog_picked_frame_by_index.index` is `None`.")
             return
         frame = self.get_picked_frame_by_index(index)
+        assert frame is not None
         if frame is None:
             self.mk_tmsg("`recog_picked_frame_by_index.frame` is `None`.")
             return
         info_id = self.get_info_id_by_frame(frame)
+        assert info_id is not None
         if info_id is None:
             self.mk_tmsg("`recog_picked_frame_by_index.info_id` is `None`.")
             return
