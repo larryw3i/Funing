@@ -87,7 +87,10 @@ class InfoWidget(WidgetABC):
         self.update_picked_frame_labels_for_recog()
 
     def update_picked_frame_labels_for_recog(self):
-        frames = self.get_picked_frames_from_frame()
+        self.update_frame_labels_for_recog()
+
+    def update_frame_labels_for_recog(self, frames=None):
+        frames = frames or self.get_picked_frames_from_frame()
         if frames is not None:
             for f in frames:
                 label = ttk.Label(
@@ -96,7 +99,7 @@ class InfoWidget(WidgetABC):
                 index = self.get_picked_frame_labels_for_recog_len()
                 label.bind(
                     "<Button-1>",
-                    lambda event, index=index: self.recog_pk_frame_by_index(
+                    lambda event, index=index: self.recog_frame_by_index(
                         index
                     ),
                 )
@@ -111,6 +114,7 @@ class InfoWidget(WidgetABC):
             self.set_picked_frames_without_update_widgets(frames)
 
         else:
+            self.set_msg(_("Nothing picked."))
             if self.is_test():
                 print(_("Picked frame is None."))
         pass
@@ -943,47 +947,11 @@ class InfoWidget(WidgetABC):
             self.saved_frame_labels.append(label)
         pass
 
-    def set_frame_labels_image_use_picked_frames_for_recog(
-        self, frames=None, from_new_frame=False
-    ):
+    def set_frame_labels_image_use_picked_frames_for_recog():
         """
         Set frame label images for recognition using picked_frames
-        Args:
-            frames (Unit[int, numpy.array]): The video or image frame or the
-            the `return` signal if `frames` is 0.
         """
-
-        if frames == 0:
-            return
-        if frames is None:
-            frames = (
-                self.get_picked_frames()
-                or (from_new_frame and self.get_picked_frames_from_frame())
-                or None
-            )
-        if frames is not None:
-            for f in frames:
-                label = ttk.Label(
-                    self.pick_scrolledframe_innerframe, state="active"
-                )
-                index = len(self.picked_frame_labels)
-                label.bind(
-                    "<Button-1>",
-                    lambda event, index=index: self.recog_pk_frame_by_index(
-                        index
-                    ),
-                )
-                label.pack(
-                    side="left",
-                    anchor="nw",
-                    padx=self.picked_frame_label_margin / 2,
-                )
-                simpletooltip.create(label, _("Click to recognize."))
-                self.set_label_image(f, label)
-                self.picked_frame_labels.append(label)
-        else:
-            if self.is_test():
-                print(_("Picked frame is None."))
+        self.update_frame_labels_for_recog(frames=None)
 
     def get_picked_frame_by_index(self, index=None):
         if not index:
@@ -996,12 +964,22 @@ class InfoWidget(WidgetABC):
             print("`get_picked_frame_by_index.index` out of range.")
         return None
 
+    def recog_frame_by_index(self, index=None):
+        self.recog_picked_frame_by_index(index)
+        pass
+
     def recog_pk_frame_by_index(self, index=None):
         self.recog_picked_frame_by_index(index)
         pass
 
     def get_labels_by_frames(self, frame=None):
         return self.fw.get_labels_by_frames(frame)
+
+    def get_label_by_frame(self, frame=None):
+        return self.fw.get_label_by_frame(frame)
+
+    def get_info_id_by_frame(self, frame=None):
+        self.fw.get_info_id_by_frame(frame)
 
     def recog_picked_frame_by_index(self, index=None):
         if not index:
@@ -1012,7 +990,10 @@ class InfoWidget(WidgetABC):
         if not frame:
             self.mk_tmsg("`recog_picked_frame_by_index.frame` is `None`.")
             return
-        label = None
+        info_id = self.get_info_id_by_frame(frame)
+        if info_id is None:
+            return
+
         pass
 
     def set_frame_labels_image(
@@ -1073,3 +1054,6 @@ class InfoWidget(WidgetABC):
         frames = self.get_picked_frames_from_frame()
         self.set_frame_labels_image_use_picked_frames_for_recog(frames)
         pass
+
+
+#

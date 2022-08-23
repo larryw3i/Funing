@@ -286,16 +286,32 @@ class FrameWidget(WidgetABC):
             if self.is_test():
                 print("`get_info_id_by_frame.frame` is `None`.")
             return
-        labels = self.get_labels_by_frame(frame)
+        label = self.get_label_by_frame(frame)
+        if label is None:
+            self.set_msg(_("No matching data."))
+            return None
+        info_id = self.get_info_id_by_label(label)
+        if info_id is None:
+            self.set_msg(_("Couldn't get `info_id` from specific label."))
+            return None
+        return info_id
 
-    def get_info_id_by_label(self, label=None):
-        return self.get_id_by_label(label)
+    def get_info_ids_len(self):
+        return self.get_info_id_list_len()
+
+    def get_info_id_list_len(self):
+        return len(self.info_ids)
 
     def get_id_by_label(self, label=None):
+        return self.get_info_id_by_label(label)
+
+    def get_info_id_by_label(self, label=None):
         if not label:
             print(_("Label is None."))
             return None
-        return self.info_ids[label] if label < len(self.info_ids) else None
+        return (
+            self.info_ids[label] if label < self.get_info_ids_len() else None
+        )
 
     def get_face_recognizer(self):
         return self.get_recognizer()
@@ -1633,3 +1649,6 @@ class FrameWidget(WidgetABC):
 
     def __del__(self):
         self.release_video_capture()
+
+
+#
