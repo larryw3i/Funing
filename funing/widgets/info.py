@@ -375,6 +375,20 @@ class InfoWidget(WidgetABC):
             print("frame_id", frame_id)
         return frame_id
 
+    def set_saved_frames_by_info_id(self, info_id=None):
+        info_id = info_id or self.get_info_id()
+        if info_id is None:
+            self.mk_tmsg("`set_saved_frames_by_info_id.info_id` is None.")
+            return
+        image_path_list = get_face_image_path_list(info_id)
+        saved_frames = []
+        for p in image_path_list:
+            image = cv2.imread(p, cv2.IMREAD_COLOR)
+            saved_frames.append(
+                (self.get_saved_frame_id_by_frame_path(p), image)
+            )
+        self.set_saved_frames(saved_frames)
+
     def get_saved_frames_by_id(self, info_id=None, set_self=True):
 
         info_id = info_id or self.get_info_id()
@@ -412,6 +426,24 @@ class InfoWidget(WidgetABC):
         self.get_saved_frames_by_id(info_id)
         if update_widgets:
             self.set_frame_labels_image()
+            self.set_basic_info_entry_content(basic_info)
+            self.set_info_text_content(info)
+            pass
+
+    def update_infos_widgets_by_info_id(self, info_id=None):
+        if info_id is None:
+            self.mk_tmsg("`update_infos_widgets_by_info_id.info_id` is None.")
+            return
+        basic_info_path = get_basic_info_path(info_id)
+        info_path = get_info_path(info_id)
+        basic_info = None
+        info = None
+        with open(basic_info_path, "r") as f:
+            basic_info = f.read()
+        with open(info_path, "r") as f:
+            info = f.read()
+        self.set_saved_frames_by_info_id(info_id)
+        if update_widgets:
             self.set_basic_info_entry_content(basic_info)
             self.set_info_text_content(info)
             pass
@@ -473,6 +505,18 @@ class InfoWidget(WidgetABC):
         self.set_infos_and_images_by_id()
         self.set_action_to_read()
 
+        pass
+
+    def update_widgets_by_info_id_for_recog(self, info_id=None):
+        if info_id is None:
+            if self.is_test():
+                print(
+                    "`update_widgets_by_info_id_for_recog.info_id` is `None`."
+                )
+            return
+        self.set_info_id(info_id)
+        self.update_infos_widgets_by_info_id()
+        self.set_saved_info_combobox_content_by_info_id()
         pass
 
     def set_basic_infos(self, refresh=False, to_none=False):
@@ -947,18 +991,18 @@ class InfoWidget(WidgetABC):
             self.saved_frame_labels.append(label)
         pass
 
-    def set_frame_labels_image_use_picked_frames_for_recog():
+    def set_frame_labels_image_use_picked_frames_for_recog(self, frames=None):
         """
         Set frame label images for recognition using picked_frames
         """
-        self.update_frame_labels_for_recog(frames=None)
+        self.update_frame_labels_for_recog(frames)
 
     def get_picked_frame_by_index(self, index=None):
         if not index:
             if self.is_test():
                 print("`get_picked_frame_by_index.index` is `None`.")
             return
-        if index < len(self.picked_frames):
+        if index < self.get_picked_frames_len():
             return self.picked_frames[index]
         if self.is_test():
             print("`get_picked_frame_by_index.index` out of range.")
@@ -993,7 +1037,7 @@ class InfoWidget(WidgetABC):
         info_id = self.get_info_id_by_frame(frame)
         if info_id is None:
             return
-
+        self.update_widgets_by_info_id_for_recog(info_id)
         pass
 
     def set_frame_labels_image(
