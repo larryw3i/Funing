@@ -186,22 +186,72 @@ class InfoWidget(WidgetABC):
 
     def set_action(self, action=ACTION.NONE, to_none=False):
         self.fw.set_action(action, to_none)
+    
+    def get_picked_frame_labels_for_recog(self):
+        return self.picked_frame_labels_for_recog()
+
+    def clear_picked_frame_labels_for_recog(self):
+        for l in self.get_picked_frame_labels_for_recog():
+            l.destroy()
+        pass
+
+    def clear_all_frame_labels(self):
+        self.clear_picked_frame_labels()
+        self.clear_saved_frame_labels()
+        self.clear_picked_frame_labels_for_recog()
+    
+    def del_saved_frames(self,update_widgets=True):
+        if update_widgets:
+            self.clear_saved_frame_labels()
+        self.saved_frames = []
+        pass
+
+    def del_picked_frames(self,update_widgets=True):
+        if update_widgets:
+            self.clear_picked_frame_labels()
+        self.picked_frames = []
+        pass
+
+    def del_picked_frames_for_recog(self,update_widgets=True):
+        if update_widgets:
+            self.clear_picked_frame_labels_for_recog()
+        self.picked_frames_for_recog = []
+        pass
+
+    def del_info_frames(self):
+        self.info_frames = None
+        pass    
+
+    def del_all_frames(self):
+        self.del_picked_frames()
+        self.del_saved_frames()
+        self.del_picked_frames_for_recog()
+        pass
 
     def set_action_to_none(self):
+        self.del_all_frames()
         self.set_action(ACTION.NONE)
 
     def set_action_to_read(self):
         if not self.is_action_read():
+            self.del_picked_frames_for_recog()
+            self.del_saved_frames()
             self.delete_button_place()
             pass
 
         self.set_action(ACTION.READ)
 
     def set_action_to_pick(self):
-        self.set_action(ACTION.PICK)
+        if not  self.is_action_pick():
+            self.del_picked_frames_for_recog()
+            self.del_saved_frames()
+            self.set_action(ACTION.PICK)
 
     def set_action_to_recog(self):
-        self.set_action(ACTION.RECOG)
+        if not self.is_action_recog():
+            self.del_saved_frames()
+            self.del_picked_frames()
+            self.set_action(ACTION.RECOG)
 
     def get_action(self):
         return self.fw.get_action()
