@@ -1023,7 +1023,7 @@ class InfoWidget(WidgetABC):
         return self.fw.get_label_by_frame(frame)
 
     def get_info_id_by_frame(self, frame=None):
-        self.fw.get_info_id_by_frame(frame)
+        return self.fw.get_info_id_by_frame(frame)
 
     def recog_picked_frame_by_index(self, index=None):
         if index is None:
@@ -1036,6 +1036,7 @@ class InfoWidget(WidgetABC):
             return
         info_id = self.get_info_id_by_frame(frame)
         if info_id is None:
+            self.mk_tmsg("`recog_picked_frame_by_index.info_id` is `None`.")
             return
         self.update_widgets_by_info_id_for_recog(info_id)
         pass
