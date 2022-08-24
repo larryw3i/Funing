@@ -1048,6 +1048,44 @@ class InfoWidget(WidgetABC):
             simpletooltip.create(label, _("Saved frame, Click to delete."))
             self.saved_frame_labels.append(label)
         pass
+    
+    def show_labels_image_by_frames(
+        self,
+        frames=None,
+        parent_widget=None,
+        label_func=None):
+        return self.set_labels_image_by_frames_return_labels( 
+            frames,
+            parent_widget,
+            label_func)
+
+    def set_labels_image_by_frames_return_labels(
+        self, frames=None, parent_widget=None, label_func=None
+    ):
+        assert frames is not None
+        label_func = label_func or (
+            lambda: print("`set_labels_image_by_frames.label_func` is None.")
+        )
+        parent_widget = parent_widget or self.pick_scrolledframe_innerframe
+        index = 0
+        labels = []
+        for f in frames:
+            label = ttk.Label( parent_widget )
+            self.set_label_image(f, label)
+            label.bind(
+                "<Button-1>",
+                lambda event,_index=index: label_func(_index),
+            )
+            label.pack(
+                side="left",
+                anchor="nw",
+                padx=self.frame_label_margin / 2,
+            )
+            simpletooltip.create(label, _("Saved frame, Click to delete."))
+            labels.append(label)
+
+        return labels
+
 
     def set_frame_labels_image_use_picked_frames_for_recog(self, frames=None):
         """
