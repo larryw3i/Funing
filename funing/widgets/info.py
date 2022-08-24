@@ -186,9 +186,9 @@ class InfoWidget(WidgetABC):
 
     def set_action(self, action=ACTION.NONE, to_none=False):
         self.fw.set_action(action, to_none)
-    
+
     def get_picked_frame_labels_for_recog(self):
-        return self.picked_frame_labels_for_recog()
+        return self.picked_frame_labels_for_recog
 
     def clear_picked_frame_labels_for_recog(self):
         for l in self.get_picked_frame_labels_for_recog():
@@ -199,20 +199,20 @@ class InfoWidget(WidgetABC):
         self.clear_picked_frame_labels()
         self.clear_saved_frame_labels()
         self.clear_picked_frame_labels_for_recog()
-    
-    def del_saved_frames(self,update_widgets=True):
+
+    def del_saved_frames(self, update_widgets=True):
         if update_widgets:
             self.clear_saved_frame_labels()
         self.saved_frames = []
         pass
 
-    def del_picked_frames(self,update_widgets=True):
+    def del_picked_frames(self, update_widgets=True):
         if update_widgets:
             self.clear_picked_frame_labels()
         self.picked_frames = []
         pass
 
-    def del_picked_frames_for_recog(self,update_widgets=True):
+    def del_picked_frames_for_recog(self, update_widgets=True):
         if update_widgets:
             self.clear_picked_frame_labels_for_recog()
         self.picked_frames_for_recog = []
@@ -220,7 +220,7 @@ class InfoWidget(WidgetABC):
 
     def del_info_frames(self):
         self.info_frames = None
-        pass    
+        pass
 
     def del_all_frames(self):
         self.del_picked_frames()
@@ -242,7 +242,7 @@ class InfoWidget(WidgetABC):
         self.set_action(ACTION.READ)
 
     def set_action_to_pick(self):
-        if not  self.is_action_pick():
+        if not self.is_action_pick():
             self.del_picked_frames_for_recog()
             self.del_saved_frames()
             self.set_action(ACTION.PICK)
@@ -484,6 +484,7 @@ class InfoWidget(WidgetABC):
             pass
 
     def update_infos_widgets_by_info_id(self, info_id=None):
+        info_id = info_id or self.get_info_id()
         assert info_id is not None
         if info_id is None:
             self.mk_tmsg("`update_infos_widgets_by_info_id.info_id` is None.")
@@ -497,10 +498,9 @@ class InfoWidget(WidgetABC):
         with open(info_path, "r") as f:
             info = f.read()
         self.set_saved_frames_by_info_id(info_id)
-        if update_widgets:
-            self.set_basic_info_entry_content(basic_info)
-            self.set_info_text_content(info)
-            pass
+        self.set_basic_info_entry_content(basic_info)
+        self.set_info_text_content(info)
+        pass
 
     def clear_info_widgets_content(self):
         self.del_info_widgets_content()
@@ -1022,8 +1022,7 @@ class InfoWidget(WidgetABC):
         saved_frames = frames or self.get_saved_frames()
         if saved_frames is None:
             if self.is_test():
-                print(self.get_info_id())
-                print(_("Saved frames is None."))
+                print(self.get_info_id(), _("Saved frames is None."))
             return
         if self.is_test():
             print("saved_frames_len", len(saved_frames))
