@@ -1034,7 +1034,7 @@ class InfoWidget(WidgetABC):
             print("saved_frames_len", len(saved_frames))
         for _id, f in saved_frames:
             print("f", f)
-            label = ttk.Label(self.pick_scrolledframe_innerframeb)
+            label = ttk.Label(self.pick_scrolledframe_innerframe)
             self.set_label_image(f, label)
             label.bind(
                 "<Button-1>",
