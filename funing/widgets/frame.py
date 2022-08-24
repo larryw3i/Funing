@@ -1006,9 +1006,6 @@ class FrameWidget(WidgetABC):
         label = self.video_frame_label
         self.set_label_image(image, label)
 
-    def set_label_image(self, frame, label):
-        self.set_label_image(frame, label)
-
     def set_label_image(self, image, label):
         vid_img = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         vid_img = pil_image_fromarray(vid_img)
