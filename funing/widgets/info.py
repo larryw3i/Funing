@@ -177,12 +177,17 @@ class InfoWidget(WidgetABC):
     def set_saved_frames_with_frame_id(self, frames=None, to_none=False):
         self.set_saved_frames(frames, to_none)
 
-    def set_saved_frames(self, frames=None, to_none=False):
+    def set_saved_frames(
+        self, frames=None, to_none=False, update_widgets=False
+    ):
         if to_none:
             self.saved_frames = None
         if frames is None:
             return
         self.saved_frames = self.saved_frames_for_active_id = frames
+
+        if update_widgets:
+            pass
 
     def set_action(self, action=ACTION.NONE, to_none=False):
         self.fw.set_action(action, to_none)
@@ -427,7 +432,7 @@ class InfoWidget(WidgetABC):
             print("frame_id", frame_id)
         return frame_id
 
-    def set_saved_frames_by_info_id(self, info_id=None):
+    def set_saved_frames_by_info_id(self, info_id=None, update_widgets=True):
         info_id = info_id or self.get_info_id()
         assert info_id is not None
         if info_id is None:
@@ -441,6 +446,8 @@ class InfoWidget(WidgetABC):
                 (self.get_saved_frame_id_by_frame_path(p), image)
             )
         self.set_saved_frames(saved_frames)
+        if update_widgets:
+            pass
 
     def get_saved_frames_by_id(self, info_id=None, set_self=True):
 
@@ -1085,10 +1092,11 @@ class InfoWidget(WidgetABC):
                 print("`recog_picked_frame_by_index.index` is `None`.")
             return
         frame = self.get_picked_frame_by_index(index)
-        assert frame is not None
         if frame is None:
+            self.set_warning_msg(_("`Picked Frames is None.`"))
             self.mk_tmsg("`recog_picked_frame_by_index.frame` is `None`.")
             return
+        assert frame is not None
         info_id = self.get_info_id_by_frame(frame)
         assert info_id is not None
         if info_id is None:
@@ -1120,7 +1128,7 @@ class InfoWidget(WidgetABC):
         face_casecade = self.get_face_casecade()
         frame = frame or self.get_frame(copy=True)
         if frame is None:
-            self.set_msg(_("Frame is None."))
+            self.set_warning_msg(_("Frame is None."))
             return None
         gray_img = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         face_rects = face_casecade.detectMultiScale(gray_img, 1.3, 5)

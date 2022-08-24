@@ -43,6 +43,13 @@ class WidgetABC(ABC):
         self.test = self.mw.test
         self.mk_test_msg = self.mw.mk_test_msg
         self.mk_tmsg = self.mw.mk_tmsg
+        self.set_primary_msg = self.mw.set_primary_msg
+        self.set_secondary_msg = self.mw.set_primary_msg
+        self.set_success_msg = self.mw.set_success_msg
+        self.set_info_msg = self.mw.set_info_msg
+        self.set_warning_msg = self.mw.set_warning_msg
+        self.set_light_msg = self.mw.set_light_msg
+        self.set_dark_msg = self.mw.set_dark_msg
         self.width = self.height = self.y = self.x = self.mw.default_xywh
 
     def set_widgets(self):
