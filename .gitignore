@@ -172,3 +172,6 @@ funing*.tar.gz
 
 # *.swp
 *.swp
+
+# .cp/
+.cp/
