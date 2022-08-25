@@ -32,7 +32,9 @@ class AboutTkApplication(pygubu.TkApplication):
         # pygubu builder
         self.builder = pygubu.Builder(translator)
         # ui files
-        about_ui_path = os.path.join(os.path.join(project_path, "ui"), "about.ui")
+        about_ui_path = os.path.join(
+            os.path.join(project_path, "ui"), "about.ui"
+        )
         # add ui files
         self.builder.add_from_file(about_ui_path)
 

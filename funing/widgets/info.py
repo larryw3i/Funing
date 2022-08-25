@@ -20,7 +20,7 @@ from pathlib import Path
 from queue import Queue
 from threading import Thread
 from tkinter import *
-from tkinter import ttk
+from tkinter import filedialog, messagebox, ttk
 
 import cv2
 from appdirs import user_data_dir
@@ -49,7 +49,10 @@ class InfoWidget(WidgetABC):
         self.face_casecade = None
         self.picked_frames = []
         self.picked_frame_labels = []
-        self.picked_frame_label_margin = 10
+        self.picked_frames_for_recog = []
+        self.picked_frame_labels_for_recog = []
+        self.frame_label_margin = 10
+        self.picked_frame_label_margin = self.frame_label_margin
         self.resize_width = None
         self.resize_height = None
         self.info_frames = None
@@ -60,19 +63,211 @@ class InfoWidget(WidgetABC):
         self.action = None
         self.saved_info_combobox = None
         self.saved_info_combobox_var = StringVar()
+        self.saved_frames_for_active_id = self.saved_frames = None
+        self.saved_frame_labels = []
         self.basic_infos = None
+        self.new_info_added_signal = (
+            self.new_info_signal
+        ) = NEW_INFO_SIGNAL.OTHER.value
+
+    def get_picked_frame_labels_for_recog_len(self):
+        return len(self.picked_frame_labels_for_recog)
+
+    def add_picked_frame_label_for_recog(self, label):
+        self.picked_frame_labels_for_recog.append(label)
+        pass
+
+    def del_picked_frame_labels_for_recog(self, update_widgets=True):
+        if update_widgets:
+            for w in self.picked_frame_labels_for_recog:
+                w.destroy()
+        self.picked_frame_labels_for_recog = []
+
+    def update_picked_frame_labels_for_recog_widgets(self):
+        self.update_picked_frame_labels_for_recog()
+
+    def update_picked_frame_labels_for_recog(self):
+        self.update_frame_labels_for_recog()
+
+    def update_frame_labels_for_recog(self, frames=None):
+        frames = frames or self.get_picked_frames_from_frame()
+        if frames is not None:
+            for f in frames:
+                label = ttk.Label(self.pick_scrolledframe_innerframe)
+                self.set_label_image(f, label)
+                index = self.get_picked_frame_labels_for_recog_len()
+                label.bind(
+                    "<Button-1>",
+                    lambda event, index=index: self.recog_frame_by_index(
+                        index
+                    ),
+                )
+                label.pack(
+                    side="left",
+                    anchor="nw",
+                    padx=self.picked_frame_label_margin / 2,
+                )
+                simpletooltip.create(label, _("Click to recognize."))
+                self.add_picked_frame_label_for_recog(label)
+            self.set_picked_frames_without_update_widgets(frames)
+
+        else:
+            self.set_msg(_("Nothing picked."))
+            if self.is_test():
+                print(_("Picked frame is None."))
+        pass
+
+    def del_picked_frames_for_recog(
+        self, update_widgets=True, update_label_list=True
+    ):
+        self.picked_frames_for_recog = []
+        if update_label_list:
+            self.del_picked_frame_labels_for_recog(update_widgets)
+        pass
+
+    def add_picked_frame_for_recog(self, frame):
+        self.picked_frames_for_recog.append(frame)
+        pass
+
+    def add_picked_frames_for_recog(self, frames, del_prev=False):
+
+        assert isinstance(frames, list)
+        if not isinstance(frames, list):
+            self.mk_tmsg("`add_picked_frames_for_recog.frames` is `None`.")
+            return
+        if del_prev:
+            self.del_picked_frames_for_recog()
+        self.picked_frames_for_recog += frames
+
+    def set_new_info_signal(self, signal=NEW_INFO_SIGNAL.OTHER.value):
+        self.new_info_added_signal = self.new_info_signal = signal
+
+    def get_new_info_signal(self):
+        return self.new_info_signal
+
+    def switch_new_info_signal_by_default(self):
+        if self.new_info_added_signal == NEW_INFO_SIGNAL.ADD.value:
+            self.new_info_added_signal = (
+                self.new_info_signal
+            ) = NEW_INFO_SIGNAL.OTHER.value
+        else:
+            self.new_info_added_signal = (
+                self.new_info_signal
+            ) = NEW_INFO_SIGNAL.ADD.value
+
+    def new_info_signal_is_add(self):
+        return self.new_info_signal == NEW_INFO_SIGNAL.ADD.value
+
+    def new_info_signal_is_other(self):
+        return self.new_info_signal == NEW_INFO_SIGNAL.OTHER.value
+
+    def get_saved_frames_for_active_id(self):
+        return self.get_saved_frames()
+
+    def get_saved_frames(self):
+        if self.saved_frames is None:
+            return self.get_saved_frames_by_id()
+        return self.saved_frames
+
+    def set_saved_frames_for_active_id(self, frames=None, to_none=False):
+        self.set_saved_frames(frames, to_none)
+
+    def set_saved_frames_with_frame_id(self, frames=None, to_none=False):
+        self.set_saved_frames(frames, to_none)
+
+    def set_saved_frames(
+        self, frames=None, to_none=False, update_widgets=False
+    ):
+        if to_none:
+            self.saved_frames = None
+        if frames is None:
+            return
+        self.saved_frames = self.saved_frames_for_active_id = frames
+
+        if update_widgets:
+            pass
 
     def set_action(self, action=ACTION.NONE, to_none=False):
         self.fw.set_action(action, to_none)
+
+    def get_picked_frame_labels_for_recog(self):
+        return self.picked_frame_labels_for_recog
+
+    def clear_picked_frame_labels_for_recog(self):
+        for l in self.get_picked_frame_labels_for_recog():
+            l.destroy()
+        pass
+
+    def clear_all_frame_labels(self):
+        self.clear_picked_frame_labels()
+        self.clear_saved_frame_labels()
+        self.clear_picked_frame_labels_for_recog()
+
+    def del_saved_frames(self, update_widgets=True):
+        if update_widgets:
+            self.clear_saved_frame_labels()
+        self.saved_frames = []
+        pass
+
+    def del_picked_frames(self, update_widgets=True):
+        if update_widgets:
+            self.clear_picked_frame_labels()
+        self.picked_frames = []
+        pass
+
+    def del_picked_frames_for_recog(self, update_widgets=True):
+        if update_widgets:
+            self.clear_picked_frame_labels_for_recog()
+        self.picked_frames_for_recog = []
+        pass
+
+    def del_info_frames(self):
+        self.info_frames = None
+        pass
+
+    def del_all_frames(self):
+        self.del_picked_frames()
+        self.del_saved_frames()
+        self.del_picked_frames_for_recog()
+        pass
+
+    def del_picked_frames_recog_included(self):
+        self.del_picked_frames_for_recog()
+        self.del_picked_frames()
+
+    def set_action_to_none(self):
+        self.del_picked_frames_recog_included()
+        self.set_action(ACTION.NONE)
+
+    def set_action_to_read(self):
+        if not self.is_action_read():
+            self.del_picked_frames_for_recog()
+            self.delete_button_place()
+            self.set_action(ACTION.READ)
+            pass
+
+    def set_action_to_pick(self):
+        if not self.is_action_pick():
+            self.del_picked_frames()
+            self.del_picked_frames_for_recog()
+            self.set_action(ACTION.PICK)
+
+    def set_action_to_recog(self):
+        if not self.is_action_recog():
+            self.del_picked_frames()
+            self.set_action(ACTION.RECOG)
 
     def get_action(self):
         return self.fw.get_action()
 
     def get_info_id(self):
-        return self.fw.get_info_id()
+        if not self.info_id:
+            self.info_id = self.fw.get_info_id()
+        return self.info_id
 
     def set_info_id(self, _id):
-        self.info_id = self.fw.set_info_id(_id)
+        self.fw.set_info_id(_id=_id)
+        self.info_id = _id
 
     def set_info_ids(self, info_ids=None, to_none=False, refresh=False):
         return self.fw.set_info_ids(info_ids, to_none, refresh)
@@ -143,13 +338,19 @@ class InfoWidget(WidgetABC):
         save_info=True,
         save_image=True,
         refresh=True,
+        update_widgets=True,
     ):
-        if len(self.picked_frames) < 1:
+
+        if not self.is_action_read() and len(self.picked_frames) < 1:
             self.set_msg(_("Nothing picked."))
             return
         basic_info_entry_get = self.get_basic_info_entry_content()
         info_text_get = self.get_info_text_content()
-        info_id = info_id or str(uuid.uuid4())
+        info_id = info_id or self.get_info_id() or str(uuid.uuid4())
+
+        if not self.get_info_id():
+            self.set_info_id(_id=info_id)
+
         if save_basic_info:
             with open(get_basic_info_path(info_id), "w") as f:
                 f.write(basic_info_entry_get)
@@ -162,6 +363,15 @@ class InfoWidget(WidgetABC):
         if refresh:
             self.set_info_ids(refresh=True)
             self.update_saved_info_combobox_values()
+        if update_widgets:
+            self.set_action_to_read()  # First `read` after adding.
+            self.set_picked_frames(to_none=True)
+            self.clear_picked_frame_labels()
+            self.clear_saved_frame_labels()
+            self.set_saved_info_combobox_content_by_info_id(info_id)
+            self.update_widgets_by_info_id()
+            pass
+
         self.set_msg(_("Information saved."))
         pass
 
@@ -172,9 +382,201 @@ class InfoWidget(WidgetABC):
         self.save_information()
         pass
 
+    def is_action_read(self):
+        return self.fw.is_action_read()
+
+    def is_action_recog(self):
+        return self.fw.is_action_recog()
+
+    def is_action_pick(self):
+        return self.fw.is_action_none()
+
+    def is_action_none(self):
+        return self.fw.is_action_none()
+
+    def get_picked_frames(self, from_frame=False, info_id=None):
+        if from_frame:
+            return self.get_picked_frames_from_frame()
+        if info_id is not None:
+            return self.get_saved_frames_by_id(info_id)
+        if self.picked_frames == []:
+            return None
+        return self.picked_frames
+
+    def set_picked_frames_without_update_widgets(self, frames=None):
+        self.set_picked_frames(frames, update_label=False)
+
+    def set_picked_frames(self, frames=None, to_none=False, update_label=True):
+        if to_none:
+            self.picked_frames = []
+            return
+        if frames is None:
+            self.picked_frames = []
+            return
+        if not isinstance(frames, list):
+            frames = [frames]
+        self.picked_frames = frames
+        if update_label:
+            self.update_picked_frame_labels()
+
+    def get_saved_frames_by_info_id(self, info_id=None, set_self=True):
+        return self.get_saved_frames_by_id(info_id, set_self)
+
+    def get_saved_frame_id_by_frame_path(self, frame_path=None):
+        if frame_path is None:
+            return None
+        frame_id = frame_path.split(os.sep)[-1]
+        frame_id = frame_id.split(".")[0]
+        if self.is_test():
+            print("frame_id", frame_id)
+        return frame_id
+
+    def set_saved_frames_by_info_id(self, info_id=None, update_widgets=True):
+        info_id = info_id or self.get_info_id()
+        assert info_id is not None
+        if info_id is None:
+            self.mk_tmsg("`set_saved_frames_by_info_id.info_id` is None.")
+            return
+        image_path_list = get_face_image_path_list(info_id)
+        saved_frames = []
+        for p in image_path_list:
+            image = cv2.imread(p, cv2.IMREAD_COLOR)
+            saved_frames.append(
+                (self.get_saved_frame_id_by_frame_path(p), image)
+            )
+        self.set_saved_frames(saved_frames)
+        if update_widgets:
+            pass
+
+    def get_saved_frames_by_id(self, info_id=None, set_self=True):
+
+        info_id = info_id or self.get_info_id()
+        if info_id is None:
+            if self.is_test():
+                print(_("info ID is None."))
+            return None
+        image_path_list = get_face_image_path_list(info_id)
+        saved_frames = []
+        for p in image_path_list:
+            image = cv2.imread(p, cv2.IMREAD_COLOR)
+            saved_frames.append(
+                (self.get_saved_frame_id_by_frame_path(p), image)
+            )
+        if set_self:
+            self.set_saved_frames(saved_frames)
+        return saved_frames
+
+    def set_infos_and_images_by_id(
+        self, info_id=None, set_picked_frames=True, update_widgets=True
+    ):
+        info_id = info_id or self.get_info_id()
+        if info_id is None:
+            if self.is_test():
+                print("set_infos_and_images_by_id: `info_id` is None.")
+            return
+        basic_info_path = get_basic_info_path(info_id)
+        info_path = get_info_path(info_id)
+        basic_info = None
+        info = None
+        with open(basic_info_path, "r") as f:
+            basic_info = f.read()
+        with open(info_path, "r") as f:
+            info = f.read()
+        self.get_saved_frames_by_id(info_id)
+        if update_widgets:
+            self.set_frame_labels_image()
+            self.set_basic_info_entry_content(basic_info)
+            self.set_info_text_content(info)
+            pass
+
+    def update_infos_widgets_by_info_id(self, info_id=None):
+        info_id = info_id or self.get_info_id()
+        assert info_id is not None
+        if info_id is None:
+            self.mk_tmsg("`update_infos_widgets_by_info_id.info_id` is None.")
+            return
+        basic_info_path = get_basic_info_path(info_id)
+        info_path = get_info_path(info_id)
+        basic_info = None
+        info = None
+        with open(basic_info_path, "r") as f:
+            basic_info = f.read()
+        with open(info_path, "r") as f:
+            info = f.read()
+        self.set_saved_frames_by_info_id(info_id)
+        self.set_basic_info_entry_content(basic_info)
+        self.set_info_text_content(info)
+        pass
+
+    def clear_info_widgets_content(self):
+        self.del_info_widgets_content()
+        pass
+
+    def del_info_widgets_content(self):
+        self.set_basic_info_entry_content(to_none=True)
+        self.set_info_text_content(to_none=True)
+        pass
+
+    def set_basic_info_entry_content(self, content=None, to_none=False):
+        if content is None or to_none:
+            self.basic_info_entry.delete("0", "end")
+            return
+        self.basic_info_entry.delete("0", "end")
+        self.basic_info_entry.insert("end", content)
+
+    def set_info_text_content(self, content=None, to_none=False):
+        if content is None or to_none:
+            self.info_text.delete("1.0", "end")
+            return
+        self.info_text.delete("1.0", "end")
+        self.info_text.insert("end", content)
+
+    def get_id_by_saved_info_combobox_var(self, var_get=None):
+        if var_get is None:
+            return None
+        if "(" not in var_get:
+            return None
+        var_get = var_get.split("(")[-1]
+        if ")" not in var_get:
+            return None
+        info_id = var_get.split(")")[0]
+        return info_id
+
     def saved_info_combobox_var_trace_w(self, *args):
+        self.update_widgets_by_info_id()
+        pass
+
+    def update_widgets_by_info_id(self, info_id=None):
+        self.clear_picked_frame_labels()
+        self.clear_saved_frame_labels()
+        self.set_saved_frames(to_none=True)
+        self.set_picked_frames(to_none=True)
         var_get = self.saved_info_combobox_var.get()
-        print(var_get)
+        info_id = info_id or self.get_id_by_saved_info_combobox_var(var_get)
+        if info_id is None:
+            if self.is_test():
+                print(var_get, info_id)
+            return
+        if info_id == _("Add"):
+            self.set_action_to_pick()
+            self.clear_info_widget_area_content()
+            return
+        self.set_info_id(info_id)
+        self.set_infos_and_images_by_id()
+        self.set_action_to_read()
+
+        pass
+
+    def update_widgets_by_info_id_for_recog(self, info_id=None):
+        if info_id is None:
+            if self.is_test():
+                print(
+                    "`update_widgets_by_info_id_for_recog.info_id` is `None`."
+                )
+            return
+        self.set_info_id(info_id)
+        self.update_infos_widgets_by_info_id()
+        self.set_saved_info_combobox_content_by_info_id()
         pass
 
     def set_basic_infos(self, refresh=False, to_none=False):
@@ -199,17 +601,96 @@ class InfoWidget(WidgetABC):
         """
         if self.basic_infos is None:
             self.set_basic_infos()
+        if self.basic_infos == []:
+            return None
         return self.basic_infos
 
     def get_saved_info_combobox_values(self):
         basic_infos = self.get_basic_infos()
-        return [info + "(" + _id + ")" for _id, info in basic_infos]
+        if basic_infos is None:
+            return []
+        combobox_values = [info + "(" + _id + ")" for _id, info in basic_infos]
+        combobox_values += [_("New information") + "(" + _("_Add") + ")"]
+        return combobox_values
 
     def update_saved_info_combobox_values(self):
         self.set_basic_infos()
         self.saved_info_combobox.configure(
             values=self.get_saved_info_combobox_values()
         )
+
+    def clear_info_widget_area_content(self):
+        self.clear_saved_info_combobox_content()
+        self.clear_picked_frame_labels()
+        self.set_basic_info_entry_content("")
+        self.set_info_text_content("")
+
+    def clear_saved_info_combobox_content(self):
+        self.del_saved_info_combobox_content()
+
+    def del_saved_info_combobox_content(self):
+        self.saved_info_combobox.set("")
+        pass
+
+    def set_saved_info_combobox_content_by_info_id(self, info_id=None):
+        info_id = info_id or self.get_info_id()
+        if not info_id:
+            return
+        values = self.get_saved_info_combobox_values()
+        id_str = f"({info_id})"
+        content = [c for c in values if c.endswith(id_str)][0]
+        self.saved_info_combobox.set(content)
+        pass
+
+    def clear_showed_info(self):
+        self.clear_info_widget_area_content()
+        pass
+
+    def get_basic_info_by_info_id(self, info_id=None):
+        info_id = info_id or self.get_info_id()
+        basic_info = None
+        basic_info_path = get_basic_info_path(info_id)
+        with open(basic_info_path, "r") as f:
+            basic_info = f.read()
+        return basic_info
+
+    def get_info_by_info_id(self, info_id=None):
+        info_id = info_id or self.get_info_id()
+        info = None
+        info_path = get_info_path(info_id)
+        with open(info_path, "r") as f:
+            info = f.read()
+        return info
+
+    def del_saved_info_by_info_id(self, info_id=None):
+        info_id = info_id or self.get_info_id()
+        if not info_id:
+            if self.is_test():
+                print(_("'info_id' is None."))
+            return
+        basic_info_path = get_basic_info_path(info_id)
+        info_path = get_info_path(info_id)
+        image_dir_path = get_image_dir_path(info_id)
+        basic_info = self.get_basic_info_by_info_id(info_id)
+        deleted_paths = [basic_info_path, info_path, image_dir_path]
+        for src in deleted_paths:
+            if os.path.exists(p):
+                shutil.move(src, get_new_backup_path())
+        self.set_basic_infos(to_none=True)
+        self.update_saved_info_combobox_values()
+        self.del_showed_info()
+        self.set_msg(
+            _("Information of %s\(%s\) is deleted.") % (basic_info, info_id)
+        )
+        pass
+
+    def delete_button_command(self):
+        if not self.is_action_read():
+            if self.is_test():
+                print(_("ACTION isn't 'READ'."))
+            return
+        self.del_saved_info_by_info_id()
+        pass
 
     def set_widgets(self):
         super().set_widgets()
@@ -245,6 +726,13 @@ class InfoWidget(WidgetABC):
         )
         self.save_button = ttk.Button(
             self.root, text=_("Save"), command=self.save_button_command
+        )
+        self.delete_button = tk.Button(
+            self.root,
+            text=_("Delete"),
+            background="red",
+            activebackground="red",
+            command=self.delete_button_command,
         )
 
     def get_frame(self, copy=False):
@@ -340,6 +828,31 @@ class InfoWidget(WidgetABC):
     def get_saved_info_combobox_height(self):
         return self.saved_info_combobox.winfo_reqheight()
 
+    def get_delete_button_x(self):
+        return self.get_x() + self.get_width() - self.get_delete_button_width()
+
+    def get_delete_button_y(self):
+        return self.get_save_button_y()
+
+    def get_delete_button_width(self):
+        return self.delete_button.winfo_reqwidth()
+
+    def get_delete_button_height(self):
+        return self.delete_button.winfo_reqheight()
+
+    def delete_button_place(self):
+        self.delete_button.place(
+            x=self.get_delete_button_x(),
+            y=self.get_delete_button_y(),
+            width=self.get_delete_button_width(),
+            height=self.get_delete_button_height(),
+        )
+        pass
+
+    def delete_button_place_forget(self):
+        self.delete_button.place_forget()
+        pass
+
     def place(self):
         super().place()
 
@@ -381,55 +894,259 @@ class InfoWidget(WidgetABC):
             height=self.get_save_button_height(),
         )
 
-    def del_picked_frame(self, index, del_label=True):
+        if self.is_action_read():
+            self.delete_button_place()
+
+    def get_picked_frames_len(self):
+        return len(self.picked_frames)
+
+    def del_picked_frame_by_index(self, index, del_label=True):
         if del_label:
             self.picked_frame_labels[index].destroy()
             del self.picked_frame_labels[index]
-        del self.picked_frames[index]
+        if index < self.get_picked_frames_len():
+            del self.picked_frames[index]
         self.set_picked_frame_labels_image()
+
+    def clear_saved_frame_labels(self):
+        for l in self.saved_frame_labels:
+            l.destroy()
+        self.saved_frame_labels = []
+        pass
 
     def clear_picked_frame_labels(self):
         for l in self.picked_frame_labels:
             l.destroy()
         self.picked_frame_labels = []
 
-    def add_pick_frames(
-        self, frames=None, update_label=True, set_info_text=True
-    ):
+    def add_picked_frames(self, frames=None, update_label=True):
         if not isinstance(frames, list):
             frames = [frames]
         self.picked_frames = frames + self.picked_frames
         if update_label:
+            new_added_frames = []
+            if self.is_action_read():
+                pass
             self.set_picked_frame_labels_image(self.picked_frames)
 
     def get_info_frame(self):
         frame = ttk.Frame(self.info_scrolledframe_innerframe)
         return frame
 
-    def set_info_text(self):
-        pass
+    def update_picked_frame_labels(self, frames=None):
+        self.set_picked_frame_labels_image(frames)
 
     def set_picked_frame_labels_image(self, frames=None):
-        self.clear_picked_frame_labels()
+        self.set_frame_labels_image(frames)
+
+    def del_saved_frame_by_id(
+        self, frame_id=None, ask=True, update_widgets=True
+    ):
+        if frame_id is None:
+            return
+        if ask:
+            if not messagebox.askyesno(
+                _("Delete saved frame"),
+                _("Do you want to delete saved frame?"),
+            ):
+                return
+
+        image_path = get_frame_path_by_ids(self.get_info_id(), frame_id)
+
+        if not os.path.exists(image_path):
+            if self.is_test():
+                print(_("Image(%s) doesn't exist.") % image_path)
+            return
+
+        backup_file_path = get_new_backup_file_path(frame_id)
+        if not os.path.exists(backup_file_path):
+            with open(backup_file_path, "wb") as f:
+                pass
+        shutil.move(image_path, backup_file_path)
+        index = 0
+        for _id, f in self.get_saved_frames():
+            if _id == frame_id:
+                del self.saved_frames[index]
+                if update_widgets:
+                    self.saved_frame_labels[index].destroy()
+                    del self.saved_frame_labels[index]
+                break
+            index += 1
+            pass
+        self.set_frame_labels_image()
+        pass
+
+    def set_frame_labels_image_use_picked_frames(
+        self, frames=None, from_new_frame=False
+    ):
+        """
+        Set frame label images using picked_frames
+        Args:
+            frames (Unit[int, numpy.array]): The video or image frame or the
+            the `return` signal if `frames` is 0.
+        """
+
+        if frames == 0:
+            return
         if frames is None:
-            frames = self.picked_frames
-        for f in frames:
-            label = ttk.Label(
-                self.pick_scrolledframe_innerframe, state="active"
+            frames = (
+                self.get_picked_frames()
+                or (from_new_frame and self.get_picked_frames_from_frame())
+                or None
             )
-            index = len(self.picked_frame_labels)
+        if frames is not None:
+            for f in frames:
+                label = ttk.Label(
+                    self.pick_scrolledframe_innerframe, state="active"
+                )
+                self.set_label_image(f, label)
+                index = len(self.picked_frame_labels)
+                label.bind(
+                    "<Button-1>",
+                    lambda event, index=index: self.del_picked_frame_by_index(
+                        index
+                    ),
+                )
+                label.pack(
+                    side="left",
+                    anchor="nw",
+                    padx=self.picked_frame_label_margin / 2,
+                )
+                simpletooltip.create(label, _("Click to delete."))
+                self.picked_frame_labels.append(label)
+        else:
+            if self.is_test():
+                print(_("Picked frame is None."))
+
+    def set_frame_labels_image_use_saved_frames(
+        self, frames=None, for_read=False
+    ):
+        if for_read:
+            if not self.is_action_read():
+                print("`NOT` is_action_read.")
+                return
+        saved_frames = frames or self.get_saved_frames()
+        if saved_frames is None:
+            if self.is_test():
+                print(self.get_info_id(), _("Saved frames is None."))
+            return
+        if self.is_test():
+            print("saved_frames_len", len(saved_frames))
+        for _id, f in saved_frames:
+            if self.is_test():
+                print("`saved_frame.id`", _id)
+            label = ttk.Label(self.pick_scrolledframe_innerframe)
+            self.set_label_image(f, label)
             label.bind(
                 "<Button-1>",
-                lambda event, index=index: self.del_picked_frame(index),
+                lambda event, _id=_id: self.del_saved_frame_by_id(_id),
             )
             label.pack(
                 side="left",
                 anchor="nw",
-                padx=self.picked_frame_label_margin / 2,
+                padx=self.frame_label_margin / 2,
             )
-            simpletooltip.create(label, _("Click to delete."))
+            simpletooltip.create(label, _("Saved frame, Click to delete."))
+            self.saved_frame_labels.append(label)
+        pass
+
+    def show_labels_image_by_frames(
+        self, frames=None, parent_widget=None, label_func=None
+    ):
+        return self.set_labels_image_by_frames_return_labels(
+            frames, parent_widget, label_func
+        )
+
+    def set_labels_image_by_frames_return_labels(
+        self, frames=None, parent_widget=None, label_func=None
+    ):
+        assert frames is not None
+        label_func = label_func or (
+            lambda: print("`set_labels_image_by_frames.label_func` is None.")
+        )
+        parent_widget = parent_widget or self.pick_scrolledframe_innerframe
+        index = 0
+        labels = []
+        for f in frames:
+            label = ttk.Label(parent_widget)
             self.set_label_image(f, label)
-            self.picked_frame_labels.append(label)
+            label.bind(
+                "<Button-1>",
+                lambda event, _index=index: label_func(_index),
+            )
+            label.pack(
+                side="left",
+                anchor="nw",
+                padx=self.frame_label_margin / 2,
+            )
+            simpletooltip.create(label, _("Saved frame, Click to delete."))
+            labels.append(label)
+
+        return labels
+
+    def set_frame_labels_image_use_picked_frames_for_recog(self, frames=None):
+        """
+        Set frame label images for recognition using picked_frames
+        """
+        self.update_frame_labels_for_recog(frames)
+
+    def get_picked_frame_by_index(self, index=None):
+        if index is None:
+            if self.is_test():
+                print("`get_picked_frame_by_index.index` is `None`.")
+            return
+        if index < self.get_picked_frames_len():
+            return self.picked_frames[index]
+        if self.is_test():
+            print("`get_picked_frame_by_index.index` out of range.")
+        return None
+
+    def recog_frame_by_index(self, index=None):
+        self.recog_picked_frame_by_index(index)
+        pass
+
+    def recog_pk_frame_by_index(self, index=None):
+        self.recog_picked_frame_by_index(index)
+        pass
+
+    def get_labels_by_frames(self, frame=None):
+        return self.fw.get_labels_by_frames(frame)
+
+    def get_label_by_frame(self, frame=None):
+        return self.fw.get_label_by_frame(frame)
+
+    def get_info_id_by_frame(self, frame=None):
+        return self.fw.get_info_id_by_frame(frame)
+
+    def recog_picked_frame_by_index(self, index=None):
+        assert index is not None
+        if index is None:
+            if self.is_test():
+                print("`recog_picked_frame_by_index.index` is `None`.")
+            return
+        frame = self.get_picked_frame_by_index(index)
+        if frame is None:
+            self.set_warning_msg(_("`Picked Frames is None.`"))
+            self.mk_tmsg("`recog_picked_frame_by_index.frame` is `None`.")
+            return
+        assert frame is not None
+        info_id = self.get_info_id_by_frame(frame)
+        assert info_id is not None
+        if info_id is None:
+            self.mk_tmsg("`recog_picked_frame_by_index.info_id` is `None`.")
+            return
+        self.update_widgets_by_info_id_for_recog(info_id)
+        pass
+
+    def set_frame_labels_image(
+        self, show_saved_frames=True, show_picked_frames=True
+    ):
+        self.clear_picked_frame_labels()
+        self.clear_saved_frame_labels()
+        if show_picked_frames:
+            self.set_frame_labels_image_use_picked_frames()
+        if show_saved_frames:
+            self.set_frame_labels_image_use_saved_frames()
 
     def set_label_image(self, image, label):
         self.set_label_frame(image, label)
@@ -437,9 +1154,12 @@ class InfoWidget(WidgetABC):
     def set_label_frame(self, frame, label):
         self.fw.set_label_image(frame, label)
 
-    def get_pick_frames(self, frame=None):
+    def get_picked_frames_from_frame(self, frame=None, set_self=False):
         face_casecade = self.get_face_casecade()
         frame = frame or self.get_frame(copy=True)
+        if frame is None:
+            self.set_warning_msg(_("Frame is None."))
+            return None
         gray_img = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         face_rects = face_casecade.detectMultiScale(gray_img, 1.3, 5)
         frames = []
@@ -453,9 +1173,31 @@ class InfoWidget(WidgetABC):
             frames.append(pick_frame)
         del frame
         del gray_img
+        if set_self:
+            self.set_picked_frames(frames)
         return frames
 
-    def pick_frame_by_default(self):
-        frames = self.get_pick_frames()
-        self.add_pick_frames(frames)
+    def pick_frame_for_add_by_default(self):
+        frames = self.get_picked_frames_from_frame()
+        if frames is None:
+            self.mk_tmsg("`pick_frame_for_add_by_default.frames` is None.")
+            return
+        self.add_picked_frames(frames)
         pass
+
+    def pick_frame_by_default(self):
+        frames = self.get_picked_frames_from_frame()
+        if frames is None:
+            return
+        self.add_picked_frames(frames)
+        pass
+
+    def recog_frame_by_default(self):
+        self.clear_picked_frame_labels()
+        self.clear_saved_frame_labels()
+        frames = self.get_picked_frames_from_frame()
+        self.set_frame_labels_image_use_picked_frames_for_recog(frames)
+        pass
+
+
+#

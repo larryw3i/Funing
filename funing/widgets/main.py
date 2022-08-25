@@ -23,7 +23,6 @@ from tkinter import *
 from tkinter import ttk
 
 import cv2
-import yaml
 from appdirs import user_data_dir
 from cv2.data import haarcascades
 from cv2.face import EigenFaceRecognizer_create
@@ -34,6 +33,7 @@ from funing.path import *
 from funing.settings import *
 from funing.settings4t import *
 from funing.widgets.bottom import BottomWidget
+from funing.widgets.color_common import *
 from funing.widgets.frame import FrameWidget
 from funing.widgets.info import InfoWidget
 from funing.widgets.seperator import SeperatorWidget
@@ -187,6 +187,16 @@ class MainWidget:
         if save_now:
             self.save_copy()
 
+    def is_test(self):
+        return self.test
+
+    def mk_test_msg(self, msg):
+        if self.is_test():
+            print(msg)
+
+    def mk_tmsg(self, msg):
+        self.mk_test_msg(msg)
+
     def sys_exit(self):
         self.root.destroy()
         sys.exit(0)
@@ -213,14 +223,35 @@ class MainWidget:
     def configure(self, event=None):
         self.place()
 
-    def set_msg(self, msg=None, label=None):
-        self.set_bottom_msg(msg, label)
+    def set_msg(self, msg=None, label=None, fg=MSG_COLOR.INFO, bg=None):
+        self.set_bottom_msg(msg, label, fg=fg, bg=bg)
 
-    def set_status_msg(self, msg=None, label=None):
-        self.set_bottom_msg(msg, label)
+    def set_status_msg(self, msg=None, label=None, fg=MSG_COLOR.INFO, bg=None):
+        self.set_bottom_msg(msg, label, fg=fg, bg=bg)
 
-    def set_bottom_msg(self, msg=None, label=None):
-        self.bottom_widget.set_msg(msg, label)
+    def set_bottom_msg(self, msg=None, label=None, fg=MSG_COLOR.INFO, bg=None):
+        self.bottom_widget.set_msg(msg, label, fg=fg, bg=bg)
+
+    def set_primary_msg(self, msg=None, label=None):
+        self.set_msg(msg, label, fg=MSG_COLOR.PRIMARY)
+
+    def set_secondary_msg(self, msg=None, label=None):
+        self.set_msg(msg, label, fg=MSG_COLOR.SECONDARY)
+
+    def set_success_msg(self, msg=None, label=None):
+        self.set_msg(msg, label, fg=MSG_COLOR.SUCCESS)
+
+    def set_info_msg(self, msg=None, label=None):
+        self.set_msg(msg, label, fg=MSG_COLOR.INFO)
+
+    def set_warning_msg(self, msg=None, label=None):
+        self.set_msg(msg, label, fg=MSG_COLOR.WARNING)
+
+    def set_light_msg(self, msg=None, label=None):
+        self.set_msg(msg, label, fg=MSG_COLOR.LIGHT)
+
+    def set_dark_msg(self, msg=None, label=None):
+        self.set_msg(msg, label, fg=MSG_COLOR.DARK)
 
     def mainloop(self):
         self.set_title()
@@ -230,3 +261,6 @@ class MainWidget:
         self.protocol()
 
         self.root.mainloop()
+
+
+#

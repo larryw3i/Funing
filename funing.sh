@@ -32,11 +32,17 @@ update_gitignore(){
     echo "gitignore updated!"
 }
 
+just_backup(){
+    git add . && \
+    git commit -m "$(date -R -u) backup." && \
+    git push
+}
+
 _xgettext(){
     [[ -f $pot_path ]] || touch $pot_path
 
     xgettext -v -j -L Python --output=${pot_path} \
-    $(find ${app_name}/ -name "*.py")
+    $(find ${app_name} -name "*.py")
 
     [[ -f $po0_path ]] || touch $po0_path
 
@@ -119,8 +125,14 @@ cat_bt(){
     echo ${app_name}.sh; cat -bt ${app_name}.sh
     echo ${app_name}.py; cat -bt ${app_name}.py
     echo setup.py;  cat -bt setup.py
-    for f in $(find ${app_name}/ -name "*.py" -o -name "*.po" -o -name "*.pot")
+    for f in $(\
+        find ${app_name}/ \
+        -type f \
+        -name "*.py" \
+        -o -name "*.po" \
+        -o -name "*.pot")
     do
+        [[ -f $f ]] || continue
         echo $f
         cat -bt $f
     done
@@ -175,6 +187,7 @@ style(){    blk;                }
 dep(){      p3;                 }
 
 depu(){     _pip3_u;            }
+bk(){       just_backup;        }
 
 $*
 

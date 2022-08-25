@@ -1,6 +1,6 @@
-import asyncio
 import getopt
 import importlib
+import math
 import os
 import pickle
 import queue
@@ -12,6 +12,8 @@ import threading
 import tkinter as tk
 import uuid
 import webbrowser
+from datetime import datetime, timedelta
+from enum import Enum
 from functools import partial
 from importlib import import_module
 from itertools import zip_longest
@@ -20,20 +22,20 @@ from pathlib import Path
 from queue import Queue
 from threading import Thread
 from tkinter import *
-from tkinter import ttk
-
-import cv2
-from appdirs import user_data_dir
-from cv2.data import haarcascades
-from cv2.face import EigenFaceRecognizer_create
-
-from funing.abc import *
-from funing.locale import _
-from funing.path import *
-from funing.settings import *
-from funing.settings4t import *
-from funing.widgets.main import MainWidget
+from tkinter import filedialog, messagebox, ttk
 
 
-def show(test=False):
-    MainWidget(test=test).mainloop()
+class MSG_COLOR(Enum):
+    """
+    Reference:
+        https://getbootstrap.com/docs/5.0/utilities/colors/
+    """
+
+    PRIMARY = "#0d6efd"
+    SECONDARY = "#6c757d"
+    SUCCESS = "#198754"
+    INFO = "#0dcaf0"
+    WARNING = "#ffc107"
+    LIGHT = "#f8f9fa"
+    DARK = "#212529"
+    pass

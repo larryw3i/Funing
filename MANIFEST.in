@@ -1,12 +1,14 @@
 
-global-include * *.mo
-
-recursive-include funing config.example.yml
-recursive-include docs *
-recursive-include requirements product.txt
+global-include *.mo
+global-exclude *.po
+global-exclude *.po~
 
 recursive-exclude * __pycache__
 recursive-exclude * *.py[co]
-recursive-exclude venv *
-recursive-exclude funing/_home *
+
+prune venv
+prune funing/_home
+prune funing/.lwcp
+prune tests
+
 

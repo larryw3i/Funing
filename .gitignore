@@ -169,3 +169,6 @@ funing*.tar.gz
 
 # *.autosave
 *.autosave
+
+# *.swp
+*.swp

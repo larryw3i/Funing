@@ -11,7 +11,6 @@ from appdirs import user_data_dir
 from cv2.data import haarcascades
 from cv2.face import EigenFaceRecognizer_create
 
-
 project_path = os.path.abspath(os.path.dirname(__file__))
 user_data_path = user_data_dir(appname, appauthor)
 locale_path = os.path.join(project_path, "locale")

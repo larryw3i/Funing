@@ -29,7 +29,6 @@ from tkinter import filedialog, messagebox, ttk
 import cv2
 import numpy
 import numpy as np
-import yaml
 from appdirs import user_data_dir
 from cv2.data import haarcascades
 from cv2.face import EigenFaceRecognizer_create
@@ -109,10 +108,13 @@ class FrameWidget(WidgetABC):
         self.resize_width = 112
         self.resize_height = self.resize_width
 
-    def set_info_id(self, _id=None):
-        if not _id:
-            return
+    def set_info_id(self, _id=None, return_id=False):
+        if _id is None:
+            return False
         self.info_id = _id
+        if return_id:
+            return self.info_id
+        return True
 
     def get_info_id(self):
         if not self.info_id:
@@ -151,6 +153,7 @@ class FrameWidget(WidgetABC):
 
     def set_info_widget(self):
         if not self.mw.info_widget:
+            print(_("info_widget is None."))
             return
         self.iw = self.info_widget = self.mw.info_widget
 
@@ -278,11 +281,38 @@ class FrameWidget(WidgetABC):
         labels = np.asarray(labels)
         return (images, labels, info_ids)
 
-    def get_id_by_label(self, label=None):
-        if not label:
-            print(_("Label is None."))
+    def get_info_id_by_frame(self, frame=None):
+        if frame is None:
+            if self.is_test():
+                print("`get_info_id_by_frame.frame` is `None`.")
             return
-        return self.info_ids[label] if label < len(self.info_ids) else None
+        label = self.get_label_by_frame(frame)
+        if label is None:
+            self.set_msg(_("No matching data."))
+            return None
+        info_id = self.get_info_id_by_label(label)
+        if info_id is None:
+            self.set_msg(_("Couldn't get `info_id` from specific label."))
+            return None
+        return info_id
+
+    def get_info_ids_len(self):
+        return self.get_info_id_list_len()
+
+    def get_info_id_list_len(self):
+        return len(self.info_ids)
+
+    def get_id_by_label(self, label=None):
+        return self.get_info_id_by_label(label)
+
+    def get_info_id_by_label(self, label=None):
+        if label is None:
+            print(_("Label is None."))
+            return None
+        label = label[0]
+        return (
+            self.info_ids[label] if label < self.get_info_ids_len() else None
+        )
 
     def get_face_recognizer(self):
         return self.get_recognizer()
@@ -364,6 +394,35 @@ class FrameWidget(WidgetABC):
         if not self.src_type:
             self.set_src_type()
         return self.src_type
+
+    def delete_button_place_forget(self):
+        self.iw.delete_button_place_forget()
+
+    def clear_saved_info_combobox_content(self):
+        self.iw.clear_saved_info_combobox_content()
+
+    def clear_info_widget_area_content(self):
+        self.iw.clear_info_widget_area_content()
+
+    def set_action_to_read(self):
+        if not self.is_action_read():
+            self.set_action(ACTION.READ)
+
+    def set_action_to_pick(self):
+        if not self.is_action_pick():
+            self.set_action(ACTION.PICK)
+            self.delete_button_place_forget()
+            self.clear_info_widget_area_content()
+
+    def set_action_to_recog(self):
+        if not self.is_action_recog():
+            self.set_action(ACTION.RECOG)
+            self.delete_button_place_forget()
+            self.clear_info_widget_area_content()
+
+    def set_action_to_none(self):
+        if not self.is_action_none():
+            self.set_action(ACTION.NONE)
 
     def set_action(self, action=ACTION.NONE, to_none=False):
         if to_none:
@@ -548,6 +607,7 @@ class FrameWidget(WidgetABC):
         )
         if frame is None:
             self.set_msg(_("Video not opened."))
+            return None
         if copy:
             return frame.copy()
         return frame
@@ -586,7 +646,9 @@ class FrameWidget(WidgetABC):
         if not frame:
             frame = self.get_frame()
             if not frame:
-                return
+                if self.is_test():
+                    print("`get_labels_by_frame` gets `None`")
+                return None
         labels = []
         gray_img = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         face_rects = self.face_casecade.detectMultiScale(gray_img, 1.3, 5)
@@ -599,6 +661,28 @@ class FrameWidget(WidgetABC):
             )
             labels.append(self.recognizer.predict(gray_img_0))
         return labels
+
+    def get_label_by_frame(self, frame=None):
+        """
+        Get dataset label via frame.
+        Args:
+            frame (numpy.array): The video or image frame.
+        Returns:
+            int: The label of dataset.
+        """
+        if frame is None:
+            if self.is_test:
+                self.mk_tmsg("`get_label_by_frame.frame` is 'None'.")
+            return
+        recognizer = self.get_recognizer()
+        gray_img = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        gray_img = cv2.resize(
+            gray_img,
+            (self.resize_width, self.resize_height),
+            interpolation=cv2.INTER_LINEAR,
+        )
+        label = recognizer.predict(gray_img)
+        return label
 
     def get_image_size(self):
         if not self.image_size:
@@ -922,9 +1006,6 @@ class FrameWidget(WidgetABC):
         label = self.video_frame_label
         self.set_label_image(image, label)
 
-    def set_label_image(self, frame, label):
-        self.set_label_image(frame, label)
-
     def set_label_image(self, image, label):
         vid_img = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         vid_img = pil_image_fromarray(vid_img)
@@ -1067,6 +1148,18 @@ class FrameWidget(WidgetABC):
             and self.get_video_file_play_mode() == PLAY_MODE.EVERY_FRAME.value
         )
 
+    def is_action_read(self):
+        return self.get_action() == ACTION.READ
+
+    def is_action_recog(self):
+        return self.get_action() == ACTION.RECOG
+
+    def is_action_pick(self):
+        return self.get_action() == ACTION.PICK
+
+    def is_action_none(self):
+        return self.get_action() == ACTION.NONE
+
     def update_video_frame(self, frame_index=0):
         time0 = datetime.now()
         video_capture = self.get_video_capture()
@@ -1161,6 +1254,12 @@ class FrameWidget(WidgetABC):
         return self.src_type == SRC_TYPE.VIDEO_FILE
 
     def pause_button_command(self):
+        self.pause_video_frame()
+
+    def pause_video(self):
+        self.pause_video_frame()
+
+    def pause_video_frame(self):
         if self.is_play_file_video():
             self.set_video_file_play_pause_frame_index()
         if self.video_signal == VIDEO_SIGNAL.REFRESH:
@@ -1174,13 +1273,30 @@ class FrameWidget(WidgetABC):
         self.iw.pick_frame_by_default()
         pass
 
+    def pick_frame_for_add_by_default(self):
+        self.iw.pick_frame_for_add_by_default()
+        pass
+
     def pick_button_command(self):
-        self.set_action(ACTION.PICK)
+        if self.is_action_recog() or self.is_action_read():
+            self.pick_frame_for_add_by_default()
+            return
+        self.set_action_to_pick()
         self.pick_frame()
         pass
 
+    def recog_frame(self):
+        self.recog_frame_by_default()
+        pass
+
+    def recog_frame_by_default(self):
+        self.pause_video_frame()
+        self.iw.recog_frame_by_default()
+        pass
+
     def recog_button_command(self):
-        self.set_action(ACTION.RECOG)
+        self.set_action_to_recog()
+        self.recog_frame()
         pass
 
     def get_openfrom_combobox_values(self):
@@ -1536,3 +1652,6 @@ class FrameWidget(WidgetABC):
 
     def __del__(self):
         self.release_video_capture()
+
+
+#

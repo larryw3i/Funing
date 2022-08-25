@@ -24,7 +24,6 @@ from tkinter import *
 from tkinter import ttk
 
 import cv2
-import yaml
 from appdirs import user_data_dir
 from cv2.data import haarcascades
 from cv2.face import EigenFaceRecognizer_create
@@ -60,3 +59,8 @@ class VIDEO_SIGNAL(Enum):
 class PLAY_MODE(Enum):
     EVERY_FRAME = 0
     IN_TIME = 1
+
+
+class NEW_INFO_SIGNAL(Enum):
+    ADD = 0
+    OTHER = 1
