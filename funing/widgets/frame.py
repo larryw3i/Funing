@@ -1278,7 +1278,7 @@ class FrameWidget(WidgetABC):
         pass
 
     def pick_button_command(self):
-        if self.is_action_recog():
+        if self.is_action_recog() or self.is_action_read():
             self.pick_frame_for_add_by_default()
             return
         self.set_action_to_pick()
