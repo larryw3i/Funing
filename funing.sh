@@ -23,7 +23,6 @@ deactivate(){
     deactivate
 }
 
-_args=("$@") # All parameters from terminal.
 
 update_gitignore(){
     git rm -r --cached . && git add .
@@ -101,7 +100,9 @@ bdist(){
 
 bdist_deb(){
     rm -rf deb_dist/  dist/  ${app_name}.egg-info/ ${app_name}*.tar.gz
-    ${bin_dir}/python3 setup.py --command-packages=stdeb.command bdist_deb
+    ${bin_dir}/python3 \
+    setup.py \
+    --command-packages=stdeb.command bdist_deb
 }
 
 _i_test(){
@@ -138,9 +139,18 @@ cat_bt(){
     done
 }
 
-test(){
+_test(){
     ${bin_dir}/python3 ${app_name}.py test
 }
+
+print_class_def(){
+    python3 ${app_name}.py pcd
+}
+
+print_file(){
+    python3 ${app_name}.py prtf
+}
+
 
 if [[ \
     $PATH != *"${PWD}/venv/local/bin"* && \
@@ -160,13 +170,13 @@ fi
 
 tu(){       twine_upload;       }
 ugi(){      update_gitignore;   }
-tst(){      test;               }
+tst(){      _test;              }
 
 gita(){     git_add;            }
 bd(){       bdist;              }
 kc(){       keep_code;          }
 
-venv(){     activate_venv;        }
+venv(){     activate_venv;      }
 msgf(){     _msgfmt;            }
 xget(){     _xgettext;          }
 
@@ -188,6 +198,9 @@ dep(){      p3;                 }
 
 depu(){     _pip3_u;            }
 bk(){       just_backup;        }
+pcd(){      print_class_def;    }
+
+prtf(){     print_file;         }
 
 $*
 

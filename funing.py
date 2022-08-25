@@ -90,6 +90,37 @@ def settings4xget():
         f.write(settings4t)
 
 
+def print_class_def(max_col=80):
+    print_file(filter_func=lambda l: "def " in l or "class " in l)
+
+
+def print_file(max_col=80, filter_func=None):
+    if not filter_func:
+        filter_func = lambda l: True
+    for (root, dirs, files) in os.walk(app_name, topdown=True):
+        for f in files:
+            if not f.endswith(".py"):
+                continue
+            file_path = os.path.join(root, f)
+            with open(file_path, "r") as f:
+                lines = f.readlines()
+                max_len = max_line_number_len = len(str(len(lines)))
+                max_len = max_line_number_len = max_len > 4 and max_len or 4
+                ln = line_number = 1
+                start_end_char_len = max_col + 2 + max_len
+                _file_path = file_path + "\u2193"
+                print(f"{_file_path:^{start_end_char_len}}")
+                print("\u005f" * (start_end_char_len))
+                for l in lines:
+                    if filter_func(l):
+                        l = str.rstrip(l)
+                        print(f"{ln:>{max_len}}|", end="")
+                        print(f"{l:<{max_col}}", end="|\n")
+                    line_number += 1
+                    ln = line_number
+                print("\u203e" * (start_end_char_len))
+
+
 def print_version():
     print(app_version)
 
@@ -110,5 +141,9 @@ if __name__ == "__main__":
             install_dev_dep_requirements_u()
         if a in ["ver"]:
             print_version()
+        if a in ["pcd"]:
+            print_class_def()
+        if a in ["prtf"]:
+            print_file()
         if a in ["pass"]:
             break
