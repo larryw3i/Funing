@@ -243,12 +243,12 @@ class InfoWidget(WidgetABC):
         if not self.is_action_read():
             self.del_picked_frames_for_recog()
             self.delete_button_place()
+            self.set_action(ACTION.READ)
             pass
-
-        self.set_action(ACTION.READ)
 
     def set_action_to_pick(self):
         if not self.is_action_pick():
+            self.del_picked_frames()
             self.del_picked_frames_for_recog()
             self.set_action(ACTION.PICK)
 
@@ -1048,16 +1048,13 @@ class InfoWidget(WidgetABC):
             simpletooltip.create(label, _("Saved frame, Click to delete."))
             self.saved_frame_labels.append(label)
         pass
-    
+
     def show_labels_image_by_frames(
-        self,
-        frames=None,
-        parent_widget=None,
-        label_func=None):
-        return self.set_labels_image_by_frames_return_labels( 
-            frames,
-            parent_widget,
-            label_func)
+        self, frames=None, parent_widget=None, label_func=None
+    ):
+        return self.set_labels_image_by_frames_return_labels(
+            frames, parent_widget, label_func
+        )
 
     def set_labels_image_by_frames_return_labels(
         self, frames=None, parent_widget=None, label_func=None
@@ -1070,11 +1067,11 @@ class InfoWidget(WidgetABC):
         index = 0
         labels = []
         for f in frames:
-            label = ttk.Label( parent_widget )
+            label = ttk.Label(parent_widget)
             self.set_label_image(f, label)
             label.bind(
                 "<Button-1>",
-                lambda event,_index=index: label_func(_index),
+                lambda event, _index=index: label_func(_index),
             )
             label.pack(
                 side="left",
@@ -1085,7 +1082,6 @@ class InfoWidget(WidgetABC):
             labels.append(label)
 
         return labels
-
 
     def set_frame_labels_image_use_picked_frames_for_recog(self, frames=None):
         """
@@ -1180,13 +1176,18 @@ class InfoWidget(WidgetABC):
             self.set_picked_frames(frames)
         return frames
 
+    def pick_frame_for_add_by_default(self):
+        frames = self.get_picked_frames_from_frame()
+        if frames is None:
+            self.mk_tmsg("`pick_frame_for_add_by_default.frames` is None.")
+            return
+        self.add_picked_frames(frames)
+        pass
+
     def pick_frame_by_default(self):
         frames = self.get_picked_frames_from_frame()
         if frames is None:
             return
-        if not self.is_action_pick():
-            self.set_saved_frames(to_none=True)
-            self.set_picked_frames(to_none=True)
         self.add_picked_frames(frames)
         pass
 

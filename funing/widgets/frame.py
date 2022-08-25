@@ -1273,11 +1273,16 @@ class FrameWidget(WidgetABC):
         self.iw.pick_frame_by_default()
         pass
 
+    def pick_frame_for_add_by_default(self):
+        self.iw.pick_frame_for_add_by_default()
+        pass
+
     def pick_button_command(self):
-        if self.get_action() == ACTION.READ:
+        if self.is_action_recog():
+            self.pick_frame_for_add_by_default()
             return
-        self.pick_frame()
         self.set_action_to_pick()
+        self.pick_frame()
         pass
 
     def recog_frame(self):
