@@ -110,7 +110,7 @@ def print_file(max_col=80, filter_func=None):
                 start_end_char_len = max_col + 2 + max_len
                 _file_path = file_path + "\u2193"
                 print(f"{_file_path:^{start_end_char_len}}")
-                print("\u005f" * (start_end_char_len))
+                print("\u005f" * (start_end_char_len - 1))
                 for l in lines:
                     if filter_func(l):
                         l = str.rstrip(l)
@@ -118,7 +118,7 @@ def print_file(max_col=80, filter_func=None):
                         print(f"{l:<{max_col}}", end="|\n")
                     line_number += 1
                     ln = line_number
-                print("\u203e" * (start_end_char_len))
+                print("\u203e" * (start_end_char_len - 1))
 
 
 def print_version():
