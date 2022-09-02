@@ -559,6 +559,8 @@ class InfoWidget(WidgetABC):
             return
         if info_id == _("Add"):
             self.set_action_to_pick()
+            self.del_picked_frames()
+            self.del_picked_frames_for_recog()
             self.clear_info_widget_area_content()
             return
         self.set_info_id(info_id)
