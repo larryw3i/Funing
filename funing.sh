@@ -2,27 +2,50 @@
 
 args=$*
 app_name='funing'
-[[ -d "venv/local" ]] && bin_dir='venv/local/bin' || bin_dir='venv/bin'
 local_dir="${app_name}/locale"
 pot_path="${local_dir}/${app_name}.pot"
 mo0_path="${local_dir}/en_US/LC_MESSAGES/${app_name}.mo"
 po0_path="${local_dir}/en_US/LC_MESSAGES/${app_name}.po"
 
-activate_venv(){
-    # Use virtualenv 'venv' if exists
-    echo "virtualenv is used, enter 'deactivate' to exit."
-    for v in \
-        "./venv/bin/activate" \
-        "./venv/local/bin/activate" # python 3.10
-    do
-        [[ -f $v ]] && . $v
-    done
+echo_venv_dont_exist(){
+    echo "Path both 'venv/bin' and 'venv/local/bin' don't exist."
 }
 
-deactivate(){
+echo_venv_used(){ 
+    echo "virtualenv is used, enter 'deactivate' to exit."
+}
+
+if [[ -d "venv/local/bin" ]]
+then
+    bin_dir='venv/local/bin'
+elif [[ -d "venv/bin" ]]
+then 
+    bin_dir='venv/bin' 
+else
+    echo_venv_dont_exist
+fi
+
+activate_venv(){
+    # Use virtualenv 'venv' if exists
+    if [[ -f "./venv/bin/activate" ]] 
+    then
+        . ./venv/bin/activate
+        echo_venv_used
+    elif [[ -f "./venv/local/bin/activate" ]]
+    then
+        . ./venv/local/bin/activate
+        echo_venv_used
+    else
+        echo_venv_dont_exist
+    fi
+
+}
+
+deactivate_venv(){
     deactivate
 }
 
+_args=("$@") # All parameters from terminal.
 
 update_gitignore(){
     git rm -r --cached . && git add .
@@ -100,9 +123,7 @@ bdist(){
 
 bdist_deb(){
     rm -rf deb_dist/  dist/  ${app_name}.egg-info/ ${app_name}*.tar.gz
-    ${bin_dir}/python3 \
-    setup.py \
-    --command-packages=stdeb.command bdist_deb
+    ${bin_dir}/python3 setup.py --command-packages=stdeb.command bdist_deb
 }
 
 _i_test(){
@@ -139,24 +160,16 @@ cat_bt(){
     done
 }
 
-_test(){
+test_funing(){
     ${bin_dir}/python3 ${app_name}.py test
 }
-
-print_class_def(){
-    python3 ${app_name}.py pcd
-}
-
-print_file(){
-    python3 ${app_name}.py prtf
-}
-
 
 if [[ \
     $PATH != *"${PWD}/venv/local/bin"* && \
     $PATH != *"${PWD}/venv/bin"* ]]
 then
-    if [[ -d "${PWD}/venv" ]];then
+    if [[ -d "${PWD}/venv" ]]
+    then
         activate_venv
     elif [[ -x $(which virtualenv) ]]
     then 
@@ -170,7 +183,7 @@ fi
 
 tu(){       twine_upload;       }
 ugi(){      update_gitignore;   }
-tst(){      _test;              }
+tst(){      test_funing;        }
 
 gita(){     git_add;            }
 bd(){       bdist;              }
@@ -198,9 +211,45 @@ dep(){      p3;                 }
 
 depu(){     _pip3_u;            }
 bk(){       just_backup;        }
-pcd(){      print_class_def;    }
 
-prtf(){     print_file;         }
 
-$*
+if [ $# -eq 0 ]
+then
+    echo " 
+        tu(){       twine_upload;       }
+        ugi(){      update_gitignore;   }
+        tst(){      test_funing;        }
+
+        gita(){     git_add;            }
+        bd(){       bdist;              }
+        kc(){       keep_code;          }
+
+        venv(){     activate_venv;      }
+        msgf(){     _msgfmt;            }
+        xget(){     _xgettext;          }
+
+        its(){       _i_test;           }
+        bdup(){     bd; tu;             }
+        s(){       _start;              }
+
+        p3(){       venv;_pip3;         }
+        _cat(){     cat_bt;             }
+        _cat_(){    _cat | tr -s '\n';  }
+
+        bdeb(){     bdist_deb;          }
+        wcl(){      _cat_ | wc -l;      }
+        blk(){      _black;             }
+
+        4xget(){    gen4xget;           }
+        style(){    blk;                }
+        dep(){      p3;                 }
+
+        depu(){     _pip3_u;            }
+        bk(){       just_backup;        }
+    "
+   
+else
+    $*
+fi
+
 
