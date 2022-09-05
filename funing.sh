@@ -25,6 +25,8 @@ else
     echo_venv_dont_exist
 fi
 
+py3bin=${bin_dir}/python3
+
 activate_venv(){
     # Use virtualenv 'venv' if exists
     if [[ -f "./venv/bin/activate" ]] 
@@ -161,6 +163,15 @@ cat_bt(){
         echo $f
         cat -bt $f
     done
+}
+
+
+pcd(){
+    $py3bin ${app_name}.py pcd
+}
+
+prtf(){
+    $py3bin ${app_name}.py prtf
 }
 
 test_funing(){
