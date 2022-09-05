@@ -282,13 +282,11 @@ class MainApplication(pygubu.TkApplication):
             "<Button-3>",
             (lambda event: menu.tk_popup(event.x_root, event.y_root)),
         )
+        l0 = new_face_label
+        idx = index
         new_face_label.bind(
             "<Button-1>",
-            (
-                lambda e, label=new_face_label, index=index: self.del_face_label_pick(
-                    label, index
-                )
-            ),
+            (lambda e, l0=l0, idx=idx: self.del_face_label_pick(l0, idx)),
         )
 
         new_face_label.pack(side=LEFT)
@@ -656,28 +654,22 @@ class MainApplication(pygubu.TkApplication):
         new_face_label.configure(image=imgtk)
 
         menu = Menu(self.master, tearoff=0)
+        l0 = new_face_label
+        idx = showed_face_index
         menu.add_command(
             label=_("delete"),
-            command=(
-                lambda _label=new_face_label, _index=showed_face_index: self.del_face_label_rec(
-                    _label, _index
-                )
-            ),
+            command=(lambda l0=l0, idx=idx: self.del_face_label_rec(l0, idx)),
         )
 
         new_face_label.bind(
             "<Double-Button-1>",
-            lambda e, _label=new_face_label, _index=showed_face_index: self.del_face_label_rec(
-                _label, _index
-            ),
+            lambda e, l0=l0, idx=idx: self.del_face_label_rec(l0, idx),
         )
+
+        i0 = cur_info_id
         new_face_label.bind(
             "<Button-1>",
-            (
-                lambda e, _label=new_face_label, _index=showed_face_index, _info_id=cur_info_id: self.show_info(
-                    _label, _index, _info_id
-                )
-            ),
+            (lambda e, l0=l0, idx=idx, i0=i0: self.show_info(l0, idx, i0)),
         )
         new_face_label.bind(
             "<Button-3>",

@@ -1005,8 +1005,8 @@ class InfoWidget(WidgetABC):
                 index = len(self.picked_frame_labels)
                 label.bind(
                     "<Button-1>",
-                    lambda event, index=index: self.del_picked_frame_by_index(
-                        index
+                    lambda event, idx=index: self.del_picked_frame_by_index(
+                        idx
                     ),
                 )
                 label.pack(

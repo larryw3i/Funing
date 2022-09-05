@@ -50,7 +50,8 @@ _args=("$@") # All parameters from terminal.
 update_gitignore(){
     git rm -r --cached . && git add .
     read -p "commit now?(y/N)" commit_now
-    [[ "Yy" == *"${commit_now}"* ]] && git commit -m 'update .gitignore'
+    [[ "Yy" == *"${commit_now}"* ]] && \
+    git commit -m 'update .gitignore'
     echo "gitignore updated!"
 }
 
@@ -68,13 +69,15 @@ _xgettext(){
 
     [[ -f $po0_path ]] || touch $po0_path
 
-    for _po in $(find ${local_dir}/ -name "*.po"); do
+    for _po in $(find ${local_dir}/ -name "*.po")
+    do
         msgmerge -U -v $_po ${pot_path}
     done
 }
 
 _msgfmt(){
-    for _po in $(find ${local_dir} -name "*.po"); do
+    for _po in $(find ${local_dir} -name "*.po")
+    do
         echo -e "$_po --> ${_po/.po/.mo}"
         msgfmt -v -o ${_po/.po/.mo} $_po
     done

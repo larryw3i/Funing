@@ -407,12 +407,12 @@ class DataTkApplication(pygubu.TkApplication):
                 added_face_frames_len = len(self.added_face_frames)
 
                 menu = Menu(self.master, tearoff=0)
+                l0 = added_face_frames_len
+                l1 = new_face_label
                 menu.add_command(
                     label=_("delete"),
                     command=(
-                        lambda label=new_face_label, index=added_face_frames_len: self.del_face_pic_new(
-                            new_face_label, index
-                        )
+                        lambda l1=l1, idx=l0: self.del_face_pic_new(l1, idx)
                     ),
                 )
                 menu.add_command(
