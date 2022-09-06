@@ -127,6 +127,9 @@ class FrameWidget(WidgetABC):
             return None
         return self.info_id
 
+    def del_info_id(self):
+        self.info_id=None
+
     def get_resize_width(self):
         return self.resize_width
 

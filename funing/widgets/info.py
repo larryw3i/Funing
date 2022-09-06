@@ -264,6 +264,9 @@ class InfoWidget(WidgetABC):
         if not self.info_id:
             self.info_id = self.fw.get_info_id()
         return self.info_id
+    
+    def del_info_id(self):
+        self.fw.del_info_id()
 
     def set_info_id(self, _id):
         self.fw.set_info_id(_id=_id)
@@ -561,6 +564,7 @@ class InfoWidget(WidgetABC):
             self.set_action_to_pick()
             self.del_picked_frames()
             self.del_picked_frames_for_recog()
+            self.del_info_id()
             self.clear_info_widget_area_content()
             return
         self.set_info_id(info_id)
