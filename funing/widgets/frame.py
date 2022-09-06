@@ -6,6 +6,7 @@ import math
 import os
 import pickle
 import queue
+import random
 import re
 import shutil
 import subprocess
@@ -107,6 +108,8 @@ class FrameWidget(WidgetABC):
         self.iw = self.info_widget = None
         self.resize_width = 112
         self.resize_height = self.resize_width
+        self.filedialog_initialdir_list = \
+        self.file_dialog_initialdir_list = ["~/Videos", "~/Pictures","~"]
 
     def set_info_id(self, _id=None, return_id=False):
         if _id is None:
@@ -1207,11 +1210,26 @@ class FrameWidget(WidgetABC):
     def filepath_is_image_type(self, path):
         return any(path.endswith(ext) for ext in self.image_exts)
 
+    def get_file_dialog_initialdir_list(self):
+        return self.get_filedialog_initialdir_list()
+
+    def get_filedialog_initialdir_list(self):
+        for d in self.file_dialog_initialdir_list:
+            if not os.path.exists(d):
+                self.file_dialog_initialdir_list.remove(d)
+        return self.file_dialog_initialdir_list
+
+    def get_random_filedialog_initialdir(self):
+        return random.choice(self.get_filedialog_initialdir_list())
+
+    def get_filedialog_initialdir(self):
+        return self.get_random_filedialog_initialdir()
+
     def open_filedialog(self):
         if self.video_signal == VIDEO_SIGNAL.REFRESH:
             self.stop_video_frame()
         src_path = filedialog.askopenfilename(
-            initialdir="~/Videos",
+            initialdir=self.get_filedialog_initialdir(),
             title=_("Select video or image file"),
             filetypes=[
                 ("", f"*.{ext}") for ext in self.video_exts + self.image_exts
