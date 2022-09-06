@@ -108,8 +108,11 @@ class FrameWidget(WidgetABC):
         self.iw = self.info_widget = None
         self.resize_width = 112
         self.resize_height = self.resize_width
-        self.filedialog_initialdir_list = \
-        self.file_dialog_initialdir_list = ["~/Videos", "~/Pictures","~"]
+        self.filedialog_initialdir_list = self.file_dialog_initialdir_list = [
+            Path.home() / "Videos",
+            Path.home() / "Pictures",
+            Path.home(),
+        ]
 
     def set_info_id(self, _id=None, return_id=False):
         if _id is None:
@@ -1214,16 +1217,18 @@ class FrameWidget(WidgetABC):
         return self.get_filedialog_initialdir_list()
 
     def get_filedialog_initialdir_list(self):
-        for d in self.file_dialog_initialdir_list:
-            if not os.path.exists(d):
+        for p in self.file_dialog_initialdir_list:
+            if not p.exists():
                 self.file_dialog_initialdir_list.remove(d)
         return self.file_dialog_initialdir_list
 
     def get_random_filedialog_initialdir(self):
-        return random.choice(self.get_filedialog_initialdir_list())
+        initialdir = random.choice(self.get_filedialog_initialdir_list())
+        return initialdir
 
     def get_filedialog_initialdir(self):
-        return self.get_random_filedialog_initialdir()
+        initialdir = self.get_random_filedialog_initialdir()
+        return initialdir if isinstance(initialdir, str) else str(initialdir)
 
     def open_filedialog(self):
         if self.video_signal == VIDEO_SIGNAL.REFRESH:
