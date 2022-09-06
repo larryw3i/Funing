@@ -3,6 +3,7 @@ import getopt
 import importlib
 import os
 import pickle
+import platform
 import queue
 import re
 import shutil
@@ -51,6 +52,12 @@ class WidgetABC(ABC):
         self.set_light_msg = self.mw.set_light_msg
         self.set_dark_msg = self.mw.set_dark_msg
         self.width = self.height = self.y = self.x = self.mw.default_xywh
+
+    def is_platform_windows(self):
+        return "Windows" in platform.system()
+
+    def is_platform_linux(self):
+        return "Linux" in platform.system()
 
     def set_widgets(self):
         pass

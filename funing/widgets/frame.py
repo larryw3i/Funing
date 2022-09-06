@@ -626,10 +626,10 @@ class FrameWidget(WidgetABC):
         self.video_scale_area_place_forget()
         self.video_file_play_mode_radiobuttons_place_forget()
 
-    def set_image(self,image):
+    def set_image(self, image):
         self.image = image
 
-    def get_image(self,copy=False,cp=False):
+    def get_image(self, copy=False, cp=False):
         if self.image is None:
             return None
         return self.image if not (copy and cp) else self.image.copy()
@@ -638,7 +638,15 @@ class FrameWidget(WidgetABC):
         if src_path:
             self.set_image_src_path(src_path)
             self.update_widgets_place4show_image()
-            image = cv2.imread(self.image_src_path)
+            image = (
+                # It seems that if the path string is encoded incorrectly on
+                # windows, it cannot be read.
+                cv2.imdecode(
+                    np.fromfile(self.image_src_path, dtype=np.uint8), -1
+                )
+                if self.is_platform_windows()
+                else cv2.imread(self.image_src_path)
+            )
             self.set_image(image)
             if image is None:
                 self.set_msg(_("`cv2.imread` gets `None` from %s") % src_path)
