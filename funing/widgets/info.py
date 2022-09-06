@@ -686,7 +686,8 @@ class InfoWidget(WidgetABC):
         self.update_saved_info_combobox_values()
         self.del_showed_info()
         self.set_msg(
-            _("Information of %s\(%s\) is deleted.") % (basic_info, info_id)
+            _("Information of %(basic_info)(%(info_id)) is deleted.") \
+            % (basic_info, info_id)
         )
         pass
 

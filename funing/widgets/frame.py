@@ -649,7 +649,7 @@ class FrameWidget(WidgetABC):
             )
             self.set_image(image)
             if image is None:
-                self.set_msg(_("`cv2.imread` gets `None` from %s") % src_path)
+                self.set_msg(_("`cv2.imread` gets `None` from %s.") % src_path)
                 return
             image = image.copy()
             if draw_face_rect:
