@@ -128,7 +128,7 @@ class FrameWidget(WidgetABC):
         return self.info_id
 
     def del_info_id(self):
-        self.info_id=None
+        self.info_id = None
 
     def get_resize_width(self):
         return self.resize_width
@@ -626,12 +626,24 @@ class FrameWidget(WidgetABC):
         self.video_scale_area_place_forget()
         self.video_file_play_mode_radiobuttons_place_forget()
 
+    def set_image(self,image):
+        self.image = image
+
+    def get_image(self,copy=False,cp=False):
+        if self.image is None:
+            return None
+        return self.image if not (copy and cp) else self.image.copy()
+
     def show_image(self, src_path=None, resize=True, draw_face_rect=True):
         if src_path:
             self.set_image_src_path(src_path)
             self.update_widgets_place4show_image()
-            self.image = cv2.imread(self.image_src_path)
-            image = self.image.copy()
+            image = cv2.imread(self.image_src_path)
+            self.set_image(image)
+            if image is None:
+                self.set_msg(_("`cv2.imread` gets `None` from %s") % src_path)
+                return
+            image = image.copy()
             if draw_face_rect:
                 image = self.draw_face_rect(image)
             if resize:

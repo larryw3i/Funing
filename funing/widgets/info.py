@@ -264,7 +264,7 @@ class InfoWidget(WidgetABC):
         if not self.info_id:
             self.info_id = self.fw.get_info_id()
         return self.info_id
-    
+
     def del_info_id(self):
         self.fw.del_info_id()
 
