@@ -638,19 +638,18 @@ class FrameWidget(WidgetABC):
         if src_path:
             self.set_image_src_path(src_path)
             self.update_widgets_place4show_image()
-            image = (
-                # It seems that if the path string is encoded incorrectly on
-                # windows, it cannot be read.
-                cv2.imdecode(
+            image = cv2.imread(self.image_src_path)
+            # It seems that if the path string is encoded incorrectly
+            # , it cannot be read.
+            if image is None:
+                image = cv2.imdecode(
                     np.fromfile(self.image_src_path, dtype=np.uint8), -1
                 )
-                if self.is_platform_windows()
-                else cv2.imread(self.image_src_path)
-            )
-            self.set_image(image)
+
             if image is None:
                 self.set_msg(_("`cv2.imread` gets `None` from %s.") % src_path)
                 return
+            self.set_image(image)
             image = image.copy()
             if draw_face_rect:
                 image = self.draw_face_rect(image)
