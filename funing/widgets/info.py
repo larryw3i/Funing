@@ -70,6 +70,9 @@ class InfoWidget(WidgetABC):
             self.new_info_signal
         ) = NEW_INFO_SIGNAL.OTHER.value
 
+    def del_info_id(self):
+        self.fw.del_info_id()
+
     def get_picked_frame_labels_for_recog_len(self):
         return len(self.picked_frame_labels_for_recog)
 
@@ -549,6 +552,13 @@ class InfoWidget(WidgetABC):
         self.update_widgets_by_info_id()
         pass
 
+    def set_adding_status(self):
+        self.set_action_to_pick()
+        self.del_info_id()
+        self.del_picked_frames_for_recog()
+        self.del_picked_frames()
+        self.clear_info_widget_area_content()
+
     def update_widgets_by_info_id(self, info_id=None):
         self.clear_picked_frame_labels()
         self.clear_saved_frame_labels()
@@ -561,11 +571,7 @@ class InfoWidget(WidgetABC):
                 print(var_get, info_id)
             return
         if info_id == _("Add"):
-            self.set_action_to_pick()
-            self.del_picked_frames()
-            self.del_picked_frames_for_recog()
-            self.del_info_id()
-            self.clear_info_widget_area_content()
+            self.set_adding_status()
             return
         self.set_info_id(info_id)
         self.set_infos_and_images_by_id()
@@ -699,6 +705,11 @@ class InfoWidget(WidgetABC):
         self.del_saved_info_by_info_id()
         pass
 
+    def add_button_command(self):
+        self.set_adding_status()
+        self.fw.play_button_command()
+        pass
+
     def set_widgets(self):
         super().set_widgets()
         self.set_frame_widget()
@@ -711,6 +722,12 @@ class InfoWidget(WidgetABC):
         )
         self.saved_info_combobox_var.trace(
             "w", self.saved_info_combobox_var_trace_w
+        )
+        self.add_button = tk.Button(
+            self.root,
+            text=_("Add"),
+            command=self.add_button_command,
+            background=self.get_add_button_background(),
         )
 
         self.pick_scrolledframe = ScrolledFrame(
@@ -749,10 +766,13 @@ class InfoWidget(WidgetABC):
         return self.get_x()
 
     def get_pick_scrolledframe_y(self):
-        return (
-            self.get_saved_info_combobox_y()
-            + self.get_saved_info_combobox_height()
+        _above_max_height = (
+            self.get_saved_info_combobox_height()
+            if self.get_saved_info_combobox_height()
+            > self.get_add_button_height()
+            else self.get_add_button_height()
         )
+        return self.get_saved_info_combobox_y() + _above_max_height
 
     def get_pick_scrolledframe_width(self):
         return self.get_width()
@@ -830,7 +850,7 @@ class InfoWidget(WidgetABC):
         return self.get_y()
 
     def get_saved_info_combobox_width(self):
-        return self.get_width()
+        return self.get_width() - self.get_add_button_width()
 
     def get_saved_info_combobox_height(self):
         return self.saved_info_combobox.winfo_reqheight()
@@ -860,6 +880,21 @@ class InfoWidget(WidgetABC):
         self.delete_button.place_forget()
         pass
 
+    def get_add_button_x(self):
+        return self.get_x() + self.get_width() - self.get_add_button_width()
+
+    def get_add_button_y(self):
+        return self.get_y()
+
+    def get_add_button_width(self):
+        return self.add_button.winfo_reqwidth()
+
+    def get_add_button_height(self):
+        return self.add_button.winfo_reqheight()
+
+    def get_add_button_background(self):
+        return "blue"
+
     def place(self):
         super().place()
 
@@ -869,6 +904,13 @@ class InfoWidget(WidgetABC):
             width=self.get_saved_info_combobox_width(),
             height=self.get_saved_info_combobox_height(),
         )
+        self.add_button.place(
+            x=self.get_add_button_x(),
+            y=self.get_add_button_y(),
+            width=self.get_add_button_width(),
+            height=self.get_add_button_height(),
+        )
+
         self.pick_scrolledframe.place(
             x=self.get_pick_scrolledframe_x(),
             y=self.get_pick_scrolledframe_y(),
