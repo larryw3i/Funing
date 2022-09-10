@@ -111,7 +111,7 @@ def get_frame_path_by_ids(info_id, frame_id):
     return os.path.join(faces_dir_path, info_id, frame_id + image_ext)
 
 
-def get_image_patg_by_ids(info_id, frame_id):
+def get_image_path_by_ids(info_id, frame_id):
     return get_frame_path_by_ids(info_id, frame_id)
 
 
