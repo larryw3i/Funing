@@ -366,6 +366,14 @@ class FrameWidget(WidgetABC):
         self.set_face_casecade_by_default()
 
     def set_face_casecade_by_default(self):
+        if alternative_cascade_path:
+            self.face_casecade = cv2.CascadeClassifier(
+                alternative_cascade_path
+            )
+            msg = _("`%s` used.") % alternative_cascade_path
+            self.set_msg(msg)
+            self.mk_tmsg(msg)
+            return
         hff_xml_path = os.path.join(
             haarcascades, "haarcascade_frontalface_default.xml"
         )

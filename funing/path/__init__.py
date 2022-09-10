@@ -1,6 +1,7 @@
 import gettext
 import os
 import pickle
+import platform
 import re
 import sys
 import time
@@ -26,12 +27,26 @@ recog_datas_dir_path = os.path.join(user_data_dir_path, "recog_datas")
 faces_dir_path = os.path.join(recog_datas_dir_path, "face_images")
 infos_dir_path = os.path.join(recog_datas_dir_path, "infos")
 backup_dir_path = os.path.join(user_data_dir_path, "backup")
+app_data_dir_path = os.path.join(project_path, "data")
 
 default_image_ext = ".jpg"
 image_ext = default_image_ext
 info_ext = ".txt"
 basic_info_ext = ".basic.txt"
 backup_ext = ".bk"
+alternative_cascade_path_linux = os.path.join(
+    os.sep,
+    "usr",
+    "share",
+    "opencv4",
+    "haarcascades",
+    "haarcascade_frontalface_default.xml",
+)
+alternative_cascade_path = (
+    alternative_cascade_path_linux
+    if os.path.exists(alternative_cascade_path_linux)
+    else None
+)
 
 for d in [
     user_data_dir_path,
@@ -39,6 +54,7 @@ for d in [
     infos_dir_path,
     faces_dir_path,
     backup_dir_path,
+    app_data_dir_path,
 ]:
     if not os.path.exists(d):
         os.makedirs(d, exist_ok=True)
