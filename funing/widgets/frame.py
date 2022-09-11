@@ -31,7 +31,6 @@ import cv2
 import numpy
 import numpy as np
 from appdirs import user_data_dir
-from cv2.data import haarcascades
 from cv2.face import EigenFaceRecognizer_create
 from PIL import Image, ImageTk
 from PIL.Image import fromarray as pil_image_fromarray
@@ -366,7 +365,7 @@ class FrameWidget(WidgetABC):
         self.set_face_casecade_by_default()
 
     def set_face_casecade_by_default(self):
-        if alternative_cascade_path:
+        if not alternative_cascade_path:
             self.face_casecade = cv2.CascadeClassifier(
                 alternative_cascade_path
             )
@@ -374,6 +373,9 @@ class FrameWidget(WidgetABC):
             self.set_msg(msg)
             self.mk_tmsg(msg)
             return
+
+        from cv2.data import haarcascades
+
         hff_xml_path = os.path.join(
             haarcascades, "haarcascade_frontalface_default.xml"
         )

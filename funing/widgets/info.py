@@ -24,7 +24,8 @@ from tkinter import filedialog, messagebox, ttk
 
 import cv2
 from appdirs import user_data_dir
-from cv2.data import haarcascades
+
+# from cv2.data import haarcascades
 from cv2.face import EigenFaceRecognizer_create
 from pygubu.widgets import simpletooltip
 from pygubu.widgets.scrolledframe import ScrolledFrame
@@ -94,11 +95,11 @@ class InfoWidget(WidgetABC):
 
     def update_frame_labels_for_recog(self, frames=None):
         frames = frames or self.get_picked_frames_from_frame()
+        index = 0
         if frames is not None:
             for f in frames:
                 label = ttk.Label(self.pick_scrolledframe_innerframe)
                 self.set_label_image(f, label)
-                index = self.get_picked_frame_labels_for_recog_len()
                 label.bind(
                     "<Button-1>",
                     lambda event, index=index: self.recog_frame_by_index(
@@ -112,6 +113,7 @@ class InfoWidget(WidgetABC):
                 )
                 simpletooltip.create(label, _("Click to recognize."))
                 self.add_picked_frame_label_for_recog(label)
+                index += 1
             self.set_picked_frames_without_update_widgets(frames)
 
         else:
@@ -1147,7 +1149,15 @@ class InfoWidget(WidgetABC):
         if index < self.get_picked_frames_len():
             return self.picked_frames[index]
         if self.is_test():
-            print("`get_picked_frame_by_index.index` out of range.")
+            print(
+                "index",
+                index,
+                "\n",
+                "get_picked_frames_len",
+                self.get_picked_frames_len(),
+                "\n",
+                "`get_picked_frame_by_index.index` out of range.",
+            )
         return None
 
     def recog_frame_by_index(self, index=None):
