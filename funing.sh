@@ -120,8 +120,48 @@ twine_upload(){
     twine upload dist/*
 }
 
+cp_data(){
+    cv2_source_dir=""
+    cv2_source_data_dir=""
+    cv2_source_LICENSE_path=""
+    cv2_source_LICENSE_3RD_PARTY_path=""
+    for v in {8..16}
+    do
+        cv2_source_dir0="${HOME}/.local/lib/python3.${v}/site-packages/cv2"
+        cv2_source_data_dir0="${cv2_source_dir0}/data"
+        if [[ -d ${cv2_source_data_dir0} ]]
+        then
+            cv2_source_dir=${cv2_source_dir0}
+            cv2_source_data_dir=${cv2_source_data_dir0}
+            cv2_source_LICENSE_path="${cv2_source_dir}/LICENSE.txt"
+            rd3l="LICENSE-3RD-PARTY.txt"
+            cv2_source_LICENSE_3RD_PARTY_path="${cv2_source_dir}/${rd3l}"
+            break
+        fi
+    done
+    if [[ "${cv2_source_data_dir}" == "" ]]
+    then
+        _pip3
+        cp_data
+    else
+        cv2_data_dir="${app_name}/data/cv2"
+        cv2_facehaar_file_name="haarcascade_frontalface_default.xml"
+        cv2_facehaar_path="${cv2_data_dir}/${cv2_facehaar_file_name}"
+        cv2_LICENSE_path="${cv2_data_dir}/LICENSE.txt"
+        cv2_LICENSE_3RD_PARTY_path="${opencv_data_dir}/LICENSE-3RD-PARTY.txt"
+
+        [[ -d ${opencv_data_dir} ]] || mkdir -p ${opencv_data_dir}
+        cp \
+            ${cv2_source_LICENSE_path} \
+            ${cv2_source_LICENSE_3RD_PARTY_path} \
+            ${cv2_source_data_dir}/${cv2_facehaar_file_name} \
+            ${cv2_data_dir}
+    fi
+}
+
 bdist(){
     _msgfmt
+    cp_data
     rm -rf dist/ build/ ${app_name}.egg-info/
     ${bin_dir}/python3 setup.py sdist bdist_wheel
 }

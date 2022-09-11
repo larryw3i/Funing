@@ -365,7 +365,7 @@ class FrameWidget(WidgetABC):
         self.set_face_casecade_by_default()
 
     def set_face_casecade_by_default(self):
-        if not alternative_cascade_path:
+        if alternative_cascade_path:
             self.face_casecade = cv2.CascadeClassifier(
                 alternative_cascade_path
             )

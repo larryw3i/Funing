@@ -42,6 +42,13 @@ alternative_cascade_path_linux = os.path.join(
     "haarcascades",
     "haarcascade_frontalface_default.xml",
 )
+alternative_cascade_path_from_data_dir = os.path.join(
+    app_data_dir_path,
+    "opencv",
+    "data",
+    "haarcascades",
+    "haarcascade_frontalface_default.xml"
+)
 alternative_cascade_path = (
     alternative_cascade_path_linux
     if os.path.exists(alternative_cascade_path_linux)

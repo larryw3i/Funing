@@ -2,6 +2,7 @@
 global-include *.mo
 global-exclude *.po
 global-exclude *.po~
+recusice-include funing/data/
 
 recursive-exclude * __pycache__
 recursive-exclude * *.py[co]
