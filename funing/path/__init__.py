@@ -21,13 +21,14 @@ from funing.settings import *
 user_data_dir_path = user_data_dir(app_name, app_author[0])
 user_config_dir_path = user_config_dir(app_name, app_author[0])
 
-project_path = os.path.abspath(os.path.dirname(__file__))
+project_path = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 copy_path = os.path.join(user_data_dir_path, "copy.pkl")
 recog_datas_dir_path = os.path.join(user_data_dir_path, "recog_datas")
 faces_dir_path = os.path.join(recog_datas_dir_path, "face_images")
 infos_dir_path = os.path.join(recog_datas_dir_path, "infos")
 backup_dir_path = os.path.join(user_data_dir_path, "backup")
 app_data_dir_path = os.path.join(project_path, "data")
+data_cv2_dir_path = os.path.join(app_data_dir_path,'cv2')
 
 default_image_ext = ".jpg"
 image_ext = default_image_ext
@@ -43,15 +44,14 @@ alternative_cascade_path_linux = os.path.join(
     "haarcascade_frontalface_default.xml",
 )
 alternative_cascade_path_from_data_dir = os.path.join(
-    app_data_dir_path,
-    "opencv",
-    "data",
-    "haarcascades",
-    "haarcascade_frontalface_default.xml"
+    data_cv2_dir_path,
+    "haarcascade_frontalface_default.xml",
 )
 alternative_cascade_path = (
     alternative_cascade_path_linux
-    if os.path.exists(alternative_cascade_path_linux)
+    if os.path.exists(alternative_cascade_path_linux) else \
+    alternative_cascade_path_from_data_dir \
+    if os.path.exists(alternative_cascade_path_from_data_dir)
     else None
 )
 

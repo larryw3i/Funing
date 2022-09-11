@@ -15,12 +15,6 @@ app_version = settings.app_version
 def get_dep_requirements_full():
     return [
         (
-            "opencv-contrib-python >= 4.6.0.66",
-            "https://github.com/opencv/opencv_contrib",
-            "Apache License 2.0",
-            "https://github.com/opencv/opencv_contrib/blob/4.x/LICENSE",
-        ),
-        (
             "numpy >= 1.23.0",
             "https://github.com/numpy/numpy",
             'BSD 3-Clause "New" or "Revised" License',

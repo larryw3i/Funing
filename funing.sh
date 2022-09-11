@@ -148,9 +148,9 @@ cp_data(){
         cv2_facehaar_file_name="haarcascade_frontalface_default.xml"
         cv2_facehaar_path="${cv2_data_dir}/${cv2_facehaar_file_name}"
         cv2_LICENSE_path="${cv2_data_dir}/LICENSE.txt"
-        cv2_LICENSE_3RD_PARTY_path="${opencv_data_dir}/LICENSE-3RD-PARTY.txt"
+        cv2_LICENSE_3RD_PARTY_path="${cv2_data_dir}/LICENSE-3RD-PARTY.txt"
 
-        [[ -d ${opencv_data_dir} ]] || mkdir -p ${opencv_data_dir}
+        [[ -d ${cv2_data_dir} ]] || mkdir -p ${cv2_data_dir}
         cp \
             ${cv2_source_LICENSE_path} \
             ${cv2_source_LICENSE_3RD_PARTY_path} \

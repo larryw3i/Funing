@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-10 17:21+0800\n"
+"POT-Creation-Date: 2022-09-11 16:13+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,7 +33,7 @@ msgstr ""
 #: funing/.lwcp/ui/main_ui.py:20 funing/settings4t.py:10
 #: funing/widgets/main.py:47 funing/widgets/main.py:49
 #: funing/widgets/main.py:46 funing/.lwcp/ui_copy/main_ui.py:20
-#: funing/.lwcp/_ui/main.py:55
+#: funing/.lwcp/_ui/main.py:55 funing/widgets/main.py:48
 msgid "Funing"
 msgstr ""
 
@@ -68,7 +68,7 @@ msgstr ""
 #: funing/widgets/frame.py:1341 funing/widgets/frame.py:1402
 #: funing/.lwcp/ui_copy/c_ui.py:22 funing/.lwcp/ui_copy/main_ui.py:79
 #: funing/widgets/frame.py:1473 funing/widgets/frame.py:1519
-#: funing/widgets/frame.py:1518
+#: funing/widgets/frame.py:1518 funing/widgets/frame.py:1528
 msgid "Open"
 msgstr ""
 
@@ -86,7 +86,7 @@ msgstr ""
 #: funing/widgets/frame.py:1408 funing/.lwcp/ui_copy/c_ui.py:37
 #: funing/.lwcp/ui_copy/main_ui.py:92 funing/.lwcp/_ui/main.py:238
 #: funing/widgets/frame.py:1479 funing/widgets/frame.py:1525
-#: funing/widgets/frame.py:1524
+#: funing/widgets/frame.py:1524 funing/widgets/frame.py:1534
 msgid "Pause"
 msgstr ""
 
@@ -95,7 +95,7 @@ msgstr ""
 #: funing/widgets/frame.py:1322 funing/widgets/frame.py:1341
 #: funing/widgets/frame.py:1353 funing/widgets/frame.py:1414
 #: funing/widgets/frame.py:1485 funing/widgets/frame.py:1531
-#: funing/widgets/frame.py:1530
+#: funing/widgets/frame.py:1530 funing/widgets/frame.py:1540
 msgid "Recognize"
 msgstr ""
 
@@ -106,7 +106,7 @@ msgstr ""
 #: funing/widgets/frame.py:1350 funing/widgets/frame.py:1411
 #: funing/.lwcp/ui_copy/c_ui.py:40 funing/.lwcp/ui_copy/main_ui.py:95
 #: funing/widgets/frame.py:1482 funing/widgets/frame.py:1528
-#: funing/widgets/frame.py:1527
+#: funing/widgets/frame.py:1527 funing/widgets/frame.py:1537
 msgid "Pick"
 msgstr ""
 
@@ -120,7 +120,7 @@ msgstr ""
 #: funing/.lwcp/ui_copy/c_ui.py:55 funing/.lwcp/ui_copy/main_ui.py:126
 #: funing/widgets/info.py:550 funing/widgets/info.py:728
 #: funing/widgets/info.py:734 funing/widgets/info.py:735
-#: funing/widgets/info.py:752
+#: funing/widgets/info.py:752 funing/widgets/info.py:754
 msgid "Save"
 msgstr ""
 
@@ -144,6 +144,7 @@ msgstr ""
 #: funing/widgets/frame.py:1344 funing/widgets/frame.py:1405
 #: funing/.lwcp/_ui/main.py:245 funing/widgets/frame.py:1476
 #: funing/widgets/frame.py:1522 funing/widgets/frame.py:1521
+#: funing/widgets/frame.py:1531
 msgid "Play"
 msgstr ""
 
@@ -209,11 +210,12 @@ msgstr ""
 
 #: funing/widgets/main.py:165 funing/widgets/main.py:175
 #: funing/widgets/main.py:173 funing/widgets/main.py:180
-#: funing/widgets/main.py:179
+#: funing/widgets/main.py:179 funing/widgets/main.py:181
 msgid "Copy Saved!"
 msgstr ""
 
 #: funing/widgets/bottom.py:46 funing/widgets/bottom.py:45
+#: funing/widgets/bottom.py:47
 msgid "Hello, Welcome to Funing."
 msgstr ""
 
@@ -239,12 +241,13 @@ msgstr ""
 #: funing/widgets/frame.py:1283 funing/widgets/frame.py:1295
 #: funing/widgets/frame.py:1356 funing/widgets/frame.py:1427
 #: funing/widgets/frame.py:1473 funing/widgets/frame.py:1472
+#: funing/widgets/frame.py:1482
 msgid "Video frame."
 msgstr ""
 
 #: funing/widgets/frame.py:205 funing/widgets/frame.py:219
 #: funing/widgets/frame.py:230 funing/widgets/frame.py:241
-#: funing/widgets/frame.py:250
+#: funing/widgets/frame.py:250 funing/widgets/frame.py:249
 #, python-format
 msgid "Information of %s doesn't exist."
 msgstr ""
@@ -252,21 +255,21 @@ msgstr ""
 #: funing/widgets/frame.py:247 funing/widgets/frame.py:248
 #: funing/widgets/frame.py:262 funing/widgets/frame.py:273
 #: funing/widgets/frame.py:286 funing/widgets/frame.py:310
-#: funing/widgets/frame.py:319
+#: funing/widgets/frame.py:319 funing/widgets/frame.py:318
 msgid "Label is None."
 msgstr ""
 
 #: funing/widgets/frame.py:278 funing/widgets/frame.py:279
 #: funing/widgets/frame.py:296 funing/widgets/frame.py:308
 #: funing/widgets/frame.py:322 funing/widgets/frame.py:349
-#: funing/widgets/frame.py:358
+#: funing/widgets/frame.py:358 funing/widgets/frame.py:357
 msgid "Train face recognizer."
 msgstr ""
 
 #: funing/widgets/frame.py:285 funing/widgets/frame.py:286
 #: funing/widgets/frame.py:300 funing/widgets/frame.py:312
 #: funing/widgets/frame.py:326 funing/widgets/frame.py:353
-#: funing/widgets/frame.py:362
+#: funing/widgets/frame.py:362 funing/widgets/frame.py:361
 msgid "Finish Training."
 msgstr ""
 
@@ -279,7 +282,8 @@ msgstr ""
 #: funing/widgets/frame.py:340 funing/widgets/frame.py:364
 #: funing/widgets/frame.py:366 funing/widgets/frame.py:367
 #: funing/widgets/frame.py:373 funing/widgets/frame.py:375
-#: funing/widgets/frame.py:376
+#: funing/widgets/frame.py:376 funing/widgets/frame.py:383
+#: funing/widgets/frame.py:385 funing/widgets/frame.py:386
 msgid "haarcascades data doesn't exist."
 msgstr ""
 
@@ -287,6 +291,7 @@ msgstr ""
 #: funing/widgets/frame.py:507 funing/widgets/frame.py:524
 #: funing/widgets/frame.py:536 funing/widgets/frame.py:580
 #: funing/widgets/frame.py:609 funing/widgets/frame.py:618
+#: funing/widgets/frame.py:628
 msgid "Video not opened."
 msgstr ""
 
@@ -294,7 +299,7 @@ msgstr ""
 #: funing/widgets/frame.py:764 funing/widgets/frame.py:783
 #: funing/widgets/frame.py:795 funing/widgets/frame.py:840
 #: funing/widgets/frame.py:893 funing/widgets/frame.py:922
-#: funing/widgets/frame.py:921
+#: funing/widgets/frame.py:921 funing/widgets/frame.py:931
 #, python-format
 msgid "Unable to open video source %s."
 msgstr ""
@@ -303,7 +308,7 @@ msgstr ""
 #: funing/widgets/frame.py:1077 funing/widgets/frame.py:1096
 #: funing/widgets/frame.py:1108 funing/widgets/frame.py:1165
 #: funing/widgets/frame.py:1215 funing/widgets/frame.py:1261
-#: funing/widgets/frame.py:1260
+#: funing/widgets/frame.py:1260 funing/widgets/frame.py:1270
 msgid "Select video or image file"
 msgstr ""
 
@@ -311,7 +316,7 @@ msgstr ""
 #: funing/widgets/frame.py:1272 funing/widgets/frame.py:1291
 #: funing/widgets/frame.py:1303 funing/widgets/frame.py:1364
 #: funing/widgets/frame.py:1435 funing/widgets/frame.py:1481
-#: funing/widgets/frame.py:1480
+#: funing/widgets/frame.py:1480 funing/widgets/frame.py:1490
 msgid "Every Frame"
 msgstr ""
 
@@ -319,7 +324,7 @@ msgstr ""
 #: funing/widgets/frame.py:1279 funing/widgets/frame.py:1298
 #: funing/widgets/frame.py:1310 funing/widgets/frame.py:1371
 #: funing/widgets/frame.py:1442 funing/widgets/frame.py:1488
-#: funing/widgets/frame.py:1487
+#: funing/widgets/frame.py:1487 funing/widgets/frame.py:1497
 msgid "In Time"
 msgstr ""
 
@@ -327,28 +332,28 @@ msgstr ""
 #: funing/widgets/info.py:343 funing/widgets/info.py:782
 #: funing/widgets/info.py:836 funing/widgets/info.py:1015
 #: funing/widgets/info.py:1021 funing/widgets/info.py:1022
-#: funing/widgets/info.py:1064
+#: funing/widgets/info.py:1064 funing/widgets/info.py:1066
 msgid "Click to delete."
 msgstr ""
 
 #: funing/widgets/frame.py:300 funing/widgets/frame.py:301
 #: funing/widgets/frame.py:317 funing/widgets/frame.py:329
 #: funing/widgets/frame.py:343 funing/widgets/frame.py:370
-#: funing/widgets/frame.py:379
+#: funing/widgets/frame.py:379 funing/widgets/frame.py:389
 msgid "Do you want to try to reinstall 'opencv-contrib-python'?"
 msgstr ""
 
 #: funing/widgets/frame.py:309 funing/widgets/frame.py:310
 #: funing/widgets/frame.py:327 funing/widgets/frame.py:339
 #: funing/widgets/frame.py:353 funing/widgets/frame.py:380
-#: funing/widgets/frame.py:389
+#: funing/widgets/frame.py:389 funing/widgets/frame.py:399
 msgid "Restart Funing?"
 msgstr ""
 
 #: funing/widgets/frame.py:309 funing/widgets/frame.py:310
 #: funing/widgets/frame.py:327 funing/widgets/frame.py:339
 #: funing/widgets/frame.py:353 funing/widgets/frame.py:380
-#: funing/widgets/frame.py:389
+#: funing/widgets/frame.py:389 funing/widgets/frame.py:399
 msgid "Do you want to restart Funing?"
 msgstr ""
 
@@ -356,7 +361,8 @@ msgstr ""
 #: funing/widgets/info.py:191 funing/widgets/info.py:218
 #: funing/widgets/info.py:115 funing/widgets/info.py:345
 #: funing/widgets/info.py:348 funing/widgets/info.py:118
-#: funing/widgets/info.py:351
+#: funing/widgets/info.py:351 funing/widgets/info.py:120
+#: funing/widgets/info.py:353
 msgid "Nothing picked."
 msgstr ""
 
@@ -364,6 +370,7 @@ msgstr ""
 #: funing/widgets/info.py:498 funing/widgets/info.py:539
 #: funing/widgets/info.py:717 funing/widgets/info.py:723
 #: funing/widgets/info.py:724 funing/widgets/info.py:741
+#: funing/widgets/info.py:743
 msgid "Write information in your strict format."
 msgstr ""
 
@@ -371,6 +378,7 @@ msgstr ""
 #: funing/widgets/info.py:502 funing/widgets/info.py:543
 #: funing/widgets/info.py:721 funing/widgets/info.py:727
 #: funing/widgets/info.py:728 funing/widgets/info.py:745
+#: funing/widgets/info.py:747
 msgid "Write basic information here."
 msgstr ""
 
@@ -378,53 +386,57 @@ msgstr ""
 #: funing/widgets/info.py:506 funing/widgets/info.py:547
 #: funing/widgets/info.py:725 funing/widgets/info.py:731
 #: funing/widgets/info.py:732 funing/widgets/info.py:749
+#: funing/widgets/info.py:751
 msgid "Write additional information here."
 msgstr ""
 
 #: funing/widgets/info.py:150 funing/widgets/info.py:212
 #: funing/widgets/info.py:248 funing/widgets/info.py:375
 #: funing/widgets/info.py:378 funing/widgets/info.py:381
+#: funing/widgets/info.py:383
 msgid "Information saved."
 msgstr ""
 
 #: funing/widgets/frame.py:306 funing/widgets/frame.py:320
 #: funing/widgets/frame.py:347 funing/widgets/frame.py:356
+#: funing/widgets/frame.py:355
 msgid "Dateset doesn't exist."
 msgstr ""
 
 #: funing/widgets/info.py:273 funing/widgets/info.py:309
 #: funing/widgets/info.py:456 funing/widgets/info.py:459
-#: funing/widgets/info.py:462
+#: funing/widgets/info.py:462 funing/widgets/info.py:464
 msgid "info ID is None."
 msgstr ""
 
 #: funing/widgets/info.py:355 funing/widgets/info.py:394
 #: funing/widgets/info.py:560 funing/widgets/info.py:563
 #: funing/widgets/info.py:573 funing/widgets/info.py:728
+#: funing/widgets/info.py:575 funing/widgets/info.py:730
 msgid "Add"
 msgstr ""
 
 #: funing/widgets/info.py:369 funing/widgets/info.py:410
 #: funing/widgets/info.py:588 funing/widgets/info.py:594
-#: funing/widgets/info.py:600
+#: funing/widgets/info.py:600 funing/widgets/info.py:602
 msgid "Information IDs is None."
 msgstr ""
 
 #: funing/widgets/info.py:394 funing/widgets/info.py:435
 #: funing/widgets/info.py:613 funing/widgets/info.py:619
-#: funing/widgets/info.py:625
+#: funing/widgets/info.py:625 funing/widgets/info.py:627
 msgid "New information"
 msgstr ""
 
 #: funing/widgets/info.py:394 funing/widgets/info.py:435
 #: funing/widgets/info.py:613 funing/widgets/info.py:619
-#: funing/widgets/info.py:625
+#: funing/widgets/info.py:625 funing/widgets/info.py:627
 msgid "_Add"
 msgstr ""
 
 #: funing/widgets/info.py:450 funing/widgets/info.py:491
 #: funing/widgets/info.py:669 funing/widgets/info.py:675
-#: funing/widgets/info.py:681
+#: funing/widgets/info.py:681 funing/widgets/info.py:683
 msgid "'info_id' is None."
 msgstr ""
 
@@ -436,30 +448,35 @@ msgstr ""
 #: funing/widgets/info.py:471 funing/widgets/info.py:512
 #: funing/widgets/info.py:690 funing/widgets/info.py:696
 #: funing/widgets/info.py:697 funing/widgets/info.py:703
+#: funing/widgets/info.py:705
 msgid "ACTION isn't 'READ'."
 msgstr ""
 
 #: funing/widgets/info.py:513 funing/widgets/info.py:554
 #: funing/widgets/info.py:732 funing/widgets/info.py:738
 #: funing/widgets/info.py:739 funing/widgets/info.py:756
+#: funing/widgets/info.py:758
 msgid "Delete"
 msgstr ""
 
 #: funing/widgets/info.py:730 funing/widgets/info.py:771
 #: funing/widgets/info.py:949 funing/widgets/info.py:955
 #: funing/widgets/info.py:956 funing/widgets/info.py:998
+#: funing/widgets/info.py:1000
 msgid "Delete saved frame"
 msgstr ""
 
 #: funing/widgets/info.py:731 funing/widgets/info.py:772
 #: funing/widgets/info.py:950 funing/widgets/info.py:956
 #: funing/widgets/info.py:957 funing/widgets/info.py:999
+#: funing/widgets/info.py:1001
 msgid "Do you want to delete saved frame?"
 msgstr ""
 
 #: funing/widgets/info.py:739 funing/widgets/info.py:780
 #: funing/widgets/info.py:958 funing/widgets/info.py:964
 #: funing/widgets/info.py:965 funing/widgets/info.py:1007
+#: funing/widgets/info.py:1009
 #, python-format
 msgid "Image(%s) doesn't exist."
 msgstr ""
@@ -468,12 +485,14 @@ msgstr ""
 #: funing/widgets/info.py:117 funing/widgets/info.py:1019
 #: funing/widgets/info.py:1025 funing/widgets/info.py:1026
 #: funing/widgets/info.py:120 funing/widgets/info.py:1068
+#: funing/widgets/info.py:122 funing/widgets/info.py:1070
 msgid "Picked frame is None."
 msgstr ""
 
 #: funing/widgets/info.py:798 funing/widgets/info.py:856
 #: funing/widgets/info.py:1031 funing/widgets/info.py:1037
 #: funing/widgets/info.py:1038 funing/widgets/info.py:1080
+#: funing/widgets/info.py:1082
 msgid "Saved frames is None."
 msgstr ""
 
@@ -482,16 +501,19 @@ msgstr ""
 #: funing/widgets/info.py:1055 funing/widgets/info.py:1088
 #: funing/widgets/info.py:1056 funing/widgets/info.py:1089
 #: funing/widgets/info.py:1098 funing/widgets/info.py:1131
+#: funing/widgets/info.py:1100 funing/widgets/info.py:1133
 msgid "Saved frame, Click to delete."
 msgstr ""
 
 #: funing/widgets/info.py:839 funing/widgets/info.py:901
 #: funing/widgets/info.py:1160 funing/widgets/info.py:1167
 #: funing/widgets/info.py:1168 funing/widgets/info.py:1210
+#: funing/widgets/info.py:1220
 msgid "Frame is None."
 msgstr ""
 
 #: funing/widgets/frame.py:156 funing/widgets/frame.py:165
+#: funing/widgets/frame.py:164
 msgid "info_widget is None."
 msgstr ""
 
@@ -590,29 +612,33 @@ msgstr ""
 msgid "Information of %s\\(%s\\) is deleted."
 msgstr ""
 
-#: funing/__init__.py:95
+#: funing/__init__.py:95 funing/__init__.py:89
 msgid "Hello, Welcome to Funing!"
 msgstr ""
 
-#: funing/__init__.py:96
+#: funing/__init__.py:96 funing/__init__.py:90
 #, python-format
 msgid "Version: %s"
 msgstr ""
 
 #: funing/widgets/info.py:110 funing/widgets/info.py:113
+#: funing/widgets/info.py:114
 msgid "Click to recognize."
 msgstr ""
 
 #: funing/widgets/info.py:1128 funing/widgets/info.py:1135
 #: funing/widgets/info.py:1136 funing/widgets/info.py:1178
+#: funing/widgets/info.py:1188
 msgid "`Picked Frames is None.`"
 msgstr ""
 
 #: funing/widgets/frame.py:291 funing/widgets/frame.py:300
+#: funing/widgets/frame.py:299
 msgid "No matching data."
 msgstr ""
 
 #: funing/widgets/frame.py:295 funing/widgets/frame.py:304
+#: funing/widgets/frame.py:303
 msgid "Couldn't get `info_id` from specific label."
 msgstr ""
 
@@ -622,10 +648,17 @@ msgid "`cv2.imread` gets `None` from %s"
 msgstr ""
 
 #: funing/widgets/info.py:689 funing/widgets/info.py:695
+#: funing/widgets/info.py:697
 msgid "Information of %(basic_info)(%(info_id)) is deleted."
 msgstr ""
 
 #: funing/widgets/frame.py:652 funing/widgets/frame.py:650
+#: funing/widgets/frame.py:660
 #, python-format
 msgid "`cv2.imread` gets `None` from %s."
+msgstr ""
+
+#: funing/widgets/frame.py:372
+#, python-format
+msgid "`%s` used."
 msgstr ""
