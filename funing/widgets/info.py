@@ -292,7 +292,7 @@ class InfoWidget(WidgetABC):
     def set_action_to_pick(self):
         if not self.is_action_pick():
             self.del_picked_frames()
-            # self.del_picked_frames_for_recog()
+            self.del_picked_frames_for_recog()
             self.set_action(ACTION.PICK)
 
     def set_action_to_recog(self):
