@@ -34,6 +34,7 @@ from appdirs import user_data_dir
 from cv2.face import EigenFaceRecognizer_create
 from PIL import Image, ImageTk
 from PIL.Image import fromarray as pil_image_fromarray
+from pygubu.widgets.scrolledframe import ScrolledFrame
 
 from funing.abc import *
 from funing.locale import _
@@ -100,6 +101,7 @@ class FrameWidget(WidgetABC):
         self.oper_widgets_height = None
         self.oper_widgets_margin = 2
         self.oper_widget_min_height = None
+        self.oper_widgets_pos = None
         self.info = None
         self.info_id = None
         self.info_ids = []
@@ -112,6 +114,7 @@ class FrameWidget(WidgetABC):
             Path.home() / "Pictures",
             Path.home(),
         ]
+        self.picked_frame_label_margin = 10
 
     def set_info_id(self, _id=None, return_id=False):
         if _id is None:
@@ -1539,6 +1542,30 @@ class FrameWidget(WidgetABC):
         self.recog_button = tk.Button(
             self.root, text=_("Recognize"), command=self.recog_button_command
         )
+        self.pick_scrolledframe_forpick = ScrolledFrame(
+            self.root, scrolltype="horizontal"
+        )
+
+    def get_pick_scrolledframe_forpick(self):
+        if self.pick_scrolledframe_forpick:
+            return self.pick_scrolledframe_forpick
+        return None
+
+    def get_pick_scrolledframe_forpick_width(self):
+        return self.get_width()
+
+    def get_pick_scrolledframe_forpick_height(self):
+        return (
+            self.get_resize_height()
+            + self.pick_scrolledframe_forpick.hsb.winfo_reqheight()
+            + self.picked_frame_label_margin
+        )
+
+    def get_pick_scrolledframe_forpick_x(self):
+        return 0
+
+    def get_pick_scrolledframe_forpick_y(self):
+        return self.get_oper_widgets_bottom_y()
 
     def set_oper_widget_min_height(self):
         self.oper_widget_min_height = (
@@ -1576,6 +1603,20 @@ class FrameWidget(WidgetABC):
             )
         )
 
+    def set_oper_widgets_pos(self, pos=None):
+        self.oper_widgets_pos = pos
+
+    def get_oper_widgets_pos(self):
+        return self.oper_widgets_pos
+
+    def get_oper_widgets_bottom_y(self):
+        widgets = self.get_oper_widgets()
+        last_widget = widgets[-1]
+        if last_widget is None:
+            return int(self.get_height() / 4)
+        (x0, y0), (x1, y1) = self.get_oper_widgets_pos()
+        return last_widget.winfo_reqheight() + y1
+
     def widgets_place_center_break(
         self, widgets, x0=0, y0=0, parent_width=None
     ):
@@ -1594,6 +1635,7 @@ class FrameWidget(WidgetABC):
             width_list.append(width)
         x = x0
         y = y0
+        x0y0 = (x, y)
         width_index = 0
         min_height = max([w.winfo_reqheight() for w in widgets])
         for w in widgets:
@@ -1609,10 +1651,12 @@ class FrameWidget(WidgetABC):
             else:
                 w.place(x=x, y=y)
                 x = new_x
+        x1y1 = (x, y)
+        return (x0y0, x1y1)
 
     def oper_widgets_place(self):
         widgets = self.get_oper_widgets()
-        self.widgets_place_center_break(
+        self.oper_widgets_pos = self.widgets_place_center_break(
             widgets,
             x0=self.get_oper_widgets_x0(),
             y0=self.get_oper_widgets_y0(),
@@ -1666,14 +1710,19 @@ class FrameWidget(WidgetABC):
             self.video_scale_area_place()
             self.video_file_play_mode_radiobuttons_place()
         self.oper_widgets_place()
+        self.pick_scrolledframe_forpick.place(
+            x=self.get_pick_scrolledframe_forpick_x(),
+            y=self.get_pick_scrolledframe_forpick_y(),
+            width=self.get_pick_scrolledframe_forpick_width(),
+            height=self.get_pick_scrolledframe_forpick_height(),
+        )
+
         self.set_video_frame_fxfy()
-
-        self.show_video_frame4widgets_size_changed()
-
+        self.show_video_frame_if_widgets_size_changed()
         if self.face_recognizer is None:
             self.train_recognizer()
 
-    def show_video_frame4widgets_size_changed(self):
+    def show_video_frame_if_widgets_size_changed(self):
         if self.video_signal == VIDEO_SIGNAL.PAUSE:
             pass
 

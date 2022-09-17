@@ -28,7 +28,7 @@ faces_dir_path = os.path.join(recog_datas_dir_path, "face_images")
 infos_dir_path = os.path.join(recog_datas_dir_path, "infos")
 backup_dir_path = os.path.join(user_data_dir_path, "backup")
 app_data_dir_path = os.path.join(project_path, "data")
-data_cv2_dir_path = os.path.join(app_data_dir_path,'cv2')
+data_cv2_dir_path = os.path.join(app_data_dir_path, "cv2")
 
 default_image_ext = ".jpg"
 image_ext = default_image_ext
@@ -49,8 +49,8 @@ alternative_cascade_path_from_data_dir = os.path.join(
 )
 alternative_cascade_path = (
     alternative_cascade_path_linux
-    if os.path.exists(alternative_cascade_path_linux) else \
-    alternative_cascade_path_from_data_dir \
+    if os.path.exists(alternative_cascade_path_linux)
+    else alternative_cascade_path_from_data_dir
     if os.path.exists(alternative_cascade_path_from_data_dir)
     else None
 )
