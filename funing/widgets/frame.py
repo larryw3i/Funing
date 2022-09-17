@@ -1348,7 +1348,7 @@ class FrameWidget(WidgetABC):
         pass
 
     def recog_frame_by_default(self):
-        self.pause_video_frame()
+        # self.pause_video_frame()
         self.iw.recog_frame_by_default()
         pass
 
@@ -1542,29 +1542,29 @@ class FrameWidget(WidgetABC):
         self.recog_button = tk.Button(
             self.root, text=_("Recognize"), command=self.recog_button_command
         )
-        self.pick_scrolledframe_forpick = ScrolledFrame(
+        self.pick_scrolledframe_forrecog = ScrolledFrame(
             self.root, scrolltype="horizontal"
         )
 
-    def get_pick_scrolledframe_forpick(self):
-        if self.pick_scrolledframe_forpick:
-            return self.pick_scrolledframe_forpick
+    def get_pick_scrolledframe_forrecog(self):
+        if self.pick_scrolledframe_forrecog:
+            return self.pick_scrolledframe_forrecog
         return None
 
-    def get_pick_scrolledframe_forpick_width(self):
+    def get_pick_scrolledframe_forrecog_width(self):
         return self.get_width()
 
-    def get_pick_scrolledframe_forpick_height(self):
+    def get_pick_scrolledframe_forrecog_height(self):
         return (
             self.get_resize_height()
-            + self.pick_scrolledframe_forpick.hsb.winfo_reqheight()
+            + self.pick_scrolledframe_forrecog.hsb.winfo_reqheight()
             + self.picked_frame_label_margin
         )
 
-    def get_pick_scrolledframe_forpick_x(self):
+    def get_pick_scrolledframe_forrecog_x(self):
         return 0
 
-    def get_pick_scrolledframe_forpick_y(self):
+    def get_pick_scrolledframe_forrecog_y(self):
         return self.get_oper_widgets_bottom_y()
 
     def set_oper_widget_min_height(self):
@@ -1710,11 +1710,11 @@ class FrameWidget(WidgetABC):
             self.video_scale_area_place()
             self.video_file_play_mode_radiobuttons_place()
         self.oper_widgets_place()
-        self.pick_scrolledframe_forpick.place(
-            x=self.get_pick_scrolledframe_forpick_x(),
-            y=self.get_pick_scrolledframe_forpick_y(),
-            width=self.get_pick_scrolledframe_forpick_width(),
-            height=self.get_pick_scrolledframe_forpick_height(),
+        self.pick_scrolledframe_forrecog.place(
+            x=self.get_pick_scrolledframe_forrecog_x(),
+            y=self.get_pick_scrolledframe_forrecog_y(),
+            width=self.get_pick_scrolledframe_forrecog_width(),
+            height=self.get_pick_scrolledframe_forrecog_height(),
         )
 
         self.set_video_frame_fxfy()

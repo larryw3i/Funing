@@ -70,6 +70,7 @@ class InfoWidget(WidgetABC):
         self.new_info_added_signal = (
             self.new_info_signal
         ) = NEW_INFO_SIGNAL.OTHER.value
+        self.innerframe_for_recog = frame_labels_innerframe_for_recog = None
 
     def del_info_id(self):
         self.fw.del_info_id()
@@ -93,18 +94,40 @@ class InfoWidget(WidgetABC):
     def update_picked_frame_labels_for_recog(self):
         self.update_frame_labels_for_recog()
 
+    def set_frame_labels_innerframe_for_recog(self, innerframe=None):
+        if innerframe is None:
+            innerframe = self.pick_scrolledframe_innerframe
+        self.frame_labels_innerframe_for_recog = (
+            self.innerframe_for_recog
+        ) = innerframe
+        pass
+
+    def set_frame_labels_innerframe_forrecog(self, innerframe=None):
+        if innerframe is None:
+            innerframe = self.pick_scrolledframe_innerframe
+        self.set_frame_labels_image_use_picked_frames_for_recog(innerframe)
+        pass
+
+    def get_frame_labels_innerframe_forrecog(self):
+        return self.innerframe_for_recog
+
+    def get_frame_labels_innerframe_for_recog(self):
+        return self.get_frame_labels_innerframe_forrecog()
+
     def update_frame_labels_for_recog(self, frames=None):
         frames = frames or self.get_picked_frames_from_frame()
+        if self.get_picked_frames_for_recog_len() > 0:
+            frames = frames + self.picked_frames_for_recog
+
         index = 0
         if frames is not None:
+            self.clear_picked_frame_labels_for_recog()
             for f in frames:
-                label = ttk.Label(self.pick_scrolledframe_innerframe)
+                label = ttk.Label(self.get_frame_labels_innerframe_forrecog())
                 self.set_label_image(f, label)
                 label.bind(
                     "<Button-1>",
-                    lambda event, index=index: self.recog_frame_by_index(
-                        index
-                    ),
+                    lambda event, idx=index: self.recog_frame_by_index(idx),
                 )
                 label.pack(
                     side="left",
@@ -114,7 +137,8 @@ class InfoWidget(WidgetABC):
                 simpletooltip.create(label, _("Click to recognize."))
                 self.add_picked_frame_label_for_recog(label)
                 index += 1
-            self.set_picked_frames_without_update_widgets(frames)
+            self.set_picked_frames_for_recog(frames)
+            # self.set_picked_frames_without_update_widgets(frames)
 
         else:
             self.set_msg(_("Nothing picked."))
@@ -122,7 +146,21 @@ class InfoWidget(WidgetABC):
                 print(_("Picked frame is None."))
         pass
 
-    def del_picked_frames_for_recog(
+    def set_picked_frames_for_recog(self, frames=None):
+        if frames is None:
+            return
+
+        frames = frames if isinstance(frames, list) else [frames]
+        self.picked_frames_for_recog = frames + self.picked_frames_for_recog
+
+    def get_fw_pick_scrolledframe(self):
+        return self.get_fw_pick_scrolledframe_forrecog()
+
+    def get_fw_pick_scrolledframe_forrecog(self):
+        scrolledframe = self.fw.get_pick_scrolledframe_forrecog()
+        return scrolledframe
+
+    def del_picked_frames_for_recog_deprecated(
         self, update_widgets=True, update_label_list=True
     ):
         self.picked_frames_for_recog = []
@@ -246,7 +284,7 @@ class InfoWidget(WidgetABC):
 
     def set_action_to_read(self):
         if not self.is_action_read():
-            self.del_picked_frames_for_recog()
+            # self.del_picked_frames_for_recog()
             self.delete_button_place()
             self.set_action(ACTION.READ)
             pass
@@ -254,7 +292,7 @@ class InfoWidget(WidgetABC):
     def set_action_to_pick(self):
         if not self.is_action_pick():
             self.del_picked_frames()
-            self.del_picked_frames_for_recog()
+            # self.del_picked_frames_for_recog()
             self.set_action(ACTION.PICK)
 
     def set_action_to_recog(self):
@@ -557,7 +595,7 @@ class InfoWidget(WidgetABC):
     def set_adding_status(self):
         self.set_action_to_pick()
         self.del_info_id()
-        self.del_picked_frames_for_recog()
+        # self.del_picked_frames_for_recog()
         self.del_picked_frames()
         self.clear_info_widget_area_content()
 
@@ -760,6 +798,9 @@ class InfoWidget(WidgetABC):
             activebackground="red",
             command=self.delete_button_command,
         )
+
+        fw_scrolledframe = self.get_fw_pick_scrolledframe_forrecog()
+        self.set_frame_labels_innerframe_for_recog(fw_scrolledframe.innerframe)
 
     def get_frame(self, copy=False):
         return self.fw.get_frame(copy)
@@ -1160,6 +1201,16 @@ class InfoWidget(WidgetABC):
             )
         return None
 
+    def get_picked_frames_for_recog_len(self):
+        return len(self.picked_frames_for_recog)
+
+    def get_picked_frame_by_index_for_recog(self, index=None):
+        if index is None:
+            return None
+        if index < self.get_picked_frames_for_recog_len():
+            return self.picked_frames_for_recog[index]
+        return None
+
     def recog_frame_by_index(self, index=None):
         self.recog_picked_frame_by_index(index)
         pass
@@ -1183,7 +1234,9 @@ class InfoWidget(WidgetABC):
             if self.is_test():
                 print("`recog_picked_frame_by_index.index` is `None`.")
             return
-        frame = self.get_picked_frame_by_index(index)
+
+        self.mk_tmsg(f"recog_picked_frame_by_index.index --> {index}")
+        frame = self.get_picked_frame_by_index_for_recog(index)
         if frame is None:
             self.set_warning_msg(_("`Picked Frames is None.`"))
             self.mk_tmsg("`recog_picked_frame_by_index.frame` is `None`.")
