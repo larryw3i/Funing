@@ -209,6 +209,9 @@ class InfoWidget(WidgetABC):
 
     def get_saved_frames(self):
         if self.saved_frames is None:
+            info_id = self.get_info_id()
+            if info_id is None:
+                return None
             return self.get_saved_frames_by_id()
         return self.saved_frames
 
@@ -292,7 +295,7 @@ class InfoWidget(WidgetABC):
     def set_action_to_pick(self):
         if not self.is_action_pick():
             self.del_picked_frames()
-            self.del_picked_frames_for_recog()
+            # self.del_picked_frames_for_recog()
             self.set_action(ACTION.PICK)
 
     def set_action_to_recog(self):
@@ -310,6 +313,7 @@ class InfoWidget(WidgetABC):
 
     def del_info_id(self):
         self.fw.del_info_id()
+        self.info_id = None
 
     def set_info_id(self, _id):
         self.fw.set_info_id(_id=_id)
@@ -596,6 +600,7 @@ class InfoWidget(WidgetABC):
         self.set_action_to_pick()
         self.del_info_id()
         # self.del_picked_frames_for_recog()
+        self.del_saved_frames()
         self.del_picked_frames()
         self.clear_info_widget_area_content()
 
