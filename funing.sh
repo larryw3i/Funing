@@ -6,6 +6,7 @@ local_dir="${app_name}/locale"
 pot_path="${local_dir}/${app_name}.pot"
 mo0_path="${local_dir}/en_US/LC_MESSAGES/${app_name}.mo"
 po0_path="${local_dir}/en_US/LC_MESSAGES/${app_name}.po"
+cp_data_counter=0
 
 echo_venv_dont_exist(){
     echo "Path both 'venv/bin' and 'venv/local/bin' don't exist."
@@ -139,10 +140,15 @@ cp_data(){
             break
         fi
     done
+    
     if [[ "${cv2_source_data_dir}" == "" ]]
     then
         _pip3
-        cp_data
+        if [[ ${cp_data_counter} < 2 ]]
+        then
+            cp_data
+            ((cp_data_counter++))
+        fi
     else
         cv2_data_dir="${app_name}/data/cv2"
         cv2_facehaar_file_name="haarcascade_frontalface_default.xml"
