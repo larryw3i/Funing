@@ -376,13 +376,14 @@ class FrameWidget(WidgetABC):
             self.set_msg(msg)
             self.mk_tmsg(msg)
             return
+        try:
+            from cv2.data import haarcascades
 
-        from cv2.data import haarcascades
-
-        hff_xml_path = os.path.join(
-            haarcascades, "haarcascade_frontalface_default.xml"
-        )
-        if not os.path.exists(hff_xml_path):
+            hff_xml_path = os.path.join(
+                haarcascades, "haarcascade_frontalface_default.xml"
+            )
+            self.face_casecade = cv2.CascadeClassifier(hff_xml_path)
+        except:
             self.mw.set_msg(_("haarcascades data doesn't exist."))
             if messagebox.askyesno(
                 _("haarcascades data doesn't exist."),
@@ -406,8 +407,7 @@ class FrameWidget(WidgetABC):
                 pass
             self.release_video_capture()
             self.face_casecade = None
-            return
-        self.face_casecade = cv2.CascadeClassifier(hff_xml_path)
+        pass
 
     def set_src_type(self, src_type=SRC_TYPE.NONE):
         self.src_type = src_type
@@ -927,7 +927,7 @@ class FrameWidget(WidgetABC):
     def turnon_video_capture(self):
         self.set_video_capture()
 
-    def set_video_capture(self, set_mjpg=True):
+    def set_video_capture(self, set_mjpg=False):
         src_path = self.get_video_src_path()
         self.video_capture = cv2.VideoCapture(src_path)
         if not self.video_capture.isOpened():

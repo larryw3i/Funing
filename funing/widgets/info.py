@@ -112,44 +112,80 @@ class InfoWidget(WidgetABC):
     def get_frame_labels_innerframe_for_recog(self):
         return self.get_frame_labels_innerframe_forrecog()
 
-    def update_frame_labels_for_recog(self, frames=None):
-        frames = frames or self.get_picked_frames_from_frame()
+    def del_recogframe_by_index(self, index=None):
+        if not index:
+            return
+        self.del_picked_frame_for_recog_by_index(index)
+        pass
+
+    def del_picked_frame_for_recog_by_index(
+        self, index=0, update_widgets=True
+    ):
+
+        print(
+            "index",
+            index,
+            "picked_frames_for_recog len",
+            self.get_picked_frames_for_recog_len(),
+        )
+        if index < self.get_picked_frames_for_recog_len():
+            del self.picked_frames_for_recog[index]
+            if update_widgets:
+                self.update_frame_labels_for_recog()
+            pass
+        else:
+            print("Out of range.")
+        pass
+
+    def update_frame_labels_for_recog_use_video_frame(self, frames=None):
         if self.get_picked_frames_for_recog_len() > 0:
             frames = frames + self.picked_frames_for_recog
-
-        index = 0
         if frames is not None:
-            self.clear_picked_frame_labels_for_recog()
-            for f in frames:
-                label = ttk.Label(self.get_frame_labels_innerframe_forrecog())
-                self.set_label_image(f, label)
-                label.bind(
-                    "<Button-1>",
-                    lambda event, idx=index: self.recog_frame_by_index(idx),
-                )
-                label.pack(
-                    side="left",
-                    anchor="nw",
-                    padx=self.picked_frame_label_margin / 2,
-                )
-                simpletooltip.create(label, _("Click to recognize."))
-                self.add_picked_frame_label_for_recog(label)
-                index += 1
+            self.update_frame_labels_for_recog(frames)
             self.set_picked_frames_for_recog(frames)
-            # self.set_picked_frames_without_update_widgets(frames)
-
         else:
             self.set_msg(_("Nothing picked."))
             if self.is_test():
                 print(_("Picked frame is None."))
         pass
 
+    def update_frame_labels_for_recog(self, frames=None):
+        if not frames:
+            frames = self.picked_frames_for_recog
+        self.clear_picked_frame_labels_for_recog()
+        if frames == None:
+            self.mk_tmsg("frames is None.")
+            return
+        index = 0
+        for f in frames:
+            label = ttk.Label(self.get_frame_labels_innerframe_forrecog())
+            self.set_label_image(f, label)
+            label.bind(
+                "<Button-1>",
+                lambda event, idx=index: self.recog_frame_by_index(idx),
+            )
+            label.bind(
+                "<Button-3>",
+                lambda event, idx=index: self.del_recogframe_by_index(idx),
+            )
+            label.pack(
+                side="left",
+                anchor="nw",
+                padx=self.picked_frame_label_margin / 2,
+            )
+            simpletooltip.create(
+                label,
+                _("Click to recognize,") + _("right click to delete."),
+            )
+            self.add_picked_frame_label_for_recog(label)
+            index += 1
+        # self.set_picked_frames_without_update_widgets(frames)
+
     def set_picked_frames_for_recog(self, frames=None):
         if frames is None:
             return
 
-        frames = frames if isinstance(frames, list) else [frames]
-        self.picked_frames_for_recog = frames + self.picked_frames_for_recog
+        self.picked_frames_for_recog = frames
 
     def get_fw_pick_scrolledframe(self):
         return self.get_fw_pick_scrolledframe_forrecog()
@@ -1183,7 +1219,7 @@ class InfoWidget(WidgetABC):
         """
         Set frame label images for recognition using picked_frames
         """
-        self.update_frame_labels_for_recog(frames)
+        self.update_frame_labels_for_recog_use_video_frame(frames)
 
     def get_picked_frame_by_index(self, index=None):
         if index is None:
