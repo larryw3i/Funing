@@ -113,21 +113,19 @@ class InfoWidget(WidgetABC):
         return self.get_frame_labels_innerframe_forrecog()
 
     def del_recogframe_by_index(self, index=None):
-        if not index:
-            return
         self.del_picked_frame_for_recog_by_index(index)
         pass
 
     def del_picked_frame_for_recog_by_index(
         self, index=0, update_widgets=True
     ):
-
-        print(
-            "index",
-            index,
-            "picked_frames_for_recog len",
-            self.get_picked_frames_for_recog_len(),
-        )
+        if self.is_test():
+            print(
+                "index",
+                index,
+                "picked_frames_for_recog len",
+                self.get_picked_frames_for_recog_len(),
+            )
         if index < self.get_picked_frames_for_recog_len():
             del self.picked_frames_for_recog[index]
             if update_widgets:
