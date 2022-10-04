@@ -105,7 +105,7 @@ def print_file(max_col=80, filter_func=None):
         filter_func = lambda l: True
     for (root, dirs, files) in os.walk(app_name, topdown=True):
         for f in files:
-            if not f.endswith(".py"):
+            if not ( f.endswith(".py") or f.endswith(".sh") ):
                 continue
             file_path = os.path.join(root, f)
             with open(file_path, "r") as f:
