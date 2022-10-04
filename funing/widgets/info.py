@@ -69,6 +69,32 @@ class InfoWidget(WidgetABC):
             self.new_info_signal
         ) = NEW_INFO_SIGNAL.OTHER.value
         self.innerframe_for_recog = frame_labels_innerframe_for_recog = None
+        self.current_clicked_label = None
+
+    def get_frame_label_margin(self):
+        return self.frame_label_margin
+
+    def set_frame_label_margin(self, margin=10):
+        self.frame_label_margin = margin
+
+    def show_click(self, x=0, y=0, w=0, h=0, width=0, height=0):
+        self.show_current_click_label(
+            x=x, y=y, w=w, h=h, width=width, height=height
+        )
+        pass
+
+    def show_current_click_label(self, x=0, y=0, w=0, h=0, width=0, height=50):
+        if self.current_clicked_label is None:
+            return
+        self.hide_current_click_label()
+        w = width if w == 0 else w
+        h = height if h == 0 else h
+        self.current_clicked_label.place(x=x, y=y, width=w, height=h)
+        pass
+
+    def hide_current_click_label(self):
+        self.current_clicked_label.place_forget()
+        pass
 
     def del_info_id(self):
         self.fw.del_info_id()
@@ -763,7 +789,7 @@ class InfoWidget(WidgetABC):
         basic_info = self.get_basic_info_by_info_id(info_id)
         deleted_paths = [basic_info_path, info_path, image_dir_path]
         for src in deleted_paths:
-            if os.path.exists(p):
+            if os.path.exists(src):
                 shutil.move(src, get_new_backup_path())
         self.set_basic_infos(to_none=True)
         self.update_saved_info_combobox_values()
@@ -790,6 +816,8 @@ class InfoWidget(WidgetABC):
     def set_widgets(self):
         super().set_widgets()
         self.set_frame_widget()
+
+        self.current_clicked_label = ttk.Label(self.root, background="blue")
 
         self.saved_info_combobox = ttk.Combobox(
             self.root,
@@ -1286,6 +1314,15 @@ class InfoWidget(WidgetABC):
             return
         self.update_widgets_by_info_id_for_recog(info_id)
         pass
+
+    def get_fw_pick_scrolledframe_forrecog_x(self):
+        return self.fw.get_pick_scrolledframe_forrecog_x()
+
+    def get_fw_pick_scrolledframe_forrecog_y(self):
+        return self.fw.get_pick_scrolledframe_forrecog_y()
+
+    def get_fw_pick_scrolledframe_forrecog_height(self):
+        return self.fw.get_pick_scrolledframe_forrecog_height()
 
     def set_frame_labels_image(
         self, show_saved_frames=True, show_picked_frames=True
