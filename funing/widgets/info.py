@@ -50,7 +50,7 @@ class InfoWidget(WidgetABC):
         self.picked_frame_labels = []
         self.picked_frames_for_recog = []
         self.picked_frame_labels_for_recog = []
-        self.picked_frame_labels_borderwidth_recog = 10
+        self.recog_picked_frame_labels_borderwidth = None
         self.frame_label_margin = 10
         self.picked_frame_label_margin = self.frame_label_margin
         self.resize_width = None
@@ -1317,23 +1317,43 @@ class InfoWidget(WidgetABC):
 
         if show_click:
             labels = self.get_picked_frame_labels_for_recog()
+
             for l in labels:
-                print(l, id(l))
-            for l in labels:
-                l.config(borderwidth=0)
+                l.config(borderwidth=0, background="")
 
             label = labels[index]
             label.config(
-                borderwidth=self.get_picked_frame_labels_borderwidth_recog()
+                borderwidth=self.get_recog_picked_frame_labels_borderwidth(),
+                background="blue",
             )
 
         pass
 
-    def get_picked_frame_labels_borderwidth_recog(self):
-        return self.picked_frame_labels_borderwidth_recog
+    def get_recog_picked_frame_labels(self):
+        return self.get_picked_frame_labels_for_recog()
 
-    def set_picked_frame_labels_borderwidth_recog(self, borderwidth=10):
-        self.picked_frame_labels_borderwidth_recog = borderwidth
+    def get_recog_picked_frame_labels_len(self):
+        return len(self.get_recog_picked_frame_labels())
+
+    def get_recog_picked_frame_label_by_index(self, index=0):
+        if self.get_recog_picked_frame_labels_len() > index:
+            return self.picked_frame_labels_for_recog[index]
+        return None
+
+    def get_default_recog_picked_frame_labels_borderwidth(self):
+        return 5
+
+    def get_recog_picked_frame_labels_borderwidth(self):
+        return (
+            self.recog_picked_frame_labels_borderwidth
+            or self.get_default_recog_picked_frame_labels_borderwidth()
+        )
+
+    def set_recog_picked_frame_labels_borderwidth(self, borderwidth=None):
+        self.recog_picked_frame_labels_borderwidth = (
+            borderwidth
+            or self.get_default_recog_picked_frame_labels_borderwidth()
+        )
 
     def get_fw_pick_scrolledframe_forrecog_x(self):
         return self.fw.get_pick_scrolledframe_forrecog_x()
