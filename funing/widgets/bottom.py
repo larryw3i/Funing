@@ -39,11 +39,13 @@ class BottomWidget(WidgetABC):
     def __init__(self, mw):
         super().__init__(mw)
         self.main_msg_label = None
+        self.resize_label = None
 
     def set_widgets(self):
         self.main_msg_label = ttk.Label(
             self.root, text=_("Hello, Welcome to Funing.")
         )
+        self.resize_label = ttk.Label(self.root, text="\u25F0")
 
     def set_x(self):
         pass
@@ -69,6 +71,12 @@ class BottomWidget(WidgetABC):
     def get_height(self):
         return self.main_msg_label.winfo_reqheight()
 
+    def get_mw_height(self):
+        return self.mw.get_height()
+
+    def get_mw_width(self):
+        return self.mw.get_width()
+
     def set_msg(self, msg=None, label=None, fg=MSG_COLOR.INFO, bg=None):
         msg = msg or _("Hello!")
         label = label or self.main_msg_label
@@ -76,11 +84,29 @@ class BottomWidget(WidgetABC):
         bg = bg and bg.value or None
         label.configure(text=msg, foreground=fg, background=bg)
 
+    def get_resize_label_x(self):
+        return self.get_width() - self.get_resize_label_width()
+
+    def get_resize_label_y(self):
+        return self.get_mw_height() - self.get_resize_label_height()
+
+    def get_resize_label_width(self):
+        return self.resize_label.winfo_reqwidth()
+
+    def get_resize_label_height(self):
+        return self.resize_label.winfo_reqheight()
+
     def place(self):
         self.main_msg_label.place(
             x=self.get_x(),
             y=self.get_y(),
             width=self.get_width(),
             height=self.get_height(),
+        )
+        self.resize_label.place(
+            x=self.get_resize_label_x(),
+            y=self.get_resize_label_y(),
+            width=self.get_resize_label_width(),
+            height=self.get_resize_label_height(),
         )
         pass
