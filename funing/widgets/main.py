@@ -60,6 +60,16 @@ class MainWidget:
             self.frame_widget,
             self.info_widget,
         ]
+        self.wait_time = 5
+
+    def get_default_wait_time(self):
+        return 5
+
+    def set_wait_time(self, time=None):
+        self.wait_time = time or self.get_default_wait_time()
+
+    def get_wait_time(self):
+        return self.wait_time
 
     def set_title(self, title=None):
         if title:
@@ -123,19 +133,29 @@ class MainWidget:
 
     def get_width(self, of=1):
         root_width = self.root.winfo_width()
+        _cp = self.get_copy("width")
+        self.mk_tmsg(f"_cp_w {_cp}")
         self._width = (
-            self.get_screenwidth(of=2)
+            _cp
+            if ((self._width == self.default_xywh or root_width == 1) and _cp)
+            else self.get_screenwidth(of=2)
             if (self._width == self.default_xywh or root_width == 1)
-            else self.root.winfo_width()
+            else root_width
         )
         return int(self._width / of)
 
     def get_height(self, of=1):
         root_height = self.root.winfo_height()
+        _cp = self.get_copy("height")
+        self.mk_tmsg(f"_cp_h {_cp}")
         self._height = (
-            self.get_screenheight(of=2)
+            _cp
+            if (
+                (self._height == self.default_xywh or root_height == 1) and _cp
+            )
+            else self.get_screenheight(of=2)
             if (self._height == self.default_xywh or root_height == 1)
-            else self.root.winfo_height()
+            else root_height
         )
         return int(self._height / of)
 
@@ -148,6 +168,12 @@ class MainWidget:
             self._width, self._height, self._x, self._y = geometry
         if update_widget:
             self.root.geometry(self.get_geometry_str())
+
+    def reset_geometry(self):
+        self.root.geometry(
+            f"{self.get_screenwidth(of=2)}x" + f"{self.get_screenheight(of=2)}"
+        )
+        pass
 
     def get_screenheight(self, times=1, of=1):
         return int(self.root.winfo_screenheight() * times / of)
@@ -164,15 +190,19 @@ class MainWidget:
         if self._copy == {}:
             with open(copy_path, "rb") as f:
                 self._copy = pickle.load(f, encoding="utf-8")
-        return (
+        _cp = (
             self._copy.get(key, None)
             if key
             else default
             if default
             else self._copy
         )
+        self.mk_tmsg(self._copy)
+        self.mk_tmsg(f"{key}\t{_cp}")
+        return _cp
 
     def save_copy(self):
+        self.mk_tmsg(self._copy)
         with open(copy_path, "wb") as f:
             pickle.dump(self._copy, f)
         if self.test:
@@ -183,6 +213,23 @@ class MainWidget:
             with open(copy_path, "r") as f:
                 self._copy = pickle.load(f)
         self._copy[key] = value
+        if save_now:
+            self.save_copy()
+
+    def get_copy_keys(self):
+        _cp = self.get_copy()
+        return _cp.keys()
+
+    def del_copy(self, key=None, save_now=False):
+        if not key:
+            return
+        if not (key in self.get_copy_keys()):
+            return
+
+        del self._copy[key]
+
+        self.mk_tmsg(self._copy)
+
         if save_now:
             self.save_copy()
 
@@ -221,6 +268,12 @@ class MainWidget:
 
     def configure(self, event=None):
         self.place()
+        self.set_window_size_copy()
+
+    def set_window_size_copy(self):
+        self.set_copy("width", self.get_width())
+        self.set_copy("height", self.get_height())
+        pass
 
     def set_msg(self, msg=None, label=None, fg=MSG_COLOR.INFO, bg=None):
         self.set_bottom_msg(msg, label, fg=fg, bg=bg)

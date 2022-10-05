@@ -46,10 +46,14 @@ class BottomWidget(WidgetABC):
             self.root, text=_("Hello, Welcome to Funing.")
         )
         self.resize_label = ttk.Label(self.root, text="\u25F0")
-        self.resize_label.bind("<Button-1>",self.resize_window)
+        self.resize_label.bind("<Button-1>", self.resize_window)
 
-    
-    def resize_window(self):
+    def mw_reset_geometry(self):
+        self.mw.reset_geometry()
+        pass
+
+    def resize_window(self, event):
+        self.mw_reset_geometry()
         self.mk_tmsg("Window resized.")
         pass
 
