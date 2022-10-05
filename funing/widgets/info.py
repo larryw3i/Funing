@@ -794,10 +794,10 @@ class InfoWidget(WidgetABC):
                 shutil.move(src, get_new_backup_path())
         self.set_basic_infos(to_none=True)
         self.update_saved_info_combobox_values()
-        self.del_showed_info()
+        self.clear_showed_info()
         self.set_msg(
-            _("Information of %(basic_info)(%(info_id)) is deleted.")
-            % (basic_info, info_id)
+            _("Information of %(basic_info)s (%(info_id)s) is deleted.")
+            % ({"basic_info": basic_info, "info_id": info_id})
         )
         pass
 
@@ -1097,11 +1097,19 @@ class InfoWidget(WidgetABC):
     def set_picked_frame_labels_image(self, frames=None):
         self.set_frame_labels_image(frames)
 
+    def get_saved_frame_labels(self):
+        if len(self.saved_frame_labels) < 1:
+            return None
+        return self.saved_frame_labels
+
     def del_saved_frame_by_id(
-        self, frame_id=None, ask=True, update_widgets=True
+        self, frame_id=None, index=0, ask=True, update_widgets=True
     ):
         if frame_id is None:
             return
+
+        self.show_widget_click(self.get_saved_frame_labels(), index)
+
         if ask:
             if not messagebox.askyesno(
                 _("Delete saved frame"),
@@ -1190,14 +1198,16 @@ class InfoWidget(WidgetABC):
             return
         if self.is_test():
             print("saved_frames_len", len(saved_frames))
+        index = 0
         for _id, f in saved_frames:
             if self.is_test():
                 print("`saved_frame.id`", _id)
             label = ttk.Label(self.pick_scrolledframe_innerframe)
             self.set_label_image(f, label)
+            i = index
             label.bind(
                 "<Button-1>",
-                lambda event, _id=_id: self.del_saved_frame_by_id(_id),
+                lambda event, _id=_id, i=i: self.del_saved_frame_by_id(_id, i),
             )
             label.pack(
                 side="left",
@@ -1206,6 +1216,7 @@ class InfoWidget(WidgetABC):
             )
             simpletooltip.create(label, _("Saved frame, Click to delete."))
             self.saved_frame_labels.append(label)
+            index += 1
         pass
 
     def show_labels_image_by_frames(
@@ -1318,14 +1329,29 @@ class InfoWidget(WidgetABC):
         if show_click:
             labels = self.get_picked_frame_labels_for_recog()
 
-            for l in labels:
-                l.config(borderwidth=0, background="")
+            self.show_widget_click(labels, index)
 
-            label = labels[index]
-            label.config(
-                borderwidth=self.get_recog_picked_frame_labels_borderwidth(),
-                background="blue",
-            )
+        pass
+
+    def show_widget_click(self, widget_list=None, index=0):
+        self.show_widget_click_by_default(widget_list, index)
+        pass
+
+    def show_widget_click_by_default(
+        self, widget_list=None, index=0, borderwidth=8, background="blue"
+    ):
+
+        if widget_list is None:
+            return
+
+        for w in widget_list:
+            w.config(borderwidth=0, background="")
+
+        w = widget_list[index]
+        w.config(
+            borderwidth=borderwidth,
+            background=background,
+        )
 
         pass
 
