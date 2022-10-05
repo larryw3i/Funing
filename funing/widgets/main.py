@@ -134,7 +134,6 @@ class MainWidget:
     def get_width(self, of=1):
         root_width = self.root.winfo_width()
         _cp = self.get_copy("width")
-        self.mk_tmsg(f"_cp_w {_cp}")
         self._width = (
             _cp
             if ((self._width == self.default_xywh or root_width == 1) and _cp)
@@ -147,7 +146,6 @@ class MainWidget:
     def get_height(self, of=1):
         root_height = self.root.winfo_height()
         _cp = self.get_copy("height")
-        self.mk_tmsg(f"_cp_h {_cp}")
         self._height = (
             _cp
             if (
@@ -197,12 +195,9 @@ class MainWidget:
             if default
             else self._copy
         )
-        self.mk_tmsg(self._copy)
-        self.mk_tmsg(f"{key}\t{_cp}")
         return _cp
 
     def save_copy(self):
-        self.mk_tmsg(self._copy)
         with open(copy_path, "wb") as f:
             pickle.dump(self._copy, f)
         if self.test:
@@ -227,8 +222,6 @@ class MainWidget:
             return
 
         del self._copy[key]
-
-        self.mk_tmsg(self._copy)
 
         if save_now:
             self.save_copy()
