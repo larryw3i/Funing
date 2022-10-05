@@ -50,7 +50,7 @@ class BottomWidget(WidgetABC):
 
     
     def resize_window(self):
-        if self.mk_tmsg("Window resized.")
+        self.mk_tmsg("Window resized.")
         pass
 
     def set_x(self):
