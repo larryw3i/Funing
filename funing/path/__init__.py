@@ -22,6 +22,7 @@ user_data_dir_path = user_data_dir(app_name, app_author[0])
 user_config_dir_path = user_config_dir(app_name, app_author[0])
 
 project_path = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+
 copy_path = os.path.join(user_data_dir_path, "copy.pkl")
 recog_datas_dir_path = os.path.join(user_data_dir_path, "recog_datas")
 faces_dir_path = os.path.join(recog_datas_dir_path, "face_images")
@@ -29,6 +30,7 @@ infos_dir_path = os.path.join(recog_datas_dir_path, "infos")
 backup_dir_path = os.path.join(user_data_dir_path, "backup")
 app_data_dir_path = os.path.join(project_path, "data")
 data_cv2_dir_path = os.path.join(app_data_dir_path, "cv2")
+info_templates_path = os.path.join(user_data_dir_path, "info_templates")
 
 default_image_ext = ".jpg"
 image_ext = default_image_ext
@@ -62,6 +64,7 @@ for d in [
     faces_dir_path,
     backup_dir_path,
     app_data_dir_path,
+    info_templates_path,
 ]:
     if not os.path.exists(d):
         os.makedirs(d, exist_ok=True)
@@ -131,3 +134,25 @@ def get_face_image_path_list(info_id):
         for f in os.listdir(face_image_dir_path)
         if f.endswith(image_ext)
     ]
+
+
+def get_info_templates_path():
+    return info_templates_path
+
+
+def get_info_template_path_by_name(name=None):
+    if not name:
+        return None
+    template_path = os.path.join(info_templates_path, name)
+
+
+def list_info_templates_dir():
+    info_templates = os.listdir(info_templates_path)
+    return info_templates
+
+
+def info_template_exists(name=None):
+    if not name:
+        return
+    exist = name in list_info_templates_dir()
+    return exists

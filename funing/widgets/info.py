@@ -71,6 +71,41 @@ class InfoWidget(WidgetABC):
         ) = NEW_INFO_SIGNAL.OTHER.value
         self.innerframe_for_recog = frame_labels_innerframe_for_recog = None
         self.current_clicked_label = None
+        self.info_template_name = None
+        self.info_template_list = None
+
+    def get_info_template_list(self):
+        if not self.info_template_list:
+            self.info_template_list = list_info_templates_dir()
+        return self.info_template_list
+
+    def get_info_template_name(self):
+        name = None
+        if self.info_template_name:
+            name = self.info_template_name
+        elif "info_template" in self.get_copy_keys():
+            name = self.get_copy("info_template")
+            if not info_template_exists(name):
+                names = self.get_info_template_list()
+                if len(names) < 1:
+                    return None
+                name = names[0]
+        return name
+
+    def get_info_template_content(self, name=None):
+        if not name:
+            name = self.get_info_template_name()
+        template_path = get_info_template_path_by_name(name)
+        content = None
+        with open(template_path, "r", encoding="utf-8") as f:
+            content = f.read()
+        return content
+
+    def set_info_template_name(self, name=None):
+        if not name:
+            return
+        self.set_copy("info_template", name)
+        self.info_template_name = name
 
     def get_frame_label_margin(self):
         return self.frame_label_margin
