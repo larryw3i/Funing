@@ -82,20 +82,26 @@ class InfoWidget(WidgetABC):
     def get_info_template_name(self):
         name = None
         if self.info_template_name:
-            name = self.info_template_name
-        elif "info_template" in self.get_copy_keys():
+            return self.info_template_name
+
+        if "info_template" in self.get_copy_keys():
             name = self.get_copy("info_template")
-            if not info_template_exists(name):
-                names = self.get_info_template_list()
-                if len(names) < 1:
-                    return None
-                name = names[0]
+            if info_template_exists(name):
+                return name
+
+        names = self.get_info_template_list()
+        if len(names) < 1:
+            return None
+        name = names[0]
         return name
 
     def get_info_template_content(self, name=None):
         if not name:
             name = self.get_info_template_name()
+            self.mk_tmsg(name)
+        assert not name is None
         template_path = get_info_template_path_by_name(name)
+        self.mk_tmsg(f"template_path\t{template_path}")
         content = None
         with open(template_path, "r", encoding="utf-8") as f:
             content = f.read()
@@ -560,6 +566,7 @@ class InfoWidget(WidgetABC):
         if not isinstance(frames, list):
             frames = [frames]
         self.picked_frames = frames
+
         if update_label:
             self.update_picked_frame_labels()
 
@@ -1116,6 +1123,16 @@ class InfoWidget(WidgetABC):
         if not isinstance(frames, list):
             frames = [frames]
         self.picked_frames = frames + self.picked_frames
+
+        info_id = self.get_info_id()
+        print("info_id", info_id)
+        if (not info_id) and self.get_picked_frames_len() < 2:
+            print(
+                "self.get_info_template_content",
+                self.get_info_template_content(),
+            )
+            self.set_info_text_content(self.get_info_template_content())
+
         if update_label:
             new_added_frames = []
             if self.is_action_read():

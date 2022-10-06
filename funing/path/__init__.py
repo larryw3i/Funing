@@ -144,6 +144,7 @@ def get_info_template_path_by_name(name=None):
     if not name:
         return None
     template_path = os.path.join(info_templates_path, name)
+    return template_path
 
 
 def list_info_templates_dir():

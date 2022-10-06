@@ -39,6 +39,7 @@ class WidgetABC(ABC):
         self.root = self.mw.root
         self.get_copy = self.mw.get_copy
         self.set_copy = self.mw.set_copy
+        self.get_copy_keys = self.mw.get_copy_keys
         self.copy = self.get_copy()
         self.test = self.mw.test
         self.mk_test_msg = self.mw.mk_test_msg
