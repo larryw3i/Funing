@@ -75,6 +75,7 @@ class InfoWidget(WidgetABC):
         self.info_template_list = None
         self.info_template_var = StringVar()
         self.info_templates_combobox = None
+        self.open_info_template_dir_str = _("Open Directory")
 
     def get_info_template_list(self):
         if not self.info_template_list:
@@ -879,6 +880,7 @@ class InfoWidget(WidgetABC):
     def get_info_template_values(self):
         template_names = self.get_info_template_list()
         # template_names = [ Path(n).stem for n in template_names ]
+        template_names += [self.open_info_template_dir_str]
         return template_names
 
     def get_info_templates_combobox_x(self):
@@ -910,11 +912,28 @@ class InfoWidget(WidgetABC):
         self.info_templates_combobox.place_forget()
         pass
 
+    def open_dir(self, dist="~"):
+        _open = (
+            sys.platform == "darwin"
+            and "open"
+            or sys.platform == "win32"
+            and "explorer"
+            or "xdg-open"
+        )
+        subprocess.Popen([_open, dist])
+        pass
+
     def info_template_var_trace_w(self, *args):
         info_template_name = self.info_template_var.get()
+        self.mk_tmsg(f"info_template_name\t{info_template_name}")
+        if info_template_name == self.open_info_template_dir_str:
+            self.open_dir(get_info_templates_path())
+            return
+
         if not info_template_exists(info_template_name):
             self.update_info_template_list()
             return
+
         self.set_info_template_name(info_template_name)
         self.set_info_text_content_use_template()
         pass
@@ -1168,6 +1187,10 @@ class InfoWidget(WidgetABC):
 
         if self.is_action_read():
             self.delete_button_place()
+        if not self.get_info_id():
+            self.place_info_templates_combobox()
+        else:
+            self.place_forget_info_templates_combobox()
 
     def get_picked_frames_len(self):
         return len(self.picked_frames)
