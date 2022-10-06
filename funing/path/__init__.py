@@ -156,4 +156,4 @@ def info_template_exists(name=None):
     if not name:
         return
     exist = name in list_info_templates_dir()
-    return exists
+    return exist

@@ -73,11 +73,22 @@ class InfoWidget(WidgetABC):
         self.current_clicked_label = None
         self.info_template_name = None
         self.info_template_list = None
+        self.info_template_var = StringVar()
+        self.info_templates_combobox = None
 
     def get_info_template_list(self):
         if not self.info_template_list:
             self.info_template_list = list_info_templates_dir()
         return self.info_template_list
+
+    def update_info_template_list(self):
+        self.info_template_list = None
+        self.get_info_template_list()
+
+    def set_info_template_name(self, name=None):
+        if not name:
+            return
+        self.info_template_name = name
 
     def get_info_template_name(self):
         name = None
@@ -99,8 +110,13 @@ class InfoWidget(WidgetABC):
         if not name:
             name = self.get_info_template_name()
             self.mk_tmsg(name)
+        if not name:
+            return None
         assert not name is None
         template_path = get_info_template_path_by_name(name)
+        if not os.path.exists(template_path):
+            return None
+
         self.mk_tmsg(f"template_path\t{template_path}")
         content = None
         with open(template_path, "r", encoding="utf-8") as f:
@@ -390,6 +406,7 @@ class InfoWidget(WidgetABC):
             # self.del_picked_frames_for_recog()
             self.delete_button_place()
             self.set_action(ACTION.READ)
+            self.place_forget_info_templates_combobox()
             pass
 
     def set_action_to_pick(self):
@@ -402,6 +419,7 @@ class InfoWidget(WidgetABC):
         if not self.is_action_recog():
             self.del_picked_frames()
             self.set_action(ACTION.RECOG)
+            self.place_forget_info_templates_combobox()
 
     def get_action(self):
         return self.fw.get_action()
@@ -704,6 +722,8 @@ class InfoWidget(WidgetABC):
         self.del_saved_frames()
         self.del_picked_frames()
         self.clear_info_widget_area_content()
+        self.place_info_templates_combobox()
+        self.set_info_text_content_use_template()
 
     def update_widgets_by_info_id(self, info_id=None):
         self.clear_picked_frame_labels()
@@ -856,6 +876,49 @@ class InfoWidget(WidgetABC):
         self.fw.play_button_command()
         pass
 
+    def get_info_template_values(self):
+        template_names = self.get_info_template_list()
+        # template_names = [ Path(n).stem for n in template_names ]
+        return template_names
+
+    def get_info_templates_combobox_x(self):
+        return self.get_x()
+
+    def get_info_templates_combobox_y(self):
+        return self.get_save_button_y()
+
+    def get_info_templates_combobox_width(self):
+        return int((self.get_save_button_x() - self.get_x()) * 0.7)
+
+    def get_info_templates_combobox_height(self):
+        return self.info_templates_combobox.winfo_reqheight()
+
+    def place_info_templates_combobox(self):
+        if not self.info_templates_combobox:
+            return
+        self.info_templates_combobox.place(
+            x=self.get_info_templates_combobox_x(),
+            y=self.get_info_templates_combobox_y(),
+            width=self.get_info_templates_combobox_width(),
+            height=self.get_info_templates_combobox_height(),
+        )
+        pass
+
+    def place_forget_info_templates_combobox(self):
+        if not self.info_templates_combobox:
+            return
+        self.info_templates_combobox.place_forget()
+        pass
+
+    def info_template_var_trace_w(self, *args):
+        info_template_name = self.info_template_var.get()
+        if not info_template_exists(info_template_name):
+            self.update_info_template_list()
+            return
+        self.set_info_template_name(info_template_name)
+        self.set_info_text_content_use_template()
+        pass
+
     def set_widgets(self):
         super().set_widgets()
         self.set_frame_widget()
@@ -896,6 +959,15 @@ class InfoWidget(WidgetABC):
         simpletooltip.create(
             self.info_text, _("Write additional information here.")
         )
+
+        self.info_templates_combobox = ttk.Combobox(
+            self.root,
+            textvariable=self.info_template_var,
+            values=self.get_info_template_values(),
+            justify="center",
+        )
+        self.info_template_var.trace("w", self.info_template_var_trace_w)
+
         self.save_button = ttk.Button(
             self.root, text=_("Save"), command=self.save_button_command
         )
@@ -1127,17 +1199,21 @@ class InfoWidget(WidgetABC):
         info_id = self.get_info_id()
         print("info_id", info_id)
         if (not info_id) and self.get_picked_frames_len() < 2:
-            print(
-                "self.get_info_template_content",
-                self.get_info_template_content(),
-            )
-            self.set_info_text_content(self.get_info_template_content())
+            self.place_info_templates_combobox()
+            self.set_info_text_content_use_template()
 
         if update_label:
             new_added_frames = []
             if self.is_action_read():
                 pass
             self.set_picked_frame_labels_image(self.picked_frames)
+
+    def set_info_text_content_use_template(self):
+        content = self.get_info_template_content()
+        if not content:
+            return
+        self.set_info_text_content(content)
+        pass
 
     def get_info_frame(self):
         frame = ttk.Frame(self.info_scrolledframe_innerframe)
