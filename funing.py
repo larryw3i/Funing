@@ -17,7 +17,7 @@ from funing.settings import *
 def get_dev_dep_requirements_full():
     return [
         (
-            "opencv_contrib-python >= 4.6.0.66",
+            "opencv-contrib-python >= 4.6.0.66",
             "https://github.com/opencv/opencv_contrib",
             "Apache License 2.0",
             "https://github.com/opencv/opencv_contrib/blob/4.x/LICENSE",
