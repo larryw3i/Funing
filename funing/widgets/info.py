@@ -1458,6 +1458,9 @@ class InfoWidget(WidgetABC):
 
     def recog_picked_frame_by_index(self, index=None, show_click=True):
         assert index is not None
+        if self.is_info_ids_none():
+            self.set_msg(_("Saved dateset doesn't exist."))
+            return
         if index is None:
             if self.is_test():
                 print("`recog_picked_frame_by_index.index` is `None`.")
@@ -1595,7 +1598,12 @@ class InfoWidget(WidgetABC):
         self.add_picked_frames(frames)
         pass
 
+    def is_info_ids_none(self):
+        return self.fw.is_info_ids_none()
+
     def recog_frame_by_default(self):
+        # if self.is_info_ids_none():
+        #    return
         self.clear_picked_frame_labels()
         self.clear_saved_frame_labels()
         frames = self.get_picked_frames_from_frame()

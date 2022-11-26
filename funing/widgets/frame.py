@@ -310,6 +310,10 @@ class FrameWidget(WidgetABC):
     def get_info_ids_len(self):
         return self.get_info_id_list_len()
 
+    def is_info_ids_none(self):
+        info_ids = self.get_info_ids()
+        return info_ids is None or len(info_ids) < 1
+
     def get_info_id_list_len(self):
         return len(self.info_ids)
 
