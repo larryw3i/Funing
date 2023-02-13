@@ -91,3 +91,11 @@ def run(test=False):
     from funing.widgets import show
 
     show(test)
+
+def get_help(_print=True):
+    _help = """
+    """
+    print(_help)
+    return _help
+
+
