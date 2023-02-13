@@ -94,8 +94,12 @@ def run(test=False):
 
 def get_help(_print=True):
     _help = """
+    -h:---------Shows help.
+    -v:---------Shows version.
+    -s:---------Start funing.
     """
-    print(_help)
+    if _print:
+        print(_help)
     return _help
 
 

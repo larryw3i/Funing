@@ -131,6 +131,11 @@ def print_version():
     print(app_version)
 
 
+def get_help_test(_print=True):
+    _help = """
+    """
+    return get_help(_print=False) + _help
+
 if __name__ == "__main__":
     sys_argv = sys.argv[1:]
     optlist, args = getopt.getopt(sys_argv, "")
