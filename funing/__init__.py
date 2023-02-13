@@ -92,6 +92,7 @@ def run(test=False):
 
     show(test)
 
+
 def get_help(_print=True):
     _help = """
     -h:---------Shows help.
@@ -101,5 +102,3 @@ def get_help(_print=True):
     if _print:
         print(_help)
     return _help
-
-

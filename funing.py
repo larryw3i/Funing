@@ -136,6 +136,7 @@ def get_help_test(_print=True):
     """
     return get_help(_print=False) + _help
 
+
 if __name__ == "__main__":
     sys_argv = sys.argv[1:]
     optlist, args = getopt.getopt(sys_argv, "")
@@ -159,6 +160,8 @@ if __name__ == "__main__":
         if a in ["pass"]:
             break
         else:
-            print('''
+            print(
+                """
                 
-                ''')
+                """
+            )
