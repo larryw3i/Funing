@@ -224,6 +224,9 @@ test_funing(){
     ${bin_dir}/python3 ${app_name}.py test
 }
 
+print_help(){
+    ${py3bin} ${app_name}.py h 
+}
 if [[ \
     $PATH != *"${PWD}/venv/local/bin"* && \
     $PATH != *"${PWD}/venv/bin"* ]]
@@ -271,7 +274,7 @@ dep(){      p3;                 }
 
 depu(){     _pip3_u;            }
 bk(){       just_backup;        }
-
+help(){     print_help;         }
 
 if [ $# -eq 0 ]
 then

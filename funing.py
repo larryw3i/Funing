@@ -132,8 +132,19 @@ def print_version():
 
 
 def get_help_test(_print=False):
-    _help = get_help( _print=False ) + """
+    _help = (
+        get_help(_print=False)
+        + """
+    t:  Start test.
+4xget:  Generate settings4t.py(local settings.py).
+  dep:  Install development requirements.
+dep_u:  Install latest development requirements.
+  ver:  Print the version.
+  pcd:  Print all classes and methods.
+ prtf:  Print all files.
+   -h:  Print helps.
     """
+    )
     if _print:
         print(_help)
     return get_help(_print=False) + _help
@@ -161,5 +172,7 @@ if __name__ == "__main__":
             print_file()
         if a in ["pass"]:
             break
-        else:
+        if a in ["h","help"]:
             print(get_help_test())
+        else:
+            pass
