@@ -273,8 +273,9 @@ style(){    blk;                }
 dep(){      p3;                 }
 
 depu(){     _pip3_u;            }
-bk(){       just_backup;        }
+bk(){       blk;just_backup;    }
 help(){     print_help;         }
+h(){        help;               }
 
 if [ $# -eq 0 ]
 then
@@ -309,6 +310,8 @@ then
 
         depu(){     _pip3_u;            }
         bk(){       just_backup;        }
+        help(){     print_help;         }
+        h(){        help;               }
     "
    
 else

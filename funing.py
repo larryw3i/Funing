@@ -172,7 +172,7 @@ if __name__ == "__main__":
             print_file()
         if a in ["pass"]:
             break
-        if a in ["h","help"]:
+        if a in ["h", "help"]:
             print(get_help_test())
         else:
             pass
