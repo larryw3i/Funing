@@ -147,7 +147,7 @@ dep_u:  Install latest development requirements.
     )
     if _print:
         print(_help)
-    return get_help(_print=False) + _help
+    return _help
 
 
 if __name__ == "__main__":
