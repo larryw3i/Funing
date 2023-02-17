@@ -2,6 +2,7 @@
 
 args=$*
 app_name='funing'
+apppy="${app_name}.py"
 local_dir="${app_name}/locale"
 pot_path="${local_dir}/${app_name}.pot"
 mo0_path="${local_dir}/en_US/LC_MESSAGES/${app_name}.mo"
@@ -275,9 +276,12 @@ dep(){      p3;                 }
 depu(){     _pip3_u;            }
 bk(){       blk;just_backup;    }
 help(){     print_help;         }
-h(){        help;               }
+# h(){        help;               }
 
-if [ $# -eq 0 ]
+if [[ $1 == "py" ]] 
+then 
+    ${py3bin} ${apppy} ${@:2}
+elif [[ $# -eq 0 ]] || [[ "-h" == *"$*"* ]]
 then
     echo " 
         tu(){       twine_upload;       }
@@ -311,7 +315,6 @@ then
         depu(){     _pip3_u;            }
         bk(){       just_backup;        }
         help(){     print_help;         }
-        h(){        help;               }
     "
    
 else

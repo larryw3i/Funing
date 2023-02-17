@@ -131,6 +131,7 @@ def print_version():
     print(app_version)
 
 
+# deprecated
 def get_help_test(_print=False):
     _help = (
         get_help(_print=False)
@@ -172,7 +173,7 @@ if __name__ == "__main__":
             print_file()
         if a in ["pass"]:
             break
-        if a in ["h", "help"]:
-            print(get_help_test())
+        # if a in ["h", "help"]:
+        #     print(get_help_test())
         else:
             pass

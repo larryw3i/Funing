@@ -75,11 +75,32 @@ class InfoWidget(WidgetABC):
         self.info_template_list = None
         self.info_template_var = StringVar()
         self.info_templates_combobox = None
+        self.info_template_dir_path = None
         self.open_info_template_dir_str = _("Open Directory")
 
-    def get_info_template_list(self):
-        if not self.info_template_list:
-            self.info_template_list = list_info_templates_dir()
+    def get_info_template_dir_path(self):
+        if self.info_template_dir_path is None:
+            self.set_info_template_dir_path()
+        if self.info_template_dir_path is None:
+            return None
+        return self.info_template_dir_path
+        pass
+
+    def set_info_template_dir_path(self,_dir = None):
+        if _dir = None:
+            _dir = str(Path.home())
+        self.info_template_dir_path = _dir
+        pass
+
+    def list_info_templates_dir(self):
+        if self.get_info_template_dir_path is None:
+            return None
+
+        pass
+
+    def get_info_template_list(self,_refresh=False):
+        if not self.info_template_list or _refresh:
+            self.info_template_list = self.list_info_templates_dir()
         return self.info_template_list
 
     def update_info_template_list(self):
@@ -927,7 +948,17 @@ class InfoWidget(WidgetABC):
         info_template_name = self.info_template_var.get()
         self.mk_tmsg(f"info_template_name\t{info_template_name}")
         if info_template_name == self.open_info_template_dir_str:
-            self.open_dir(get_info_templates_path())
+            # self.open_dir(get_info_templates_path())
+            _path = filedialog.askdirectory(
+                parent = self.root, 
+                title=_("Select a template directory."),
+                initialdir = str(Path.home()),
+                mustexist = True
+            )
+            if _path is None:
+                return
+            self.set_copy("info_template_dir",_path)
+            self.set_info_template_dir_path(_dir = _path)
             return
 
         if not info_template_exists(info_template_name):
