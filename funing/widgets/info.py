@@ -76,31 +76,55 @@ class InfoWidget(WidgetABC):
         self.info_template_var = StringVar()
         self.info_templates_combobox = None
         self.info_template_dir_path = None
+        self.info_template_file_exts = [".txt", ".TXT"]
         self.open_info_template_dir_str = _("Open Directory")
+
+    def update_info_templates_combobox(self):
+
+        pass
 
     def get_info_template_dir_path(self):
         if self.info_template_dir_path is None:
             self.set_info_template_dir_path()
         if self.info_template_dir_path is None:
-            return None
+            return str(Path.home())
         return self.info_template_dir_path
         pass
 
-    def set_info_template_dir_path(self,_dir = None):
-        if _dir = None:
+    def set_info_template_dir_path(self, _dir=None, update_ui=False):
+        if _dir == None:
             _dir = str(Path.home())
         self.info_template_dir_path = _dir
+        if update_ui:
+            self.update_info_templates_combobox()
         pass
 
     def list_info_templates_dir(self):
         if self.get_info_template_dir_path is None:
             return None
-
+        listed_contents = os.listdir(self.get_info_template_dir_path())
+        listed_contents = [
+            f
+            for f in listed_contents
+            if os.path.isfile(
+                os.path.join(self.get_info_template_dir_path(), f)
+            )
+        ]
+        new_listed_contents = []
+        for f in listed_contents:
+            for e in self.info_template_file_exts:
+                if f.endswith(e):
+                    new_listed_contents.append(e)
+                    break
+        listed_contents = None
+        return new_listed_contents
         pass
 
-    def get_info_template_list(self,_refresh=False):
+    def get_info_template_list(self, _refresh=False):
         if not self.info_template_list or _refresh:
             self.info_template_list = self.list_info_templates_dir()
+        if not self.info_template_list:
+            return []
         return self.info_template_list
 
     def update_info_template_list(self):
@@ -950,15 +974,15 @@ class InfoWidget(WidgetABC):
         if info_template_name == self.open_info_template_dir_str:
             # self.open_dir(get_info_templates_path())
             _path = filedialog.askdirectory(
-                parent = self.root, 
+                parent=self.root,
                 title=_("Select a template directory."),
-                initialdir = str(Path.home()),
-                mustexist = True
+                initialdir=str(Path.home()),
+                mustexist=True,
             )
             if _path is None:
                 return
-            self.set_copy("info_template_dir",_path)
-            self.set_info_template_dir_path(_dir = _path)
+            self.set_copy("info_template_dir", _path)
+            self.set_info_template_dir_path(_dir=_path, update_ui=True)
             return
 
         if not info_template_exists(info_template_name):
