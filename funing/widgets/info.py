@@ -202,9 +202,10 @@ class InfoWidget(WidgetABC):
         return content
 
     def set_info_template_name(self, name=None, update_ui=False):
+        print(205, name)
         if not name:
             return
-        self.set_copy(info_template_copy_name, name)
+        self.set_copy(self.info_template_copy_name, name)
         self.info_template_name = name
         if update_ui:
             self.set_info_text_content_use_template()
@@ -1002,9 +1003,15 @@ class InfoWidget(WidgetABC):
         subprocess.Popen([_open, dist])
         pass
 
+    def info_template_exists(self, name):
+        _exist = os.path.exists(
+            os.path.join(self.get_info_template_dir_path(), name)
+        )
+        return _exist
+
     def info_template_var_trace_w(self, *args):
         info_template_name = self.info_template_var.get()
-        self.mk_tmsg(f"info_template_name\t{info_template_name}")
+        # self.mk_tmsg(f"info_template_name\t{info_template_name}")
         if info_template_name == self.open_info_template_dir_str:
             # self.open_dir(get_info_templates_path())
             _path = filedialog.askdirectory(
@@ -1019,11 +1026,10 @@ class InfoWidget(WidgetABC):
             self.set_info_template_dir_path(_dir=_path, update_ui=True)
             return
 
-        if not info_template_exists(info_template_name):
+        if not self.info_template_exists(info_template_name):
             self.update_info_template_list()
             return
-
-        self.set_info_template_name(info_template_name, update_ui=True)
+        self.set_info_template_name(name=info_template_name, update_ui=True)
         # self.set_info_text_content_use_template()
         pass
 
@@ -1323,6 +1329,7 @@ class InfoWidget(WidgetABC):
     def set_info_text_content_use_template(self):
         content = self.get_info_template_content()
         if not content:
+            print(1326)
             return
         self.set_info_text_content(content)
         pass
