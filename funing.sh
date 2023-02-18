@@ -283,40 +283,43 @@ then
     ${py3bin} ${apppy} ${@:2}
 elif [[ $# -eq 0 ]] || [[ "-h" == *"$*"* ]]
 then
-    echo " 
-        tu(){       twine_upload;       }
-        ugi(){      update_gitignore;   }
-        tst(){      test_funing;        }
-
-        gita(){     git_add;            }
-        bd(){       bdist;              }
-        kc(){       keep_code;          }
-
-        venv(){     activate_venv;      }
-        msgf(){     _msgfmt;            }
-        xget(){     _xgettext;          }
-
-        its(){       _i_test;           }
-        bdup(){     bd; tu;             }
-        s(){       _start;              }
-
-        p3(){       venv;_pip3;         }
-        _cat(){     cat_bt;             }
-        _cat_(){    _cat | tr -s '\n';  }
-
-        bdeb(){     bdist_deb;          }
-        wcl(){      _cat_ | wc -l;      }
-        blk(){      _black;             }
-
-        4xget(){    gen4xget;           }
-        style(){    blk;                }
-        dep(){      p3;                 }
-
-        depu(){     _pip3_u;            }
-        bk(){       just_backup;        }
-        help(){     print_help;         }
-    "
-   
+    if [[ "$0" != "-bash" ]];
+    then
+        cat $0
+    fi
+#     echo " 
+#         tu(){       twine_upload;       }
+#         ugi(){      update_gitignore;   }
+#         tst(){      test_funing;        }
+# 
+#         gita(){     git_add;            }
+#         bd(){       bdist;              }
+#         kc(){       keep_code;          }
+# 
+#         venv(){     activate_venv;      }
+#         msgf(){     _msgfmt;            }
+#         xget(){     _xgettext;          }
+# 
+#         its(){       _i_test;           }
+#         bdup(){     bd; tu;             }
+#         s(){       _start;              }
+# 
+#         p3(){       venv;_pip3;         }
+#         _cat(){     cat_bt;             }
+#         _cat_(){    _cat | tr -s '\n';  }
+# 
+#         bdeb(){     bdist_deb;          }
+#         wcl(){      _cat_ | wc -l;      }
+#         blk(){      _black;             }
+# 
+#         4xget(){    gen4xget;           }
+#         style(){    blk;                }
+#         dep(){      p3;                 }
+# 
+#         depu(){     _pip3_u;            }
+#         bk(){       just_backup;        }
+#         help(){     print_help;         }
+#    "  
 else
     $*
 fi

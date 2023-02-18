@@ -140,6 +140,7 @@ def get_info_templates_path():
     return info_templates_path
 
 
+# Deprecated
 def get_info_template_path_by_name(name=None):
     if not name:
         return None

@@ -47,7 +47,7 @@ class MainWidget:
         self._lr_sep_x = (
             self._width
         ) = self._height = self._x = self._y = self.default_xywh = 10
-        self._copy = {}
+        self._copies = {}
         self.top_widget = TopWidget(self)
         self.bottom_widget = BottomWidget(self)
         self.frame_widget = FrameWidget(self)
@@ -184,47 +184,59 @@ class MainWidget:
         sys.exit()
         pass
 
-    def get_copy(self, key=None, default=None):
-        if self._copy == {}:
+    def set_copies(self):
+        try:
             with open(copy_path, "rb") as f:
-                self._copy = pickle.load(f, encoding="utf-8")
-        _cp = (
-            self._copy.get(key, None)
-            if key
-            else default
-            if default
-            else self._copy
-        )
+                self._copies = pickle.load(f, encoding="utf-8")
+        except Exception as e:
+            print(_("Failed to open copy file."))
+            print(e)
+
+    def get_copies(self):
+        if self._copies == {}:
+            self.set_copies()
+        return self._copies
+
+    def get_copy(self, key=None, default=None):
+        if self._copies == {}:
+            self.get_copies()
+        #             with open(copy_path, "rb") as f:
+        #                 self._copies = pickle.load(f, encoding="utf-8")
+        _cp = self._copies.get(key, None) if key else default
+        #             if default
+        #             else self._copies
+        # )
         return _cp
 
-    def save_copy(self):
+    def save_copies(self):
         with open(copy_path, "wb") as f:
-            pickle.dump(self._copy, f)
+            pickle.dump(self._copies, f)
         if self.test:
             print(_("Copy Saved!"))
 
     def set_copy(self, key, value, save_now=False):
-        if self._copy == None:
-            with open(copy_path, "r") as f:
-                self._copy = pickle.load(f)
-        self._copy[key] = value
+        if self._copies == None:
+            self.set_copies()
+        #            with open(copy_path, "r") as f:
+        #                self._copies = pickle.load(f)
+        self._copies[key] = value
         if save_now:
-            self.save_copy()
+            self.save_copies()
 
-    def get_copy_keys(self):
-        _cp = self.get_copy()
-        return _cp.keys()
+    def get_copies_keys(self):
+        _cps = self.get_copies()
+        return _cps.keys()
 
     def del_copy(self, key=None, save_now=False):
         if not key:
             return
-        if not (key in self.get_copy_keys()):
+        if not (key in self.get_copies_keys()):
             return
 
-        del self._copy[key]
+        del self._copies[key]
 
         if save_now:
-            self.save_copy()
+            self.save_copies()
 
     def is_test(self):
         return self.test
@@ -241,7 +253,7 @@ class MainWidget:
         sys.exit(0)
 
     def wm_delete_window_protocol(self):
-        self.save_copy()
+        self.save_copies()
         self.sys_exit()
 
     def bind(self):
