@@ -131,6 +131,26 @@ def print_version():
     print(app_version)
 
 
+# deprecated
+def get_help_test(_print=False):
+    _help = (
+        get_help(_print=False)
+        + """
+    t:  Start test.
+4xget:  Generate settings4t.py(local settings.py).
+  dep:  Install development requirements.
+dep_u:  Install latest development requirements.
+  ver:  Print the version.
+  pcd:  Print all classes and methods.
+ prtf:  Print all files.
+   -h:  Print helps.
+    """
+    )
+    if _print:
+        print(_help)
+    return _help
+
+
 if __name__ == "__main__":
     sys_argv = sys.argv[1:]
     optlist, args = getopt.getopt(sys_argv, "")
@@ -153,3 +173,7 @@ if __name__ == "__main__":
             print_file()
         if a in ["pass"]:
             break
+        # if a in ["h", "help"]:
+        #     print(get_help_test())
+        else:
+            pass

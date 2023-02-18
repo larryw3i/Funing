@@ -2,6 +2,7 @@
 
 args=$*
 app_name='funing'
+apppy="${app_name}.py"
 local_dir="${app_name}/locale"
 pot_path="${local_dir}/${app_name}.pot"
 mo0_path="${local_dir}/en_US/LC_MESSAGES/${app_name}.mo"
@@ -224,6 +225,9 @@ test_funing(){
     ${bin_dir}/python3 ${app_name}.py test
 }
 
+print_help(){
+    ${py3bin} ${app_name}.py h 
+}
 if [[ \
     $PATH != *"${PWD}/venv/local/bin"* && \
     $PATH != *"${PWD}/venv/bin"* ]]
@@ -270,44 +274,52 @@ style(){    blk;                }
 dep(){      p3;                 }
 
 depu(){     _pip3_u;            }
-bk(){       just_backup;        }
+bk(){       blk;just_backup;    }
+help(){     print_help;         }
+# h(){        help;               }
 
-
-if [ $# -eq 0 ]
+if [[ $1 == "py" ]] 
+then 
+    ${py3bin} ${apppy} ${@:2}
+elif [[ $# -eq 0 ]] || [[ "-h" == *"$*"* ]]
 then
-    echo " 
-        tu(){       twine_upload;       }
-        ugi(){      update_gitignore;   }
-        tst(){      test_funing;        }
-
-        gita(){     git_add;            }
-        bd(){       bdist;              }
-        kc(){       keep_code;          }
-
-        venv(){     activate_venv;      }
-        msgf(){     _msgfmt;            }
-        xget(){     _xgettext;          }
-
-        its(){       _i_test;           }
-        bdup(){     bd; tu;             }
-        s(){       _start;              }
-
-        p3(){       venv;_pip3;         }
-        _cat(){     cat_bt;             }
-        _cat_(){    _cat | tr -s '\n';  }
-
-        bdeb(){     bdist_deb;          }
-        wcl(){      _cat_ | wc -l;      }
-        blk(){      _black;             }
-
-        4xget(){    gen4xget;           }
-        style(){    blk;                }
-        dep(){      p3;                 }
-
-        depu(){     _pip3_u;            }
-        bk(){       just_backup;        }
-    "
-   
+    if [[ "$0" != "-bash" ]];
+    then
+        cat $0
+    fi
+#     echo " 
+#         tu(){       twine_upload;       }
+#         ugi(){      update_gitignore;   }
+#         tst(){      test_funing;        }
+# 
+#         gita(){     git_add;            }
+#         bd(){       bdist;              }
+#         kc(){       keep_code;          }
+# 
+#         venv(){     activate_venv;      }
+#         msgf(){     _msgfmt;            }
+#         xget(){     _xgettext;          }
+# 
+#         its(){       _i_test;           }
+#         bdup(){     bd; tu;             }
+#         s(){       _start;              }
+# 
+#         p3(){       venv;_pip3;         }
+#         _cat(){     cat_bt;             }
+#         _cat_(){    _cat | tr -s '\n';  }
+# 
+#         bdeb(){     bdist_deb;          }
+#         wcl(){      _cat_ | wc -l;      }
+#         blk(){      _black;             }
+# 
+#         4xget(){    gen4xget;           }
+#         style(){    blk;                }
+#         dep(){      p3;                 }
+# 
+#         depu(){     _pip3_u;            }
+#         bk(){       just_backup;        }
+#         help(){     print_help;         }
+#    "  
 else
     $*
 fi

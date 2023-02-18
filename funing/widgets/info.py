@@ -72,32 +72,105 @@ class InfoWidget(WidgetABC):
         self.innerframe_for_recog = frame_labels_innerframe_for_recog = None
         self.current_clicked_label = None
         self.info_template_name = None
+        self.info_template_copy_name = "info_template"
         self.info_template_list = None
         self.info_template_var = StringVar()
         self.info_templates_combobox = None
+        self.info_template_dir_path = None
+        self.info_template_dir_path_copy_name = "info_template_dir"
+        self.info_template_file_exts = [".txt"]
         self.open_info_template_dir_str = _("Open Directory")
 
-    def get_info_template_list(self):
+    def update_info_templates_combobox(self):
+        if not self.info_templates_combobox:
+            return
+        self.info_templates_combobox[
+            "values"
+        ] = self.get_info_template_list() + [self.open_info_template_dir_str]
+
+        pass
+
+    def get_info_template_dir_path(self):
+        if self.info_template_dir_path is None:
+            self.set_info_template_dir_path(update_ui=False)
+            if (
+                self.info_template_dir_path is None
+                or self.info_template_dir_path == ()
+            ):
+                _path = str(Path.home())
+                self.set_info_template_dir_path(
+                    self.info_template_dir_path_copy_name, _path
+                )
+
+        if not os.path.exists(self.info_template_dir_path):
+            print(_("Path does not exist."))
+            return str(Path.home())
+        return self.info_template_dir_path
+
+    def set_info_template_dir_path(self, _dir=None, update_ui=False):
+        if _dir == None:
+            _dir_copy = self.get_copy(
+                key=self.info_template_dir_path_copy_name
+            )
+            if _dir_copy == None or _dir_copy == ():
+                _dir = str(Path.home())
+            else:
+                if not os.path.exists(_dir_copy):
+                    print(_("Path does not exist."))
+                    _dir = str(Path.home())
+                else:
+                    _dir = _dir_copy
+        else:
+            self.set_copy(self.info_template_dir_path_copy_name, _dir)
+        #         _dir = _dir[0] if isinstance(_dir,tuple) else _dir
+        self.info_template_dir_path = _dir
+        if update_ui:
+            self.update_info_templates_combobox()
+        pass
+
+    def list_info_templates_dir(self):
+        if self.get_info_template_dir_path() is None:
+            return None
+        listed_contents = os.listdir(self.get_info_template_dir_path())
+        listed_contents = [
+            f
+            for f in listed_contents
+            if os.path.isfile(
+                os.path.join(self.get_info_template_dir_path(), f)
+            )
+        ]
+        new_listed_contents = []
+        for f in listed_contents:
+            for e in self.info_template_file_exts:
+                if f.lower().endswith(e):
+                    new_listed_contents.append(f)
+                    break
+        listed_contents = None
+        return new_listed_contents
+
+    def get_info_template_list(self, _refresh=False):
+        if not self.info_template_list or _refresh:
+            self.info_template_list = self.list_info_templates_dir()
         if not self.info_template_list:
-            self.info_template_list = list_info_templates_dir()
+            return []
         return self.info_template_list
 
     def update_info_template_list(self):
         self.info_template_list = None
         self.get_info_template_list()
 
-    def set_info_template_name(self, name=None):
-        if not name:
-            return
-        self.info_template_name = name
+    # def set_info_template_name(self, name=None):
+    #    if not name:
+    #        return
+    #    self.info_template_name = name
 
     def get_info_template_name(self):
         name = None
         if self.info_template_name:
             return self.info_template_name
 
-        if "info_template" in self.get_copy_keys():
-            name = self.get_copy("info_template")
+        if self.info_template_dir_path_copy_name in self.get_copies_keys():
+            name = self.get_copy(self.info_template_dir_path_copy_name)
             if info_template_exists(name):
                 return name
 
@@ -107,6 +180,10 @@ class InfoWidget(WidgetABC):
         name = names[0]
         return name
 
+    def get_info_template_path_by_name(self, name):
+        _path = os.path.join(self.get_info_template_dir_path(), name)
+        return _path
+
     def get_info_template_content(self, name=None):
         if not name:
             name = self.get_info_template_name()
@@ -114,7 +191,7 @@ class InfoWidget(WidgetABC):
         if not name:
             return None
         assert not name is None
-        template_path = get_info_template_path_by_name(name)
+        template_path = self.get_info_template_path_by_name(name)
         if not os.path.exists(template_path):
             return None
 
@@ -124,11 +201,14 @@ class InfoWidget(WidgetABC):
             content = f.read()
         return content
 
-    def set_info_template_name(self, name=None):
+    def set_info_template_name(self, name=None, update_ui=False):
+        print(205, name)
         if not name:
             return
-        self.set_copy("info_template", name)
+        self.set_copy(self.info_template_copy_name, name)
         self.info_template_name = name
+        if update_ui:
+            self.set_info_text_content_use_template()
 
     def get_frame_label_margin(self):
         return self.frame_label_margin
@@ -923,19 +1003,34 @@ class InfoWidget(WidgetABC):
         subprocess.Popen([_open, dist])
         pass
 
+    def info_template_exists(self, name):
+        _exist = os.path.exists(
+            os.path.join(self.get_info_template_dir_path(), name)
+        )
+        return _exist
+
     def info_template_var_trace_w(self, *args):
         info_template_name = self.info_template_var.get()
-        self.mk_tmsg(f"info_template_name\t{info_template_name}")
+        # self.mk_tmsg(f"info_template_name\t{info_template_name}")
         if info_template_name == self.open_info_template_dir_str:
-            self.open_dir(get_info_templates_path())
+            # self.open_dir(get_info_templates_path())
+            _path = filedialog.askdirectory(
+                parent=self.root,
+                title=_("Select a template directory."),
+                initialdir=str(Path.home()),
+                mustexist=True,
+            )
+            if _path is None:
+                return
+            self.set_copy(self.info_template_dir_path_copy_name, _path)
+            self.set_info_template_dir_path(_dir=_path, update_ui=True)
             return
 
-        if not info_template_exists(info_template_name):
+        if not self.info_template_exists(info_template_name):
             self.update_info_template_list()
             return
-
-        self.set_info_template_name(info_template_name)
-        self.set_info_text_content_use_template()
+        self.set_info_template_name(name=info_template_name, update_ui=True)
+        # self.set_info_text_content_use_template()
         pass
 
     def set_widgets(self):
@@ -984,6 +1079,14 @@ class InfoWidget(WidgetABC):
             textvariable=self.info_template_var,
             values=self.get_info_template_values(),
             justify="center",
+        )
+        simpletooltip.create(
+            self.info_templates_combobox,
+            _(
+                "Select a template file or "
+                + "a directory contains template files."
+                + ' Template files ends with ".txt".'
+            ),
         )
         self.info_template_var.trace("w", self.info_template_var_trace_w)
 
@@ -1458,6 +1561,9 @@ class InfoWidget(WidgetABC):
 
     def recog_picked_frame_by_index(self, index=None, show_click=True):
         assert index is not None
+        if self.is_info_ids_none():
+            self.set_msg(_("Saved dateset doesn't exist."))
+            return
         if index is None:
             if self.is_test():
                 print("`recog_picked_frame_by_index.index` is `None`.")
@@ -1595,7 +1701,12 @@ class InfoWidget(WidgetABC):
         self.add_picked_frames(frames)
         pass
 
+    def is_info_ids_none(self):
+        return self.fw.is_info_ids_none()
+
     def recog_frame_by_default(self):
+        # if self.is_info_ids_none():
+        #    return
         self.clear_picked_frame_labels()
         self.clear_saved_frame_labels()
         frames = self.get_picked_frames_from_frame()
