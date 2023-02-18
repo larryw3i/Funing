@@ -169,7 +169,7 @@ class InfoWidget(WidgetABC):
         if self.info_template_name:
             return self.info_template_name
 
-        if self.info_template_dir_path_copy_name in self.get_copy_keys():
+        if self.info_template_dir_path_copy_name in self.get_copies_keys():
             name = self.get_copy(self.info_template_dir_path_copy_name)
             if info_template_exists(name):
                 return name
