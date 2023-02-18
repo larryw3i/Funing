@@ -1080,6 +1080,14 @@ class InfoWidget(WidgetABC):
             values=self.get_info_template_values(),
             justify="center",
         )
+        simpletooltip.create(
+            self.info_templates_combobox,
+            _(
+                "Select a template file or "
+                + "a directory contains template files."
+                + ' Template files ends with ".txt".'
+            ),
+        )
         self.info_template_var.trace("w", self.info_template_var_trace_w)
 
         self.save_button = ttk.Button(
@@ -1329,7 +1337,6 @@ class InfoWidget(WidgetABC):
     def set_info_text_content_use_template(self):
         content = self.get_info_template_content()
         if not content:
-            print(1326)
             return
         self.set_info_text_content(content)
         pass

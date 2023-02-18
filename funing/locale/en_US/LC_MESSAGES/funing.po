@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Funing 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-18 16:44+0800\n"
+"POT-Creation-Date: 2023-02-18 21:34+0800\n"
 "PO-Revision-Date: 2022-11-27 02:30+0800\n"
 "Last-Translator: larryw3i <larryw3i@163.com>\n"
 "Language-Team: Chinese - China <larryw3i@163.com>\n"
@@ -131,6 +131,7 @@ msgstr ""
 #: funing/widgets/info.py:752 funing/widgets/info.py:754
 #: funing/widgets/info.py:829 funing/widgets/info.py:858
 #: funing/widgets/info.py:991 funing/widgets/info.py:1080
+#: funing/widgets/info.py:1094
 msgid "Save"
 msgstr ""
 
@@ -367,6 +368,7 @@ msgstr ""
 #: funing/widgets/info.py:1064 funing/widgets/info.py:1066
 #: funing/widgets/info.py:1144 funing/widgets/info.py:1181
 #: funing/widgets/info.py:1332 funing/widgets/info.py:1421
+#: funing/widgets/info.py:1435
 msgid "Click to delete."
 msgstr ""
 
@@ -403,7 +405,8 @@ msgstr ""
 #: funing/widgets/info.py:427 funing/widgets/info.py:173
 #: funing/widgets/info.py:454 funing/widgets/info.py:231
 #: funing/widgets/info.py:514 funing/widgets/info.py:310
-#: funing/widgets/info.py:593
+#: funing/widgets/info.py:593 funing/widgets/info.py:311
+#: funing/widgets/info.py:594
 #, fuzzy
 msgid "Nothing picked."
 msgstr "Nothing enter"
@@ -414,7 +417,7 @@ msgstr "Nothing enter"
 #: funing/widgets/info.py:724 funing/widgets/info.py:741
 #: funing/widgets/info.py:743 funing/widgets/info.py:818
 #: funing/widgets/info.py:847 funing/widgets/info.py:971
-#: funing/widgets/info.py:1060
+#: funing/widgets/info.py:1060 funing/widgets/info.py:1066
 msgid "Write information in your strict format."
 msgstr ""
 
@@ -424,7 +427,7 @@ msgstr ""
 #: funing/widgets/info.py:728 funing/widgets/info.py:745
 #: funing/widgets/info.py:747 funing/widgets/info.py:822
 #: funing/widgets/info.py:851 funing/widgets/info.py:975
-#: funing/widgets/info.py:1064
+#: funing/widgets/info.py:1064 funing/widgets/info.py:1070
 msgid "Write basic information here."
 msgstr ""
 
@@ -434,7 +437,7 @@ msgstr ""
 #: funing/widgets/info.py:732 funing/widgets/info.py:749
 #: funing/widgets/info.py:751 funing/widgets/info.py:826
 #: funing/widgets/info.py:855 funing/widgets/info.py:979
-#: funing/widgets/info.py:1068
+#: funing/widgets/info.py:1068 funing/widgets/info.py:1074
 msgid "Write additional information here."
 msgstr ""
 
@@ -443,7 +446,7 @@ msgstr ""
 #: funing/widgets/info.py:378 funing/widgets/info.py:381
 #: funing/widgets/info.py:383 funing/widgets/info.py:457
 #: funing/widgets/info.py:484 funing/widgets/info.py:544
-#: funing/widgets/info.py:623
+#: funing/widgets/info.py:623 funing/widgets/info.py:624
 msgid "Information saved."
 msgstr ""
 
@@ -459,6 +462,7 @@ msgstr ""
 #: funing/widgets/info.py:462 funing/widgets/info.py:464
 #: funing/widgets/info.py:538 funing/widgets/info.py:565
 #: funing/widgets/info.py:626 funing/widgets/info.py:705
+#: funing/widgets/info.py:706
 msgid "info ID is None."
 msgstr ""
 
@@ -470,6 +474,7 @@ msgstr ""
 #: funing/widgets/info.py:677 funing/widgets/info.py:834
 #: funing/widgets/info.py:740 funing/widgets/info.py:958
 #: funing/widgets/info.py:819 funing/widgets/info.py:1047
+#: funing/widgets/info.py:820 funing/widgets/info.py:1053
 msgid "Add"
 msgstr ""
 
@@ -478,6 +483,7 @@ msgstr ""
 #: funing/widgets/info.py:600 funing/widgets/info.py:602
 #: funing/widgets/info.py:677 funing/widgets/info.py:704
 #: funing/widgets/info.py:767 funing/widgets/info.py:846
+#: funing/widgets/info.py:847
 msgid "Information IDs is None."
 msgstr ""
 
@@ -486,6 +492,7 @@ msgstr ""
 #: funing/widgets/info.py:625 funing/widgets/info.py:627
 #: funing/widgets/info.py:702 funing/widgets/info.py:729
 #: funing/widgets/info.py:792 funing/widgets/info.py:871
+#: funing/widgets/info.py:872
 msgid "New information"
 msgstr ""
 
@@ -494,6 +501,7 @@ msgstr ""
 #: funing/widgets/info.py:625 funing/widgets/info.py:627
 #: funing/widgets/info.py:702 funing/widgets/info.py:729
 #: funing/widgets/info.py:792 funing/widgets/info.py:871
+#: funing/widgets/info.py:872
 msgid "_Add"
 msgstr "Add"
 
@@ -502,6 +510,7 @@ msgstr "Add"
 #: funing/widgets/info.py:681 funing/widgets/info.py:683
 #: funing/widgets/info.py:758 funing/widgets/info.py:785
 #: funing/widgets/info.py:848 funing/widgets/info.py:927
+#: funing/widgets/info.py:928
 msgid "'info_id' is None."
 msgstr ""
 
@@ -515,7 +524,7 @@ msgstr ""
 #: funing/widgets/info.py:697 funing/widgets/info.py:703
 #: funing/widgets/info.py:705 funing/widgets/info.py:780
 #: funing/widgets/info.py:807 funing/widgets/info.py:870
-#: funing/widgets/info.py:949
+#: funing/widgets/info.py:949 funing/widgets/info.py:950
 msgid "ACTION isn't 'READ'."
 msgstr ""
 
@@ -524,7 +533,7 @@ msgstr ""
 #: funing/widgets/info.py:739 funing/widgets/info.py:756
 #: funing/widgets/info.py:758 funing/widgets/info.py:833
 #: funing/widgets/info.py:862 funing/widgets/info.py:995
-#: funing/widgets/info.py:1084
+#: funing/widgets/info.py:1084 funing/widgets/info.py:1098
 msgid "Delete"
 msgstr ""
 
@@ -533,7 +542,7 @@ msgstr ""
 #: funing/widgets/info.py:956 funing/widgets/info.py:998
 #: funing/widgets/info.py:1000 funing/widgets/info.py:1078
 #: funing/widgets/info.py:1115 funing/widgets/info.py:1266
-#: funing/widgets/info.py:1355
+#: funing/widgets/info.py:1355 funing/widgets/info.py:1369
 msgid "Delete saved frame"
 msgstr ""
 
@@ -542,7 +551,7 @@ msgstr ""
 #: funing/widgets/info.py:957 funing/widgets/info.py:999
 #: funing/widgets/info.py:1001 funing/widgets/info.py:1079
 #: funing/widgets/info.py:1116 funing/widgets/info.py:1267
-#: funing/widgets/info.py:1356
+#: funing/widgets/info.py:1356 funing/widgets/info.py:1370
 msgid "Do you want to delete saved frame?"
 msgstr ""
 
@@ -551,7 +560,7 @@ msgstr ""
 #: funing/widgets/info.py:965 funing/widgets/info.py:1007
 #: funing/widgets/info.py:1009 funing/widgets/info.py:1087
 #: funing/widgets/info.py:1124 funing/widgets/info.py:1275
-#: funing/widgets/info.py:1364
+#: funing/widgets/info.py:1364 funing/widgets/info.py:1378
 #, python-format
 msgid "Image(%s) doesn't exist."
 msgstr ""
@@ -565,6 +574,7 @@ msgstr ""
 #: funing/widgets/info.py:175 funing/widgets/info.py:1185
 #: funing/widgets/info.py:233 funing/widgets/info.py:1336
 #: funing/widgets/info.py:312 funing/widgets/info.py:1425
+#: funing/widgets/info.py:313 funing/widgets/info.py:1439
 msgid "Picked frame is None."
 msgstr ""
 
@@ -573,7 +583,7 @@ msgstr ""
 #: funing/widgets/info.py:1038 funing/widgets/info.py:1080
 #: funing/widgets/info.py:1082 funing/widgets/info.py:1160
 #: funing/widgets/info.py:1197 funing/widgets/info.py:1348
-#: funing/widgets/info.py:1437
+#: funing/widgets/info.py:1437 funing/widgets/info.py:1451
 msgid "Saved frames is None."
 msgstr ""
 
@@ -587,6 +597,7 @@ msgstr ""
 #: funing/widgets/info.py:1217 funing/widgets/info.py:1251
 #: funing/widgets/info.py:1368 funing/widgets/info.py:1402
 #: funing/widgets/info.py:1457 funing/widgets/info.py:1491
+#: funing/widgets/info.py:1471 funing/widgets/info.py:1505
 msgid "Saved frame, Click to delete."
 msgstr ""
 
@@ -596,6 +607,7 @@ msgstr ""
 #: funing/widgets/info.py:1220 funing/widgets/info.py:1310
 #: funing/widgets/info.py:1413 funing/widgets/info.py:1564
 #: funing/widgets/info.py:1567 funing/widgets/info.py:1656
+#: funing/widgets/info.py:1670
 msgid "Frame is None."
 msgstr ""
 
@@ -700,11 +712,11 @@ msgstr ""
 msgid "Information of %s\\(%s\\) is deleted."
 msgstr ""
 
-#: funing/__init__.py:95 funing/__init__.py:89
+#: funing/__init__.py:95 funing/__init__.py:89 funing/__init__.py:90
 msgid "Hello, Welcome to Funing!"
 msgstr ""
 
-#: funing/__init__.py:96 funing/__init__.py:90
+#: funing/__init__.py:96 funing/__init__.py:90 funing/__init__.py:91
 #, python-format
 msgid "Version: %s"
 msgstr ""
@@ -719,6 +731,7 @@ msgstr ""
 #: funing/widgets/info.py:1188 funing/widgets/info.py:1278
 #: funing/widgets/info.py:1318 funing/widgets/info.py:1469
 #: funing/widgets/info.py:1472 funing/widgets/info.py:1561
+#: funing/widgets/info.py:1575
 msgid "`Picked Frames is None.`"
 msgstr ""
 
@@ -758,16 +771,18 @@ msgstr ""
 
 #: funing/widgets/info.py:176 funing/widgets/info.py:204
 #: funing/widgets/info.py:262 funing/widgets/info.py:341
+#: funing/widgets/info.py:342
 msgid "Click to recognize,"
 msgstr ""
 
 #: funing/widgets/info.py:176 funing/widgets/info.py:204
 #: funing/widgets/info.py:262 funing/widgets/info.py:341
+#: funing/widgets/info.py:342
 msgid "right click to delete."
 msgstr ""
 
 #: funing/widgets/info.py:799 funing/widgets/info.py:862
-#: funing/widgets/info.py:941
+#: funing/widgets/info.py:941 funing/widgets/info.py:942
 #, python-format
 msgid "Information of %(basic_info)s (%(info_id)s) is deleted."
 msgstr ""
@@ -777,6 +792,7 @@ msgid "Open Directory"
 msgstr ""
 
 #: funing/widgets/info.py:1462 funing/widgets/info.py:1551
+#: funing/widgets/info.py:1565
 msgid "Saved dateset doesn't exist."
 msgstr "Saved dateset doesn't exist."
 
@@ -785,12 +801,18 @@ msgstr "Saved dateset doesn't exist."
 msgid "Path does not exist."
 msgstr "Saved dateset doesn't exist."
 
-#: funing/widgets/info.py:1012
+#: funing/widgets/info.py:1012 funing/widgets/info.py:1019
 msgid "Select a template directory."
 msgstr ""
 
 #: funing/widgets/main.py:192
 msgid "Failed to open copy file."
+msgstr ""
+
+#: funing/widgets/info.py:1086
+msgid ""
+"Select a template file or a directory contains template files. Template "
+"files ends with \".txt\"."
 msgstr ""
 
 #~ msgid "show_per_page_str0"

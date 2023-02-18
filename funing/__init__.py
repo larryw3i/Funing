@@ -86,7 +86,8 @@ def install_dep_requirements(test=False, dep_requirements=None, upgrade=False):
 
 def run(test=False):
     if test:
-        print(_("Hello, Welcome to Funing!"))
+        pass
+    print(_("Hello, Welcome to Funing!"))
     print(_("Version: %s") % (app_version))
     from funing.widgets import show
 

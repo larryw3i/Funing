@@ -1,5 +1,6 @@
 # Funing  
-a **simple** face recognition GUI, try it just enter:  
+A **simple** face recognition GUI, try it just enter:  
 ```bash
 pip3 install funing; funing
 ```
+
