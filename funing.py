@@ -52,6 +52,12 @@ def get_dev_dep_requirements_full():
             "MIT License",
             "https://github.com/PyCQA/isort/blob/main/LICENSE",
         ),
+        (
+            "pre-commit >= 3.0.4",
+            "https://pypi.org/project/pre-commit/",
+            "MIT License",
+            "https://github.com/pre-commit/pre-commit/blob/main/LICENSE",
+        ),
     ]
 
 
