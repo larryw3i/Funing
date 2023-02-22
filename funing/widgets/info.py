@@ -921,12 +921,21 @@ class InfoWidget(WidgetABC):
             info = f.read()
         return info
 
-    def del_saved_info_by_info_id(self, info_id=None):
+    def del_saved_info_by_info_id(self, info_id=None, _ask=False):
         info_id = info_id or self.get_info_id()
         if not info_id:
             if self.is_test():
                 print(_("'info_id' is None."))
             return
+        if _ask:
+            delete_info = messagebox.askyesno(
+                master=self.root,
+                title=_("Delete information?"),
+                message=_("Do you want to delete saved information?"),
+            )
+            if not delete_info:
+                return
+            pass
         basic_info_path = get_basic_info_path(info_id)
         info_path = get_info_path(info_id)
         image_dir_path = get_image_dir_path(info_id)
@@ -949,7 +958,7 @@ class InfoWidget(WidgetABC):
             if self.is_test():
                 print(_("ACTION isn't 'READ'."))
             return
-        self.del_saved_info_by_info_id()
+        self.del_saved_info_by_info_id(_ask=True)
         pass
 
     def add_button_command(self):
