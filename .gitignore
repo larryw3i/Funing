@@ -176,5 +176,7 @@ funing*.tar.gz
 # .cp/
 .cp/
 
-# funing/data/
-funing/data/
+# funing/data/cv2
+funing/data/cv2
+
+# 
