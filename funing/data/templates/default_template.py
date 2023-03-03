@@ -1,8 +1,7 @@
-
-
 from funing.locale import _
 
-info_template0 = _("""
+info_template0 = _(
+    """
 Gender: 
 Date of Birth: 
 Native Place: 
@@ -17,4 +16,5 @@ Education Background:
 
 Work Experience: 
 
-""")
+"""
+)
