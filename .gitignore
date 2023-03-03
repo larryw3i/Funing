@@ -148,7 +148,7 @@ funing/.home/
 funing/config.yml
 
 # funing/data/
-funing/data/
+## funing/data/
 
 # output
 output/
