@@ -11,5 +11,6 @@ prune venv
 prune funing/_home
 prune funing/.lwcp
 prune tests
+prune funing/data/__pycache__
 
 

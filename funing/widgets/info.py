@@ -29,6 +29,7 @@ from pygubu.widgets import simpletooltip
 from pygubu.widgets.scrolledframe import ScrolledFrame
 
 from funing.abc import *
+from funing.data.templates import info_template0
 from funing.locale import _
 from funing.path import *
 from funing.settings import *
@@ -80,13 +81,22 @@ class InfoWidget(WidgetABC):
         self.info_template_dir_path_copy_name = "info_template_dir"
         self.info_template_file_exts = [".txt"]
         self.open_info_template_dir_str = _("Open Directory")
+        self.use_default_info_template_str = _("Default")
+
+    def get_initial_info_templates_combobox_values(self):
+        values = [
+            self.open_info_template_dir_str,
+            self.use_default_info_template_str,
+        ]
+        return values
 
     def update_info_templates_combobox(self):
         if not self.info_templates_combobox:
             return
-        self.info_templates_combobox[
-            "values"
-        ] = self.get_info_template_list() + [self.open_info_template_dir_str]
+        self.info_templates_combobox["values"] = (
+            self.get_info_template_list()
+            + self.get_initial_info_templates_combobox_values()
+        )
 
         pass
 
@@ -101,9 +111,14 @@ class InfoWidget(WidgetABC):
                 self.set_info_template_dir_path(
                     self.info_template_dir_path_copy_name, _path
                 )
-
+        if not isinstance(self.info_template_dir_path, str):
+            print(
+                "path should be string, bytes, os.PathLike or integer, "
+                + "not tuple"
+            )
+            return str(Path.home())
         if not os.path.exists(self.info_template_dir_path):
-            print(_("Path does not exist."))
+            print(_("Info template path does not exist."))
             return str(Path.home())
         return self.info_template_dir_path
 
@@ -202,7 +217,7 @@ class InfoWidget(WidgetABC):
         return content
 
     def set_info_template_name(self, name=None, update_ui=False):
-        print(205, name)
+        # print(205, name)
         if not name:
             return
         self.set_copy(self.info_template_copy_name, name)
@@ -969,7 +984,7 @@ class InfoWidget(WidgetABC):
     def get_info_template_values(self):
         template_names = self.get_info_template_list()
         # template_names = [ Path(n).stem for n in template_names ]
-        template_names += [self.open_info_template_dir_str]
+        template_names += self.get_initial_info_templates_combobox_values()
         return template_names
 
     def get_info_templates_combobox_x(self):
@@ -1018,8 +1033,17 @@ class InfoWidget(WidgetABC):
         )
         return _exist
 
+    def use_default_info_template(self):
+        content = info_template0
+        self.set_info_text_content(content)
+        pass
+
     def info_template_var_trace_w(self, *args):
         info_template_name = self.info_template_var.get()
+
+        if info_template_name == self.use_default_info_template_str:
+            self.use_default_info_template()
+
         # self.mk_tmsg(f"info_template_name\t{info_template_name}")
         if info_template_name == self.open_info_template_dir_str:
             # self.open_dir(get_info_templates_path())
@@ -1029,7 +1053,8 @@ class InfoWidget(WidgetABC):
                 initialdir=str(Path.home()),
                 mustexist=True,
             )
-            if _path is None:
+            # print(_path,type(_path))
+            if _path is None or _path == () or _path == "":
                 return
             self.set_copy(self.info_template_dir_path_copy_name, _path)
             self.set_info_template_dir_path(_dir=_path, update_ui=True)
@@ -1332,7 +1357,8 @@ class InfoWidget(WidgetABC):
         self.picked_frames = frames + self.picked_frames
 
         info_id = self.get_info_id()
-        print("info_id", info_id)
+        if self.is_test():
+            print("info_id", info_id)
         if (not info_id) and self.get_picked_frames_len() < 2:
             self.place_info_templates_combobox()
             self.set_info_text_content_use_template()
