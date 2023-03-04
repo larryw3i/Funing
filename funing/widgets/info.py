@@ -118,7 +118,7 @@ class InfoWidget(WidgetABC):
             )
             return str(Path.home())
         if not os.path.exists(self.info_template_dir_path):
-            print(_("Info template path does not exist."))
+            self.mk_tmsg(_("Info template path does not exist."))
             return str(Path.home())
         return self.info_template_dir_path
 
@@ -131,7 +131,7 @@ class InfoWidget(WidgetABC):
                 _dir = str(Path.home())
             else:
                 if not os.path.exists(_dir_copy):
-                    print(_("Path does not exist."))
+                    self.mk_tmsg(_("Info template path does not exist."))
                     _dir = str(Path.home())
                 else:
                     _dir = _dir_copy
