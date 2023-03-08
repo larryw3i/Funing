@@ -386,7 +386,6 @@ class InfoWidget(WidgetABC):
         pass
 
     def add_picked_frames_for_recog(self, frames, del_prev=False):
-
         assert isinstance(frames, list)
         if not isinstance(frames, list):
             self.mk_tmsg("`add_picked_frames_for_recog.frames` is `None`.")
@@ -604,7 +603,6 @@ class InfoWidget(WidgetABC):
         refresh=True,
         update_widgets=True,
     ):
-
         if not self.is_action_read() and len(self.picked_frames) < 1:
             self.set_msg(_("Nothing picked."))
             return
@@ -714,7 +712,6 @@ class InfoWidget(WidgetABC):
             pass
 
     def get_saved_frames_by_id(self, info_id=None, set_self=True):
-
         info_id = info_id or self.get_info_id()
         if info_id is None:
             if self.is_test():
@@ -1632,7 +1629,6 @@ class InfoWidget(WidgetABC):
     def show_widget_click_by_default(
         self, widget_list=None, index=0, borderwidth=8, background="blue"
     ):
-
         if widget_list is None:
             return
 
@@ -1707,7 +1703,7 @@ class InfoWidget(WidgetABC):
         gray_img = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         face_rects = face_casecade.detectMultiScale(gray_img, 1.3, 5)
         frames = []
-        for (x, y, w, h) in face_rects:
+        for x, y, w, h in face_rects:
             pick_frame = frame[y : y + h, x : x + w]
             pick_frame = cv2.resize(
                 pick_frame,

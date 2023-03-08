@@ -226,7 +226,6 @@ class _MainUI:
         self.change_face_show(0)
 
     def pick_v0(self):
-
         if self.doing == "r":
             self.clear_faces_frame()
             self.doing = "p"
@@ -255,7 +254,6 @@ class _MainUI:
         self.infofm.face_text.delete(1.0, END)
 
     def add_face_label_p(self, num):
-
         x, y, w, h = self.face_rects[num]
         _w = max(w, h)
 
@@ -341,7 +339,6 @@ class _MainUI:
 
     def root_after_cancel(self):
         if self.root_after != -1:
-
             if self.vid is not None and self.vid.isOpened():
                 _, self.cur_frame = self.vid.read()
 
@@ -371,7 +368,7 @@ class _MainUI:
         gray_img = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         rects = self.face_casecade.detectMultiScale(gray_img, 1.3, 5)
 
-        for (x, y, w, h) in rects:
+        for x, y, w, h in rects:
             frame = cv2.rectangle(
                 frame, (x, y), (x + w, y + h), (255, 0, 0), 2
             )
@@ -426,7 +423,7 @@ class _MainUI:
         if len(self.face_rects) < 1:
             return
 
-        for (x, y, w, h) in self.recfs:
+        for x, y, w, h in self.recfs:
             self.cur_frame = cv2.rectangle(
                 self.cur_frame, (x, y), (x + w, y + h), (255, 0, 0), 2
             )
@@ -568,7 +565,7 @@ class _MainUI:
 
         self.change_face_show(0)
 
-        for (x, y, w, h) in self.recfs:
+        for x, y, w, h in self.recfs:
             self.cur_frame = cv2.rectangle(
                 self.cur_frame, (x, y), (x + w, y + h), (255, 0, 0), 2
             )
@@ -590,7 +587,6 @@ class _MainUI:
         label.configure(image=imgtk)
 
     def show_info(self, label, _id, index):
-
         if (self.zoomed_in_face_label[0] != 0) and (
             self.zoomed_in_face_label[0] != label
         ):
@@ -616,7 +612,6 @@ class _MainUI:
         self.infofm.face_text.insert("1.0", open(info_file_path, "r").read())
 
     def add_face_label_r(self, num):
-
         index = len(self.showed_face_frames)
 
         new_fl = Label(self.infofm.faces_frame)
@@ -663,7 +658,6 @@ class _MainUI:
             child.destroy()
 
     def recf_v0(self):
-
         if self.source_type == -1:
             return
         if (not self.pause) and self.vid:
@@ -696,7 +690,6 @@ class _MainUI:
             self.add_face_label_r(i)
 
     def change_language(self, lang):
-
         lang_display_name = self.rbmixfm.lang_combobox_var.get()
         new_lang_code = Language.find(lang_display_name).to_tag()
         if settings.debug:

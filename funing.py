@@ -109,7 +109,7 @@ def print_class_def(max_col=80):
 def print_file(max_col=80, filter_func=None):
     if not filter_func:
         filter_func = lambda l: True
-    for (root, dirs, files) in os.walk(app_name, topdown=True):
+    for root, dirs, files in os.walk(app_name, topdown=True):
         for f in files:
             if not (f.endswith(".py") or f.endswith(".sh")):
                 continue

@@ -30,7 +30,6 @@ class Enjoy:
             os.system(f"msgfmt -o {mo_path} {po_path}")
 
     def initialize(self):
-
         try:
             self.msgfmt()
         except Exception as e:

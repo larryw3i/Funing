@@ -389,9 +389,13 @@ class FrameWidget(WidgetABC):
             self.face_casecade = cv2.CascadeClassifier(hff_xml_path)
         except:
             self.mw.set_msg(_("haarcascades data doesn't exist."))
+            haarcascades_doesnt_exist_str = _(
+                "haarcascades data doesn't exist"
+            )
             if messagebox.askyesno(
-                _("haarcascades data doesn't exist."),
-                _("haarcascades data doesn't exist.")
+                haarcascades_doesnt_exist_str,
+                haarcascades_doesnt_exist_str
+                + "."
                 + " "
                 + _(
                     "Do you want to try to reinstall 'opencv-contrib-python'?"
@@ -697,7 +701,7 @@ class FrameWidget(WidgetABC):
         labels = []
         gray_img = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         face_rects = self.face_casecade.detectMultiScale(gray_img, 1.3, 5)
-        for (x, y, w, h) in face_rects:
+        for x, y, w, h in face_rects:
             gray_img_0 = gray_img[y : y + h, x : x + w]
             gray_img_0 = cv2.resize(
                 gray_img_0,
@@ -1018,7 +1022,7 @@ class FrameWidget(WidgetABC):
         if face_casecade is None:
             return
         rects = face_casecade.detectMultiScale(gray_img, 1.3, 5)
-        for (x, y, w, h) in rects:
+        for x, y, w, h in rects:
             frame = cv2.rectangle(
                 frame, (x, y), (x + w, y + h), (255, 0, 0), 2
             )

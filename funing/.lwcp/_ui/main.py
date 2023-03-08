@@ -50,7 +50,6 @@ class Status(Enum):
 
 class MainApplication(pygubu.TkApplication):
     def _create_ui(self):
-
         # master
         self.master.title(_("Funing") + " (" + version + ")")
 
@@ -194,7 +193,6 @@ class MainApplication(pygubu.TkApplication):
         self.data()
 
     def data(self):
-
         self.cancel_root_after()
 
         if self.data_tkapp is None:
@@ -331,7 +329,6 @@ class MainApplication(pygubu.TkApplication):
         self.play_video()
 
     def go_combobox_selected(self, args):
-
         go_combobox_var = self.go_combobox.get()
         if len(go_combobox_var.strip()) < 1:
             return
@@ -454,7 +451,7 @@ class MainApplication(pygubu.TkApplication):
             self.rec_gray_img, 1.3, 5
         )
 
-        for (x, y, w, h) in self.face_rects:
+        for x, y, w, h in self.face_rects:
             self.cur_frame = cv2.rectangle(
                 self.cur_frame, (x, y), (x + w, y + h), (255, 0, 0), 2
             )
@@ -508,7 +505,7 @@ class MainApplication(pygubu.TkApplication):
             self.show_no_face_was_detected_status_msg()
         else:
             self.show_face_was_detected_status_msg()
-            for (x, y, w, h) in self.face_rects:
+            for x, y, w, h in self.face_rects:
                 self.cur_frame = cv2.rectangle(
                     self.cur_frame, (x, y), (x + w, y + h), (255, 0, 0), 2
                 )
@@ -596,7 +593,6 @@ class MainApplication(pygubu.TkApplication):
         return get_info_file_path(info_id)
 
     def show_info(self, label, index, cur_info_id):
-
         if (self.zoomed_in_face_label[0] != 0) and (
             self.zoomed_in_face_label[0] != label
         ):
@@ -698,7 +694,6 @@ class MainApplication(pygubu.TkApplication):
         self.pick()
 
     def pick(self):
-
         if self.source_type == SourceType.NULL:
             return
 
@@ -734,7 +729,6 @@ class MainApplication(pygubu.TkApplication):
         self.rec()
 
     def rec(self):
-
         if self.source_type == SourceType.NULL:
             return
 

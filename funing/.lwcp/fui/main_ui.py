@@ -70,7 +70,6 @@ class ShowFrame:
         self.pick_btn = tk.Button(self.frame, textvariable=self.pick_sv)
 
     def place(self):
-
         # place vid_frame_label
         self.vid_frame_label.grid(column=0, row=0, rowspan=3, columnspan=7)
 

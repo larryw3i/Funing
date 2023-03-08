@@ -43,7 +43,6 @@ class TopWidget(WidgetABC):
         self.abouttoplevel = None
 
     def set_widgets(self):
-
         self.menubar = Menu(self.root)
         self.root.config(menu=self.menubar)
 

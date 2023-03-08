@@ -143,7 +143,6 @@ class AboutToplevel:
         )
 
     def set_text_content(self):
-
         self.default_text_insert(
             content=app_name_t,
             font="None 18",

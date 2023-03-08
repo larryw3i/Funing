@@ -199,7 +199,6 @@ class DataTkApplication(pygubu.TkApplication):
         if del_or_not:
             info_path = os.path.join(data_path, info_id)
             if _is_last_pic_:
-
                 self.clear_face_labels()
 
                 # shutil.rmtree(info_path)
@@ -232,7 +231,6 @@ class DataTkApplication(pygubu.TkApplication):
             l.grid(row=i // img_len_root_ceil, column=i % img_len_root_ceil)
 
     def show_data(self, info_id):
-
         info_path = os.path.join(data_path, info_id)
         if not os.path.isdir(info_path):
             return
@@ -395,7 +393,6 @@ class DataTkApplication(pygubu.TkApplication):
     def add_face_pic(self):
         if self.master_after == -1:
             if self.face_frame is not None:
-
                 # default value of self.face_frame is 0.
                 if (
                     not isinstance(self.face_frame, int)
