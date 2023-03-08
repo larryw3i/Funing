@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funing 0.2.44\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-04 02:33+0800\n"
-"PO-Revision-Date: 2023-03-04 02:34+0800\n"
+"POT-Creation-Date: 2023-03-09 00:40+0800\n"
+"PO-Revision-Date: 2023-03-09 00:41+0800\n"
 "Last-Translator: larryw3i <larryw3i@163.com>\n"
 "Language-Team: Chinese - China <larryw3i@163.com>\n"
 "Language: zh_CN\n"
@@ -37,12 +37,14 @@ msgstr "一个人脸识别 GUI "
 #: funing/widgets/main.py:47 funing/widgets/main.py:49
 #: funing/widgets/main.py:46 funing/.lwcp/ui_copy/main_ui.py:20
 #: funing/.lwcp/_ui/main.py:55 funing/widgets/main.py:48
+#: funing/.lwcp/_ui/main.py:54
 msgid "Funing"
 msgstr "Funing"
 
 #: funing/.lwcp/fui/main_ui.py:47 funing/.lwcp/ui/c_ui.py:19
 #: funing/.lwcp/ui/main_ui.py:76 funing/.lwcp/ui_copy/c_ui.py:19
-#: funing/.lwcp/ui_copy/main_ui.py:76
+#: funing/.lwcp/ui_copy/main_ui.py:76 funing/.lwcp/ui_copy/main_ui.py:75
+#: funing/.lwcp/ui/main_ui.py:75
 msgid "GO"
 msgstr "直达"
 
@@ -52,6 +54,9 @@ msgstr "直达"
 #: funing/.lwcp/ui_copy/main_ui.py:78 funing/.lwcp/_ui/main.py:108
 #: funing/.lwcp/_ui/main.py:343 funing/.lwcp/_ui/main.py:376
 #: funing/.lwcp/_ui/main.py:341 funing/.lwcp/_ui/main.py:374
+#: funing/.lwcp/ui_copy/main_ui.py:77 funing/.lwcp/ui/main_ui.py:77
+#: funing/.lwcp/_ui/main.py:107 funing/.lwcp/_ui/main.py:338
+#: funing/.lwcp/_ui/main.py:371
 msgid "File"
 msgstr "文件"
 
@@ -61,6 +66,9 @@ msgstr "文件"
 #: funing/.lwcp/ui_copy/main_ui.py:78 funing/.lwcp/_ui/main.py:108
 #: funing/.lwcp/_ui/main.py:346 funing/.lwcp/_ui/main.py:379
 #: funing/.lwcp/_ui/main.py:344 funing/.lwcp/_ui/main.py:377
+#: funing/.lwcp/ui_copy/main_ui.py:77 funing/.lwcp/ui/main_ui.py:77
+#: funing/.lwcp/_ui/main.py:107 funing/.lwcp/_ui/main.py:341
+#: funing/.lwcp/_ui/main.py:374
 msgid "Camera"
 msgstr "摄像头"
 
@@ -73,12 +81,15 @@ msgstr "摄像头"
 #: funing/widgets/frame.py:1473 funing/widgets/frame.py:1519
 #: funing/widgets/frame.py:1518 funing/widgets/frame.py:1528
 #: funing/widgets/frame.py:1531 funing/widgets/frame.py:1535
+#: funing/.lwcp/ui_copy/main_ui.py:78 funing/.lwcp/ui/main_ui.py:78
+#: funing/widgets/frame.py:1539 funing/widgets/frame.py:1541
 msgid "Open"
 msgstr "打开"
 
 #: funing/.lwcp/fui/main_ui.py:56 funing/.lwcp/ui/c_ui.py:30
 #: funing/.lwcp/ui/main_ui.py:85 funing/.lwcp/ui_copy/c_ui.py:30
-#: funing/.lwcp/ui_copy/main_ui.py:85
+#: funing/.lwcp/ui_copy/main_ui.py:85 funing/.lwcp/ui_copy/main_ui.py:84
+#: funing/.lwcp/ui/main_ui.py:84
 msgid "tolerance"
 msgstr "误差（0.1-0.6）"
 
@@ -92,6 +103,9 @@ msgstr "误差（0.1-0.6）"
 #: funing/widgets/frame.py:1479 funing/widgets/frame.py:1525
 #: funing/widgets/frame.py:1524 funing/widgets/frame.py:1534
 #: funing/widgets/frame.py:1537 funing/widgets/frame.py:1541
+#: funing/.lwcp/ui_copy/main_ui.py:91 funing/.lwcp/ui/main_ui.py:91
+#: funing/.lwcp/_ui/main.py:236 funing/widgets/frame.py:1545
+#: funing/widgets/frame.py:1547
 msgid "Pause"
 msgstr "暂停"
 
@@ -102,6 +116,7 @@ msgstr "暂停"
 #: funing/widgets/frame.py:1485 funing/widgets/frame.py:1531
 #: funing/widgets/frame.py:1530 funing/widgets/frame.py:1540
 #: funing/widgets/frame.py:1543 funing/widgets/frame.py:1547
+#: funing/widgets/frame.py:1551 funing/widgets/frame.py:1553
 msgid "Recognize"
 msgstr "识别"
 
@@ -114,10 +129,12 @@ msgstr "识别"
 #: funing/widgets/frame.py:1482 funing/widgets/frame.py:1528
 #: funing/widgets/frame.py:1527 funing/widgets/frame.py:1537
 #: funing/widgets/frame.py:1540 funing/widgets/frame.py:1544
+#: funing/.lwcp/ui_copy/main_ui.py:94 funing/.lwcp/ui/main_ui.py:94
+#: funing/widgets/frame.py:1548 funing/widgets/frame.py:1550
 msgid "Pick"
 msgstr "获取"
 
-#: funing/.lwcp/fui/main_ui.py:110
+#: funing/.lwcp/fui/main_ui.py:110 funing/.lwcp/fui/main_ui.py:109
 msgid "Write it with certain rules so that you can analyze it later"
 msgstr ""
 "信息编写要中规中矩, 比如yaml或toml, \n"
@@ -134,6 +151,8 @@ msgstr ""
 #: funing/widgets/info.py:991 funing/widgets/info.py:1080
 #: funing/widgets/info.py:1094 funing/widgets/info.py:1103
 #: funing/widgets/info.py:1127 funing/widgets/info.py:1128
+#: funing/.lwcp/ui_copy/main_ui.py:124 funing/.lwcp/fui/main_ui.py:113
+#: funing/.lwcp/ui/main_ui.py:124 funing/widgets/info.py:1125
 msgid "Save"
 msgstr "保存"
 
@@ -141,6 +160,7 @@ msgstr "保存"
 #: funing/widgets/top.py:54 funing/widgets/about.py:85 funing/widgets/top.py:53
 #: funing/widgets/about.py:84 funing/.lwcp/_ui/about.py:58
 #: funing/widgets/top.py:52 funing/widgets/about.py:83
+#: funing/.lwcp/fui/main_ui.py:136 funing/widgets/top.py:51
 msgid "About Funing"
 msgstr "关于Funing"
 
@@ -159,51 +179,60 @@ msgstr "本项目以MIT开源协议授权。"
 #: funing/.lwcp/_ui/main.py:245 funing/widgets/frame.py:1476
 #: funing/widgets/frame.py:1522 funing/widgets/frame.py:1521
 #: funing/widgets/frame.py:1531 funing/widgets/frame.py:1534
-#: funing/widgets/frame.py:1538
+#: funing/widgets/frame.py:1538 funing/.lwcp/_ui/main.py:243
+#: funing/widgets/frame.py:1542 funing/widgets/frame.py:1544
 msgid "Play"
 msgstr "继续"
 
 #: funing/.lwcp/_fui/_main_ui.py:319 funing/.lwcp/_ui/main.py:313
 #: funing/.lwcp/_ui/main.py:403 funing/.lwcp/_ui/main.py:311
-#: funing/.lwcp/_ui/main.py:401
+#: funing/.lwcp/_ui/main.py:401 funing/.lwcp/_fui/_main_ui.py:317
+#: funing/.lwcp/_ui/main.py:309 funing/.lwcp/_ui/main.py:398
 msgid "Select a file"
 msgstr "选择一个文件"
 
 #: funing/.lwcp/_fui/_main_ui.py:322 funing/.lwcp/_ui/main.py:314
 #: funing/.lwcp/_ui/main.py:404 funing/.lwcp/_ui/main.py:312
-#: funing/.lwcp/_ui/main.py:402
+#: funing/.lwcp/_ui/main.py:402 funing/.lwcp/_fui/_main_ui.py:320
+#: funing/.lwcp/_ui/main.py:310 funing/.lwcp/_ui/main.py:399
 msgid "Image or video"
 msgstr "照片或视频"
 
 #: funing/.lwcp/_fui/_main_ui.py:465 funing/.lwcp/_fui/_main_ui.py:722
+#: funing/.lwcp/_fui/_main_ui.py:462 funing/.lwcp/_fui/_main_ui.py:715
 msgid "Unable to open video source"
 msgstr "无法打开视频源。"
 
 #: funing/.lwcp/_fui/_main_ui.py:614 funing/.lwcp/_ui/main.py:622
 #: funing/.lwcp/_ui/data.py:307 funing/.lwcp/_ui/main.py:620
+#: funing/.lwcp/_fui/_main_ui.py:610 funing/.lwcp/_ui/data.py:305
+#: funing/.lwcp/_ui/main.py:616
 msgid "No informations found"
 msgstr "未发现信息"
 
-#: funing/.lwcp/_fui/_main_ui.py:713
+#: funing/.lwcp/_fui/_main_ui.py:713 funing/.lwcp/_fui/_main_ui.py:706
 msgid "Restart Funing Now?"
 msgstr "重启应用?"
 
 #: funing/.lwcp/_fui/_main_ui.py:728 funing/.lwcp/_ui/main.py:777
-#: funing/.lwcp/_ui/main.py:769
+#: funing/.lwcp/_ui/main.py:769 funing/.lwcp/_fui/_main_ui.py:721
+#: funing/.lwcp/_ui/main.py:763
 msgid "Nothing enter"
 msgstr "没有录入任何数据"
 
-#: funing/.lwcp/_fui/_main_ui.py:729
+#: funing/.lwcp/_fui/_main_ui.py:729 funing/.lwcp/_fui/_main_ui.py:722
 msgid "You haven't entered anything yet! "
 msgstr "你还没有录入任何数据, 打开摄像头或文件然后点击'录入'。"
 
 #: funing/.lwcp/ui/c_ui.py:48 funing/.lwcp/ui/main_ui.py:119
 #: funing/.lwcp/ui_copy/c_ui.py:48 funing/.lwcp/ui_copy/main_ui.py:119
+#: funing/.lwcp/ui_copy/main_ui.py:117 funing/.lwcp/ui/main_ui.py:117
 msgid "prev_symb"
 msgstr "上一页"
 
 #: funing/.lwcp/ui/c_ui.py:50 funing/.lwcp/ui/main_ui.py:121
 #: funing/.lwcp/ui_copy/c_ui.py:50 funing/.lwcp/ui_copy/main_ui.py:121
+#: funing/.lwcp/ui_copy/main_ui.py:119 funing/.lwcp/ui/main_ui.py:119
 msgid "next_symb"
 msgstr "下一页"
 
@@ -220,6 +249,7 @@ msgid "Hello, Funing!"
 msgstr "你好，富宁！"
 
 #: funing/widgets/top.py:57 funing/widgets/top.py:56 funing/widgets/top.py:55
+#: funing/widgets/top.py:54
 msgid "About"
 msgstr "关于"
 
@@ -246,12 +276,12 @@ msgid "OK"
 msgstr "好的"
 
 #: funing/widgets/about.py:170 funing/widgets/about.py:169
-#: funing/widgets/about.py:168
+#: funing/widgets/about.py:168 funing/widgets/about.py:167
 msgid "Author:"
 msgstr "作者："
 
 #: funing/widgets/about.py:178 funing/widgets/about.py:177
-#: funing/widgets/about.py:176
+#: funing/widgets/about.py:176 funing/widgets/about.py:175
 msgid "Contributors:"
 msgstr "贡献者："
 
@@ -261,7 +291,8 @@ msgstr "贡献者："
 #: funing/widgets/frame.py:1356 funing/widgets/frame.py:1427
 #: funing/widgets/frame.py:1473 funing/widgets/frame.py:1472
 #: funing/widgets/frame.py:1482 funing/widgets/frame.py:1485
-#: funing/widgets/frame.py:1489
+#: funing/widgets/frame.py:1489 funing/widgets/frame.py:1493
+#: funing/widgets/frame.py:1495
 msgid "Video frame."
 msgstr "视频帧。"
 
@@ -311,6 +342,7 @@ msgstr "识别器训练完成。"
 #: funing/widgets/frame.py:387 funing/widgets/frame.py:389
 #: funing/widgets/frame.py:390 funing/widgets/frame.py:391
 #: funing/widgets/frame.py:393 funing/widgets/frame.py:394
+#: funing/widgets/frame.py:396
 msgid "haarcascades data doesn't exist."
 msgstr "haarcascades 数据不存在。"
 
@@ -319,7 +351,8 @@ msgstr "haarcascades 数据不存在。"
 #: funing/widgets/frame.py:536 funing/widgets/frame.py:580
 #: funing/widgets/frame.py:609 funing/widgets/frame.py:618
 #: funing/widgets/frame.py:628 funing/widgets/frame.py:631
-#: funing/widgets/frame.py:635
+#: funing/widgets/frame.py:635 funing/widgets/frame.py:639
+#: funing/widgets/frame.py:641
 msgid "Video not opened."
 msgstr "视频未打开。"
 
@@ -329,6 +362,7 @@ msgstr "视频未打开。"
 #: funing/widgets/frame.py:893 funing/widgets/frame.py:922
 #: funing/widgets/frame.py:921 funing/widgets/frame.py:931
 #: funing/widgets/frame.py:934 funing/widgets/frame.py:938
+#: funing/widgets/frame.py:942 funing/widgets/frame.py:944
 #, python-format
 msgid "Unable to open video source %s."
 msgstr "无法打开视频源 %s 。"
@@ -339,6 +373,7 @@ msgstr "无法打开视频源 %s 。"
 #: funing/widgets/frame.py:1215 funing/widgets/frame.py:1261
 #: funing/widgets/frame.py:1260 funing/widgets/frame.py:1270
 #: funing/widgets/frame.py:1273 funing/widgets/frame.py:1277
+#: funing/widgets/frame.py:1281 funing/widgets/frame.py:1283
 msgid "Select video or image file"
 msgstr "选择一个图片或视频文件"
 
@@ -348,6 +383,7 @@ msgstr "选择一个图片或视频文件"
 #: funing/widgets/frame.py:1435 funing/widgets/frame.py:1481
 #: funing/widgets/frame.py:1480 funing/widgets/frame.py:1490
 #: funing/widgets/frame.py:1493 funing/widgets/frame.py:1497
+#: funing/widgets/frame.py:1501 funing/widgets/frame.py:1503
 msgid "Every Frame"
 msgstr "每帧"
 
@@ -357,6 +393,7 @@ msgstr "每帧"
 #: funing/widgets/frame.py:1442 funing/widgets/frame.py:1488
 #: funing/widgets/frame.py:1487 funing/widgets/frame.py:1497
 #: funing/widgets/frame.py:1500 funing/widgets/frame.py:1504
+#: funing/widgets/frame.py:1508 funing/widgets/frame.py:1510
 msgid "In Time"
 msgstr "按时"
 
@@ -369,6 +406,7 @@ msgstr "按时"
 #: funing/widgets/info.py:1332 funing/widgets/info.py:1421
 #: funing/widgets/info.py:1435 funing/widgets/info.py:1444
 #: funing/widgets/info.py:1468 funing/widgets/info.py:1469
+#: funing/widgets/info.py:1467
 msgid "Click to delete."
 msgstr "点击删除。"
 
@@ -377,6 +415,7 @@ msgstr "点击删除。"
 #: funing/widgets/frame.py:343 funing/widgets/frame.py:370
 #: funing/widgets/frame.py:379 funing/widgets/frame.py:389
 #: funing/widgets/frame.py:393 funing/widgets/frame.py:397
+#: funing/widgets/frame.py:401 funing/widgets/frame.py:403
 msgid "Do you want to try to reinstall 'opencv-contrib-python'?"
 msgstr "你想要重新安装 opencv-contrib-python 吗？"
 
@@ -385,6 +424,7 @@ msgstr "你想要重新安装 opencv-contrib-python 吗？"
 #: funing/widgets/frame.py:353 funing/widgets/frame.py:380
 #: funing/widgets/frame.py:389 funing/widgets/frame.py:399
 #: funing/widgets/frame.py:403 funing/widgets/frame.py:407
+#: funing/widgets/frame.py:411 funing/widgets/frame.py:413
 msgid "Restart Funing?"
 msgstr "重启应用？"
 
@@ -393,6 +433,7 @@ msgstr "重启应用？"
 #: funing/widgets/frame.py:353 funing/widgets/frame.py:380
 #: funing/widgets/frame.py:389 funing/widgets/frame.py:399
 #: funing/widgets/frame.py:403 funing/widgets/frame.py:407
+#: funing/widgets/frame.py:411 funing/widgets/frame.py:413
 msgid "Do you want to restart Funing?"
 msgstr "是否要重新启动应用吗？"
 
@@ -407,7 +448,7 @@ msgstr "是否要重新启动应用吗？"
 #: funing/widgets/info.py:514 funing/widgets/info.py:310
 #: funing/widgets/info.py:593 funing/widgets/info.py:311
 #: funing/widgets/info.py:594 funing/widgets/info.py:326
-#: funing/widgets/info.py:609
+#: funing/widgets/info.py:609 funing/widgets/info.py:607
 msgid "Nothing picked."
 msgstr "没有获取到特征图片。"
 
@@ -419,7 +460,7 @@ msgstr "没有获取到特征图片。"
 #: funing/widgets/info.py:847 funing/widgets/info.py:971
 #: funing/widgets/info.py:1060 funing/widgets/info.py:1066
 #: funing/widgets/info.py:1075 funing/widgets/info.py:1099
-#: funing/widgets/info.py:1100
+#: funing/widgets/info.py:1100 funing/widgets/info.py:1097
 msgid "Write information in your strict format."
 msgstr "用你自己严格的格式来记录相关信息。"
 
@@ -431,7 +472,7 @@ msgstr "用你自己严格的格式来记录相关信息。"
 #: funing/widgets/info.py:851 funing/widgets/info.py:975
 #: funing/widgets/info.py:1064 funing/widgets/info.py:1070
 #: funing/widgets/info.py:1079 funing/widgets/info.py:1103
-#: funing/widgets/info.py:1104
+#: funing/widgets/info.py:1104 funing/widgets/info.py:1101
 msgid "Write basic information here."
 msgstr "在这里写上基础的信息。"
 
@@ -443,7 +484,7 @@ msgstr "在这里写上基础的信息。"
 #: funing/widgets/info.py:855 funing/widgets/info.py:979
 #: funing/widgets/info.py:1068 funing/widgets/info.py:1074
 #: funing/widgets/info.py:1083 funing/widgets/info.py:1107
-#: funing/widgets/info.py:1108
+#: funing/widgets/info.py:1108 funing/widgets/info.py:1105
 msgid "Write additional information here."
 msgstr "在这里写上附加的信息。"
 
@@ -453,7 +494,7 @@ msgstr "在这里写上附加的信息。"
 #: funing/widgets/info.py:383 funing/widgets/info.py:457
 #: funing/widgets/info.py:484 funing/widgets/info.py:544
 #: funing/widgets/info.py:623 funing/widgets/info.py:624
-#: funing/widgets/info.py:639
+#: funing/widgets/info.py:639 funing/widgets/info.py:637
 msgid "Information saved."
 msgstr "信息被保存。"
 
@@ -470,6 +511,7 @@ msgstr "数据集不存在。"
 #: funing/widgets/info.py:538 funing/widgets/info.py:565
 #: funing/widgets/info.py:626 funing/widgets/info.py:705
 #: funing/widgets/info.py:706 funing/widgets/info.py:721
+#: funing/widgets/info.py:718
 msgid "info ID is None."
 msgstr "info ID 为空。"
 
@@ -484,6 +526,7 @@ msgstr "info ID 为空。"
 #: funing/widgets/info.py:820 funing/widgets/info.py:1053
 #: funing/widgets/info.py:1062 funing/widgets/info.py:835
 #: funing/widgets/info.py:1086 funing/widgets/info.py:1087
+#: funing/widgets/info.py:832 funing/widgets/info.py:1084
 msgid "Add"
 msgstr "添加"
 
@@ -493,6 +536,7 @@ msgstr "添加"
 #: funing/widgets/info.py:677 funing/widgets/info.py:704
 #: funing/widgets/info.py:767 funing/widgets/info.py:846
 #: funing/widgets/info.py:847 funing/widgets/info.py:862
+#: funing/widgets/info.py:859
 msgid "Information IDs is None."
 msgstr "信息 ID 为空。"
 
@@ -502,6 +546,7 @@ msgstr "信息 ID 为空。"
 #: funing/widgets/info.py:702 funing/widgets/info.py:729
 #: funing/widgets/info.py:792 funing/widgets/info.py:871
 #: funing/widgets/info.py:872 funing/widgets/info.py:887
+#: funing/widgets/info.py:884
 msgid "New information"
 msgstr "新信息"
 
@@ -511,6 +556,7 @@ msgstr "新信息"
 #: funing/widgets/info.py:702 funing/widgets/info.py:729
 #: funing/widgets/info.py:792 funing/widgets/info.py:871
 #: funing/widgets/info.py:872 funing/widgets/info.py:887
+#: funing/widgets/info.py:884
 msgid "_Add"
 msgstr "添加"
 
@@ -520,6 +566,7 @@ msgstr "添加"
 #: funing/widgets/info.py:758 funing/widgets/info.py:785
 #: funing/widgets/info.py:848 funing/widgets/info.py:927
 #: funing/widgets/info.py:928 funing/widgets/info.py:943
+#: funing/widgets/info.py:940
 msgid "'info_id' is None."
 msgstr "info_id 为空。"
 
@@ -535,6 +582,7 @@ msgstr "%s（%s） 的信息已被删除。"
 #: funing/widgets/info.py:807 funing/widgets/info.py:870
 #: funing/widgets/info.py:949 funing/widgets/info.py:950
 #: funing/widgets/info.py:959 funing/widgets/info.py:974
+#: funing/widgets/info.py:971
 msgid "ACTION isn't 'READ'."
 msgstr "ACTION 不为 “READ”。"
 
@@ -545,7 +593,7 @@ msgstr "ACTION 不为 “READ”。"
 #: funing/widgets/info.py:862 funing/widgets/info.py:995
 #: funing/widgets/info.py:1084 funing/widgets/info.py:1098
 #: funing/widgets/info.py:1107 funing/widgets/info.py:1131
-#: funing/widgets/info.py:1132
+#: funing/widgets/info.py:1132 funing/widgets/info.py:1129
 msgid "Delete"
 msgstr "删除"
 
@@ -556,7 +604,7 @@ msgstr "删除"
 #: funing/widgets/info.py:1115 funing/widgets/info.py:1266
 #: funing/widgets/info.py:1355 funing/widgets/info.py:1369
 #: funing/widgets/info.py:1378 funing/widgets/info.py:1402
-#: funing/widgets/info.py:1403
+#: funing/widgets/info.py:1403 funing/widgets/info.py:1401
 msgid "Delete saved frame"
 msgstr "删除已保存的图片。"
 
@@ -567,7 +615,7 @@ msgstr "删除已保存的图片。"
 #: funing/widgets/info.py:1116 funing/widgets/info.py:1267
 #: funing/widgets/info.py:1356 funing/widgets/info.py:1370
 #: funing/widgets/info.py:1379 funing/widgets/info.py:1403
-#: funing/widgets/info.py:1404
+#: funing/widgets/info.py:1404 funing/widgets/info.py:1402
 msgid "Do you want to delete saved frame?"
 msgstr "确定要删除已保存的图片吗？"
 
@@ -578,7 +626,7 @@ msgstr "确定要删除已保存的图片吗？"
 #: funing/widgets/info.py:1124 funing/widgets/info.py:1275
 #: funing/widgets/info.py:1364 funing/widgets/info.py:1378
 #: funing/widgets/info.py:1387 funing/widgets/info.py:1411
-#: funing/widgets/info.py:1412
+#: funing/widgets/info.py:1412 funing/widgets/info.py:1410
 #, python-format
 msgid "Image(%s) doesn't exist."
 msgstr "图片（%s）不存在。"
@@ -595,6 +643,7 @@ msgstr "图片（%s）不存在。"
 #: funing/widgets/info.py:313 funing/widgets/info.py:1439
 #: funing/widgets/info.py:1448 funing/widgets/info.py:328
 #: funing/widgets/info.py:1472 funing/widgets/info.py:1473
+#: funing/widgets/info.py:1471
 msgid "Picked frame is None."
 msgstr "获取的图片为空。"
 
@@ -605,7 +654,7 @@ msgstr "获取的图片为空。"
 #: funing/widgets/info.py:1197 funing/widgets/info.py:1348
 #: funing/widgets/info.py:1437 funing/widgets/info.py:1451
 #: funing/widgets/info.py:1460 funing/widgets/info.py:1484
-#: funing/widgets/info.py:1485
+#: funing/widgets/info.py:1485 funing/widgets/info.py:1483
 msgid "Saved frames is None."
 msgstr "没有被保存的图片。"
 
@@ -622,7 +671,8 @@ msgstr "没有被保存的图片。"
 #: funing/widgets/info.py:1471 funing/widgets/info.py:1505
 #: funing/widgets/info.py:1480 funing/widgets/info.py:1514
 #: funing/widgets/info.py:1504 funing/widgets/info.py:1538
-#: funing/widgets/info.py:1539
+#: funing/widgets/info.py:1539 funing/widgets/info.py:1503
+#: funing/widgets/info.py:1537
 msgid "Saved frame, Click to delete."
 msgstr "已保存的图片，点击删除。"
 
@@ -634,6 +684,7 @@ msgstr "已保存的图片，点击删除。"
 #: funing/widgets/info.py:1567 funing/widgets/info.py:1656
 #: funing/widgets/info.py:1670 funing/widgets/info.py:1679
 #: funing/widgets/info.py:1703 funing/widgets/info.py:1704
+#: funing/widgets/info.py:1701
 msgid "Frame is None."
 msgstr "图片为空。"
 
@@ -642,50 +693,55 @@ msgstr "图片为空。"
 msgid "info_widget is None."
 msgstr "info_widget 为空。"
 
-#: funing/.lwcp/_ui/main.py:70
+#: funing/.lwcp/_ui/main.py:70 funing/.lwcp/_ui/main.py:69
 msgid "Face was detected."
 msgstr "人脸被检测。"
 
-#: funing/.lwcp/_ui/main.py:71
+#: funing/.lwcp/_ui/main.py:71 funing/.lwcp/_ui/main.py:70
 msgid "No face was detected."
 msgstr "没有检测到人脸。"
 
-#: funing/.lwcp/_ui/main.py:73
+#: funing/.lwcp/_ui/main.py:73 funing/.lwcp/_ui/main.py:72
 msgid "You haven't entered anything yet!"
 msgstr "你还没有录入任何数据！"
 
 #: funing/.lwcp/_ui/main.py:76 funing/.lwcp/_ui/data.py:321
+#: funing/.lwcp/_ui/data.py:319 funing/.lwcp/_ui/main.py:75
 msgid "Unable to open video source."
 msgstr "无法打开视频源。"
 
-#: funing/.lwcp/_ui/main.py:84
+#: funing/.lwcp/_ui/main.py:84 funing/.lwcp/_ui/main.py:83
 msgid "Click the picked face image to remove."
 msgstr "单击被获取的图片就可以删除。"
 
-#: funing/.lwcp/_ui/main.py:87
+#: funing/.lwcp/_ui/main.py:87 funing/.lwcp/_ui/main.py:86
 msgid "Double click the face image to remove."
 msgstr "双击被获取的图片就可以删除。"
 
-#: funing/.lwcp/_ui/main.py:140
+#: funing/.lwcp/_ui/main.py:140 funing/.lwcp/_ui/main.py:139
 msgid "No desktop environment is detected! "
 msgstr "亲, 好像没有检测到显示器哦! "
 
-#: funing/.lwcp/_ui/main.py:179
+#: funing/.lwcp/_ui/main.py:179 funing/.lwcp/_ui/main.py:178
 msgid "Recognizer training. . ."
 msgstr "正在训练识别器. . ."
 
-#: funing/.lwcp/_ui/main.py:185
+#: funing/.lwcp/_ui/main.py:185 funing/.lwcp/_ui/main.py:184
 msgid "Recognizer finish training."
 msgstr "识别器训练结束。"
 
 #: funing/.lwcp/_ui/main.py:273 funing/.lwcp/_ui/main.py:660
 #: funing/.lwcp/_ui/data.py:273 funing/.lwcp/_ui/data.py:411
-#: funing/.lwcp/_ui/data.py:413
+#: funing/.lwcp/_ui/data.py:413 funing/.lwcp/_ui/data.py:271
+#: funing/.lwcp/_ui/data.py:410 funing/.lwcp/_ui/main.py:271
+#: funing/.lwcp/_ui/main.py:656
 msgid "delete"
 msgstr "删除"
 
 #: funing/.lwcp/_ui/main.py:563 funing/.lwcp/_ui/data.py:453
 #: funing/.lwcp/_ui/data.py:467 funing/.lwcp/_ui/main.py:561
+#: funing/.lwcp/_ui/data.py:450 funing/.lwcp/_ui/data.py:464
+#: funing/.lwcp/_ui/main.py:558
 msgid "No face picture picked"
 msgstr "没有检测到人脸。"
 
@@ -706,28 +762,28 @@ msgstr "{0} 的全部数据会被移除"
 msgid "Delete face picture?"
 msgstr "删除脸部图片?"
 
-#: funing/.lwcp/_ui/data.py:212
+#: funing/.lwcp/_ui/data.py:212 funing/.lwcp/_ui/data.py:211
 msgid "face picture has been removed!"
 msgstr "脸部图片被删除!"
 
-#: funing/.lwcp/_ui/data.py:220
+#: funing/.lwcp/_ui/data.py:220 funing/.lwcp/_ui/data.py:219
 #, python-brace-format
 msgid "All data of {0} have been removed!"
 msgstr "{0}的全部数据已删除!"
 
-#: funing/.lwcp/_ui/data.py:291
+#: funing/.lwcp/_ui/data.py:291 funing/.lwcp/_ui/data.py:289
 msgid "ADD"
 msgstr "添加"
 
-#: funing/.lwcp/_ui/data.py:312
+#: funing/.lwcp/_ui/data.py:312 funing/.lwcp/_ui/data.py:310
 msgid "Click the face image to pick."
 msgstr "单击图片来获取它。"
 
-#: funing/.lwcp/_ui/data.py:419
+#: funing/.lwcp/_ui/data.py:419 funing/.lwcp/_ui/data.py:416
 msgid "pick/stop"
 msgstr "获取/停止"
 
-#: funing/.lwcp/_ui/data.py:440
+#: funing/.lwcp/_ui/data.py:440 funing/.lwcp/_ui/data.py:437
 msgid "Right click: pause or play, double click: delete."
 msgstr "右击：暂停或播放，双击：删除。"
 
@@ -758,6 +814,7 @@ msgstr "点击识别。"
 #: funing/widgets/info.py:1472 funing/widgets/info.py:1561
 #: funing/widgets/info.py:1575 funing/widgets/info.py:1584
 #: funing/widgets/info.py:1608 funing/widgets/info.py:1609
+#: funing/widgets/info.py:1607
 msgid "`Picked Frames is None.`"
 msgstr "获取的图片为空。"
 
@@ -783,7 +840,8 @@ msgstr "%(basic_info)（%(info_id)） 的信息已被删除。"
 
 #: funing/widgets/frame.py:652 funing/widgets/frame.py:650
 #: funing/widgets/frame.py:660 funing/widgets/frame.py:663
-#: funing/widgets/frame.py:667
+#: funing/widgets/frame.py:667 funing/widgets/frame.py:671
+#: funing/widgets/frame.py:673
 #, python-format
 msgid "`cv2.imread` gets `None` from %s."
 msgstr "`cv2.imread` 从 %s 获取到 `None`。"
@@ -809,6 +867,7 @@ msgstr "右击删除。"
 #: funing/widgets/info.py:799 funing/widgets/info.py:862
 #: funing/widgets/info.py:941 funing/widgets/info.py:942
 #: funing/widgets/info.py:951 funing/widgets/info.py:966
+#: funing/widgets/info.py:963
 #, python-format
 msgid "Information of %(basic_info)s (%(info_id)s) is deleted."
 msgstr "%(basic_info)s （%(info_id)s） 的信息已被删除。"
@@ -821,6 +880,7 @@ msgstr "打开目录"
 #: funing/widgets/info.py:1462 funing/widgets/info.py:1551
 #: funing/widgets/info.py:1565 funing/widgets/info.py:1574
 #: funing/widgets/info.py:1598 funing/widgets/info.py:1599
+#: funing/widgets/info.py:1597
 msgid "Saved dateset doesn't exist."
 msgstr "已被存储的数据集不存在。"
 
@@ -831,6 +891,7 @@ msgstr "路径不存在。"
 
 #: funing/widgets/info.py:1012 funing/widgets/info.py:1019
 #: funing/widgets/info.py:1028 funing/widgets/info.py:1052
+#: funing/widgets/info.py:1049
 msgid "Select a template directory."
 msgstr "选择一个模板目录。"
 
@@ -840,6 +901,7 @@ msgstr "无法打开副本文件。"
 
 #: funing/widgets/info.py:1086 funing/widgets/info.py:1095
 #: funing/widgets/info.py:1119 funing/widgets/info.py:1120
+#: funing/widgets/info.py:1117
 msgid ""
 "Select a template file or a directory contains template files. Template "
 "files ends with \".txt\"."
@@ -848,10 +910,12 @@ msgstr ""
 "会被列出。"
 
 #: funing/widgets/info.py:933 funing/widgets/info.py:948
+#: funing/widgets/info.py:945
 msgid "Delete information?"
 msgstr "删除信息？"
 
 #: funing/widgets/info.py:934 funing/widgets/info.py:949
+#: funing/widgets/info.py:946
 msgid "Do you want to delete saved information?"
 msgstr "确定要删除已保存的信息吗？"
 
@@ -894,9 +958,13 @@ msgstr ""
 msgid "Default"
 msgstr "默认"
 
-#: funing/widgets/info.py:121
+#: funing/widgets/info.py:121 funing/widgets/info.py:134
 msgid "Info template path does not exist."
 msgstr "信息模板路径不存在。"
+
+#: funing/widgets/frame.py:393
+msgid "haarcascades data doesn't exist"
+msgstr "haarcascades 数据不存在"
 
 #~ msgid "%page_num%"
 #~ msgstr "%page_num%"

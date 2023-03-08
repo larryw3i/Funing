@@ -392,10 +392,12 @@ class FrameWidget(WidgetABC):
             haarcascades_doesnt_exist_str = _(
                 "haarcascades data doesn't exist"
             )
+            haarcascades_doesnt_exist_str0 = _(
+                "haarcascades data doesn't exist."
+            )
             if messagebox.askyesno(
                 haarcascades_doesnt_exist_str,
-                haarcascades_doesnt_exist_str
-                + "."
+                haarcascades_doesnt_exist_str0
                 + " "
                 + _(
                     "Do you want to try to reinstall 'opencv-contrib-python'?"
