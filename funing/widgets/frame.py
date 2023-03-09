@@ -86,7 +86,7 @@ class FrameWidget(WidgetABC):
         self.openfrom_combobox_var = StringVar()
         self.openfrom_combobox_file_str = _("File")
         self.openfrom_combobox_camera_str = _("Camera")
-        self.openfrom_Combobox = None
+        self.openfrom_combobox = None
         self.opensrc_button = None
         self.play_button = None
         self.pause_button = None
@@ -535,6 +535,13 @@ class FrameWidget(WidgetABC):
             self.recog_button,
         ]
 
+    def add_widget_to_oper_widgets(self, _widget=None):
+        if _widget is None:
+            self.mk_tmsg("The widget you want to add is None.")
+            return False
+        self.oper_widgets.append(_widget)
+        return True
+
     def get_oper_widgets(self):
         if not self.oper_widgets:
             self.set_oper_widgets()
@@ -884,11 +891,17 @@ class FrameWidget(WidgetABC):
     def get_openfrom_combobox_y(self):
         pass
 
+    def get_opensrc_button_height(self):
+        return self.opensrc_button.winfo_reqheight()
+
     def get_openfrom_combobox_width(self):
         return self.openfrom_combobox.winfo_reqwidth()
 
-    def get_openfrom_combobox_height(self):
-        return self.openfrom_combobox.winfo_reqheight()
+    def get_openfrom_combobox_height(self, _index=1):
+        height0 = self.openfrom_combobox.winfo_reqheight()
+        height1 = sel.get_opensrc_button_height()
+        heights = [height0, height1]
+        return heights[_index]
 
     def get_video_scale_x(self):
         return 0
@@ -1538,7 +1551,9 @@ class FrameWidget(WidgetABC):
         self.video_scale_label = ttk.Label(self.root, text="00:00/00:00")
 
         self.opensrc_button = tk.Button(
-            self.root, text=_("Open"), command=self.opensrc_button_command
+            self.root,
+            text=_("Open"),
+            command=self.opensrc_button_command,
         )
         self.play_button = tk.Button(
             self.root, text=_("Play"), command=self.play_button_command
@@ -1656,6 +1671,13 @@ class FrameWidget(WidgetABC):
                 width_index += 1
                 x = x0 + int((parent_width - width_list[width_index]) / 2)
                 y += min_height
+                # if w is self.openfrom_combobox:
+                #    self.mk_tmsg("Widget is `self.openfrom_combobox`.")
+                #    w.place(
+                #        x=x, y=y, height=self.get_openfrom_combobox_height()
+                #    )
+                # else:
+                #     self.mk_tmsg("Widget isn't `self.openfrom_combobox`.")
                 w.place(x=x, y=y)
                 x += w.winfo_reqwidth()
             else:
