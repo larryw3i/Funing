@@ -74,8 +74,9 @@ def install_dep_requirements(test=False, dep_requirements=None, upgrade=False):
     dep_requirements = dep_requirements or get_dep_requirements()
     sh = ""
     if upgrade:
-        dep_requirements = get_install_dep_requirements_name()
-        sh = "pip3 install -U " + (" ".join(dep_requirements))
+        # dep_requirements = get_install_dep_requirements_name()
+        dep_requirements = [r.split(" ")[0] for r in dep_requirements]
+        sh = "pip3 install -U '" + ("' '".join(dep_requirements)) + "'"
     else:
         dep_requirements = [d.replace(" ", "") for d in dep_requirements]
         sh = "pip3 install '" + ("' '".join(dep_requirements)) + "'"

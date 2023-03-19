@@ -237,7 +237,7 @@ then
         activate_venv
     elif [[ -x $(which virtualenv) ]]
     then 
-        virtualenv venv
+        python3 -m venv venv
         activate_venv
     else
         echo "virtualenv is not installed, cancel virtual environment."
