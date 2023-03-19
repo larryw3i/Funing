@@ -9,6 +9,16 @@ mo0_path="${local_dir}/en_US/LC_MESSAGES/${app_name}.mo"
 po0_path="${local_dir}/en_US/LC_MESSAGES/${app_name}.po"
 cp_data_counter=0
 
+py_version="$(python3 --version)"
+[[ $py_version == *"3.11"* ]] && \
+is_py311=1 || is_py311=0
+
+[[ $py_version == *"3.10"* ]] && \
+is_py310=1 || is_py310=0
+
+[[ $py_version == *"3.9"* ]] && \
+is_py39=1 || is_py39=0
+
 echo_venv_dont_exist(){
     echo "Path both 'venv/bin' and 'venv/local/bin' don't exist."
 }
@@ -237,7 +247,9 @@ then
         activate_venv
     elif [[ -x $(which virtualenv) ]]
     then 
-        python3 -m venv venv
+        [[ $is_py311 == 1 ]] \
+        && python3 -m venv venv \
+        || virtualenv venv
         activate_venv
     else
         echo "virtualenv is not installed, cancel virtual environment."
